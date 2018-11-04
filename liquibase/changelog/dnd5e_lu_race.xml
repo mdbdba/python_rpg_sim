@@ -1,0 +1,622 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    
+    <changeSet author="mdbdba" id="lu_race_1">
+        <createTable 
+                schemaName="dnd_5e"
+                tableName="lu_race">
+            <column name="race" type="varchar(32)"/>
+            <column name="subrace_of" type="varchar(32)"/>
+            <column name="maturity_age" type="smallint"/>
+            <column name="avg_max_age" type="smallint"/>
+            <column name="base_walking_speed" type="smallint"/>
+            <column name="height_min_inches" type="int"/>
+            <column name="height_modifier_multiplier"  type="int"/>
+            <column name="height_modifier_die" type="int"/>
+            <column name="height_modifier_adj" type="int"/>
+            <column name="weight_min_pounds" type="int"/>
+            <column name="weight_modifier_multiplier"  type="int"/>
+            <column name="weight_modifier_die" type="int"/>
+            <column name="weight_modifier_adj" type="int"/>
+            <column name="size" type="varchar(16)"/>
+            <column name="source_material" type="varchar(64)"/>
+            <column name="source_credit_url" type="varchar(255)"/>
+            <column name="source_credit_comment" type="varchar(255)"/>
+        </createTable>
+        <addPrimaryKey 
+            columnNames="race"
+            constraintName="pk_lu_race"
+            schemaName="dnd_5e"
+            tableName="lu_race"/>
+        <addForeignKeyConstraint baseColumnNames="source_material"
+            baseTableName="lu_race"
+            constraintName="fk_lu_race_source_material"
+            deferrable="true"
+            initiallyDeferred="true"
+            onDelete="CASCADE"
+            onUpdate="RESTRICT"
+            referencedColumnNames="value"
+            referencedTableName="lu_source_material"/>
+        <addForeignKeyConstraint baseColumnNames="size"
+            baseTableName="lu_race"
+            constraintName="fk_lu_race_size"
+            deferrable="true"
+            initiallyDeferred="true"
+            onDelete="CASCADE"
+            onUpdate="RESTRICT"
+            referencedColumnNames="name"
+            referencedTableName="lu_size"/>
+    </changeSet>
+    <changeSet author="mdbdba" id="lu_ability_2">
+        <insert schemaName="dnd_5e" tableName="lu_race">
+            <column name="race" value="Hill dwarf"/>
+            <column name="subrace_of" value="Dwarf"/>
+            <column name="maturity_age" value="50"/>
+            <column name="avg_max_age" value="350"/>
+            <column name="base_walking_speed" value="25"/>
+            <column name="height_min_inches" value="51"/>
+            <column name="height_modifier_multiplier"  value="2"/>
+            <column name="height_modifier_die" value="6"/>
+            <column name="height_modifier_adj" value="0"/>
+            <column name="weight_min_pounds" value="130"/>
+            <column name="weight_modifier_multiplier"  value="4"/>
+            <column name="weight_modifier_die" value="12"/>
+            <column name="weight_modifier_adj" value="0"/>
+            <column name="size" value="Medium"/>
+            <column name="source_material" value="SRD5"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_race">
+            <column name="race" value="High elf"/>
+            <column name="subrace_of" value="Elf"/>
+            <column name="maturity_age" value="100"/>
+            <column name="avg_max_age" value="725"/>
+            <column name="base_walking_speed" value="30"/>
+            <column name="height_min_inches" value="48"/>
+            <column name="height_modifier_multiplier"  value="4"/>
+            <column name="height_modifier_die" value="6"/>
+            <column name="height_modifier_adj" value="0"/>
+            <column name="weight_min_pounds" value="95"/>
+            <column name="weight_modifier_multiplier"  value="5"/>
+            <column name="weight_modifier_die" value="10"/>
+            <column name="weight_modifier_adj" value="0"/>
+            <column name="size" value="Medium"/>
+            <column name="source_material" value="SRD5"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_race">
+            <column name="race" value="Mountain dwarf"/>
+            <column name="subrace_of" value="Dwarf"/>
+            <column name="maturity_age" value="50"/>
+            <column name="avg_max_age" value="350"/>
+            <column name="base_walking_speed" value="25"/>
+            <column name="height_min_inches" value="45"/>
+            <column name="height_modifier_multiplier"  value="2"/>
+            <column name="height_modifier_die" value="6"/>
+            <column name="height_modifier_adj" value="0"/>
+            <column name="weight_min_pounds" value="130"/>
+            <column name="weight_modifier_multiplier"  value="4"/>
+            <column name="weight_modifier_die" value="12"/>
+            <column name="weight_modifier_adj" value="0"/>
+            <column name="size" value="Medium"/>
+            <column name="source_material" value="PBR"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_race">
+            <column name="race" value="Wood elf"/>
+            <column name="subrace_of" value="Elf"/>
+            <column name="maturity_age" value="100"/>
+            <column name="avg_max_age" value="725"/>
+            <column name="base_walking_speed" value="35"/>
+            <column name="height_min_inches" value="48"/>
+            <column name="height_modifier_multiplier"  value="4"/>
+            <column name="height_modifier_die" value="6"/>
+            <column name="height_modifier_adj" value="0"/>
+            <column name="weight_min_pounds" value="95"/>
+            <column name="weight_modifier_multiplier"  value="5"/>
+            <column name="weight_modifier_die" value="10"/>
+            <column name="weight_modifier_adj" value="0"/>
+            <column name="size" value="Medium"/>
+            <column name="source_material" value="PBR"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_race">
+            <column name="race" value="Lightfoot halfling"/>
+            <column name="subrace_of" value="Halfling"/>
+            <column name="maturity_age" value="20"/>
+            <column name="avg_max_age" value="250"/>
+            <column name="base_walking_speed" value="25"/>
+            <column name="height_min_inches" value="30"/>
+            <column name="height_modifier_multiplier"  value="2"/>
+            <column name="height_modifier_die" value="6"/>
+            <column name="height_modifier_adj" value="0"/>
+            <column name="weight_min_pounds" value="27"/>
+            <column name="weight_modifier_multiplier"  value="3"/>
+            <column name="weight_modifier_die" value="6"/>
+            <column name="weight_modifier_adj" value="0"/>
+            <column name="size" value="Small"/>
+            <column name="source_material" value="SRD5"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_race">
+            <column name="race" value="Stout halfling"/>
+            <column name="subrace_of" value="Halfling"/>
+            <column name="maturity_age" value="20"/>
+            <column name="avg_max_age" value="250"/>
+            <column name="base_walking_speed" value="25"/>
+            <column name="height_min_inches" value="30"/>
+            <column name="height_modifier_multiplier"  value="2"/>
+            <column name="height_modifier_die" value="6"/>
+            <column name="height_modifier_adj" value="0"/>
+            <column name="weight_min_pounds" value="27"/>
+            <column name="weight_modifier_multiplier"  value="3"/>
+            <column name="weight_modifier_die" value="6"/>
+            <column name="weight_modifier_adj" value="0"/>
+            <column name="size" value="Small"/>
+            <column name="source_material" value="SRD5"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_race">
+            <column name="race" value="Half-Elf"/>
+            <column name="maturity_age" value="20"/>
+            <column name="avg_max_age" value="200"/>
+            <column name="base_walking_speed" value="30"/>
+            <column name="height_min_inches" value="54"/>
+            <column name="height_modifier_multiplier"  value="2"/>
+            <column name="height_modifier_die" value="6"/>
+            <column name="height_modifier_adj" value="0"/>
+            <column name="weight_min_pounds" value="110"/>
+            <column name="weight_modifier_multiplier"  value="4"/>
+            <column name="weight_modifier_die" value="8"/>
+            <column name="weight_modifier_adj" value="0"/>
+            <column name="size" value="Medium"/>
+            <column name="source_material" value="SRD5"/>
+        </insert>
+                <insert schemaName="dnd_5e" tableName="lu_race">
+            <column name="race" value="Human"/>
+            <column name="maturity_age" value="18"/>
+            <column name="avg_max_age" value="75"/>
+            <column name="base_walking_speed" value="30"/>
+            <column name="height_min_inches" value="58"/>
+            <column name="height_modifier_multiplier"  value="5"/>
+            <column name="height_modifier_die" value="6"/>
+            <column name="height_modifier_adj" value="0"/>
+            <column name="weight_min_pounds" value="115"/>
+            <column name="weight_modifier_multiplier"  value="5"/>
+            <column name="weight_modifier_die" value="12"/>
+            <column name="weight_modifier_adj" value="0"/>
+            <column name="size" value="Medium"/>
+            <column name="source_material" value="SRD5"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_race">
+            <column name="race" value="Black dragonborn"/>
+            <column name="subrace_of" value="Dragonborn"/>
+            <column name="maturity_age" value="15"/>
+            <column name="avg_max_age" value="80"/>
+            <column name="base_walking_speed" value="30"/>
+            <column name="height_min_inches" value="70"/>
+            <column name="height_modifier_multiplier"  value="2"/>
+            <column name="height_modifier_die" value="6"/>
+            <column name="height_modifier_adj" value="0"/>
+            <column name="weight_min_pounds" value="220"/>
+            <column name="weight_modifier_multiplier"  value="3"/>
+            <column name="weight_modifier_die" value="12"/>
+            <column name="weight_modifier_adj" value="0"/>
+            <column name="size" value="Medium"/>
+            <column name="source_material" value="SRD5"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_race">
+            <column name="race" value="Blue dragonborn"/>
+            <column name="subrace_of" value="Dragonborn"/>
+            <column name="maturity_age" value="15"/>
+            <column name="avg_max_age" value="80"/>
+            <column name="base_walking_speed" value="30"/>
+            <column name="height_min_inches" value="70"/>
+            <column name="height_modifier_multiplier"  value="2"/>
+            <column name="height_modifier_die" value="6"/>
+            <column name="height_modifier_adj" value="0"/>
+            <column name="weight_min_pounds" value="220"/>
+            <column name="weight_modifier_multiplier"  value="3"/>
+            <column name="weight_modifier_die" value="12"/>
+            <column name="weight_modifier_adj" value="0"/>
+            <column name="size" value="Medium"/>
+            <column name="source_material" value="SRD5"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_race">
+            <column name="race" value="Brass dragonborn"/>
+            <column name="subrace_of" value="Dragonborn"/>
+            <column name="maturity_age" value="15"/>
+            <column name="avg_max_age" value="80"/>
+            <column name="base_walking_speed" value="30"/>
+            <column name="height_min_inches" value="70"/>
+            <column name="height_modifier_multiplier"  value="2"/>
+            <column name="height_modifier_die" value="6"/>
+            <column name="height_modifier_adj" value="0"/>
+            <column name="weight_min_pounds" value="220"/>
+            <column name="weight_modifier_multiplier"  value="3"/>
+            <column name="weight_modifier_die" value="12"/>
+            <column name="weight_modifier_adj" value="0"/>
+            <column name="size" value="Medium"/>
+            <column name="source_material" value="SRD5"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_race">
+            <column name="race" value="Bronze dragonborn"/>
+            <column name="subrace_of" value="Dragonborn"/>
+            <column name="maturity_age" value="15"/>
+            <column name="avg_max_age" value="80"/>
+            <column name="base_walking_speed" value="30"/>
+            <column name="height_min_inches" value="70"/>
+            <column name="height_modifier_multiplier"  value="2"/>
+            <column name="height_modifier_die" value="6"/>
+            <column name="height_modifier_adj" value="0"/>
+            <column name="weight_min_pounds" value="220"/>
+            <column name="weight_modifier_multiplier"  value="3"/>
+            <column name="weight_modifier_die" value="12"/>
+            <column name="weight_modifier_adj" value="0"/>
+            <column name="size" value="Medium"/>
+            <column name="source_material" value="SRD5"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_race">
+            <column name="race" value="Copper dragonborn"/>
+            <column name="subrace_of" value="Dragonborn"/>
+            <column name="maturity_age" value="15"/>
+            <column name="avg_max_age" value="80"/>
+            <column name="base_walking_speed" value="30"/>
+            <column name="height_min_inches" value="70"/>
+            <column name="height_modifier_multiplier"  value="2"/>
+            <column name="height_modifier_die" value="6"/>
+            <column name="height_modifier_adj" value="0"/>
+            <column name="weight_min_pounds" value="220"/>
+            <column name="weight_modifier_multiplier"  value="3"/>
+            <column name="weight_modifier_die" value="12"/>
+            <column name="weight_modifier_adj" value="0"/>
+            <column name="size" value="Medium"/>
+            <column name="source_material" value="SRD5"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_race">
+            <column name="race" value="Gold dragonborn"/>
+            <column name="subrace_of" value="Dragonborn"/>
+            <column name="maturity_age" value="15"/>
+            <column name="avg_max_age" value="80"/>
+            <column name="base_walking_speed" value="30"/>
+            <column name="height_min_inches" value="70"/>
+            <column name="height_modifier_multiplier"  value="2"/>
+            <column name="height_modifier_die" value="6"/>
+            <column name="height_modifier_adj" value="0"/>
+            <column name="weight_min_pounds" value="220"/>
+            <column name="weight_modifier_multiplier"  value="3"/>
+            <column name="weight_modifier_die" value="12"/>
+            <column name="weight_modifier_adj" value="0"/>
+            <column name="size" value="Medium"/>
+            <column name="source_material" value="SRD5"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_race">
+            <column name="race" value="Green dragonborn"/>
+            <column name="subrace_of" value="Dragonborn"/>
+            <column name="maturity_age" value="15"/>
+            <column name="avg_max_age" value="80"/>
+            <column name="base_walking_speed" value="30"/>
+            <column name="height_min_inches" value="70"/>
+            <column name="height_modifier_multiplier"  value="2"/>
+            <column name="height_modifier_die" value="6"/>
+            <column name="height_modifier_adj" value="0"/>
+            <column name="weight_min_pounds" value="220"/>
+            <column name="weight_modifier_multiplier"  value="3"/>
+            <column name="weight_modifier_die" value="12"/>
+            <column name="weight_modifier_adj" value="0"/>
+            <column name="size" value="Medium"/>
+            <column name="source_material" value="SRD5"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_race">
+            <column name="race" value="Red dragonborn"/>
+          <column name="subrace_of" value="Dragonborn"/>
+            <column name="maturity_age" value="15"/>
+            <column name="avg_max_age" value="80"/>
+            <column name="base_walking_speed" value="30"/>
+            <column name="height_min_inches" value="70"/>
+            <column name="height_modifier_multiplier"  value="2"/>
+            <column name="height_modifier_die" value="6"/>
+            <column name="height_modifier_adj" value="0"/>
+            <column name="weight_min_pounds" value="220"/>
+            <column name="weight_modifier_multiplier"  value="3"/>
+            <column name="weight_modifier_die" value="12"/>
+            <column name="weight_modifier_adj" value="0"/>
+            <column name="size" value="Medium"/>
+            <column name="source_material" value="SRD5"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_race">
+            <column name="race" value="Silver dragonborn"/>
+            <column name="subrace_of" value="Dragonborn"/>
+            <column name="maturity_age" value="15"/>
+            <column name="avg_max_age" value="80"/>
+            <column name="base_walking_speed" value="30"/>
+            <column name="height_min_inches" value="70"/>
+            <column name="height_modifier_multiplier"  value="2"/>
+            <column name="height_modifier_die" value="6"/>
+            <column name="height_modifier_adj" value="0"/>
+            <column name="weight_min_pounds" value="220"/>
+            <column name="weight_modifier_multiplier"  value="3"/>
+            <column name="weight_modifier_die" value="12"/>
+            <column name="weight_modifier_adj" value="0"/>
+            <column name="size" value="Medium"/>
+            <column name="source_material" value="SRD5"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_race">
+            <column name="race" value="White dragonborn"/>
+            <column name="subrace_of" value="Dragonborn"/>
+            <column name="maturity_age" value="15"/>
+            <column name="avg_max_age" value="80"/>
+            <column name="base_walking_speed" value="30"/>
+            <column name="height_min_inches" value="70"/>
+            <column name="height_modifier_multiplier"  value="2"/>
+            <column name="height_modifier_die" value="6"/>
+            <column name="height_modifier_adj" value="0"/>
+            <column name="weight_min_pounds" value="220"/>
+            <column name="weight_modifier_multiplier"  value="3"/>
+            <column name="weight_modifier_die" value="12"/>
+            <column name="weight_modifier_adj" value="0"/>
+            <column name="size" value="Medium"/>
+            <column name="source_material" value="SRD5"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_race">
+            <column name="race" value="Rock gnome"/>
+            <column name="subrace_of" value="Gnome"/>
+            <column name="maturity_age" value="40"/>
+            <column name="avg_max_age" value="425"/>
+            <column name="base_walking_speed" value="25"/>
+            <column name="height_min_inches" value="34"/>
+            <column name="height_modifier_multiplier"  value="2"/>
+            <column name="height_modifier_die" value="8"/>
+            <column name="height_modifier_adj" value="0"/>
+            <column name="weight_min_pounds" value="34"/>
+            <column name="weight_modifier_multiplier"  value="2"/>
+            <column name="weight_modifier_die" value="8"/>
+            <column name="weight_modifier_adj" value="0"/>
+            <column name="size" value="Small"/>
+            <column name="source_material" value="SRD5"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_race">
+            <column name="race" value="Half-Orc"/>
+            <column name="maturity_age" value="14"/>
+            <column name="avg_max_age" value="68"/>
+            <column name="base_walking_speed" value="30"/>
+            <column name="height_min_inches" value="58"/>
+            <column name="height_modifier_multiplier"  value="2"/>
+            <column name="height_modifier_die" value="10"/>
+            <column name="height_modifier_adj" value="0"/>
+            <column name="weight_min_pounds" value="170"/>
+            <column name="weight_modifier_multiplier"  value="2"/>
+            <column name="weight_modifier_die" value="20"/>
+            <column name="weight_modifier_adj" value="0"/>
+            <column name="size" value="Small"/>
+            <column name="source_material" value="SRD5"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_race">
+            <column name="race" value="Tiefling"/>
+            <column name="maturity_age" value="17"/>
+            <column name="avg_max_age" value="80"/>
+            <column name="base_walking_speed" value="30"/>
+            <column name="height_min_inches" value="58"/>
+            <column name="height_modifier_multiplier"  value="5"/>
+            <column name="height_modifier_die" value="6"/>
+            <column name="height_modifier_adj" value="0"/>
+            <column name="weight_min_pounds" value="160"/>
+            <column name="weight_modifier_multiplier"  value="5"/>
+            <column name="weight_modifier_die" value="12"/>
+            <column name="weight_modifier_adj" value="0"/>
+            <column name="size" value="Medium"/>
+            <column name="source_material" value="SRD5"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_race">
+            <column name="race" value="Centaur"/>
+            <column name="maturity_age" value="17"/>
+            <column name="avg_max_age" value="80"/>
+            <column name="base_walking_speed" value="40"/>
+            <column name="height_min_inches" value="58"/>
+            <column name="height_modifier_multiplier"  value="5"/>
+            <column name="height_modifier_die" value="6"/>
+            <column name="height_modifier_adj" value="0"/>
+            <column name="weight_min_pounds" value="115"/>
+            <column name="weight_modifier_multiplier"  value="5"/>
+            <column name="weight_modifier_die" value="12"/>
+            <column name="weight_modifier_adj" value="0"/>
+            <column name="size" value="Medium"/>
+            <column name="source_material" value="homebrew"/>
+            <column name="source_credit_url" value="https://www.dndbeyond.com/characters/races/centaur"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_race">
+            <column name="race" value="Black bearkin"/>
+            <column name="subrace_of" value="Bearkin"/>
+            <column name="maturity_age" value="17"/>
+            <column name="avg_max_age" value="56"/>
+            <column name="base_walking_speed" value="20"/>
+            <column name="height_min_inches" value="57"/>
+            <column name="height_modifier_multiplier"  value="3"/>
+            <column name="height_modifier_die" value="6"/>
+            <column name="height_modifier_adj" value="0"/>
+            <column name="weight_min_pounds" value="195"/>
+            <column name="weight_modifier_multiplier"  value="5"/>
+            <column name="weight_modifier_die" value="20"/>
+            <column name="weight_modifier_adj" value="0"/>
+            <column name="size" value="Medium"/>
+            <column name="source_material" value="homebrew"/>
+            <column name="source_credit_url" value="https://www.dndbeyond.com/characters/races/1853-bearkin"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_race">
+            <column name="race" value="Brown bearkin"/>
+            <column name="subrace_of" value="Bearkin"/>
+            <column name="maturity_age" value="17"/>
+            <column name="avg_max_age" value="56"/>
+            <column name="base_walking_speed" value="20"/>
+            <column name="height_min_inches" value="77"/>
+            <column name="height_modifier_multiplier"  value="1"/>
+            <column name="height_modifier_die" value="6"/>
+            <column name="height_modifier_adj" value="0"/>
+            <column name="weight_min_pounds" value="295"/>
+            <column name="weight_modifier_multiplier"  value="7"/>
+            <column name="weight_modifier_die" value="20"/>
+            <column name="weight_modifier_adj" value="0"/>
+            <column name="size" value="Medium"/>
+            <column name="source_material" value="homebrew"/>
+            <column name="source_credit_url" value="https://www.dndbeyond.com/characters/races/1853-bearkin"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_race">
+            <column name="race" value="Koala bearkin"/>
+            <column name="subrace_of" value="Bearkin"/>
+            <column name="maturity_age" value="17"/>
+            <column name="avg_max_age" value="56"/>
+            <column name="base_walking_speed" value="20"/>
+            <column name="height_min_inches" value="34"/>
+            <column name="height_modifier_multiplier"  value="2"/>
+            <column name="height_modifier_die" value="8"/>
+            <column name="height_modifier_adj" value="0"/>
+            <column name="weight_min_pounds" value="49"/>
+            <column name="weight_modifier_multiplier"  value="2"/>
+            <column name="weight_modifier_die" value="10"/>
+            <column name="weight_modifier_adj" value="0"/>
+            <column name="size" value="Small"/>
+            <column name="source_material" value="homebrew"/>
+            <column name="source_credit_url" value="https://www.dndbeyond.com/characters/races/1853-bearkin"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_race">
+            <column name="race" value="Panda bearkin"/>
+            <column name="subrace_of" value="Bearkin"/>
+            <column name="maturity_age" value="17"/>
+            <column name="avg_max_age" value="56"/>
+            <column name="base_walking_speed" value="20"/>
+            <column name="height_min_inches" value="58"/>
+            <column name="height_modifier_multiplier"  value="5"/>
+            <column name="height_modifier_die" value="8"/>
+            <column name="height_modifier_adj" value="0"/>
+            <column name="weight_min_pounds" value="195"/>
+            <column name="weight_modifier_multiplier"  value="5"/>
+            <column name="weight_modifier_die" value="20"/>
+            <column name="weight_modifier_adj" value="0"/>
+            <column name="size" value="Medium"/>
+            <column name="source_material" value="homebrew"/>
+            <column name="source_credit_url" value="https://www.dndbeyond.com/characters/races/1853-bearkin"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_race">
+            <column name="race" value="Polar bearkin"/>
+            <column name="subrace_of" value="Bearkin"/>
+            <column name="maturity_age" value="17"/>
+            <column name="avg_max_age" value="56"/>
+            <column name="base_walking_speed" value="20"/>
+            <column name="height_min_inches" value="81"/>
+            <column name="height_modifier_multiplier"  value="2"/>
+            <column name="height_modifier_die" value="8"/>
+            <column name="height_modifier_adj" value="0"/>
+            <column name="weight_min_pounds" value="397"/>
+            <column name="weight_modifier_multiplier"  value="5"/>
+            <column name="weight_modifier_die" value="20"/>
+            <column name="weight_modifier_adj" value="0"/>
+            <column name="size" value="Medium"/>
+            <column name="source_material" value="homebrew"/>
+            <column name="source_credit_url" value="https://www.dndbeyond.com/characters/races/1853-bearkin"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_race">
+            <column name="race" value="Burrows kobold"/>
+            <column name="subrace_of" value="Kobold"/>
+            <column name="maturity_age" value="10"/>
+            <column name="avg_max_age" value="120"/>
+            <column name="base_walking_speed" value="30"/>
+            <column name="height_min_inches" value="21"/>
+            <column name="height_modifier_multiplier"  value="2"/>
+            <column name="height_modifier_die" value="4"/>
+            <column name="height_modifier_adj" value="0"/>
+            <column name="weight_min_pounds" value="25"/>
+            <column name="weight_modifier_multiplier"  value="3"/>
+            <column name="weight_modifier_die" value="4"/>
+            <column name="weight_modifier_adj" value="0"/>
+            <column name="size" value="Small"/>
+            <column name="source_material" value="homebrew"/>
+            <column name="source_credit_url" value="https://www.dandwiki.com/wiki/Kobold,_Variant_(5e_Race)"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_race">
+            <column name="race" value="Loredrake kobold"/>
+            <column name="subrace_of" value="Kobold"/>
+            <column name="maturity_age" value="10"/>
+            <column name="avg_max_age" value="120"/>
+            <column name="base_walking_speed" value="30"/>
+            <column name="height_min_inches" value="21"/>
+            <column name="height_modifier_multiplier"  value="2"/>
+            <column name="height_modifier_die" value="4"/>
+            <column name="height_modifier_adj" value="0"/>
+            <column name="weight_min_pounds" value="25"/>
+            <column name="weight_modifier_multiplier"  value="3"/>
+            <column name="weight_modifier_die" value="4"/>
+            <column name="weight_modifier_adj" value="0"/>
+            <column name="size" value="Small"/>
+            <column name="source_material" value="homebrew"/>
+            <column name="source_credit_url" value="https://www.dandwiki.com/wiki/Kobold,_Variant_(5e_Race)"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_race">
+            <column name="race" value="Winged kobold"/>
+            <column name="subrace_of" value="Kobold"/>
+            <column name="maturity_age" value="10"/>
+            <column name="avg_max_age" value="120"/>
+            <column name="base_walking_speed" value="30"/>
+            <column name="height_min_inches" value="21"/>
+            <column name="height_modifier_multiplier"  value="2"/>
+            <column name="height_modifier_die" value="4"/>
+            <column name="height_modifier_adj" value="0"/>
+            <column name="weight_min_pounds" value="25"/>
+            <column name="weight_modifier_multiplier"  value="3"/>
+            <column name="weight_modifier_die" value="4"/>
+            <column name="weight_modifier_adj" value="0"/>
+            <column name="size" value="Small"/>
+            <column name="source_material" value="homebrew"/>
+            <column name="source_credit_url" value="https://www.dandwiki.com/wiki/Kobold,_Variant_(5e_Race)"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_race">
+            <column name="race" value="Greenskin goblin"/>
+            <column name="subrace_of" value="Goblin"/>
+            <column name="maturity_age" value="3"/>
+            <column name="avg_max_age" value="35"/>
+            <column name="base_walking_speed" value="40"/>
+            <column name="height_min_inches" value="35"/>
+            <column name="height_modifier_multiplier"  value="2"/>
+            <column name="height_modifier_die" value="4"/>
+            <column name="height_modifier_adj" value="0"/>
+            <column name="weight_min_pounds" value="40"/>
+            <column name="weight_modifier_multiplier"  value="3"/>
+            <column name="weight_modifier_die" value="4"/>
+            <column name="weight_modifier_adj" value="0"/>
+            <column name="size" value="Small"/>
+            <column name="source_material" value="homebrew"/>
+            <column name="source_credit_url" value="https://www.dandwiki.com/wiki/Goblin_(5e_Race_Variant)"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_race">
+            <column name="race" value="Boggart goblin"/>
+            <column name="subrace_of" value="Goblin"/>
+            <column name="maturity_age" value="3"/>
+            <column name="avg_max_age" value="35"/>
+            <column name="base_walking_speed" value="40"/>
+            <column name="height_min_inches" value="35"/>
+            <column name="height_modifier_multiplier"  value="2"/>
+            <column name="height_modifier_die" value="4"/>
+            <column name="height_modifier_adj" value="0"/>
+            <column name="weight_min_pounds" value="40"/>
+            <column name="weight_modifier_multiplier"  value="3"/>
+            <column name="weight_modifier_die" value="4"/>
+            <column name="weight_modifier_adj" value="0"/>
+            <column name="size" value="Small"/>
+            <column name="source_material" value="homebrew"/>
+            <column name="source_credit_url" value="https://www.dandwiki.com/wiki/Goblin_(5e_Race_Variant)"/>
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_race">
+            <column name="race" value="Gremlin goblin"/>
+            <column name="subrace_of" value="Goblin"/>
+            <column name="maturity_age" value="3"/>
+            <column name="avg_max_age" value="35"/>
+            <column name="base_walking_speed" value="40"/>
+            <column name="height_min_inches" value="35"/>
+            <column name="height_modifier_multiplier"  value="2"/>
+            <column name="height_modifier_die" value="4"/>
+            <column name="height_modifier_adj" value="0"/>
+            <column name="weight_min_pounds" value="40"/>
+            <column name="weight_modifier_multiplier"  value="3"/>
+            <column name="weight_modifier_die" value="4"/>
+            <column name="weight_modifier_adj" value="0"/>
+            <column name="size" value="Small"/>
+            <column name="source_material" value="homebrew"/>
+            <column name="source_credit_url" value="https://www.dandwiki.com/wiki/Goblin_(5e_Race_Variant)"/>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>

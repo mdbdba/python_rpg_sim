@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet author="mdbdba" id="lu_racial_trait_category_1">
+        <createTable 
+                schemaName="dnd_5e"
+                tableName="lu_racial_trait_category">
+            <column name="value" type="varchar(32)"/>
+        </createTable>
+        <addPrimaryKey 
+            columnNames="value"
+            constraintName="pk_lu_racial_trait_category"
+            schemaName="dnd_5e"
+            tableName="lu_racial_trait_category"/>
+
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait_category">
+            <column name="value" value="Weapon" /></insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait_category">
+            <column name="value" value="Spell" /></insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait_category">
+            <column name="value" value="Spell Effect" /></insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait_category">
+            <column name="value" value="Attack" /></insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait_category">
+            <column name="value" value="Saving Throw" /></insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait_category">
+            <column name="value" value="Damage Given" /></insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait_category">
+            <column name="value" value="Damage Received" /></insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait_category">
+            <column name="value" value="Proficiency Skill" /></insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait_category">
+            <column name="value" value="Language Skill" /></insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait_category">
+            <column name="value" value="Hit Point Adj" /></insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait_category">
+            <column name="value" value="Feat" /></insert> 
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait_category">
+            <column name="value" value="Movement" /></insert> 
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait_category">
+            <column name="value" value="Vision" /></insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait_category">
+           <column name="value" value="Skill Check"/></insert>
+    </changeSet>
+</databaseChangeLog>
+

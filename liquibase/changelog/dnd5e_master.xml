@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    
+    <include file="./dnd5e_lu_alignment.xml"/>
+    <include file="./dnd5e_lu_spell.xml"/>
+    <include file="dnd5e_lu_ability.xml"/>
+    <include file="dnd5e_lu_recharge_on.xml"/>
+    <include file="dnd5e_lu_size.xml"/>
+    <include file="dnd5e_lu_source_material.xml"/>
+    <include file="dnd5e_lu_affect.xml"/>
+    <include file="dnd5e_lu_gender.xml"/>
+    <include file="dnd5e_lu_gender_pronoun.xml"/>
+    <include file="dnd5e_lu_language.xml"/>
+    <include file="dnd5e_lu_level.xml"/>
+    <include file="dnd5e_lu_racial_trait_category.xml"/>
+    <include file="dnd5e_lu_ability_score_modifier.xml"/>
+    <include file="dnd5e_lu_ability_score_point_cost.xml"/>
+    <include file="dnd5e_lu_ability_skill.xml"/>
+    <include file="dnd5e_lu_race.xml"/>
+    <include file="dnd5e_lu_racial_ability_score_modifier.xml"/>
+    <include file="dnd5e_lu_racial_alignment_preference.xml"/>
+    <include file="dnd5e_lu_racial_eye_color.xml"/>
+    <include file="dnd5e_lu_racial_first_name.xml"/>
+    <include file="dnd5e_lu_racial_hair_color.xml"/>
+    <include file="dnd5e_lu_racial_hair_type.xml"/>
+    <include file="dnd5e_lu_racial_language.xml"/>
+    <include file="dnd5e_lu_racial_last_name.xml"/>
+    <include file="dnd5e_lu_racial_skin_tone.xml"/>
+    <include file="dnd5e_lu_racial_trait.xml"/>
+
+</databaseChangeLog>

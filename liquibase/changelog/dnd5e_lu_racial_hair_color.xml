@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    
+    <changeSet author="mdbdba" id="lu_racial_hair_color_1">
+        <createTable 
+                schemaName="dnd_5e"
+                tableName="lu_racial_hair_color">
+            <column autoIncrement="true" startWith="1" name="id" type="int"/>
+            <column name="race" type="varchar(32)"/>
+            <column name="value" type="varchar(64)"/>
+        </createTable>
+        <addPrimaryKey 
+            columnNames="id"
+            constraintName="pk_lu_racial_hair_color"
+            schemaName="dnd_5e"
+            tableName="lu_racial_hair_color"/>
+        <insert schemaName="dnd_5e" tableName="lu_racial_hair_color">
+            <column name="race" value="Dwarf"/><column name="value" value="Black"/>
+        </insert>
+           <insert schemaName="dnd_5e" tableName="lu_racial_hair_color">
+            <column name="race" value="Dwarf"/><column name="value" value="Brown"/>
+        </insert>
+           <insert schemaName="dnd_5e" tableName="lu_racial_hair_color">
+            <column name="race" value="Dwarf"/><column name="value" value="Grey"/>
+        </insert>
+           <insert schemaName="dnd_5e" tableName="lu_racial_hair_color">
+            <column name="race" value="Elf"/><column name="value" value="Black"/>
+        </insert>
+           <insert schemaName="dnd_5e" tableName="lu_racial_hair_color">
+            <column name="race" value="Elf"/><column name="value" value="Brown"/>
+        </insert>
+           <insert schemaName="dnd_5e" tableName="lu_racial_hair_color">
+            <column name="race" value="Elf"/><column name="value" value="Grey"/>
+        </insert>
+           <insert schemaName="dnd_5e" tableName="lu_racial_hair_color">
+            <column name="race" value="Half-Elf"/><column name="value" value="Black"/>
+        </insert>
+           <insert schemaName="dnd_5e" tableName="lu_racial_hair_color">
+            <column name="race" value="Half-Elf"/><column name="value" value="Brown"/>
+        </insert>
+           <insert schemaName="dnd_5e" tableName="lu_racial_hair_color">
+            <column name="race" value="Half-Elf"/><column name="value" value="Blond"/>
+        </insert>
+           <insert schemaName="dnd_5e" tableName="lu_racial_hair_color">
+            <column name="race" value="Half-Elf"/><column name="value" value="Red"/>
+        </insert>
+           <insert schemaName="dnd_5e" tableName="lu_racial_hair_color">
+            <column name="race" value="Half-Elf"/><column name="value" value="White"/>
+        </insert>
+           <insert schemaName="dnd_5e" tableName="lu_racial_hair_color">
+            <column name="race" value="Orc"/><column name="value" value="Black"/>
+        </insert>
+           <insert schemaName="dnd_5e" tableName="lu_racial_hair_color">
+            <column name="race" value="Orc"/><column name="value" value="Brown"/>
+        </insert>
+           <insert schemaName="dnd_5e" tableName="lu_racial_hair_color">
+            <column name="race" value="Orc"/><column name="value" value="Blond"/>
+        </insert>
+           <insert schemaName="dnd_5e" tableName="lu_racial_hair_color">
+            <column name="race" value="Orc"/><column name="value" value="Red"/>
+        </insert>
+           <insert schemaName="dnd_5e" tableName="lu_racial_hair_color">
+            <column name="race" value="Orc"/><column name="value" value="White"/>
+        </insert>
+           <insert schemaName="dnd_5e" tableName="lu_racial_hair_color">
+            <column name="race" value="Half-Orc"/><column name="value" value="Black"/>
+        </insert>
+           <insert schemaName="dnd_5e" tableName="lu_racial_hair_color">
+            <column name="race" value="Half-Orc"/><column name="value" value="Brown"/>
+        </insert>
+           <insert schemaName="dnd_5e" tableName="lu_racial_hair_color">
+            <column name="race" value="Half-Orc"/><column name="value" value="Blond"/>
+        </insert>
+           <insert schemaName="dnd_5e" tableName="lu_racial_hair_color">
+            <column name="race" value="Half-Orc"/><column name="value" value="Red"/>
+        </insert>
+           <insert schemaName="dnd_5e" tableName="lu_racial_hair_color">
+            <column name="race" value="Half-Orc"/><column name="value" value="White"/>
+        </insert>
+           <insert schemaName="dnd_5e" tableName="lu_racial_hair_color">
+            <column name="race" value="Human"/><column name="value" value="Black"/>
+        </insert>
+           <insert schemaName="dnd_5e" tableName="lu_racial_hair_color">
+            <column name="race" value="Human"/><column name="value" value="Brown"/>
+        </insert>
+           <insert schemaName="dnd_5e" tableName="lu_racial_hair_color">
+            <column name="race" value="Human"/><column name="value" value="Blond"/>
+        </insert>
+           <insert schemaName="dnd_5e" tableName="lu_racial_hair_color">
+            <column name="race" value="Human"/><column name="value" value="Red"/>
+        </insert>
+           <insert schemaName="dnd_5e" tableName="lu_racial_hair_color">
+            <column name="race" value="Human"/><column name="value" value="White"/>
+        </insert>
+           <insert schemaName="dnd_5e" tableName="lu_racial_hair_color">
+            <column name="race" value="Human"/><column name="value" value="Grey"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_hair_color">
+            <column name="race" value="Halfling"/><column name="value" value="Auburn"/>
+        </insert>
+           <insert schemaName="dnd_5e" tableName="lu_racial_hair_color">
+            <column name="race" value="Halfling"/><column name="value" value="Brown"/>
+        </insert>
+           <insert schemaName="dnd_5e" tableName="lu_racial_hair_color">
+            <column name="race" value="Halfling"/><column name="value" value="Blond"/>
+        </insert>
+           <insert schemaName="dnd_5e" tableName="lu_racial_hair_color">
+            <column name="race" value="Halfling"/><column name="value" value="Red"/>
+        </insert>
+           <insert schemaName="dnd_5e" tableName="lu_racial_hair_color">
+            <column name="race" value="Halfling"/><column name="value" value="White"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_hair_color">
+            <column name="race" value="Dragonborn"/><column name="value" value="None"/></insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_hair_color">
+            <column name="race" value="Gnome"/><column name="value" value="Yellow"/></insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_hair_color">
+            <column name="race" value="Gnome"/><column name="value" value="White"/></insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_hair_color">
+            <column name="race" value="Gnome"/><column name="value" value="Red"/></insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_hair_color">
+            <column name="race" value="Gnome"/><column name="value" value="Black"/></insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_hair_color">
+            <column name="race" value="Gnome"/><column name="value" value="Orange"/></insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_hair_color">
+            <column name="race" value="Gnome"/><column name="value" value="Brown"/></insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_hair_color">
+            <column name="race" value="Gnome"/><column name="value" value="Blue"/></insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_hair_color">
+            <column name="race" value="Gnome"/><column name="value" value="Green"/></insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_hair_color">
+            <column name="race" value="Gnome"/><column name="value" value="Purple"/></insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_hair_color">
+            <column name="race" value="Gnome"/><column name="value" value="Grey"/></insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_hair_color">
+            <column name="race" value="Half-Orc"/><column name="value" value="Black"/></insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_hair_color">
+            <column name="race" value="Half-Orc"/><column name="value" value="Grey"/></insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_hair_color">
+            <column name="race" value="Tiefling"/><column name="value" value="Dark Red"/></insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_hair_color">
+            <column name="race" value="Tiefling"/><column name="value" value="Black"/></insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_hair_color">
+            <column name="race" value="Tiefling"/><column name="value" value="Brown"/></insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_hair_color">
+            <column name="race" value="Tiefling"/><column name="value" value="Purple"/></insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_hair_color">
+            <column name="race" value="Tiefling"/><column name="value" value="Blue"/></insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_hair_color">
+            <column name="race" value="Centaur"/><column name="value" value="Chestnut"/></insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_hair_color">
+            <column name="race" value="Centaur"/><column name="value" value="Grey"/></insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_hair_color">
+            <column name="race" value="Centaur"/><column name="value" value="Black"/></insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_hair_color">
+            <column name="race" value="Centaur"/><column name="value" value="White"/></insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_hair_color">
+            <column name="race" value="Centaur"/><column name="value" value="Smoky Cream"/></insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_hair_color">
+            <column name="race" value="Centaur"/><column name="value" value="Smoky Black"/></insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_hair_color">
+            <column name="race" value="Centaur"/><column name="value" value="Silver"/></insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_hair_color">
+            <column name="race" value="Bearkin"/><column name="value" value="Brown"/></insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_hair_color">
+            <column name="race" value="Bearkin"/><column name="value" value="Black"/></insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_hair_color">
+            <column name="race" value="Bearkin"/><column name="value" value="Silver Blue"/></insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_hair_color">
+            <column name="race" value="Bearkin"/><column name="value" value="Light Grey"/></insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_hair_color">
+            <column name="race" value="Bearkin"/><column name="value" value="Dark Grey"/></insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_hair_color">
+            <column name="race" value="Bearkin"/><column name="value" value="White"/></insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_hair_color">
+            <column name="race" value="Bearkin"/><column name="value" value="Yellow"/></insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_hair_color">
+            <column name="race" value="Bearkin"/><column name="value" value="Tan"/></insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_hair_color">
+            <column name="race" value="Bearkin"/><column name="value" value="Rusty Brown"/></insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_hair_color">
+            <column name="race" value="Bearkin"/><column name="value" value="Light Brown"/></insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_hair_color">
+            <column name="race" value="Bearkin"/><column name="value" value="Dark Brown"/></insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_hair_color">
+            <column name="race" value="Black bearkin"/><column name="value" value="Black"/></insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_hair_color">
+            <column name="race" value="Black bearkin"/><column name="value" value="Silver Blue"/></insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_hair_color">
+            <column name="race" value="Black bearkin"/><column name="value" value="Grey"/></insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_hair_color">
+            <column name="race" value="Brown bearkin"/><column name="value" value="Tan"/></insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_hair_color">
+            <column name="race" value="Brown bearkin"/><column name="value" value="Rusty Brown"/></insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_hair_color">
+            <column name="race" value="Brown bearkin"/><column name="value" value="Dark Brown"/></insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_hair_color">
+            <column name="race" value="Koala bearkin"/><column name="value" value="Light Grey"/></insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_hair_color">
+            <column name="race" value="Koala bearkin"/><column name="value" value="Dark Grey"/></insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_hair_color">
+            <column name="race" value="Koala bearkin"/><column name="value" value="Light Brown"/></insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_hair_color">
+            <column name="race" value="Koala bearkin"/><column name="value" value="Dark Brown"/></insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_hair_color">
+            <column name="race" value="Panda bearkin"/><column name="value" value="Black and White"/></insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_hair_color">
+            <column name="race" value="Polar bearkin"/><column name="value" value="White"/></insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_hair_color">
+            <column name="race" value="Polar bearkin"/><column name="value" value="Yellow"/></insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_hair_color">
+            <column name="race" value="Kobold"/><column name="value" value="None"/></insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_hair_color">
+            <column name="race" value="Greenskin Goblin"/>
+            <column name="value" value="White"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_hair_color">
+            <column name="race" value="Greenskin Goblin"/>
+            <column name="value" value="Black"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_hair_color">
+            <column name="race" value="Greenskin Goblin"/>
+            <column name="value" value="Blue"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_hair_color">
+            <column name="race" value="Greenskin Goblin"/>
+            <column name="value" value="Grey"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_hair_color">
+            <column name="race" value="Boggart Goblin"/>
+            <column name="value" value="White"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_hair_color">
+            <column name="race" value="Boggart Goblin"/>
+            <column name="value" value="Black"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_hair_color">
+            <column name="race" value="Boggart Goblin"/>
+            <column name="value" value="Blue"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_hair_color">
+            <column name="race" value="Boggart Goblin"/>
+            <column name="value" value="Grey"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_hair_color">
+            <column name="race" value="Gremlin Goblin"/>
+            <column name="value" value="White"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_hair_color">
+            <column name="race" value="Gremlin Goblin"/>
+            <column name="value" value="Black"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_hair_color">
+            <column name="race" value="Gremlin Goblin"/>
+            <column name="value" value="Blue"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_hair_color">
+            <column name="race" value="Gremlin Goblin"/>
+            <column name="value" value="Grey"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>

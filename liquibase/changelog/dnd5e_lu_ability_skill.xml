@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet author="mdbdba" id="lu_ability_skill_1">
+       <createTable 
+                schemaName="dnd_5e"
+                tableName="lu_ability_skill">
+            <column name="ability" type="varchar(32)"/>
+            <column name="name" type="varchar(32)"/>
+        </createTable>
+        <addPrimaryKey 
+            columnNames="name"
+            constraintName="pk_lu_ability_skill"
+            schemaName="dnd_5e"
+            tableName="lu_ability_skill"/>
+
+        <insert schemaName="dnd_5e" tableName="lu_ability_skill">
+            <column name="ability" value="Strength" /><column name="name" value="Athletics" />  
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_ability_skill">
+            <column name="ability" value="Dexterity" /><column name="name" value="Acrobatics" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_ability_skill">
+            <column name="ability" value="Dexterity" /><column name="name" value="Sleight of Hand" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_ability_skill">
+            <column name="ability" value="Dexterity" /><column name="name" value="Stealth" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_ability_skill">
+            <column name="ability" value="Intelligence" /><column name="name" value="Arcana" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_ability_skill">
+            <column name="ability" value="Intelligence" /><column name="name" value="History" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_ability_skill">
+            <column name="ability" value="Intelligence" /><column name="name" value="Investigation" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_ability_skill">
+            <column name="ability" value="Intelligence" /><column name="name" value="Nature" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_ability_skill">
+            <column name="ability" value="Intelligence" /><column name="name" value="Religion" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_ability_skill">
+            <column name="ability" value="Wisdom" /><column name="name" value="Animal Handling" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_ability_skill">
+            <column name="ability" value="Wisdom" /><column name="name" value="Insight" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_ability_skill">
+            <column name="ability" value="Wisdom" /><column name="name" value="Medicine" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_ability_skill">
+            <column name="ability" value="Wisdom" /><column name="name" value="Perception" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_ability_skill">
+            <column name="ability" value="Wisdom" /><column name="name" value="Survival" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_ability_skill">
+            <column name="ability" value="Charisma" /><column name="name" value="Deception" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_ability_skill">
+            <column name="ability" value="Charisma" /><column name="name" value="Intimidation" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_ability_skill">
+            <column name="ability" value="Charisma" /><column name="name" value="Performance" /> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_ability_skill">
+            <column name="ability" value="Charisma" /><column name="name" value="Persuasion" />
+        </insert>
+
+    </changeSet>
+</databaseChangeLog>

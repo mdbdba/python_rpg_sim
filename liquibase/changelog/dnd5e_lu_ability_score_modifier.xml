@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    
+    <changeSet author="mdbdba" id="lu_ability_score_modifier_1">
+       <createTable 
+                schemaName="dnd_5e"
+                tableName="lu_ability_score_modifier">
+            <column name="value" type="smallint"/>
+            <column name="modifier" type="smallint"/>
+        </createTable>
+        <addPrimaryKey 
+            columnNames="value"
+            constraintName="pk_lu_ability_score_modifier"
+            schemaName="dnd_5e"
+            tableName="lu_ability_score_modifier"/>
+        
+        <insert schemaName="dnd_5e" tableName="lu_ability_score_modifier">
+            <column name="value" value="1"/><column name="modifier" value="-5"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_ability_score_modifier">
+            <column name="value" value="2"/><column name="modifier" value="-4"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_ability_score_modifier">
+            <column name="value" value="3"/><column name="modifier" value="-4"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_ability_score_modifier">
+            <column name="value" value="4"/><column name="modifier" value="-3"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_ability_score_modifier">
+            <column name="value" value="5"/><column name="modifier" value="-3"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_ability_score_modifier">
+            <column name="value" value="6"/><column name="modifier" value="-2"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_ability_score_modifier">
+            <column name="value" value="7"/><column name="modifier" value="-2"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_ability_score_modifier">
+            <column name="value" value="8"/><column name="modifier" value="-1"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_ability_score_modifier">
+            <column name="value" value="9"/><column name="modifier" value="-1"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_ability_score_modifier">
+            <column name="value" value="10"/><column name="modifier" value="0"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_ability_score_modifier">
+            <column name="value" value="11"/><column name="modifier" value="0"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_ability_score_modifier">
+            <column name="value" value="12"/><column name="modifier" value="1"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_ability_score_modifier">
+            <column name="value" value="13"/><column name="modifier" value="1"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_ability_score_modifier">
+            <column name="value" value="14"/><column name="modifier" value="2"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_ability_score_modifier">
+            <column name="value" value="15"/><column name="modifier" value="2"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_ability_score_modifier">
+            <column name="value" value="16"/><column name="modifier" value="3"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_ability_score_modifier">
+            <column name="value" value="17"/><column name="modifier" value="3"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_ability_score_modifier">
+            <column name="value" value="18"/><column name="modifier" value="4"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_ability_score_modifier">
+            <column name="value" value="19"/><column name="modifier" value="4"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_ability_score_modifier">
+            <column name="value" value="20"/><column name="modifier" value="5"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_ability_score_modifier">
+            <column name="value" value="21"/><column name="modifier" value="5"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_ability_score_modifier">
+            <column name="value" value="22"/><column name="modifier" value="6"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_ability_score_modifier">
+            <column name="value" value="23"/><column name="modifier" value="6"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_ability_score_modifier">
+            <column name="value" value="24"/><column name="modifier" value="7"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_ability_score_modifier">
+            <column name="value" value="25"/><column name="modifier" value="7"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_ability_score_modifier">
+            <column name="value" value="26"/><column name="modifier" value="8"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_ability_score_modifier">
+            <column name="value" value="27"/><column name="modifier" value="8"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_ability_score_modifier">
+            <column name="value" value="28"/><column name="modifier" value="9"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_ability_score_modifier">
+            <column name="value" value="29"/><column name="modifier" value="9"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_ability_score_modifier">
+            <column name="value" value="30"/><column name="modifier" value="10"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>

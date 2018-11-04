@@ -1,0 +1,672 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet author="mdbdba" id="lu_racial_alignment_preference_1">
+        <createTable 
+                schemaName="dnd_5e"
+                tableName="lu_racial_alignment_preference">
+            <column name="race" type="varchar(32)"/>
+            <column name="alignment" type="varchar(32)"/>
+            <column name="pct_likely" type="numeric(5, 2)"/>
+        </createTable>
+        <addPrimaryKey 
+            columnNames="race, alignment"
+            constraintName="pk_lu_racial_alignment_preference"
+            schemaName="dnd_5e"
+            tableName="lu_racial_alignment_preference"/>
+
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Dwarf" />
+            <column name="alignment" value="LG" />
+            <column name="pct_likely" value="45.0" />
+        </insert>
+        
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Dwarf" />
+            <column name="alignment" value="NG" />
+            <column name="pct_likely" value="5.0" />
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Dwarf" />
+            <column name="alignment" value="CG" />
+            <column name="pct_likely" value="5.0" />
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Dwarf" />
+            <column name="alignment" value="LN" />
+            <column name="pct_likely" value="10.0" />
+        </insert>
+ 
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Dwarf" />
+            <column name="alignment" value="N" />
+            <column name="pct_likely" value="5.0" />
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Dwarf" />
+            <column name="alignment" value="CN" />
+            <column name="pct_likely" value="5.0" />
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Dwarf" />
+            <column name="alignment" value="LE" />
+            <column name="pct_likely" value="10.0" />
+        </insert>
+ 
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Dwarf" />
+            <column name="alignment" value="NE" />
+            <column name="pct_likely" value="5.0" />
+        </insert>
+ 
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Dwarf" />
+            <column name="alignment" value="CE" />
+            <column name="pct_likely" value="5.0" />
+        </insert> 
+
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Elf" />
+            <column name="alignment" value="CG" />
+            <column name="pct_likely" value="60.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Elf" />
+            <column name="alignment" value="CN" />
+            <column name="pct_likely" value="20.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Elf" />
+            <column name="alignment" value="CE" />
+            <column name="pct_likely" value="2.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Elf" />
+            <column name="alignment" value="LG" />
+            <column name="pct_likely" value="2.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Elf" />
+            <column name="alignment" value="LN" />
+            <column name="pct_likely" value="2.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Elf" />
+            <column name="alignment" value="LE" />
+            <column name="pct_likely" value="1.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Elf" />
+            <column name="alignment" value="N" />
+            <column name="pct_likely" value="1.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Elf" />
+            <column name="alignment" value="NG" />
+            <column name="pct_likely" value="6.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Elf" />
+            <column name="alignment" value="NE" />
+            <column name="pct_likely" value="6.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Halfling" />
+            <column name="alignment" value="LG" />
+            <column name="pct_likely" value="70.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Halfling" />
+            <column name="alignment" value="NG" />
+            <column name="pct_likely" value="15.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Halfling" />
+            <column name="alignment" value="CG" />
+            <column name="pct_likely" value="10.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Halfling" />
+            <column name="alignment" value="N" />
+            <column name="pct_likely" value="3.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Halfling" />
+            <column name="alignment" value="LE" />
+            <column name="pct_likely" value="2.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Half-Elf" />
+            <column name="alignment" value="CG" />
+            <column name="pct_likely" value="30.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Half-Elf" />
+            <column name="alignment" value="CN" />
+            <column name="pct_likely" value="30.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Half-Elf" />
+            <column name="alignment" value="CE" />
+            <column name="pct_likely" value="10.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Half-Elf" />
+            <column name="alignment" value="N" />
+            <column name="pct_likely" value="15.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Half-Elf" />
+            <column name="alignment" value="LG" />
+            <column name="pct_likely" value="5.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Half-Elf" />
+            <column name="alignment" value="NE" />
+            <column name="pct_likely" value="5.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Half-Elf" />
+            <column name="alignment" value="NG" />
+            <column name="pct_likely" value="5.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Human" />
+            <column name="alignment" value="LG" />
+            <column name="pct_likely" value="11.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Human" />
+            <column name="alignment" value="NG" />
+            <column name="pct_likely" value="11.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Human" />
+            <column name="alignment" value="CG" />
+            <column name="pct_likely" value="11.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Human" />
+            <column name="alignment" value="LN" />
+            <column name="pct_likely" value="11.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Human" />
+            <column name="alignment" value="LE" />
+            <column name="pct_likely" value="11.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Human" />
+            <column name="alignment" value="N" />
+            <column name="pct_likely" value="12.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Human" />
+            <column name="alignment" value="NE" />
+            <column name="pct_likely" value="11.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Human" />
+            <column name="alignment" value="CN" />
+            <column name="pct_likely" value="11.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Human" />
+            <column name="alignment" value="CE" />
+            <column name="pct_likely" value="11.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Dragonborn" />
+            <column name="alignment" value="LG" />
+            <column name="pct_likely" value="30.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Dragonborn" />
+            <column name="alignment" value="NG" />
+            <column name="pct_likely" value="10.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Dragonborn" />
+            <column name="alignment" value="CG" />
+            <column name="pct_likely" value="4.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Dragonborn" />
+            <column name="alignment" value="LN" />
+            <column name="pct_likely" value="4.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Dragonborn" />
+            <column name="alignment" value="LE" />
+            <column name="pct_likely" value="4.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Dragonborn" />
+            <column name="alignment" value="N" />
+            <column name="pct_likely" value="4.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Dragonborn" />
+            <column name="alignment" value="NE" />
+            <column name="pct_likely" value="4.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Dragonborn" />
+            <column name="alignment" value="CN" />
+            <column name="pct_likely" value="10.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Dragonborn" />
+            <column name="alignment" value="CE" />
+            <column name="pct_likely" value="30.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Gnome" />
+            <column name="alignment" value="LG" />
+            <column name="pct_likely" value="20.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Gnome" />
+            <column name="alignment" value="NG" />
+            <column name="pct_likely" value="20.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Gnome" />
+            <column name="alignment" value="CG" />
+            <column name="pct_likely" value="20.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Gnome" />
+            <column name="alignment" value="LN" />
+            <column name="pct_likely" value="15.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Gnome" />
+            <column name="alignment" value="LE" />
+            <column name="pct_likely" value="2.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Gnome" />
+            <column name="alignment" value="N" />
+            <column name="pct_likely" value="5.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Gnome" />
+            <column name="alignment" value="NE" />
+            <column name="pct_likely" value="3.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Gnome" />
+            <column name="alignment" value="CN" />
+            <column name="pct_likely" value="13.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Gnome" />
+            <column name="alignment" value="CE" />
+            <column name="pct_likely" value="2.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Half-Orc" />
+            <column name="alignment" value="LG" />
+            <column name="pct_likely" value="3.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Half-Orc" />
+            <column name="alignment" value="NG" />
+            <column name="pct_likely" value="3.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Half-Orc" />
+            <column name="alignment" value="CG" />
+            <column name="pct_likely" value="25.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Half-Orc" />
+            <column name="alignment" value="LN" />
+            <column name="pct_likely" value="2.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Half-Orc" />
+            <column name="alignment" value="LE" />
+            <column name="pct_likely" value="2.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Half-Orc" />
+            <column name="alignment" value="N" />
+            <column name="pct_likely" value="5.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Half-Orc" />
+            <column name="alignment" value="NE" />
+            <column name="pct_likely" value="10.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Half-Orc" />
+            <column name="alignment" value="CN" />
+            <column name="pct_likely" value="25.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Half-Orc" />
+            <column name="alignment" value="CE" />
+            <column name="pct_likely" value="25.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Tiefling" />
+            <column name="alignment" value="LG" />
+            <column name="pct_likely" value="2.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Tiefling" />
+            <column name="alignment" value="NG" />
+            <column name="pct_likely" value="3.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Tiefling" />
+            <column name="alignment" value="CG" />
+            <column name="pct_likely" value="15.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Tiefling" />
+            <column name="alignment" value="LN" />
+            <column name="pct_likely" value="3.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Tiefling" />
+            <column name="alignment" value="LE" />
+            <column name="pct_likely" value="4.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Tiefling" />
+            <column name="alignment" value="N" />
+            <column name="pct_likely" value="8.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Tiefling" />
+            <column name="alignment" value="NE" />
+            <column name="pct_likely" value="20.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Tiefling" />
+            <column name="alignment" value="CN" />
+            <column name="pct_likely" value="20.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Tiefling" />
+            <column name="alignment" value="CE" />
+            <column name="pct_likely" value="25.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Centaur" />
+            <column name="alignment" value="LG" />
+            <column name="pct_likely" value="5.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Centaur" />
+            <column name="alignment" value="NG" />
+            <column name="pct_likely" value="15.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Centaur" />
+            <column name="alignment" value="CG" />
+            <column name="pct_likely" value="9.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Centaur" />
+            <column name="alignment" value="LN" />
+            <column name="pct_likely" value="15.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Centaur" />
+            <column name="alignment" value="LE" />
+            <column name="pct_likely" value="3.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Centaur" />
+            <column name="alignment" value="N" />
+            <column name="pct_likely" value="20.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Centaur" />
+            <column name="alignment" value="NE" />
+            <column name="pct_likely" value="15.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Centaur" />
+            <column name="alignment" value="CN" />
+            <column name="pct_likely" value="15.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Centaur" />
+            <column name="alignment" value="CE" />
+            <column name="pct_likely" value="3.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Bearkin" />
+            <column name="alignment" value="LG" />
+            <column name="pct_likely" value="9.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Bearkin" />
+            <column name="alignment" value="NG" />
+            <column name="pct_likely" value="12.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Bearkin" />
+            <column name="alignment" value="CG" />
+            <column name="pct_likely" value="9.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Bearkin" />
+            <column name="alignment" value="LN" />
+            <column name="pct_likely" value="15.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Bearkin" />
+            <column name="alignment" value="LE" />
+            <column name="pct_likely" value="6.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Bearkin" />
+            <column name="alignment" value="N" />
+            <column name="pct_likely" value="20.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Bearkin" />
+            <column name="alignment" value="NE" />
+            <column name="pct_likely" value="12.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Bearkin" />
+            <column name="alignment" value="CN" />
+            <column name="pct_likely" value="15.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Bearkin" />
+            <column name="alignment" value="CE" />
+            <column name="pct_likely" value="2.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Kobold" />
+            <column name="alignment" value="LG" />
+            <column name="pct_likely" value="20.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Kobold" />
+            <column name="alignment" value="NG" />
+            <column name="pct_likely" value="20.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Kobold" />
+            <column name="alignment" value="CG" />
+            <column name="pct_likely" value="20.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Kobold" />
+            <column name="alignment" value="LN" />
+            <column name="pct_likely" value="15.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Kobold" />
+            <column name="alignment" value="LE" />
+            <column name="pct_likely" value="2.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Kobold" />
+            <column name="alignment" value="N" />
+            <column name="pct_likely" value="5.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Kobold" />
+            <column name="alignment" value="NE" />
+            <column name="pct_likely" value="3.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Kobold" />
+            <column name="alignment" value="CN" />
+            <column name="pct_likely" value="13.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Kobold" />
+            <column name="alignment" value="CE" />
+            <column name="pct_likely" value="2.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Greenskin goblin" />
+            <column name="alignment" value="LG" />
+            <column name="pct_likely" value="1.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Greenskin goblin" />
+            <column name="alignment" value="NG" />
+            <column name="pct_likely" value="10.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Greenskin goblin" />
+            <column name="alignment" value="CG" />
+            <column name="pct_likely" value="15.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Greenskin goblin" />
+            <column name="alignment" value="LN" />
+            <column name="pct_likely" value="1.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Greenskin goblin" />
+            <column name="alignment" value="LE" />
+            <column name="pct_likely" value="1.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Greenskin goblin" />
+            <column name="alignment" value="N" />
+            <column name="pct_likely" value="30.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Greenskin goblin" />
+            <column name="alignment" value="NE" />
+            <column name="pct_likely" value="10.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Greenskin goblin" />
+            <column name="alignment" value="CN" />
+            <column name="pct_likely" value="17.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Greenskin goblin" />
+            <column name="alignment" value="CE" />
+            <column name="pct_likely" value="15.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Boggart goblin" />
+            <column name="alignment" value="LG" />
+            <column name="pct_likely" value="1.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Boggart goblin" />
+            <column name="alignment" value="NG" />
+            <column name="pct_likely" value="20.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Boggart goblin" />
+            <column name="alignment" value="CG" />
+            <column name="pct_likely" value="5.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Boggart goblin" />
+            <column name="alignment" value="LN" />
+            <column name="pct_likely" value="1.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Boggart goblin" />
+            <column name="alignment" value="LE" />
+            <column name="pct_likely" value="1.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Boggart goblin" />
+            <column name="alignment" value="N" />
+            <column name="pct_likely" value="30.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Boggart goblin" />
+            <column name="alignment" value="NE" />
+            <column name="pct_likely" value="20.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Boggart goblin" />
+            <column name="alignment" value="CN" />
+            <column name="pct_likely" value="17.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Boggart goblin" />
+            <column name="alignment" value="CE" />
+            <column name="pct_likely" value="5.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Gremlin goblin" />
+            <column name="alignment" value="LG" />
+            <column name="pct_likely" value="1.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Gremlin goblin" />
+            <column name="alignment" value="NG" />
+            <column name="pct_likely" value="6.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Gremlin goblin" />
+            <column name="alignment" value="CG" />
+            <column name="pct_likely" value="1.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Gremlin goblin" />
+            <column name="alignment" value="LN" />
+            <column name="pct_likely" value="1.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Gremlin goblin" />
+            <column name="alignment" value="LE" />
+            <column name="pct_likely" value="1.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Gremlin goblin" />
+            <column name="alignment" value="N" />
+            <column name="pct_likely" value="30.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Gremlin goblin" />
+            <column name="alignment" value="NE" />
+            <column name="pct_likely" value="10.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Gremlin goblin" />
+            <column name="alignment" value="CN" />
+            <column name="pct_likely" value="25.0" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_alignment_preference">
+            <column name="race" value="Gremlin goblin" />
+            <column name="alignment" value="CE" />
+            <column name="pct_likely" value="25.0" />
+        </insert>
+    </changeSet>
+</databaseChangeLog>

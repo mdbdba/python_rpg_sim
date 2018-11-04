@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet author="mdbdba" id="lu_level_1">
+       <createTable 
+                schemaName="dnd_5e"
+                tableName="lu_level">
+            <column name="id" type="smallint"/>
+            <column name="experience_min" type="int"/>
+            <column name="experience_max" type="int"/>
+            <column name="proficiency_bonus" type="smallint"/>
+        </createTable>
+        <addPrimaryKey 
+            columnNames="id"
+            constraintName="pk_lu_level"
+            schemaName="dnd_5e"
+            tableName="lu_level"/>
+        <insert schemaName="dnd_5e" tableName="lu_level">
+            <column name="id" value="1"/>
+            <column name="experience_min" value="0"/><column name="experience_max" value="299"/>
+            <column name="proficiency_bonus" value="2"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_level">
+            <column name="id" value="2"/>
+            <column name="experience_min" value="300"/><column name="experience_max" value="899"/>
+            <column name="proficiency_bonus" value="2"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_level">
+            <column name="id" value="3"/>
+            <column name="experience_min" value="900"/><column name="experience_max" value="2699"/>
+            <column name="proficiency_bonus" value="2"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_level">
+            <column name="id" value="4"/>
+            <column name="experience_min" value="2700"/><column name="experience_max" value="6499"/>
+            <column name="proficiency_bonus" value="2"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_level">
+            <column name="id" value="5"/>
+            <column name="experience_min" value="6500"/><column name="experience_max" value="13999"/>
+            <column name="proficiency_bonus" value="3"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_level">
+            <column name="id" value="6"/>
+            <column name="experience_min" value="14000"/><column name="experience_max" value="22999"/>
+            <column name="proficiency_bonus" value="3"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_level">
+            <column name="id" value="7"/>
+            <column name="experience_min" value="23000"/><column name="experience_max" value="33999"/>
+            <column name="proficiency_bonus" value="3"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_level">
+            <column name="id" value="8"/>
+            <column name="experience_min" value="34000"/><column name="experience_max" value="47999"/>
+            <column name="proficiency_bonus" value="3"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_level">
+            <column name="id" value="9"/>
+            <column name="experience_min" value="48000"/><column name="experience_max" value="63999"/>
+            <column name="proficiency_bonus" value="4"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_level">
+            <column name="id" value="10"/>
+            <column name="experience_min" value="64000"/><column name="experience_max" value="84999"/>
+            <column name="proficiency_bonus" value="4"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_level">
+            <column name="id" value="11"/>
+            <column name="experience_min" value="85000"/><column name="experience_max" value="99999"/>
+            <column name="proficiency_bonus" value="4"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_level">
+            <column name="id" value="12"/>
+            <column name="experience_min" value="100000"/><column name="experience_max" value="119999"/>
+            <column name="proficiency_bonus" value="4"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_level">
+            <column name="id" value="13"/>
+            <column name="experience_min" value="120000"/><column name="experience_max" value="139999"/>
+            <column name="proficiency_bonus" value="5"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_level">
+            <column name="id" value="14"/>
+            <column name="experience_min" value="140000"/><column name="experience_max" value="164999"/>
+            <column name="proficiency_bonus" value="5"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_level">
+            <column name="id" value="15"/>
+            <column name="experience_min" value="165000"/><column name="experience_max" value="194999"/>
+            <column name="proficiency_bonus" value="5"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_level">
+            <column name="id" value="16"/>
+            <column name="experience_min" value="195000"/><column name="experience_max" value="224999"/>
+            <column name="proficiency_bonus" value="5"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_level">
+            <column name="id" value="17"/>
+            <column name="experience_min" value="225000"/><column name="experience_max" value="264999"/>
+            <column name="proficiency_bonus" value="6"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_level">
+            <column name="id" value="18"/>
+            <column name="experience_min" value="265000"/><column name="experience_max" value="304999"/>
+            <column name="proficiency_bonus" value="6"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_level">
+            <column name="id" value="19"/>
+            <column name="experience_min" value="305000"/><column name="experience_max" value="354999"/>
+            <column name="proficiency_bonus" value="6"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_level">
+            <column name="id" value="20"/>
+            <column name="experience_min" value="355000"/><column name="experience_max" value="214783640"/>
+            <column name="proficiency_bonus" value="6"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>

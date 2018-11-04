@@ -1,0 +1,383 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet author="mdbdba" id="lu_spell_1">
+        <createTable 
+                schemaName="dnd_5e"
+                tableName="lu_casting_time_uom">
+            <column name="value" type="varchar(64)"/>
+        </createTable>
+        <addPrimaryKey 
+            columnNames="value"
+            constraintName="lu_casting_time_uom_pk"
+            schemaName="dnd_5e"
+            tableName="lu_casting_time_uom"/>
+
+        <createTable 
+                schemaName="dnd_5e"
+                tableName="lu_range_uom">
+            <column name="value" type="varchar(64)"/>
+        </createTable>
+        <addPrimaryKey 
+            columnNames="value"
+            constraintName="lu_range_uom_pk"
+            schemaName="dnd_5e"
+            tableName="lu_range_uom"/>
+
+        <createTable 
+                schemaName="dnd_5e"
+                tableName="lu_range_aoe">
+            <column name="value" type="varchar(64)"/>
+        </createTable>
+        <addPrimaryKey 
+            columnNames="value"
+            constraintName="lu_range_aoe_pk"
+            schemaName="dnd_5e"
+            tableName="lu_range_aoe"/>
+
+        <createTable 
+                schemaName="dnd_5e"
+                tableName="lu_duration_uom">
+            <column name="value" type="varchar(64)"/>
+        </createTable>
+        <addPrimaryKey 
+            columnNames="value"
+            constraintName="lu_duration_uom_pk"
+            schemaName="dnd_5e"
+            tableName="lu_duration_uom"/>
+
+        <createTable 
+                schemaName="dnd_5e"
+                tableName="lu_spell_school">
+            <column name="value" type="varchar(64)"/>
+            <column name="description" type="text"/>
+        </createTable>  
+        <addPrimaryKey 
+            columnNames="value"
+            constraintName="lu_spell_school_pk"
+            schemaName="dnd_5e"
+            tableName="lu_spell_school"/>
+
+        <createTable 
+                schemaName="dnd_5e"
+                tableName="lu_spell">
+            <column name="id" type="int"/>
+            <column name="name" type="varchar(128)"/>
+            <column name="level" type="smallint"/>
+            <column name="save" type="varchar(132)"/>
+            <column name="school" type="varchar(128)"/>
+            <column name="casting_time_amt" type="smallint"/>
+            <column name="casting_time_uom" type="varchar(64)"/>
+            <column name="casting_time_note" type="varchar(128)"/>
+            <column name="range_amt" type="smallint"/>
+            <column name="range_uom" type="varchar(64)"/>
+            <column name="range_aoe" type="varchar(64)"/>
+            <column name="verbal_component_ind" type="boolean"/>
+            <column name="somatic_component_ind" type="boolean"/>
+            <column name="material_component_ind" type="boolean"/>
+            <column name="material_component_desc" type="text"/>
+            <column name="duration_amt" type="smallint"/>
+            <column name="duration_uom" type="varchar(64)"/>
+            <column name="concentration_ind" type="boolean"/>
+            <column name="description" type="text"/>
+            <column name="higher_level_cast" type="text"/>
+        </createTable>
+        <addPrimaryKey 
+            columnNames="id"
+            constraintName="lu_spell_pk"
+            schemaName="dnd_5e"
+            tableName="lu_spell"/>
+        <addDefaultValue 
+            columnDataType="boolean"
+            columnName="verbal_component_ind"
+            defaultValueBoolean="false"
+            schemaName="dnd_5e"
+            tableName="lu_spell"/>
+        <addDefaultValue 
+            columnDataType="boolean"
+            columnName="somatic_component_ind"
+            defaultValueBoolean="false"
+            schemaName="dnd_5e"
+            tableName="lu_spell"/>
+        <addDefaultValue 
+            columnDataType="boolean"
+            columnName="material_component_ind"
+            defaultValueBoolean="false"
+            schemaName="dnd_5e"
+            tableName="lu_spell"/>
+        <addDefaultValue 
+            columnDataType="boolean"
+            columnName="concentration_ind"
+            defaultValueBoolean="false"
+            schemaName="dnd_5e"
+            tableName="lu_spell"/>
+        <addForeignKeyConstraint baseColumnNames="casting_time_uom"
+            baseTableName="lu_spell"
+            constraintName="lu_spell_casting_time_uom_fk"
+            onDelete="CASCADE"
+            onUpdate="RESTRICT"
+            referencedColumnNames="value"
+            referencedTableName="lu_casting_time_uom"/>
+        <addForeignKeyConstraint baseColumnNames="range_uom"
+            baseTableName="lu_spell"
+            constraintName="lu_spell_range_uom_fk"
+            onDelete="CASCADE"
+            onUpdate="RESTRICT"
+            referencedColumnNames="value"
+            referencedTableName="lu_range_uom"/>
+        <addForeignKeyConstraint baseColumnNames="range_aoe"
+            baseTableName="lu_spell"
+            constraintName="lu_spell_range_aoe_fk"
+            onDelete="CASCADE"
+            onUpdate="RESTRICT"
+            referencedColumnNames="value"
+            referencedTableName="lu_range_aoe"/>
+        <addForeignKeyConstraint baseColumnNames="duration_uom"
+            baseTableName="lu_spell"
+            constraintName="lu_spell_duration_uom_fk"
+            onDelete="CASCADE"
+            onUpdate="RESTRICT"
+            referencedColumnNames="value"
+            referencedTableName="lu_duration_uom"/>
+
+
+        <insert schemaName="dnd_5e" tableName="lu_spell_school"><column name="value" value="Abjuration"/><column name="description" value="Abjuration spells are protective in nature, though some of them have aggressive uses. They create magical barriers, negate harmful effects, harm trespassers, or banish creatures to other planes of existence."/></insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell_school"><column name="value" value="Conjuration"/><column name="description" value="Conjuration spells involve the transportation of objects and creatures from one location to another. Some spells summon creatures or objects to the caster''s side, whereas others allow the caster to teleport to another location. Some conjurations create objects or effects out of nothing."/></insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell_school"><column name="value" value="Divination"/><column name="description" value="Divination spells reveal information, whether in the form of secrets long forgotten, glimpses of the future, the locations of hidden things, the truth behind illusions, or visions of distant people or places."/></insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell_school"><column name="value" value="Enchantment"/><column name="description" value="Enchantment spells affect the minds of others, influencing or controlling their behavior. Such spells can make enemies see the caster as a friend, force creatures to take a course of action, or even control another creature like a puppet."/></insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell_school"><column name="value" value="Evocation"/><column name="description" value="Evocation spells manipulate magical energy to produce a desired effect. Some call up blasts of fire or lightning. Others channel positive energy to heal wounds."/></insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell_school"><column name="value" value="Illusion"/><column name="description" value="Illusion spells deceive the senses or minds of others. They cause people to see things that are not there, to miss things that are there, to hear phantom noises, or to remember things that never happened. Some illusions create phantom images that any creature can see, but the most insidious illusions plant an image directly in the mind of a creature."/></insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell_school"><column name="value" value="Necromancy"/><column name="description" value="Necromancy spells manipulate the energies of life and death. Such spells can grant an extra reserve of life force, drain the life energy from another creature, create the undead, or even bring the dead back to life. Creating the undead through the use of necromancy spells such as animate dead is not a good act, and only evil casters use such spells frequently."/></insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell_school"><column name="value" value="Transmutation"/><column name="description" value="Transmutation spells change the properties of a creature, object, or environment. They might turn an enemy into a harmless creature, bolster the strength of an ally, make an object move at the caster's command, or enhance a creature's innate healing abilities to rapidly recover from injury."/></insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_casting_time_uom"><column name="value" value="Minute(s)"/></insert>
+        <insert schemaName="dnd_5e" tableName="lu_casting_time_uom"><column name="value" value="Hour(s)"/></insert>
+        <insert schemaName="dnd_5e" tableName="lu_casting_time_uom"><column name="value" value="Action"/></insert>
+        <insert schemaName="dnd_5e" tableName="lu_casting_time_uom"><column name="value" value="Bonus Action"/></insert>
+        <insert schemaName="dnd_5e" tableName="lu_casting_time_uom"><column name="value" value="Reaction"/></insert>
+        
+        <insert schemaName="dnd_5e" tableName="lu_range_uom"><column name="value" value=""/></insert>
+        <insert schemaName="dnd_5e" tableName="lu_range_uom"><column name="value" value="Foot"/></insert>
+        <insert schemaName="dnd_5e" tableName="lu_range_uom"><column name="value" value="Feet"/></insert>
+        <insert schemaName="dnd_5e" tableName="lu_range_uom"><column name="value" value="Mile(s)"/></insert>
+        <insert schemaName="dnd_5e" tableName="lu_range_uom"><column name="value" value="Self"/></insert>
+        <insert schemaName="dnd_5e" tableName="lu_range_uom"><column name="value" value="Sight"/></insert>
+        <insert schemaName="dnd_5e" tableName="lu_range_uom"><column name="value" value="Special"/></insert>
+        <insert schemaName="dnd_5e" tableName="lu_range_uom"><column name="value" value="Touch"/></insert>
+        <insert schemaName="dnd_5e" tableName="lu_range_uom"><column name="value" value="Unlimited"/></insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_range_aoe"><column name="value" value=""/></insert>
+        <insert schemaName="dnd_5e" tableName="lu_range_aoe"><column name="value" value="Line"/></insert>
+        <insert schemaName="dnd_5e" tableName="lu_range_aoe"><column name="value" value="Cone"/></insert>
+        <insert schemaName="dnd_5e" tableName="lu_range_aoe"><column name="value" value="Cube"/></insert>
+        <insert schemaName="dnd_5e" tableName="lu_range_aoe"><column name="value" value="Radius Sphere"/></insert>
+        <insert schemaName="dnd_5e" tableName="lu_range_aoe"><column name="value" value="Radius Hemisphere"/></insert>
+        <insert schemaName="dnd_5e" tableName="lu_range_aoe"><column name="value" value="Radius"/></insert>
+        <insert schemaName="dnd_5e" tableName="lu_range_aoe"><column name="value" value="Cylinder"/></insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_duration_uom"><column name="value" value="Minute(s)"/></insert>
+        <insert schemaName="dnd_5e" tableName="lu_duration_uom"><column name="value" value="Hour(s)"/></insert>
+        <insert schemaName="dnd_5e" tableName="lu_duration_uom"><column name="value" value="Day(s)"/></insert>
+        <insert schemaName="dnd_5e" tableName="lu_duration_uom"><column name="value" value="Special"/></insert>
+        <insert schemaName="dnd_5e" tableName="lu_duration_uom"><column name="value" value="Round(s)"/></insert>
+        <insert schemaName="dnd_5e" tableName="lu_duration_uom"><column name="value" value="Until Dispelled"/></insert>
+        <insert schemaName="dnd_5e" tableName="lu_duration_uom"><column name="value" value="Until Dispelled or Triggered"/></insert>
+        <insert schemaName="dnd_5e" tableName="lu_duration_uom"><column name="value" value="Instantaneous"/></insert>
+
+    </changeSet>
+
+    <changeSet author="mdbdba" id="lu_spell_2">
+        <insert schemaName="dnd_5e" tableName="lu_spell">
+            <column name="id" value="362"/>
+            <column name="name" value="Dragonborn Breath Weapon - Black"/>
+            <column name="level" value="0"/>
+            <column name="casting_time_amt" value="1"/>
+            <column name="casting_time_uom" value="Action"/>
+            <column name="range_amt" value="30"/>
+            <column name="range_uom" value="Feet"/>
+            <column name="range_aoe" value="Line"/>
+            <column name="verbal_component_ind" value="false"/>
+            <column name="somatic_component_ind" value="true"/>
+            <column name="material_component_ind" value="false"/>
+            <column name="duration_amt" value="1"/>
+            <column name="duration_uom" value="Round(s)"/>
+            <column name="concentration_ind" value="false"/>
+            <column name="description" value="You can use your action to exhale destructive energy. Your draconic ancestry determines the size, shape, and damage type of the exhalation."/>
+            <column name="higher_level_cast" value="level:1,type:Acid,damage:2D6|level:6,type:Acid,damage:3D6|level:11,type:Acid,damage:4D6|level:16,type:Acid,damage:5D6"/>
+            <column name="save" value="Dexterity"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell">
+            <column name="id" value="363"/>
+            <column name="name" value="Dragonborn Breath Weapon - Blue"/>
+            <column name="level" value="0"/>
+            <column name="casting_time_amt" value="1"/>
+            <column name="casting_time_uom" value="Action"/>
+            <column name="range_amt" value="30"/>
+            <column name="range_uom" value="Feet"/>
+            <column name="range_aoe" value="Line"/>
+            <column name="verbal_component_ind" value="false"/>
+            <column name="somatic_component_ind" value="true"/>
+            <column name="material_component_ind" value="false"/>
+            <column name="duration_amt" value="1"/>
+            <column name="duration_uom" value="Round(s)"/>
+            <column name="concentration_ind" value="false"/>
+            <column name="description" value="You can use your action to exhale destructive energy. Your draconic ancestry determines the size, shape, and damage type of the exhalation."/>
+            <column name="higher_level_cast" value="level:1,type:Lightning,damage:2D6|level:6,type:Lightning,damage:3D6|level:11,type:Lightning,damage:4D6|level:16,type:Lightning,damage:5D6"/>
+            <column name="save" value="Dexterity"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell">
+            <column name="id" value="364"/>
+            <column name="name" value="Dragonborn Breath Weapon - Brass"/>
+            <column name="level" value="0"/>
+            <column name="casting_time_amt" value="1"/>
+            <column name="casting_time_uom" value="Action"/>
+            <column name="range_amt" value="30"/>
+            <column name="range_uom" value="Feet"/>
+            <column name="range_aoe" value="Line"/>
+            <column name="verbal_component_ind" value="false"/>
+            <column name="somatic_component_ind" value="true"/>
+            <column name="material_component_ind" value="false"/>
+            <column name="duration_amt" value="1"/>
+            <column name="duration_uom" value="Round(s)"/>
+            <column name="concentration_ind" value="false"/>
+            <column name="description" value="You can use your action to exhale destructive energy. Your draconic ancestry determines the size, shape, and damage type of the exhalation."/>
+            <column name="higher_level_cast" value="level:1,type:Fire,damage:2D6|level:6,type:Fire,damage:3D6|level:11,type:Fire,damage:4D6|level:16,type:Fire,damage:5D6"/>
+            <column name="save" value="Dexterity"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell">
+            <column name="id" value="365"/>
+            <column name="name" value="Dragonborn Breath Weapon - Bronze"/>
+            <column name="level" value="0"/>
+            <column name="casting_time_amt" value="1"/>
+            <column name="casting_time_uom" value="Action"/>
+            <column name="range_amt" value="30"/>
+            <column name="range_uom" value="Feet"/>
+            <column name="range_aoe" value="Line"/>
+            <column name="verbal_component_ind" value="false"/>
+            <column name="somatic_component_ind" value="true"/>
+            <column name="material_component_ind" value="false"/>
+            <column name="duration_amt" value="1"/>
+            <column name="duration_uom" value="Round(s)"/>
+            <column name="concentration_ind" value="false"/>
+            <column name="description" value="You can use your action to exhale destructive energy. Your draconic ancestry determines the size, shape, and damage type of the exhalation."/>
+            <column name="higher_level_cast" value="level:1,type:Lightning,damage:2D6|level:6,type:Lightning,damage:3D6|level:11,type:Lightning,damage:4D6|level:16,type:Lightning,damage:5D6"/>
+            <column name="save" value="Dexterity"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell">
+            <column name="id" value="366"/>
+            <column name="name" value="Dragonborn Breath Weapon - Copper"/>
+            <column name="level" value="0"/>
+            <column name="casting_time_amt" value="1"/>
+            <column name="casting_time_uom" value="Action"/>
+            <column name="range_amt" value="30"/>
+            <column name="range_uom" value="Feet"/>
+            <column name="range_aoe" value="Line"/>
+            <column name="verbal_component_ind" value="false"/>
+            <column name="somatic_component_ind" value="true"/>
+            <column name="material_component_ind" value="false"/>
+            <column name="duration_amt" value="1"/>
+            <column name="duration_uom" value="Round(s)"/>
+            <column name="concentration_ind" value="false"/>
+            <column name="description" value="You can use your action to exhale destructive energy. Your draconic ancestry determines the size, shape, and damage type of the exhalation."/>
+            <column name="higher_level_cast" value="level:1,type:Acid,damage:2D6|level:6,type:Acid,damage:3D6|level:11,type:Acid,damage:4D6|level:16,type:Acid,damage:5D6"/>
+            <column name="save" value="Dexterity"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell">
+            <column name="id" value="367"/>
+            <column name="name" value="Dragonborn Breath Weapon - Gold"/>
+            <column name="level" value="0"/>
+            <column name="casting_time_amt" value="1"/>
+            <column name="casting_time_uom" value="Action"/>
+            <column name="range_amt" value="15"/>
+            <column name="range_uom" value="Feet"/>
+            <column name="range_aoe" value="Cone"/>
+            <column name="verbal_component_ind" value="false"/>
+            <column name="somatic_component_ind" value="true"/>
+            <column name="material_component_ind" value="false"/>
+            <column name="duration_amt" value="1"/>
+            <column name="duration_uom" value="Round(s)"/>
+            <column name="concentration_ind" value="false"/>
+            <column name="description" value="You can use your action to exhale destructive energy. Your draconic ancestry determines the size, shape, and damage type of the exhalation."/>
+            <column name="higher_level_cast" value="level:1,type:Fire,damage:2D6|level:6,type:Fire,damage:3D6|level:11,type:Fire,damage:4D6|level:16,type:Fire,damage:5D6"/>
+            <column name="save" value="Dexterity"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell">
+            <column name="id" value="368"/>
+            <column name="name" value="Dragonborn Breath Weapon - Green"/>
+            <column name="level" value="0"/>
+            <column name="casting_time_amt" value="1"/>
+            <column name="casting_time_uom" value="Action"/>
+            <column name="range_amt" value="15"/>
+            <column name="range_uom" value="Feet"/>
+            <column name="range_aoe" value="Cone"/>
+            <column name="verbal_component_ind" value="false"/>
+            <column name="somatic_component_ind" value="true"/>
+            <column name="material_component_ind" value="false"/>
+            <column name="duration_amt" value="1"/>
+            <column name="duration_uom" value="Round(s)"/>
+            <column name="concentration_ind" value="false"/>
+            <column name="description" value="You can use your action to exhale destructive energy. Your draconic ancestry determines the size, shape, and damage type of the exhalation."/>
+            <column name="higher_level_cast" value="level:1,type:Poison,damage:2D6|level:6,type:Poison,damage:3D6|level:11,type:Poison,damage:4D6|level:16,type:Poison,damage:5D6"/>
+            <column name="save" value="Constitution"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell">
+            <column name="id" value="369"/>
+            <column name="name" value="Dragonborn Breath Weapon - Red"/>
+            <column name="level" value="0"/>
+            <column name="casting_time_amt" value="1"/>
+            <column name="casting_time_uom" value="Action"/>
+            <column name="range_amt" value="15"/>
+            <column name="range_uom" value="Feet"/>
+            <column name="range_aoe" value="Cone"/>
+            <column name="verbal_component_ind" value="false"/>
+            <column name="somatic_component_ind" value="true"/>
+            <column name="material_component_ind" value="false"/>
+            <column name="duration_amt" value="1"/>
+            <column name="duration_uom" value="Round(s)"/>
+            <column name="concentration_ind" value="false"/>
+            <column name="description" value="You can use your action to exhale destructive energy. Your draconic ancestry determines the size, shape, and damage type of the exhalation."/>
+            <column name="higher_level_cast" value="level:1,type:Fire,damage:2D6|level:6,type:Fire,damage:3D6|level:11,type:Fire,damage:4D6|level:16,type:Fire,damage:5D6"/>
+            <column name="save" value="Dexterity"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell">
+            <column name="id" value="370"/>
+            <column name="name" value="Dragonborn Breath Weapon - Silver"/>
+            <column name="level" value="0"/>
+            <column name="casting_time_amt" value="1"/>
+            <column name="casting_time_uom" value="Action"/>
+            <column name="range_amt" value="15"/>
+            <column name="range_uom" value="Feet"/>
+            <column name="range_aoe" value="Cone"/>
+            <column name="verbal_component_ind" value="false"/>
+            <column name="somatic_component_ind" value="true"/>
+            <column name="material_component_ind" value="false"/>
+            <column name="duration_amt" value="1"/>
+            <column name="duration_uom" value="Round(s)"/>
+            <column name="concentration_ind" value="false"/>
+            <column name="description" value="You can use your action to exhale destructive energy. Your draconic ancestry determines the size, shape, and damage type of the exhalation."/>
+            <column name="higher_level_cast" value="level:1,type:Cold,damage:2D6|level:6,type:Cold,damage:3D6|level:11,type:Cold,damage:4D6|level:16,type:Cold,damage:5D6"/>
+            <column name="save" value="Constitution"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell">
+            <column name="id" value="371"/>
+            <column name="name" value="Dragonborn Breath Weapon - White"/>
+            <column name="level" value="0"/>
+            <column name="casting_time_amt" value="1"/>
+            <column name="casting_time_uom" value="Action"/>
+            <column name="range_amt" value="15"/>
+            <column name="range_uom" value="Feet"/>
+            <column name="range_aoe" value="Cone"/>
+            <column name="verbal_component_ind" value="false"/>
+            <column name="somatic_component_ind" value="true"/>
+            <column name="material_component_ind" value="false"/>
+            <column name="duration_amt" value="1"/>
+            <column name="duration_uom" value="Round(s)"/>
+            <column name="concentration_ind" value="false"/>
+            <column name="description" value="You can use your action to exhale destructive energy. Your draconic ancestry determines the size, shape, and damage type of the exhalation."/>
+            <column name="higher_level_cast" value="level:1,type:Cold,damage:2D6|level:6,type:Cold,damage:3D6|level:11,type:Cold,damage:4D6|level:16,type:Cold,damage:5D6"/>
+            <column name="save" value="Constitution"/>
+        </insert>
+
+    </changeSet>
+
+
+</databaseChangeLog>

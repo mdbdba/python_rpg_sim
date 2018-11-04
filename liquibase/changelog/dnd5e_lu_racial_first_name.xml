@@ -1,0 +1,1603 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet author="mdbdba" id="lu_racial_first_name_1">
+        <createTable 
+                schemaName="dnd_5e"
+                tableName="lu_racial_first_name">
+            <column autoIncrement="true" startWith="1" name="id" type="int"/>
+            <column name="race" type="varchar(32)"/>
+            <column name="value" type="varchar(64)"/>
+            <column name="gender" type="varchar(16)"/>
+        </createTable>
+        <addPrimaryKey 
+            columnNames="id"
+            constraintName="pk_lu_racial_first_name"
+            schemaName="dnd_5e"
+            tableName="lu_racial_first_name"/>
+        <addForeignKeyConstraint baseColumnNames="gender"
+            baseTableName="lu_racial_first_name"
+            constraintName="fk_lu_racial_first_name_gender"
+            deferrable="true"
+            initiallyDeferred="true"
+            onDelete="CASCADE"
+            onUpdate="RESTRICT"
+            referencedColumnNames="value"
+            referencedTableName="lu_gender"/>
+        <addDefaultValue 
+            columnDataType="varchar(16)"
+            columnName="gender"
+            defaultValue="U"
+            schemaName="dnd_5e"
+            tableName="lu_racial_first_name"/>
+    </changeSet>
+    <changeSet author="mdbdba" id="lu_racial_first_name_2">
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Dwarf"/><column name="value" value="Adrik"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Dwarf"/><column name="value" value="Alberich"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Dwarf"/><column name="value" value="Armdrak"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Dwarf"/><column name="value" value="Bardain"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Dwarf"/><column name="value" value="Baern"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Dwarf"/><column name="value" value="Barendd"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Dwarf"/><column name="value" value="Brottor"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Dwarf"/><column name="value" value="Bruenor"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Dwarf"/><column name="value" value="Dain"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Dwarf"/><column name="value" value="Darrak"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Dwarf"/><column name="value" value="Delg"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Dwarf"/><column name="value" value="Eberk"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Dwarf"/><column name="value" value="Einkil"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Dwarf"/><column name="value" value="Fargrim"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Dwarf"/><column name="value" value="Flint"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Dwarf"/><column name="value" value="Gardain"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Dwarf"/><column name="value" value="Grengarn"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Dwarf"/><column name="value" value="Gralthran"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Dwarf"/><column name="value" value="Harbek"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Dwarf"/><column name="value" value="Kildrak"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Dwarf"/><column name="value" value="Krumrom"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Dwarf"/><column name="value" value="Kharrus"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Dwarf"/><column name="value" value="Morgran"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Dwarf"/><column name="value" value="Orsik"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Dwarf"/><column name="value" value="Oskar"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Dwarf"/><column name="value" value="Rangrim"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Dwarf"/><column name="value" value="Riswynn"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Dwarf"/><column name="value" value="Rotrik"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Dwarf"/><column name="value" value="Rurik"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Dwarf"/><column name="value" value="Taklinn"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Dwarf"/><column name="value" value="Thalnur"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Dwarf"/><column name="value" value="Thoradin"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Dwarf"/><column name="value" value="Thorin"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Dwarf"/><column name="value" value="Tordek"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Dwarf"/><column name="value" value="Traubon"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Dwarf"/><column name="value" value="Travok"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Dwarf"/><column name="value" value="Ulfgar"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Dwarf"/><column name="value" value="Veit"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Dwarf"/><column name="value" value="Vondal"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Elf"/><column name="value" value="Adfir"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Elf"/><column name="value" value="Adran"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Elf"/><column name="value" value="Aelar"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Elf"/><column name="value" value="Aramil"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Elf"/><column name="value" value="Arannis"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Elf"/><column name="value" value="Aust"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Elf"/><column name="value" value="Beiro"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Elf"/><column name="value" value="Beiven"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Elf"/><column name="value" value="Berrian"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Elf"/><column name="value" value="Carric"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Elf"/><column name="value" value="Elro"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Elf"/><column name="value" value="Enialis"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Elf"/><column name="value" value="Erdan"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Elf"/><column name="value" value="Erevan"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Elf"/><column name="value" value="Galinndan"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Elf"/><column name="value" value="Hadarai"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Elf"/><column name="value" value="Heian"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Elf"/><column name="value" value="Himo"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Elf"/><column name="value" value="Ianneiros"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Elf"/><column name="value" value="Immeral"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Elf"/><column name="value" value="Ivellios"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Elf"/><column name="value" value="Laucian"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Elf"/><column name="value" value="Leohorn"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Elf"/><column name="value" value="Luric"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Elf"/><column name="value" value="Mindartis"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Elf"/><column name="value" value="Moryarus"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Elf"/><column name="value" value="Paelias"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Elf"/><column name="value" value="Paqen"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Elf"/><column name="value" value="Quarion"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Elf"/><column name="value" value="Ralopetor"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Elf"/><column name="value" value="Riardon"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Elf"/><column name="value" value="Ronelis"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Elf"/><column name="value" value="Rolen"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Elf"/><column name="value" value="Sarjor"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Elf"/><column name="value" value="Sarkas"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Elf"/><column name="value" value="Soveliss"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Elf"/><column name="value" value="Thamior"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Elf"/><column name="value" value="Tharivol"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Elf"/><column name="value" value="Theren"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Elf"/><column name="value" value="Varis"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Halfling"/><column name="value" value="Alton"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Halfling"/><column name="value" value="Anders"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Halfling"/><column name="value" value="Cade"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Halfling"/><column name="value" value="Connor"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Halfling"/><column name="value" value="Corrin"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Halfling"/><column name="value" value="Derrick"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Halfling"/><column name="value" value="Ender"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Halfling"/><column name="value" value="Eldon"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Halfling"/><column name="value" value="Errich"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Halfling"/><column name="value" value="Finnan"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Halfling"/><column name="value" value="Garret"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Halfling"/><column name="value" value="Lindal"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Halfling"/><column name="value" value="Lyle"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Halfling"/><column name="value" value="Merric"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Halfling"/><column name="value" value="Milo"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Halfling"/><column name="value" value="Osborn"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Halfling"/><column name="value" value="Perrin"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Halfling"/><column name="value" value="Reed"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Halfling"/><column name="value" value="Roscoe"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Halfling"/><column name="value" value="Wellby"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Gnome"/><column name="value" value="Boddynock"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Gnome"/><column name="value" value="Dimble"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Gnome"/><column name="value" value="Fonkin"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Gnome"/><column name="value" value="Gimble"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Gnome"/><column name="value" value="Glim"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Gnome"/><column name="value" value="Gerbo"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Gnome"/><column name="value" value="Jebeddo"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Gnome"/><column name="value" value="Namfoodle"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Gnome"/><column name="value" value="Roondar"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Gnome"/><column name="value" value="Seebo"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Gnome"/><column name="value" value="Zook"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Orc"/><column name="value" value="Atun"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Orc"/><column name="value" value="Ajad"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Orc"/><column name="value" value="Bruk"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Orc"/><column name="value" value="Dench"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Orc"/><column name="value" value="Feng"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Orc"/><column name="value" value="Gell"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Orc"/><column name="value" value="Gok"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Orc"/><column name="value" value="Guddoll"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Orc"/><column name="value" value="Gundukk"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Orc"/><column name="value" value="Henk"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Orc"/><column name="value" value="Holg"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Orc"/><column name="value" value="Imsh"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Orc"/><column name="value" value="Jokk"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Orc"/><column name="value" value="Keth"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Orc"/><column name="value" value="Krusk"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Orc"/><column name="value" value="Ogvub"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Orc"/><column name="value" value="Radgud"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Orc"/><column name="value" value="Rhuk"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Orc"/><column name="value" value="Rhurokk"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Orc"/><column name="value" value="Ront"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Orc"/><column name="value" value="Shump"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Orc"/><column name="value" value="Thokk"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Orc"/><column name="value" value="Unog"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Orc"/><column name="value" value="Ugzog"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Orc"/><column name="value" value="Zol"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Human"/><column name="value" value="Aseir"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Human"/><column name="value" value="Bardeid"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Human"/><column name="value" value="Haseid"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Human"/><column name="value" value="Khemed"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Human"/><column name="value" value="Mehmen"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Human"/><column name="value" value="Sudeiman"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Human"/><column name="value" value="Zasheir"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Human"/><column name="value" value="Darvin"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Human"/><column name="value" value="Dorn"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Human"/><column name="value" value="Evendur"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Human"/><column name="value" value="Gorstag"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Human"/><column name="value" value="Grim"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Human"/><column name="value" value="Helm"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Human"/><column name="value" value="Malark"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Human"/><column name="value" value="Morn"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Human"/><column name="value" value="Randal"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Human"/><column name="value" value="Stedd"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Human"/><column name="value" value="Bor"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Human"/><column name="value" value="Fodel"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Human"/><column name="value" value="Glar"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Human"/><column name="value" value="Grigor"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Human"/><column name="value" value="Igan"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Human"/><column name="value" value="Ivor"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Human"/><column name="value" value="Kosef"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Human"/><column name="value" value="Mival"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Human"/><column name="value" value="Orel"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Human"/><column name="value" value="Pavel"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Human"/><column name="value" value="Sergor"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Human"/><column name="value" value="Ander"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Human"/><column name="value" value="Blath"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Human"/><column name="value" value="Bran"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Human"/><column name="value" value="Frath"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Human"/><column name="value" value="Geth"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Human"/><column name="value" value="Lander"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Human"/><column name="value" value="Luth"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Human"/><column name="value" value="Malcer"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Human"/><column name="value" value="Stor"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Human"/><column name="value" value="Taman"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Human"/><column name="value" value="Urth"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Human"/><column name="value" value="Aoth"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Human"/><column name="value" value="Bareris"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Human"/><column name="value" value="Ehput Ki"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Human"/><column name="value" value="Kethoth"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Human"/><column name="value" value="Mumed"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Human"/><column name="value" value="Ramas"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Human"/><column name="value" value="So Kehur"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Human"/><column name="value" value="Thazar De"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Human"/><column name="value" value="Urhur"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Human"/><column name="value" value="Borivik"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Human"/><column name="value" value="Cedrick"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Human"/><column name="value" value="Faurgar"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Human"/><column name="value" value="Jandar"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Human"/><column name="value" value="Kanithar"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Human"/><column name="value" value="Madislak"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Human"/><column name="value" value="Ralmevik"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Human"/><column name="value" value="Shaumar"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Human"/><column name="value" value="Vladislak"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Human"/><column name="value" value="Chien"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Human"/><column name="value" value="Huang"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Human"/><column name="value" value="Kao"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Human"/><column name="value" value="Kung"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Human"/><column name="value" value="Lao"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Human"/><column name="value" value="Ling"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Human"/><column name="value" value="Mei"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Human"/><column name="value" value="Pin"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Human"/><column name="value" value="Shin"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Human"/><column name="value" value="Sum"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Human"/><column name="value" value="Tan"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Human"/><column name="value" value="Wan"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Human"/><column name="value" value="Anton"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Human"/><column name="value" value="Diero"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Human"/><column name="value" value="Marcon"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Human"/><column name="value" value="Pieron"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Human"/><column name="value" value="Rimardo"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Human"/><column name="value" value="Rowena"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Human"/><column name="value" value="Romero"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Human"/><column name="value" value="Salazar"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Human"/><column name="value" value="Umbero"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Dragonborn"/><column name="value" value="Arnaar"/><column name="gender" value="M"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Dragonborn"/><column name="value" value="Jinhazar"/><column name="gender" value="M"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Dragonborn"/><column name="value" value="Wrarakas"/><column name="gender" value="M"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Dragonborn"/><column name="value" value="Balzavur"/><column name="gender" value="M"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Dragonborn"/><column name="value" value="Caerxiros"/><column name="gender" value="M"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Dragonborn"/><column name="value" value="Froyax"/><column name="gender" value="M"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Dragonborn"/><column name="value" value="Lumivull"/><column name="gender" value="M"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Dragonborn"/><column name="value" value="Zofrina"/><column name="gender" value="F"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Dragonborn"/><column name="value" value="Cavys"/><column name="gender" value="F"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Dragonborn"/><column name="value" value="Wraqwen"/><column name="gender" value="F"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Dragonborn"/><column name="value" value="Havyre"/><column name="gender" value="F"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Dragonborn"/><column name="value" value="Quilhymm"/><column name="gender" value="F"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Dragonborn"/><column name="value" value="Grizita"/><column name="gender" value="F"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Dragonborn"/><column name="value" value="Kelkaryn"/><column name="gender" value="F"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Gnome"/><column name="value" value="Doryur"/><column name="gender" value="M"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Gnome"/><column name="value" value="Keltor"/><column name="gender" value="M"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Gnome"/><column name="value" value="Felzu"/><column name="gender" value="M"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Gnome"/><column name="value" value="Tanlin"/><column name="gender" value="M"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Gnome"/><column name="value" value="Neshik"/><column name="gender" value="M"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Gnome"/><column name="value" value="Venmyra"/><column name="gender" value="F"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Gnome"/><column name="value" value="Daphirhana"/><column name="gender" value="F"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Gnome"/><column name="value" value="Galna"/><column name="gender" value="F"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Gnome"/><column name="value" value="Lorifyx"/><column name="gender" value="F"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Gnome"/><column name="value" value="Selrhana"/><column name="gender" value="F"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Half-Orc"/><column name="value" value="Thokk"/><column name="gender" value="M"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Half-Orc"/><column name="value" value="Jonathan"/><column name="gender" value="M"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Half-Orc"/><column name="value" value="Henk"/><column name="gender" value="M"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Half-Orc"/><column name="value" value="Keith"/><column name="gender" value="M"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Half-Orc"/><column name="value" value="Feng"/><column name="gender" value="M"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Half-Orc"/><column name="value" value="Louis"/><column name="gender" value="M"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Half-Orc"/><column name="value" value="Neega"/><column name="gender" value="F"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Half-Orc"/><column name="value" value="Charlotte"/><column name="gender" value="F"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Half-Orc"/><column name="value" value="Vola"/><column name="gender" value="F"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Half-Orc"/><column name="value" value="Pearl"/><column name="gender" value="F"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Half-Orc"/><column name="value" value="Baggi"/><column name="gender" value="F"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Half-Orc"/><column name="value" value="Trudi"/><column name="gender" value="F"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Tiefling"/><column name="value" value="Akemenos"/><column name="gender" value="M"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Tiefling"/><column name="value" value="Barakas"/><column name="gender" value="M"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Tiefling"/><column name="value" value="Kairon"/><column name="gender" value="M"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Tiefling"/><column name="value" value="Therai"/><column name="gender" value="M"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Tiefling"/><column name="value" value="Melech"/><column name="gender" value="M"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Tiefling"/><column name="value" value="Iados"/><column name="gender" value="M"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Tiefling"/><column name="value" value="Kallista"/><column name="gender" value="F"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Tiefling"/><column name="value" value="Makaria"/><column name="gender" value="F"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Tiefling"/><column name="value" value="Orianna"/><column name="gender" value="F"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Tiefling"/><column name="value" value="Rieta"/><column name="gender" value="F"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Tiefling"/><column name="value" value="Bryseis"/><column name="gender" value="F"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Tiefling"/><column name="value" value="Akta"/><column name="gender" value="F"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Centaur"/><column name="value" value=" Bane"/><column name="gender" value="U"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Centaur"/><column name="value" value="Firenze"/><column name="gender" value="U"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Centaur"/><column name="value" value="Ronan"/><column name="gender" value="U"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Centaur"/><column name="value" value="Magorian"/><column name="gender" value="U"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Centaur"/><column name="value" value="Pahk"/><column name="gender" value="U"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Bearkin"/><column name="value" value="Uzumati"/><column name="gender" value="M"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Bearkin"/><column name="value" value="Theo"/><column name="gender" value="M"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Bearkin"/><column name="value" value="Bjornar"/><column name="gender" value="M"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Bearkin"/><column name="value" value="Mecho"/><column name="gender" value="M"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Bearkin"/><column name="value" value="Bemelle"/><column name="gender" value="M"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Bearkin"/><column name="value" value="Uther"/><column name="gender" value="M"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Bearkin"/><column name="value" value="Orsino"/><column name="gender" value="M"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Bearkin"/><column name="value" value="Ursella"/><column name="gender" value="F"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Bearkin"/><column name="value" value="Tobini"/><column name="gender" value="F"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Bearkin"/><column name="value" value="Sapata"/><column name="gender" value="F"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Bearkin"/><column name="value" value="Averi"/><column name="gender" value="F"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Bearkin"/><column name="value" value="Heltu"/><column name="gender" value="F"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Bearkin"/><column name="value" value="Eferhild"/><column name="gender" value="F"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Bearkin"/><column name="value" value="Avery"/><column name="gender" value="U"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Bearkin"/><column name="value" value="Turi"/><column name="gender" value="U"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Black bearkin"/><column name="value" value="Ber"/><column name="gender" value="M"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Black bearkin"/><column name="value" value="Arkadios"/><column name="gender" value="M"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Black bearkin"/><column name="value" value="Arttu"/><column name="gender" value="M"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Black bearkin"/><column name="value" value="Orsin"/><column name="gender" value="M"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Black bearkin"/><column name="value" value="Kumu"/><column name="gender" value="F"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Black bearkin"/><column name="value" value="Mahtowa"/><column name="gender" value="F"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Black bearkin"/><column name="value" value="Orsa"/><column name="gender" value="F"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Brown bearkin"/><column name="value" value="Telutci"/><column name="gender" value="M"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Brown bearkin"/><column name="value" value="Yana"/><column name="gender" value="M"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Brown bearkin"/><column name="value" value="Myr"/><column name="gender" value="M"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Brown bearkin"/><column name="value" value="Orion"/><column name="gender" value="M"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Brown bearkin"/><column name="value" value="Nita"/><column name="gender" value="F"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Brown bearkin"/><column name="value" value="Queenie"/><column name="gender" value="F"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Brown bearkin"/><column name="value" value="Urska"/><column name="gender" value="F"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Brown bearkin"/><column name="value" value="Sabby"/><column name="gender" value="F"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Koala bearkin"/><column name="value" value="Cesar"/><column name="gender" value="M"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Koala bearkin"/><column name="value" value="Gio"/><column name="gender" value="M"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Koala bearkin"/><column name="value" value="Jesse"/><column name="gender" value="M"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Koala bearkin"/><column name="value" value="Dundee"/><column name="gender" value="M"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Koala bearkin"/><column name="value" value="Lola"/><column name="gender" value="F"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Koala bearkin"/><column name="value" value="Tufu"/><column name="gender" value="F"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Koala bearkin"/><column name="value" value="Fleur"/><column name="gender" value="F"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Koala bearkin"/><column name="value" value="Kylie"/><column name="gender" value="F"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Panda bearkin"/><column name="value" value="Junus"/><column name="gender" value="M"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Panda bearkin"/><column name="value" value="Scorpion"/><column name="gender" value="M"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Panda bearkin"/><column name="value" value="Zarius"/><column name="gender" value="M"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Panda bearkin"/><column name="value" value="Nhia"/><column name="gender" value="F"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Panda bearkin"/><column name="value" value="Milah"/><column name="gender" value="F"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Panda bearkin"/><column name="value" value="Kashia"/><column name="gender" value="F"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Polar bearkin"/><column name="value" value="Zapp"/><column name="gender" value="M"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Polar bearkin"/><column name="value" value="Alpine"/><column name="gender" value="M"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Polar bearkin"/><column name="value" value="Momus"/><column name="gender" value="M"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Polar bearkin"/><column name="value" value="Soraya"/><column name="gender" value="F"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Polar bearkin"/><column name="value" value="Nira"/><column name="gender" value="F"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Polar bearkin"/><column name="value" value="Kamisha"/><column name="gender" value="F"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Dragonborn"/><column name="value" value="Faerroth"/><column name="gender" value="U"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Dragonborn"/><column name="value" value="Mormash"/><column name="gender" value="U"/>
+        </insert>
+
+    </changeSet>
+
+    <changeSet author="mdbdba" id="lu_racial_first_name_3">
+        <update schemaName="dnd_5e"
+            tableName="lu_racial_first_name">
+          <column name="gender" value="M"/><where> race = 'Dwarf' and value = 'Adrik'</where></update>
+        <update schemaName="dnd_5e"
+            tableName="lu_racial_first_name">
+          <column name="gender" value="M"/><where> race = 'Dwarf' and value = 'Alberich'</where></update>
+        <update schemaName="dnd_5e"
+            tableName="lu_racial_first_name">
+          <column name="gender" value="M"/><where> race = 'Dwarf' and value = 'Armdrak'</where></update>
+        <update schemaName="dnd_5e"
+            tableName="lu_racial_first_name">
+          <column name="gender" value="M"/><where> race = 'Dwarf' and value = 'Baern'</where></update>
+        <update schemaName="dnd_5e"
+            tableName="lu_racial_first_name">
+          <column name="gender" value="M"/><where> race = 'Dwarf' and value = 'Brottor'</where></update>
+        <update schemaName="dnd_5e"
+            tableName="lu_racial_first_name">
+          <column name="gender" value="F"/><where> race = 'Dwarf' and value = 'Dain'</where></update>
+        <update schemaName="dnd_5e"
+            tableName="lu_racial_first_name">
+          <column name="gender" value="M"/><where> race = 'Dwarf' and value = 'Darrak'</where></update>
+        <update schemaName="dnd_5e"
+            tableName="lu_racial_first_name">
+          <column name="gender" value="F"/><where> race = 'Dwarf' and value = 'Fargrim'</where></update>
+        <update schemaName="dnd_5e"
+            tableName="lu_racial_first_name">
+          <column name="gender" value="M"/><where> race = 'Dwarf' and value = 'Flint'</where></update>
+        <update schemaName="dnd_5e"
+            tableName="lu_racial_first_name">
+          <column name="gender" value="F"/><where> race = 'Dwarf' and value = 'Gardain'</where></update>
+        <update schemaName="dnd_5e"
+            tableName="lu_racial_first_name">
+          <column name="gender" value="F"/><where> race = 'Dwarf' and value = 'Gralthran'</where></update>
+        <update schemaName="dnd_5e"
+            tableName="lu_racial_first_name">
+          <column name="gender" value="F"/><where> race = 'Dwarf' and value = 'Morgran'</where></update>
+        <update schemaName="dnd_5e"
+            tableName="lu_racial_first_name">
+          <column name="gender" value="M"/><where> race = 'Dwarf' and value = 'Oskar'</where></update>
+        <update schemaName="dnd_5e"
+            tableName="lu_racial_first_name">
+          <column name="gender" value="M"/><where> race = 'Dwarf' and value = 'Rangrim'</where></update>
+        <update schemaName="dnd_5e"
+            tableName="lu_racial_first_name">
+          <column name="gender" value="F"/><where> race = 'Dwarf' and value = 'Riswynn'</where></update>
+        <update schemaName="dnd_5e"
+            tableName="lu_racial_first_name">
+          <column name="gender" value="M"/><where> race = 'Dwarf' and value = 'Rotrik'</where></update>
+        <update schemaName="dnd_5e"
+            tableName="lu_racial_first_name">
+          <column name="gender" value="M"/><where> race = 'Dwarf' and value = 'Rurik'</where></update>
+        <update schemaName="dnd_5e"
+            tableName="lu_racial_first_name">
+          <column name="gender" value="F"/><where> race = 'Dwarf' and value = 'Taklinn'</where></update>
+        <update schemaName="dnd_5e"
+            tableName="lu_racial_first_name">
+          <column name="gender" value="M"/><where> race = 'Dwarf' and value = 'Thalnur'</where></update>
+        <update schemaName="dnd_5e"
+            tableName="lu_racial_first_name">
+          <column name="gender" value="M"/><where> race = 'Dwarf' and value = 'Thorin'</where></update>
+        <update schemaName="dnd_5e"
+            tableName="lu_racial_first_name">
+          <column name="gender" value="M"/><where> race = 'Dwarf' and value = 'Travok'</where></update>
+        <update schemaName="dnd_5e"
+            tableName="lu_racial_first_name">
+          <column name="gender" value="M"/><where> race = 'Dwarf' and value = 'Ulfgar'</where></update>
+        <update schemaName="dnd_5e"
+            tableName="lu_racial_first_name">
+          <column name="gender" value="M"/><where> race = 'Elf' and value = 'Adfir'</where></update>
+        <update schemaName="dnd_5e"
+            tableName="lu_racial_first_name">
+          <column name="gender" value="M"/><where> race = 'Elf' and value = 'Adran'</where></update>
+        <update schemaName="dnd_5e"
+            tableName="lu_racial_first_name">
+          <column name="gender" value="M"/><where> race = 'Elf' and value = 'Aust'</where></update>
+        <update schemaName="dnd_5e"
+            tableName="lu_racial_first_name">
+          <column name="gender" value="M"/><where> race = 'Elf' and value = 'Beiro'</where></update>
+        <update schemaName="dnd_5e"
+            tableName="lu_racial_first_name">
+          <column name="gender" value="M"/><where> race = 'Elf' and value = 'Berrian'</where></update>
+        <update schemaName="dnd_5e"
+            tableName="lu_racial_first_name">
+          <column name="gender" value="M"/><where> race = 'Elf' and value = 'Carric'</where></update>
+        <update schemaName="dnd_5e"
+            tableName="lu_racial_first_name">
+          <column name="gender" value="F"/><where> race = 'Elf' and value = 'Erevan'</where></update>
+        <update schemaName="dnd_5e"
+            tableName="lu_racial_first_name">
+          <column name="gender" value="M"/><where> race = 'Elf' and value = 'Ianneiros'</where></update>
+        <update schemaName="dnd_5e"
+            tableName="lu_racial_first_name">
+          <column name="gender" value="M"/><where> race = 'Elf' and value = 'Immeral'</where></update>
+        <update schemaName="dnd_5e"
+            tableName="lu_racial_first_name">
+          <column name="gender" value="M"/><where> race = 'Elf' and value = 'Laucian'</where></update>
+        <update schemaName="dnd_5e"
+            tableName="lu_racial_first_name">
+          <column name="gender" value="M"/><where> race = 'Elf' and value = 'Leohorn'</where></update>
+        <update schemaName="dnd_5e"
+            tableName="lu_racial_first_name">
+          <column name="gender" value="F"/><where> race = 'Elf' and value = 'Moryarus'</where></update>
+        <update schemaName="dnd_5e"
+            tableName="lu_racial_first_name">
+          <column name="gender" value="F"/><where> race = 'Elf' and value = 'Paelias'</where></update>
+        <update schemaName="dnd_5e"
+            tableName="lu_racial_first_name">
+          <column name="gender" value="F"/><where> race = 'Elf' and value = 'Paqen'</where></update>
+        <update schemaName="dnd_5e"
+            tableName="lu_racial_first_name">
+          <column name="gender" value="M"/><where> race = 'Elf' and value = 'Ralopetor'</where></update>
+        <update schemaName="dnd_5e"
+            tableName="lu_racial_first_name">
+          <column name="gender" value="M"/><where> race = 'Elf' and value = 'Rolen'</where></update>
+        <update schemaName="dnd_5e"
+            tableName="lu_racial_first_name">
+          <column name="gender" value="M"/><where> race = 'Elf' and value = 'Sarjor'</where></update>
+        <update schemaName="dnd_5e"
+            tableName="lu_racial_first_name">
+          <column name="gender" value="F"/><where> race = 'Elf' and value = 'Soveliss'</where></update>
+        <update schemaName="dnd_5e"
+            tableName="lu_racial_first_name">
+          <column name="gender" value="F"/><where> race = 'Elf' and value = 'Theren'</where></update>
+        <update schemaName="dnd_5e"
+            tableName="lu_racial_first_name">
+          <column name="gender" value="M"/><where> race = 'Elf' and value = 'Varis'</where></update>
+        <update schemaName="dnd_5e"
+            tableName="lu_racial_first_name">
+          <column name="gender" value="M"/><where> race = 'Halfling' and value = 'Alton'</where></update>
+        <update schemaName="dnd_5e"
+            tableName="lu_racial_first_name">
+          <column name="gender" value="M"/><where> race = 'Halfling' and value = 'Anders'</where></update>
+        <update schemaName="dnd_5e"
+            tableName="lu_racial_first_name">
+          <column name="gender" value="M"/><where> race = 'Halfling' and value = 'Connor'</where></update>
+        <update schemaName="dnd_5e"
+            tableName="lu_racial_first_name">
+          <column name="gender" value="M"/><where> race = 'Halfling' and value = 'Derrick'</where></update>
+        <update schemaName="dnd_5e"
+            tableName="lu_racial_first_name">
+          <column name="gender" value="M"/><where> race = 'Halfling' and value = 'Eldon'</where></update>
+        <update schemaName="dnd_5e"
+            tableName="lu_racial_first_name">
+          <column name="gender" value="M"/><where> race = 'Halfling' and value = 'Errich'</where></update>
+        <update schemaName="dnd_5e"
+            tableName="lu_racial_first_name">
+          <column name="gender" value="F"/><where> race = 'Halfling' and value = 'Finnan'</where></update>
+        <update schemaName="dnd_5e"
+            tableName="lu_racial_first_name">
+          <column name="gender" value="F"/><where> race = 'Halfling' and value = 'Lindal'</where></update>
+        <update schemaName="dnd_5e"
+            tableName="lu_racial_first_name">
+          <column name="gender" value="M"/><where> race = 'Halfling' and value = 'Lyle'</where></update>
+        <update schemaName="dnd_5e"
+            tableName="lu_racial_first_name">
+          <column name="gender" value="M"/><where> race = 'Halfling' and value = 'Merric'</where></update>
+        <update schemaName="dnd_5e"
+            tableName="lu_racial_first_name">
+          <column name="gender" value="M"/><where> race = 'Halfling' and value = 'Milo'</where></update>
+        <update schemaName="dnd_5e"
+            tableName="lu_racial_first_name">
+          <column name="gender" value="M"/><where> race = 'Halfling' and value = 'Osborn'</where></update>
+        <update schemaName="dnd_5e"
+            tableName="lu_racial_first_name">
+          <column name="gender" value="M"/><where> race = 'Halfling' and value = 'Reed'</where></update>
+        <update schemaName="dnd_5e"
+            tableName="lu_racial_first_name">
+          <column name="gender" value="M"/><where> race = 'Halfling' and value = 'Roscoe'</where></update>
+        <update schemaName="dnd_5e"
+            tableName="lu_racial_first_name">
+          <column name="gender" value="M"/><where> race = 'Halfling' and value = ''</where></update>
+        <update schemaName="dnd_5e"
+            tableName="lu_racial_first_name">
+          <column name="gender" value="M"/><where> race = 'Gnome' and value = 'Wellby'</where></update>
+        <update schemaName="dnd_5e"
+            tableName="lu_racial_first_name">
+          <column name="gender" value="M"/><where> race = 'Orc' and value = 'Bruk'</where></update>
+        <update schemaName="dnd_5e"
+            tableName="lu_racial_first_name">
+          <column name="gender" value="F"/><where> race = 'Orc' and value = 'Dench'</where></update>
+        <update schemaName="dnd_5e"
+            tableName="lu_racial_first_name">
+          <column name="gender" value="M"/><where> race = 'Orc' and value = 'Gok'</where></update>
+        <update schemaName="dnd_5e"
+            tableName="lu_racial_first_name">
+          <column name="gender" value="F"/><where> race = 'Orc' and value = 'Guddoll'</where></update>
+        <update schemaName="dnd_5e"
+            tableName="lu_racial_first_name">
+          <column name="gender" value="M"/><where> race = 'Orc' and value = 'Gundukk'</where></update>
+        <update schemaName="dnd_5e"
+            tableName="lu_racial_first_name">
+          <column name="gender" value="M"/><where> race = 'Orc' and value = 'Ront'</where></update>
+        <update schemaName="dnd_5e"
+            tableName="lu_racial_first_name">
+          <column name="gender" value="M"/><where> race = 'Orc' and value = 'Shump'</where></update>
+        <update schemaName="dnd_5e"
+            tableName="lu_racial_first_name">
+          <column name="gender" value="F"/><where> race = 'Human' and value = 'Aseir'</where></update>
+        <update schemaName="dnd_5e"
+            tableName="lu_racial_first_name">
+          <column name="gender" value="F"/><where> race = 'Human' and value = 'Bardeid'</where></update>
+        <update schemaName="dnd_5e"
+            tableName="lu_racial_first_name">
+          <column name="gender" value="M"/><where> race = 'Human' and value = 'Darvin'</where></update>
+        <update schemaName="dnd_5e"
+            tableName="lu_racial_first_name">
+          <column name="gender" value="M"/><where> race = 'Human' and value = 'Dorn'</where></update>
+        <update schemaName="dnd_5e"
+            tableName="lu_racial_first_name">
+          <column name="gender" value="M"/><where> race = 'Human' and value = 'Gorstag'</where></update>
+        <update schemaName="dnd_5e"
+            tableName="lu_racial_first_name">
+          <column name="gender" value="F"/><where> race = 'Human' and value = 'Malark'</where></update>
+        <update schemaName="dnd_5e"
+            tableName="lu_racial_first_name">
+          <column name="gender" value="F"/><where> race = 'Human' and value = 'Morn'</where></update>
+        <update schemaName="dnd_5e"
+            tableName="lu_racial_first_name">
+          <column name="gender" value="M"/><where> race = 'Human' and value = 'Randal'</where></update>
+        <update schemaName="dnd_5e"
+            tableName="lu_racial_first_name">
+          <column name="gender" value="M"/><where> race = 'Human' and value = 'Stedd'</where></update>
+        <update schemaName="dnd_5e"
+            tableName="lu_racial_first_name">
+          <column name="gender" value="M"/><where> race = 'Human' and value = 'Grigor'</where></update>
+        <update schemaName="dnd_5e"
+            tableName="lu_racial_first_name">
+          <column name="gender" value="M"/><where> race = 'Human' and value = 'Ivor'</where></update>
+        <update schemaName="dnd_5e"
+            tableName="lu_racial_first_name">
+          <column name="gender" value="M"/><where> race = 'Human' and value = 'Kosef'</where></update>
+        <update schemaName="dnd_5e"
+            tableName="lu_racial_first_name">
+          <column name="gender" value="M"/><where> race = 'Human' and value = 'Bran'</where></update>
+        <update schemaName="dnd_5e"
+            tableName="lu_racial_first_name">
+          <column name="gender" value="F"/><where> race = 'Human' and value = 'Geth'</where></update>
+        <update schemaName="dnd_5e"
+            tableName="lu_racial_first_name">
+          <column name="gender" value="F"/><where> race = 'Human' and value = 'Kethoth'</where></update>
+    </changeSet>
+
+    <changeSet author="mdbdba" id="lu_racial_first_name_4">
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Kobold"/><column name="value" value="Draahzin"/><column name="gender" value="M"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Kobold"/><column name="value" value="Eadoo"/><column name="gender" value="M"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Kobold"/><column name="value" value="Ipmeerk"/><column name="gender" value="M"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Kobold"/><column name="value" value="Jamada"/><column name="gender" value="M"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Kobold"/><column name="value" value="Kib"/><column name="gender" value="M"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Kobold"/><column name="value" value="Makroo"/><column name="gender" value="M"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Kobold"/><column name="value" value="Olp"/><column name="gender" value="M"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Kobold"/><column name="value" value="Yark"/><column name="gender" value="M"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Kobold"/><column name="value" value="Yraalik"/><column name="gender" value="M"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Kobold"/><column name="value" value="Zornesk"/><column name="gender" value="M"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Kobold"/><column name="value" value="Adriaak"/><column name="gender" value="F"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Kobold"/><column name="value" value="Harkail"/><column name="gender" value="F"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Kobold"/><column name="value" value="Neeral"/><column name="gender" value="F"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Kobold"/><column name="value" value="Ozula"/><column name="gender" value="F"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Kobold"/><column name="value" value="Poro"/><column name="gender" value="F"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Kobold"/><column name="value" value="Saassraa"/><column name="gender" value="F"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Kobold"/><column name="value" value="Tarka"/><column name="gender" value="F"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Kobold"/><column name="value" value="Cras"/><column name="gender" value="U"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Kobold"/><column name="value" value="Closz"/><column name="gender" value="U"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Kobold"/><column name="value" value="Khoz"/><column name="gender" value="U"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Kobold"/><column name="value" value="Chial"/><column name="gender" value="U"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Kobold"/><column name="value" value="Khamgi"/><column name="gender" value="U"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Kobold"/><column name="value" value="Xuzsun"/><column name="gender" value="U"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Kobold"/><column name="value" value="Errux"/><column name="gender" value="U"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Kobold"/><column name="value" value="Ubhres"/><column name="gender" value="U"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Kobold"/><column name="value" value="Itzus"/><column name="gender" value="U"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Kobold"/><column name="value" value="Cligro"/><column name="gender" value="U"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Kobold"/><column name="value" value="Shrais"/><column name="gender" value="U"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Kobold"/><column name="value" value="Cliax"/><column name="gender" value="U"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Kobold"/><column name="value" value="Szang"/><column name="gender" value="U"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Kobold"/><column name="value" value="Clus"/><column name="gender" value="U"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Kobold"/><column name="value" value="Knainszun"/><column name="gender" value="U"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Kobold"/><column name="value" value="Threikhring"/><column name="gender" value="U"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Kobold"/><column name="value" value="Szekkeil"/><column name="gender" value="U"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Kobold"/><column name="value" value="Shromqaax"/><column name="gender" value="U"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Kobold"/><column name="value" value="Zranzun"/><column name="gender" value="U"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Kobold"/><column name="value" value="Gizsan"/><column name="gender" value="U"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Greenskin Goblin"/>
+            <column name="value" value="Gungax"/><column name="gender" value="M"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Boggart Goblin"/>
+            <column name="value" value="Gungax"/><column name="gender" value="M"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Gremlin Goblin"/>
+            <column name="value" value="Gungax"/><column name="gender" value="M"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Greenskin Goblin"/>
+            <column name="value" value="Makdox"/><column name="gender" value="M"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Boggart Goblin"/>
+            <column name="value" value="Makdox"/><column name="gender" value="M"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Gremlin Goblin"/>
+            <column name="value" value="Makdox"/><column name="gender" value="M"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Greenskin Goblin"/>
+            <column name="value" value="Gizil"/><column name="gender" value="M"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Boggart Goblin"/>
+            <column name="value" value="Gizil"/><column name="gender" value="M"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Gremlin Goblin"/>
+            <column name="value" value="Gizil"/><column name="gender" value="M"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Greenskin Goblin"/>
+            <column name="value" value="Bilnix"/><column name="gender" value="M"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Boggart Goblin"/>
+            <column name="value" value="Bilnix"/><column name="gender" value="M"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Gremlin Goblin"/>
+            <column name="value" value="Bilnix"/><column name="gender" value="M"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Greenskin Goblin"/>
+            <column name="value" value="Rukalog"/><column name="gender" value="M"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Boggart Goblin"/>
+            <column name="value" value="Rukalog"/><column name="gender" value="M"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Gremlin Goblin"/>
+            <column name="value" value="Rukalog"/><column name="gender" value="M"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Greenskin Goblin"/>
+            <column name="value" value="Drax"/><column name="gender" value="M"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Boggart Goblin"/>
+            <column name="value" value="Drax"/><column name="gender" value="M"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Gremlin Goblin"/>
+            <column name="value" value="Drax"/><column name="gender" value="M"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Greenskin Goblin"/>
+            <column name="value" value="Unkgil"/><column name="gender" value="M"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Boggart Goblin"/>
+            <column name="value" value="Unkgil"/><column name="gender" value="M"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Gremlin Goblin"/>
+            <column name="value" value="Unkgil"/><column name="gender" value="M"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Greenskin Goblin"/>
+            <column name="value" value="Tiwin"/><column name="gender" value="F"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Boggart Goblin"/>
+            <column name="value" value="Tiwin"/><column name="gender" value="F"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Gremlin Goblin"/>
+            <column name="value" value="Tiwin"/><column name="gender" value="F"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Greenskin Goblin"/>
+            <column name="value" value="Kawli"/><column name="gender" value="F"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Boggart Goblin"/>
+            <column name="value" value="Kawli"/><column name="gender" value="F"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Gremlin Goblin"/>
+            <column name="value" value="Kawli"/><column name="gender" value="F"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Greenskin Goblin"/>
+            <column name="value" value="Wort"/><column name="gender" value="F"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Boggart Goblin"/>
+            <column name="value" value="Wort"/><column name="gender" value="F"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Gremlin Goblin"/>
+            <column name="value" value="Wort"/><column name="gender" value="F"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Greenskin Goblin"/>
+            <column name="value" value="Ib"/><column name="gender" value="F"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Boggart Goblin"/>
+            <column name="value" value="Ib"/><column name="gender" value="F"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Gremlin Goblin"/>
+            <column name="value" value="Ib"/><column name="gender" value="F"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Greenskin Goblin"/>
+            <column name="value" value="Drolaw"/><column name="gender" value="F"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Boggart Goblin"/>
+            <column name="value" value="Drolaw"/><column name="gender" value="F"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Gremlin Goblin"/>
+            <column name="value" value="Drolaw"/><column name="gender" value="F"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Greenskin Goblin"/>
+            <column name="value" value="Marowa"/><column name="gender" value="F"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Boggart Goblin"/>
+            <column name="value" value="Marowa"/><column name="gender" value="F"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Gremlin Goblin"/>
+            <column name="value" value="Marowa"/><column name="gender" value="F"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Greenskin Goblin"/>
+            <column name="value" value="Walow"/><column name="gender" value="F"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Boggart Goblin"/>
+            <column name="value" value="Walow"/><column name="gender" value="F"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Gremlin Goblin"/>
+            <column name="value" value="Walow"/><column name="gender" value="F"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Greenskin Goblin"/>
+            <column name="value" value="Wonk"/><column name="gender" value="U"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Boggart Goblin"/>
+            <column name="value" value="Wonk"/><column name="gender" value="U"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Gremlin Goblin"/>
+            <column name="value" value="Wonk"/><column name="gender" value="U"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Greenskin Goblin"/>
+            <column name="value" value="Drulx"/><column name="gender" value="U"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Boggart Goblin"/>
+            <column name="value" value="Drulx"/><column name="gender" value="U"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Gremlin Goblin"/>
+            <column name="value" value="Drulx"/><column name="gender" value="U"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Greenskin Goblin"/>
+            <column name="value" value="Trits"/><column name="gender" value="U"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Boggart Goblin"/>
+            <column name="value" value="Trits"/><column name="gender" value="U"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Gremlin Goblin"/>
+            <column name="value" value="Trits"/><column name="gender" value="U"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Greenskin Goblin"/>
+            <column name="value" value="Beattoct"/><column name="gender" value="U"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Boggart Goblin"/>
+            <column name="value" value="Beattoct"/><column name="gender" value="U"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Gremlin Goblin"/>
+            <column name="value" value="Beattoct"/><column name="gender" value="U"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Greenskin Goblin"/>
+            <column name="value" value="Veagiak"/><column name="gender" value="U"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Boggart Goblin"/>
+            <column name="value" value="Veagiak"/><column name="gender" value="U"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Gremlin Goblin"/>
+            <column name="value" value="Veagiak"/><column name="gender" value="U"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Greenskin Goblin"/>
+            <column name="value" value="Iorburk"/><column name="gender" value="U"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Boggart Goblin"/>
+            <column name="value" value="Iorburk"/><column name="gender" value="U"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Gremlin Goblin"/>
+            <column name="value" value="Iorburk"/><column name="gender" value="U"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Greenskin Goblin"/>
+            <column name="value" value="Asdyrm"/><column name="gender" value="U"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Boggart Goblin"/>
+            <column name="value" value="Asdyrm"/><column name="gender" value="U"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Gremlin Goblin"/>
+            <column name="value" value="Asdyrm"/><column name="gender" value="U"/>
+        </insert>
+    </changeSet>
+
+
+
+</databaseChangeLog>
+

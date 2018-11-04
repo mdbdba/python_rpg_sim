@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet author="mdbdba" id="lu_alignment_1">
+        <createTable 
+                schemaName="dnd_5e"
+                tableName="lu_alignment">
+            <column name="value" type="varchar(32)"/>
+            <column name="abbreviation" type="varchar(5)"/>
+            <column name="description" type="varchar(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="mdbdba" id="lu_alignment_2">
+        <addPrimaryKey 
+            columnNames="abbreviation"
+            constraintName="pk_lu_alignment"
+            schemaName="dnd_5e"
+            tableName="lu_alignment"/>
+        <insert schemaName="dnd_5e" tableName="lu_alignment">
+            <column name="value" value="Lawful good"/><column name="abbreviation" value="LG"/>
+            <column name="description" value="Lawful good (LG) creatures can be counted on to do the right thing as expected by society. Gold dragons, paladins, and most dwarves are lawful good."/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_alignment">
+            <column name="value" value="Neutral good"/><column name="abbreviation" value="NG"/>
+            <column name="description" value="Neutral good (NG) folk do the best they can to help others according to their needs. Many celestials, some cloud giants, and most gnomes are neutral good."/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_alignment">
+            <column name="value" value="Chaotic good"/><column name="abbreviation" value="CG"/>
+            <column name="description" value="Chaotic good (CG) creatures act as their conscience directs, with little regard for what others expect. Copper dragons, many elves, and unicorns are chaotic good."/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_alignment">
+            <column name="value" value="Lawful neutral"/><column name="abbreviation" value="LN"/>
+            <column name="description" value="Lawful neutral (LN) individuals act in accordance with law, tradition, or personal codes. Many monks and some wizards are lawful neutral."/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_alignment">
+            <column name="value" value="Neutral"/><column name="abbreviation" value="N"/>
+            <column name="description" value="Neutral (N) is the alignment of those who prefer to steer clear of moral questions and don’t take sides, doing what seems best at the time. Lizardfolk, most druids, and many humans are neutral."/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_alignment">
+            <column name="value" value="Chaotic neutral"/><column name="abbreviation" value="CN"/>
+            <column name="description" value="Chaotic neutral (CN) creatures follow their whims, holding their personal freedom above all else. Many barbarians and rogues, and some bards, are chaotic neutral."/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_alignment">
+            <column name="value" value="Lawful evil"/><column name="abbreviation" value="LE"/>
+            <column name="description" value="Lawful evil (LE) creatures methodically take what they want, within the limits of a code of tradition, loyalty, or order. Devils, blue dragons, and hobgoblins are lawful evil."/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_alignment">
+            <column name="value" value="Neutral evil"/><column name="abbreviation" value="NE"/>
+            <column name="description" value="Neutral evil (NE) is the alignment of those who do whatever they can get away with, without compassion or qualms. Many drow, some cloud giants, and goblins are neutral evil."/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_alignment">
+            <column name="value" value="Chaotic evil"/><column name="abbreviation" value="CE"/>
+            <column name="description" value="Chaotic evil (CE) creatures act with arbitrary violence, spurred by their greed, hatred, or bloodlust. Demons, red dragons, and orcs are chaotic evil."/>
+        </insert>
+
+    </changeSet>
+
+</databaseChangeLog>

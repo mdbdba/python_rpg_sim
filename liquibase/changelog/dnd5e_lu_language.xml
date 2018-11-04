@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet author="mdbdba" id="lu_language_1">
+        <createTable 
+                schemaName="dnd_5e"
+                tableName="lu_language">
+            <column name="name" type="varchar(32)"/>
+            <column name="typical_speakers" type="varchar(128)"/>
+            <column name="written_form" type="varchar(32)"/>
+            <column name="category" type="varchar(18)"/>
+        </createTable>
+        <addPrimaryKey 
+            columnNames="name"
+            constraintName="pk_lu_language"
+            schemaName="dnd_5e"
+            tableName="lu_language"/>
+        <insert schemaName="dnd_5e" tableName="lu_language">
+            <column name="name" value="Common"/>
+            <column name="typical_speakers" value="Humans"/>
+            <column name="written_form" value="Common"/>
+            <column name="category" value="Standard"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_language">
+            <column name="name" value="Dwarvish"/>
+            <column name="typical_speakers" value="Dwarves"/>
+            <column name="written_form" value="Dwarvish"/>
+            <column name="category" value="Standard"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_language">
+            <column name="name" value="Elvish"/>
+            <column name="typical_speakers" value="Elves"/>
+            <column name="written_form" value="Elvish"/>
+            <column name="category" value="Standard"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_language">
+            <column name="name" value="Giant"/>
+            <column name="typical_speakers" value="Ogres, giants"/>
+            <column name="written_form" value="Dwarvish"/>
+            <column name="category" value="Standard"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_language">
+            <column name="name" value="Gnomish"/>
+            <column name="typical_speakers" value="Gnomes"/>
+            <column name="written_form" value="Dwarvish"/>
+            <column name="category" value="Standard"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_language">
+            <column name="name" value="Goblin"/>
+            <column name="typical_speakers" value="Goblinoids"/>
+            <column name="written_form" value="Dwarvish"/>
+            <column name="category" value="Standard"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_language">
+            <column name="name" value="Halfling"/>
+            <column name="typical_speakers" value="Halflings"/>
+            <column name="written_form" value="Common"/>
+            <column name="category" value="Standard"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_language">
+            <column name="name" value="Orc"/>
+            <column name="typical_speakers" value="Orcs"/>
+            <column name="written_form" value="Dwarvish"/>
+            <column name="category" value="Standard"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_language">
+            <column name="name" value="Abyssal"/>
+            <column name="typical_speakers" value="Demons"/>
+            <column name="written_form" value="Infernal"/>
+            <column name="category" value="Exotic"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_language">
+            <column name="name" value="Celestial"/>
+            <column name="typical_speakers" value="Celestials"/>
+            <column name="written_form" value="Celestial"/>
+            <column name="category" value="Exotic"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_language">
+            <column name="name" value="Draconic"/>
+            <column name="typical_speakers" value="Dragons, dragonborn"/>
+            <column name="written_form" value="Draconic"/>
+            <column name="category" value="Exotic"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_language">
+            <column name="name" value="Deep Speech"/>
+            <column name="typical_speakers" value="Aboleths, cloakers"/>
+            <column name="written_form" value=""/>
+            <column name="category" value="Exotic"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_language">
+            <column name="name" value="Infernal"/>
+            <column name="typical_speakers" value="Devils"/>
+            <column name="written_form" value="Infernal"/>
+            <column name="category" value="Exotic"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_language">
+            <column name="name" value="Primordial"/>
+            <column name="typical_speakers" value="Elementals"/>
+            <column name="written_form" value="Dwarvish"/>
+            <column name="category" value="Exotic"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_language">
+            <column name="name" value="Sylvan"/>
+            <column name="typical_speakers" value="Fey creatures"/>
+            <column name="written_form" value="Elvish"/>
+            <column name="category" value="Exotic"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_language">
+            <column name="name" value="Undercommon"/>
+            <column name="typical_speakers" value="Underworld traders"/>
+            <column name="written_form" value="Elvish"/>
+            <column name="category" value="Exotic"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_language">
+           <column name="name" value="Ursine"/> 
+           <column name="typical_speakers" value="Bearkin"/> 
+           <column name="category" value="Exotic"/> 
+        </insert>
+    </changeSet>
+</databaseChangeLog>

@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet author="mdbdba" id="lu_racial_ability_score_modifier_1">
+       <createTable 
+                schemaName="dnd_5e"
+                tableName="lu_racial_ability_score_modifier">
+            <column name="race" type="varchar(32)"/>
+            <column name="ability" type="varchar(32)"/>
+            <column name="modifier" type="smallint"/>
+        </createTable>
+        <addPrimaryKey 
+            columnNames="race, ability"
+            constraintName="pk_lu_racial_ability_score_modifier"
+            schemaName="dnd_5e"
+            tableName="lu_racial_ability_score_modifier"/>
+        
+        <insert schemaName="dnd_5e" tableName="lu_racial_ability_score_modifier">
+            <column name="race" value="Mountain dwarf" /><column name="ability" value="Strength" /><column name="modifier" value="2"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_ability_score_modifier">
+            <column name="race" value="Human" /><column name="ability" value="Strength" /><column name="modifier" value="1"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_ability_score_modifier">
+
+            <column name="race" value="Elf" /><column name="ability" value="Dexterity" /><column name="modifier" value="2"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_ability_score_modifier">
+            <column name="race" value="Human" /><column name="ability" value="Dexterity" /><column name="modifier" value="1"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_ability_score_modifier">
+            <column name="race" value="Halfling" /><column name="ability" value="Dexterity" /><column name="modifier" value="2"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_ability_score_modifier">
+            <column name="race" value="Dwarf" /><column name="ability" value="Constitution" /><column name="modifier" value="2"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_ability_score_modifier">
+            <column name="race" value="Stout halfling" /><column name="ability" value="Constitution" /><column name="modifier" value="1"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_ability_score_modifier">
+            <column name="race" value="Human" /><column name="ability" value="Constitution" /><column name="modifier" value="1"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_ability_score_modifier">
+            <column name="race" value="High elf" /><column name="ability" value="Intelligence" /><column name="modifier" value="1"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_ability_score_modifier">
+            <column name="race" value="Human" /><column name="ability" value="Intelligence" /><column name="modifier" value="1"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_ability_score_modifier">
+
+            <column name="race" value="Hill dwarf" /><column name="ability" value="Wisdom" /><column name="modifier" value="1"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_ability_score_modifier">
+            <column name="race" value="Wood elf" /><column name="ability" value="Wisdom" /><column name="modifier" value="1"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_ability_score_modifier">
+            <column name="race" value="Human" /><column name="ability" value="Wisdom" /><column name="modifier" value="1"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_ability_score_modifier">
+            <column name="race" value="Lightfoot halfling" /><column name="ability" value="Charisma" /><column name="modifier" value="1"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_ability_score_modifier">
+            <column name="race" value="Human" /><column name="ability" value="Charisma" /><column name="modifier" value="1"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_ability_score_modifier">
+            <column name="race" value="Dragonborn" /><column name="ability" value="Strength" />
+            <column name="modifier" value="2"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_ability_score_modifier">
+            <column name="race" value="Charisma" /><column name="ability" value="Dexterity" />
+            <column name="modifier" value="1"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_ability_score_modifier">
+            <column name="race" value="Rock gnome" /><column name="ability" value="Intelligence" />
+            <column name="modifier" value="2"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_ability_score_modifier">
+            <column name="race" value="Rock gnome" /><column name="ability" value="Constitution" />
+            <column name="modifier" value="1"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_ability_score_modifier">
+            <column name="race" value="Half-Orc" /><column name="ability" value="Strength" />
+            <column name="modifier" value="2"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_ability_score_modifier">
+            <column name="race" value="Half-Orc" /><column name="ability" value="Constitution" />
+            <column name="modifier" value="1"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_ability_score_modifier">
+            <column name="race" value="Tiefling" /><column name="ability" value="Intelligence" />
+            <column name="modifier" value="1"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_ability_score_modifier">
+            <column name="race" value="Tiefling" /><column name="ability" value="Charisma" />
+            <column name="modifier" value="2"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_ability_score_modifier">
+            <column name="race" value="Centaur" /><column name="ability" value="Strength" />
+            <column name="modifier" value="2"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_ability_score_modifier">
+            <column name="race" value="Centaur" /><column name="ability" value="Wisdom" />
+            <column name="modifier" value="1"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_ability_score_modifier">
+            <column name="race" value="Black bearkin" /><column name="ability" value="Strength" />
+            <column name="modifier" value="2"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_ability_score_modifier">
+            <column name="race" value="Black bearkin" /><column name="ability" value="Wisdom" />
+            <column name="modifier" value="1"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_ability_score_modifier">
+            <column name="race" value="Brown bearkin" /><column name="ability" value="Strength" />
+            <column name="modifier" value="2"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_ability_score_modifier">
+            <column name="race" value="Brown bearkin" /><column name="ability" value="Charisma" />
+            <column name="modifier" value="1"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_ability_score_modifier">
+            <column name="race" value="Koala bearkin" /><column name="ability" value="Strength" />
+            <column name="modifier" value="2"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_ability_score_modifier">
+            <column name="race" value="Koala bearkin" /><column name="ability" value="Dexterity" />
+            <column name="modifier" value="1"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_ability_score_modifier">
+            <column name="race" value="Panda bearkin" /><column name="ability" value="Strength" />
+            <column name="modifier" value="2"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_ability_score_modifier">
+            <column name="race" value="Panda bearkin" /><column name="ability" value="Wisdom" />
+            <column name="modifier" value="1"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_ability_score_modifier">
+            <column name="race" value="Polar bearkin" /><column name="ability" value="Strength" />
+            <column name="modifier" value="2"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_ability_score_modifier">
+            <column name="race" value="Polar bearkin" /><column name="ability" value="Constitution" />
+            <column name="modifier" value="1"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_ability_score_modifier">
+           <column name="race" value="Dragonborn"/> 
+           <column name="ability" value="Charisma"/> 
+           <column name="modifier" value="1"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_ability_score_modifier">
+           <column name="race" value="Kobold"/> 
+           <column name="ability" value="Dexterity"/> 
+           <column name="modifier" value="2"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_ability_score_modifier">
+           <column name="race" value="Burrows kobold"/> 
+           <column name="ability" value="Intelligence"/> 
+           <column name="modifier" value="1"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_ability_score_modifier">
+           <column name="race" value="Loredrake kobold"/> 
+           <column name="ability" value="Charisma"/> 
+           <column name="modifier" value="1"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_ability_score_modifier">
+           <column name="race" value="Goblin"/> 
+           <column name="ability" value="Dexterity"/> 
+           <column name="modifier" value="2"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_ability_score_modifier">
+           <column name="race" value="Goblin"/> 
+           <column name="ability" value="Charisma"/> 
+           <column name="modifier" value="-1"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_ability_score_modifier">
+           <column name="race" value="Greenskin goblin"/> 
+           <column name="ability" value="Constitution"/> 
+           <column name="modifier" value="1"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_ability_score_modifier">
+           <column name="race" value="Boggart goblin"/> 
+           <column name="ability" value="Wisdom"/> 
+           <column name="modifier" value="1"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_ability_score_modifier">
+           <column name="race" value="Gremlin goblin"/> 
+           <column name="ability" value="Intelligence"/> 
+           <column name="modifier" value="1"/> 
+        </insert>
+    </changeSet>
+</databaseChangeLog>

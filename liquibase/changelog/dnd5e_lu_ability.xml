@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    
+    <changeSet author="mdbdba" id="lu_ability_1">
+       <createTable 
+                schemaName="dnd_5e"
+                tableName="lu_ability">
+        <column name="name" type="varchar(16)"/>
+        <column name="description" type="text"/>
+        </createTable>
+        <addPrimaryKey 
+            columnNames="name"
+            constraintName="pk_lu_ability"
+            schemaName="dnd_5e"
+            tableName="lu_ability"/>
+        <insert schemaName="dnd_5e" tableName="lu_ability">
+            <column name="name" value="Strength"/><column name="description" value="physical power"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_ability">
+            <column name="name" value="Dexterity"/><column name="description" value="agility"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_ability">
+            <column name="name" value="Constitution"/><column name="description" value="endurance"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_ability">
+            <column name="name" value="Intelligence"/><column name="description" value="reasoning and memory"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_ability">
+            <column name="name" value="Wisdom"/><column name="description" value="perception and insight"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_ability">
+            <column name="name" value="Charisma"/><column name="description" value="force of personality"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>
+
+
+
+
+

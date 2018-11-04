@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet author="mdbdba" id="lu_gender_pronoun_1">
+        <createTable 
+                schemaName="dnd_5e"
+                tableName="lu_gender_pronoun">
+            <column name="gender" type="varchar(16)"/>
+            <column name="operand" type="varchar(16)"/>
+            <column name="value" type="varchar(16)"/>
+        </createTable>
+        <addPrimaryKey 
+            columnNames="gender,operand,value"
+            constraintName="pk_lu_gender_pronoun"
+            schemaName="dnd_5e"
+            tableName="lu_gender_pronoun"/>
+
+        <addForeignKeyConstraint baseColumnNames="gender"
+            baseTableName="lu_gender_pronoun"
+            constraintName="fk_lu_gender_pronoun"
+            deferrable="true"
+            initiallyDeferred="true"
+            onDelete="CASCADE"
+            onUpdate="RESTRICT"
+            referencedColumnNames="value"
+            referencedTableName="lu_gender"/>
+        <insert schemaName="dnd_5e" tableName="lu_gender_pronoun">
+            <column name="gender" value="M"/>
+            <column name="operand" value="subject"/>
+            <column name="value" value="he"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_gender_pronoun">
+            <column name="gender" value="F"/>
+            <column name="operand" value="subject"/>
+            <column name="value" value="she"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_gender_pronoun">
+            <column name="gender" value="U"/>
+            <column name="operand" value="subject"/>
+            <column name="value" value="they"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_gender_pronoun">
+            <column name="gender" value="M"/>
+            <column name="operand" value="object"/>
+            <column name="value" value="him"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_gender_pronoun">
+            <column name="gender" value="F"/>
+            <column name="operand" value="object"/>
+            <column name="value" value="her"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_gender_pronoun">
+            <column name="gender" value="U"/>
+            <column name="operand" value="object"/>
+            <column name="value" value="them"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>

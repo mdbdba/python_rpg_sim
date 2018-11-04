@@ -1,0 +1,6 @@
+driver=org.postgresql.Driver
+classpath=<putRestOfPathHere>/rpg/liquibase/postgresql-42.2.2.jar
+url=jdbc:postgresql://localhost:5433/rpg
+username=rpg_admin
+password=Id0minated!
+changeLogFile=./dnd5e_master.xml

@@ -1,0 +1,17 @@
+version: '2'
+
+services:
+  pgs:
+    restart: always
+    build: ./pgs
+    image: mdbdba/postgres:11
+    container_name: pgs
+    ports:
+      - "5433:5432"
+    environment:
+     - POSTGRES_USER=postgres
+     - POSTGRES_PASSWORD=d&d5thedition
+     - POSTGRES_DB=rpg
+    volumes:
+     - ~/rpg/docker_data/pgs/data:/var/lib/postgresql/data
+

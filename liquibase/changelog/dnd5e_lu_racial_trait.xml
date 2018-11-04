@@ -1,0 +1,933 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet author="mdbdba" id="lu_racial_trait_1">
+
+        <createTable
+                schemaName="dnd_5e"
+                tableName="lu_racial_trait">
+            <column name="race" type="varchar(32)"/>
+            <column name="name" type="varchar(64)"/>
+            <column name="category" type="varchar(32)"/>
+            <column name="affected_name" type="varchar(64)"/>
+            <column name="affected_multiplier" type="int"/>
+            <column name="affected_die" type="int"/>
+            <column name="affected_adj" type="int"/>
+            <column name="affect" type="varchar(32)"/>
+            <column name="recharge_on" type="varchar(32)"/>
+            <column name="variable_recharge_multiplier" type="int"/>
+            <column name="variable_recharge_die" type="int"/>
+            <column name="variable_recharge_adj" type="int"/>
+            <column name="description" type="varchar(255)"/>
+
+        </createTable>
+        <addPrimaryKey
+            columnNames="race, name, category"
+            constraintName="pk_lu_racial_trait"
+            schemaName="dnd_5e"
+            tableName="lu_racial_trait"/>
+
+        <addForeignKeyConstraint
+            baseColumnNames="category"
+            baseTableName="lu_racial_trait"
+            constraintName="fk_lu_racial_trait_category"
+            onDelete="CASCADE"
+            onUpdate="RESTRICT"
+            referencedColumnNames="value"
+            referencedTableName="lu_racial_trait_category"/>
+
+        <addForeignKeyConstraint
+            baseColumnNames="recharge_on"
+            baseTableName="lu_racial_trait"
+            constraintName="fk_lu_racial_trait_recharge_on"
+            onDelete="CASCADE"
+            onUpdate="RESTRICT"
+            referencedColumnNames="value"
+            referencedTableName="lu_recharge_on"/>
+
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+            <column name="race" value="Dwarf" />
+            <column name="name" value="Dwarven Resilience" />
+            <column name="category" value="Saving Throw" />
+            <column name="affect" value="advantage" />
+            <column name="affected_name" value="Poison" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+            <column name="race" value="Dwarf" />
+            <column name="name" value="Dwarven Resilience" />
+            <column name="category" value="Damage Received" />
+            <column name="affect" value="resistant" />
+            <column name="affected_name" value="Poison" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+            <column name="race" value="Hill Dwarf" />
+            <column name="name" value="Dwarven Toughness" />
+            <column name="category" value="Hit Point Adj" />
+            <column name="recharge_on" value="Level" />
+            <column name="affected_adj" value="1" />
+        </insert>
+
+    </changeSet>
+    <changeSet author="mdbdba" id="lu_racial_trait_2">
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+            <column name="race" value="Dwarf" />
+            <column name="name" value="Dwarven Combat Training 1" />
+            <column name="category" value="Proficiency Skill" />
+            <column name="affected_name" value="battleaxe" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+            <column name="race" value="Dwarf" />
+            <column name="name" value="Dwarven Combat Training 2" />
+            <column name="category" value="Proficiency Skill" />
+            <column name="affected_name" value="handaxe" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+            <column name="race" value="Dwarf" />
+            <column name="name" value="Dwarven Combat Training 3" />
+            <column name="category" value="Proficiency Skill" />
+            <column name="affected_name" value="light hammer" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+            <column name="race" value="Dwarf" />
+            <column name="name" value="Dwarven Combat Training 4" />
+            <column name="category" value="Proficiency Skill" />
+            <column name="affected_name" value="warhammer" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+            <column name="race" value="Mountain dwarf" />
+            <column name="name" value="Dwarven Armor Training 1" />
+            <column name="category" value="Proficiency Skill" />
+            <column name="affected_name" value="light armor" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+            <column name="race" value="Mountain dwarf" />
+            <column name="name" value="Dwarven Armor Training 2" />
+            <column name="category" value="Proficiency Skill" />
+            <column name="affected_name" value="medium armor" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+            <column name="race" value="High elf" />
+            <column name="name" value="Cantrip" />
+            <column name="category" value="Spell" />
+            <column name="affected_name" value="Cantrip" />
+            <column name="affected_adj" value="1" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+            <column name="race" value="Elf" />
+            <column name="name" value="Keen Senses" />
+            <column name="category" value="Proficiency Skill" />
+            <column name="affect" value="advantage" />
+            <column name="affected_name" value="Perception" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+            <column name="race" value="Elf" />
+            <column name="name" value="Fey Ancestry 1" />
+            <column name="category" value="Spell Effect" />
+            <column name="affect" value="advantage" />
+            <column name="affected_name" value="Charm" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+            <column name="race" value="Elf" />
+            <column name="name" value="Fey Ancestry 2" />
+            <column name="category" value="Spell Effect" />
+            <column name="affect" value="immune" />
+            <column name="affected_name" value="Sleep" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+            <column name="race" value="High elf" />
+            <column name="name" value="Extra Language" />
+            <column name="category" value="Language Skill" />
+            <column name="affected_name" value="Any" />
+            <column name="affected_adj" value="1" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+            <column name="race" value="High elf" />
+            <column name="name" value="Elvin Weapon Training 1" />
+            <column name="category" value="Proficiency Skill" />
+            <column name="affected_name" value="shortsword" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+            <column name="race" value="High elf" />
+            <column name="name" value="Elvin Weapon Training 2" />
+            <column name="category" value="Proficiency Skill" />
+            <column name="affected_name" value="longsword" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+            <column name="race" value="High elf" />
+            <column name="name" value="Elvin Weapon Training 3" />
+            <column name="category" value="Proficiency Skill" />
+            <column name="affected_name" value="shortbow" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+            <column name="race" value="High elf" />
+            <column name="name" value="Elvin Weapon Training 4" />
+            <column name="category" value="Proficiency Skill" />
+            <column name="affected_name" value="longsword" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+            <column name="race" value="Wood elf" />
+            <column name="name" value="Elvin Weapon Training 1" />
+            <column name="category" value="Proficiency Skill" />
+            <column name="affected_name" value="shortsword" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+            <column name="race" value="Wood elf" />
+            <column name="name" value="Elvin Weapon Training 2" />
+            <column name="category" value="Proficiency Skill" />
+            <column name="affected_name" value="longsword" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+            <column name="race" value="Wood elf" />
+            <column name="name" value="Elvin Weapon Training 3" />
+            <column name="category" value="Proficiency Skill" />
+            <column name="affected_name" value="shortbow" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+            <column name="race" value="Wood elf" />
+            <column name="name" value="Elvin Weapon Training 4" />
+            <column name="category" value="Proficiency Skill" />
+            <column name="affected_name" value="longsword" />
+        </insert>
+
+    </changeSet>
+    <changeSet author="mdbdba" id="lu_racial_trait_3">
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+            <column name="race" value="Halfling" />
+            <column name="name" value="Lucky" />
+            <column name="category" value="Feat" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+            <column name="race" value="Halfling" />
+            <column name="name" value="Brave" />
+            <column name="category" value="Saving Throw" />
+            <column name="affect" value="advantage" />
+            <column name="affected_name" value="Frightened" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+            <column name="race" value="Halfling" />
+            <column name="name" value="Halfling Nimbleness" />
+            <column name="category" value="Movement" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+            <column name="race" value="Stout halfling" />
+            <column name="name" value="Stout Resilience" />
+            <column name="category" value="Saving Throw" />
+            <column name="affect" value="advantage" />
+            <column name="affected_name" value="Poison" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+            <column name="race" value="Stout halfling" />
+            <column name="name" value="Stout Resilience" />
+            <column name="category" value="Damage Received" />
+            <column name="affect" value="resistant" />
+            <column name="affected_name" value="Poison" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+            <column name="race" value="Lightfoot halfling" />
+            <column name="name" value="Naturally Stealthy" />
+            <column name="category" value="Movement" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+            <column name="race" value="Half-Elf" />
+            <column name="name" value="Darkvision" />
+            <column name="category" value="Vision" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+            <column name="race" value="Elf" />
+            <column name="name" value="Darkvision" />
+            <column name="category" value="Vision" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+            <column name="race" value="Dwarf" />
+            <column name="name" value="Darkvision" />
+            <column name="category" value="Vision" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+            <column name="race" value="Half-Elf" />
+            <column name="name" value="Fey Ancestry 1" />
+            <column name="category" value="Spell Effect" />
+            <column name="affect" value="advantage" />
+            <column name="affected_name" value="Charm" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+            <column name="race" value="Half-Elf" />
+            <column name="name" value="Fey Ancestry 2" />
+            <column name="category" value="Spell Effect" />
+            <column name="affect" value="immune" />
+            <column name="affected_name" value="Sleep" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+            <column name="race" value="Half-Elf" />
+            <column name="name" value="Extra Language" />
+            <column name="category" value="Language Skill" />
+            <column name="affected_name" value="Any" />
+            <column name="affected_adj" value="1" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+            <column name="race" value="Half-Elf" />
+            <column name="name" value="Skill Versatility" />
+            <column name="category" value="Proficiency Skill" />
+            <column name="affected_name" value="Any" />
+            <column name="affected_adj" value="2" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+            <column name="race" value="Human" />
+            <column name="name" value="Extra Language" />
+            <column name="category" value="Language Skill" />
+            <column name="affected_name" value="Any" />
+            <column name="affected_adj" value="1" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+           <column name="race" value="Black Dragonborn"/>
+           <column name="name" value="Draconic Ancestry"/>
+           <column name="category" value="Spell"/>
+           <column name="affected_name" value="Dragonborn Breath Weapon - Black"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+           <column name="race" value="Black Dragonborn"/>
+           <column name="name" value="Draconic Ancestry"/>
+           <column name="category" value="Damage Received"/>
+           <column name="affected_name" value="Acid"/>
+           <column name="affect" value="resistant"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+           <column name="race" value="Blue dragonborn"/>
+           <column name="name" value="Draconic Ancestry"/>
+           <column name="category" value="Spell"/>
+           <column name="affected_name" value="Dragonborn Breath Weapon - Blue"/>
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+           <column name="race" value="Blue dragonborn"/>
+           <column name="name" value="Draconic Ancestry"/>
+           <column name="category" value="Damage Received"/>
+           <column name="affected_name" value="Lightning"/>
+           <column name="affect" value="resistant"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+           <column name="race" value="Brass dragonborn"/>
+           <column name="name" value="Draconic Ancestry"/>
+           <column name="category" value="Spell"/>
+           <column name="affected_name" value="Dragonborn Breath Weapon - Brass"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+           <column name="race" value="Brass dragonborn"/>
+           <column name="name" value="Draconic Ancestry"/>
+           <column name="category" value="Damage Received"/>
+           <column name="affected_name" value="Fire"/>
+           <column name="affect" value="resistant"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+           <column name="race" value="Bronze dragonborn"/>
+           <column name="name" value="Draconic Ancestry"/>
+           <column name="category" value="Spell"/>
+           <column name="affected_name" value="Dragonborn Breath Weapon - Bronze"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+           <column name="race" value="Bronze dragonborn"/>
+           <column name="name" value="Draconic Ancestry"/>
+           <column name="category" value="Damage Received"/>
+           <column name="affected_name" value="Lightning"/>
+           <column name="affect" value="resistant"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+           <column name="race" value="Copper dragonborn"/>
+           <column name="name" value="Draconic Ancestry"/>
+           <column name="category" value="Spell"/>
+           <column name="affected_name" value="Dragonborn Breath Weapon - Copper"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+           <column name="race" value="Copper dragonborn"/>
+           <column name="name" value="Draconic Ancestry"/>
+           <column name="category" value="Damage Received"/>
+           <column name="affected_name" value="Lightning"/>
+           <column name="affect" value="resistant"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+           <column name="race" value="Gold dragonborn"/>
+           <column name="name" value="Draconic Ancestry"/>
+           <column name="category" value="Spell"/>
+           <column name="affected_name" value="Dragonborn Breath Weapon - Gold"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+           <column name="race" value="Gold dragonborn"/>
+           <column name="name" value="Draconic Ancestry"/>
+           <column name="category" value="Damage Received"/>
+           <column name="affected_name" value="Fire"/>
+           <column name="affect" value="resistant"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+           <column name="race" value="Green dragonborn"/>
+           <column name="name" value="Draconic Ancestry"/>
+           <column name="category" value="Spell"/>
+           <column name="affected_name" value="Dragonborn Breath Weapon - Green"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+           <column name="race" value="Green dragonborn"/>
+           <column name="name" value="Draconic Ancestry"/>
+           <column name="category" value="Damage Received"/>
+           <column name="affected_name" value="Poison"/>
+           <column name="affect" value="resistant"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+           <column name="race" value="Red dragonborn"/>
+           <column name="name" value="Draconic Ancestry"/>
+           <column name="category" value="Spell"/>
+           <column name="affected_name" value="Dragonborn Breath Weapon - Red"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+           <column name="race" value="Red dragonborn"/>
+           <column name="name" value="Draconic Ancestry"/>
+           <column name="category" value="Damage Received"/>
+           <column name="affected_name" value="Fire"/>
+           <column name="affect" value="resistant"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+           <column name="race" value="Silver dragonborn"/>
+           <column name="name" value="Draconic Ancestry"/>
+           <column name="category" value="Spell"/>
+           <column name="affected_name" value="Dragonborn Breath Weapon - Silver"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+           <column name="race" value="Silver dragonborn"/>
+           <column name="name" value="Draconic Ancestry"/>
+           <column name="category" value="Damage Received"/>
+           <column name="affected_name" value="Cold"/>
+           <column name="affect" value="resistant"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+           <column name="race" value="White dragonborn"/>
+           <column name="name" value="Draconic Ancestry"/>
+           <column name="category" value="Spell"/>
+           <column name="affected_name" value="Dragonborn Breath Weapon - White"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+           <column name="race" value="White dragonborn"/>
+           <column name="name" value="Draconic Ancestry"/>
+           <column name="category" value="Damage Received"/>
+           <column name="affected_name" value="Cold"/>
+           <column name="affect" value="resistant"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+           <column name="race" value="Rock gnome"/>
+           <column name="name" value="Darkvision"/>
+           <column name="category" value="Vision"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+           <column name="race" value="Rock gnome"/>
+           <column name="name" value="Gnome Cunning 1"/>
+           <column name="category" value="Saving Throw"/>
+           <column name="affected_name" value="Intelligence"/>
+           <column name="affect" value="advantage"/>
+           <column name="description" value="targetAffect:Magic"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+           <column name="race" value="Rock gnome"/>
+           <column name="name" value="Gnome Cunning 2"/>
+           <column name="category" value="Saving Throw"/>
+           <column name="affected_name" value="Wisdom"/>
+           <column name="affect" value="advantage"/>
+           <column name="description" value="targetAffect:Magic"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+           <column name="race" value="Rock gnome"/>
+           <column name="name" value="Gnome Cunning 3"/>
+           <column name="category" value="Saving Throw"/>
+           <column name="affected_name" value="Charisma"/>
+           <column name="affect" value="advantage"/>
+           <column name="description" value="targetAffect:Magic"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+           <column name="race" value="Rock gnome"/>
+           <column name="name" value="Artificer's Lore"/>
+           <column name="category" value="Proficiency Skill"/>
+           <column name="affected_name" value="History Check"/>
+           <column name="affect" value="curProficencyTimes:2"/>
+           <column name="description" value="subjects:magicItem,alchemicalItem,techItem"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+           <column name="race" value="Rock gnome"/>
+           <column name="name" value="Tinker"/>
+           <column name="category" value="Proficiency Skill"/>
+           <column name="affected_name" value="Tinker's tools"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+           <column name="race" value="Half-Orc"/>
+           <column name="name" value="Darkvision"/>
+           <column name="category" value="Vision"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+           <column name="race" value="Half-Orc"/>
+           <column name="name" value="Menacing"/>
+           <column name="category" value="Proficiency Skill"/>
+           <column name="affected_name" value="Intimidation"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+           <column name="race" value="Half-Orc"/>
+           <column name="name" value="Relentless"/>
+           <column name="category" value="Damage Received"/>
+           <column name="affected_name" value="Hit Points"/>
+           <column name="affected_adj" value="1"/>
+           <column name="recharge_on" value="Long Rest"/>
+           <column name="description" value="Instead of dropping below 0HP, drop to 1"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+           <column name="race" value="Half-Orc"/>
+           <column name="name" value="Savage Attacks"/>
+           <column name="category" value="Damage Given"/>
+           <column name="affected_name" value="Melee Attack"/>
+           <column name="affect" value="additional damage die"/>
+           <column name="description" value="targetAffect:Crit"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+           <column name="race" value="Tiefling"/>
+           <column name="name" value="Darkvision"/>
+           <column name="category" value="Vision"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+           <column name="race" value="Tiefling"/>
+           <column name="name" value="Hellish Resistance"/>
+           <column name="category" value="Damage Received"/>
+           <column name="affected_name" value="Fire"/>
+           <column name="affect" value="resistant"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+           <column name="race" value="Tiefling"/>
+           <column name="name" value="Infernal Legacy 1"/>
+           <column name="category" value="Spell"/>
+           <column name="affected_name" value="Hellish Rebuke"/>
+           <column name="recharge_on" value="Long Rest"/>
+           <column name="description" value="onLevel:3,spellLevel:2"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+           <column name="race" value="Tiefling"/>
+           <column name="name" value="Infernal Legacy 2"/>
+           <column name="category" value="Spell"/>
+           <column name="affected_name" value="Darkness"/>
+           <column name="recharge_on" value="Long Rest"/>
+           <column name="description" value="onLevel:5,spellLevel:2"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+           <column name="race" value="Centaur"/>       
+           <column name="name" value="Darkvision"/>            
+           <column name="category" value="Vision"/>           
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+           <column name="race" value="Centaur"/>       
+           <column name="name" value="Charge"/>            
+           <column name="category" value="Damage Given"/>           
+           <column name="recharge_on" value="Long or Short Rest"/>
+           <column name="affected_name" value="Melee Attack"/>           
+           <column name="affect" value="damage die rolled 2 times"/>      
+           <column name="description" value="reqSpace:20ft"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+           <column name="race" value="Centaur"/>       
+           <column name="name" value="Hooves"/>            
+           <column name="category" value="Proficiency Skill"/> 
+           <column name="affected_name" value="Hooves"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+           <column name="race" value="Centaur"/>       
+           <column name="name" value="Survivor"/>            
+           <column name="category" value="Proficiency Skill"/> 
+           <column name="affected_name" value="Survival"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+           <column name="race" value="Centaur"/>       
+           <column name="name" value="Hybrid Nature"/>            
+           <column name="category" value="Spell Effect"/> 
+           <column name="affect" value="Affected by"/> 
+           <column name="affected_name" value="Monstrosity"/>
+           <column name="description" value="You are both human and monstrosity. Spells affect you if they are for either"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+           <column name="race" value="Black bearkin"/>       
+           <column name="name" value="Darkvision"/>            
+           <column name="category" value="Vision"/>           
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+           <column name="race" value="Black bearkin"/>       
+           <column name="name" value="Keen Smell"/>            
+           <column name="category" value="Skill Check"/>          
+           <column name="affected_name" value="Perception"/>           
+           <column name="affect" value="advantage"/>      
+           <column name="description" value="targetAffect:Smell"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+           <column name="race" value="Black bearkin"/>       
+           <column name="name" value="Animal Knowledge"/>            
+           <column name="category" value="Proficiency Skill"/> 
+           <column name="affected_name" value="Nature"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+           <column name="race" value="Black bearkin"/>       
+           <column name="name" value="Claws"/>            
+           <column name="category" value="Proficiency Skill"/> 
+           <column name="affected_name" value="Claws"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+           <column name="race" value="Black bearkin"/>       
+           <column name="name" value="Stealthy"/>            
+           <column name="category" value="Proficiency Skill"/> 
+           <column name="affected_name" value="Stealth"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+           <column name="race" value="Black bearkin"/>       
+           <column name="name" value="Underdark Scavenger"/> 
+           <column name="category" value="Proficiency Skill"/> 
+           <column name="affected_name" value="Survival"/>  
+           <column name="description" value="targetAffect:Foraging"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+           <column name="race" value="Brown bearkin"/>       
+           <column name="name" value="Keen Smell"/>            
+           <column name="category" value="Skill Check"/>          
+           <column name="affected_name" value="Perception"/>           
+           <column name="affect" value="advantage"/>      
+           <column name="description" value="targetAffect:Smell"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+           <column name="race" value="Brown bearkin"/>       
+           <column name="name" value="Animal Knowledge"/>            
+           <column name="category" value="Proficiency Skill"/> 
+           <column name="affected_name" value="Nature"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+           <column name="race" value="Brown bearkin"/>       
+           <column name="name" value="Claws"/>            
+           <column name="category" value="Proficiency Skill"/> 
+           <column name="affected_name" value="Claws"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+           <column name="race" value="Brown bearkin"/>       
+           <column name="name" value="Protector"/>            
+           <column name="category" value="Saving Throw"/> 
+           <column name="affected_name" value="Strength"/>
+           <column name="affect" value="other"/>
+           <column name="recharge_on" value="Short Rest"/>
+           <column name="description" value="when an ally is in 5ft of you and must make a Strength 
+                saving throw, you may choose to have the affect target you instead."/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+           <column name="race" value="Brown bearkin"/>       
+           <column name="name" value="Powerful Build"/> 
+           <column name="category" value="Feat"/> 
+           <column name="description" value="You count as one size larger when determining your carrying capacity and the weight you can push, drag, or lift."/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+           <column name="race" value="Koala bearkin"/>       
+           <column name="name" value="Keen Smell"/>            
+           <column name="category" value="Skill Check"/>          
+           <column name="affected_name" value="Perception"/>           
+           <column name="affect" value="advantage"/>      
+           <column name="description" value="targetAffect:Smell"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+           <column name="race" value="Koala bearkin"/>       
+           <column name="name" value="Animal Knowledge"/>            
+           <column name="category" value="Proficiency Skill"/> 
+           <column name="affected_name" value="Nature"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+           <column name="race" value="Koala bearkin"/>       
+           <column name="name" value="Claws"/>            
+           <column name="category" value="Proficiency Skill"/> 
+           <column name="affected_name" value="Claws"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+           <column name="race" value="Koala bearkin"/>       
+           <column name="name" value="Nimble"/>            
+           <column name="category" value="Proficiency Skill"/> 
+           <column name="affected_name" value="Acrobatics"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+           <column name="race" value="Koala bearkin"/>       
+           <column name="name" value="Bear Drop"/>            
+           <column name="category" value="Attack"/> 
+           <column name="affect" value="advantage"/>
+           <column name="recharge_on" value="Short Rest"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+           <column name="race" value="Koala bearkin"/>       
+           <column name="name" value="Bear Drop"/>            
+           <column name="category" value="Damage Received"/> 
+           <column name="affected_name" value="falling damage"/>
+           <column name="affect" value="halved"/>
+           <column name="recharge_on" value="Short Rest"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+           <column name="race" value="Koala bearkin"/>       
+           <column name="name" value="Iron Tummy 1"/> 
+           <column name="category" value="Saving Throw"/> 
+           <column name="affected_name" value="poison"/>
+           <column name="affect" value="immune"/>
+           <column name="description" value="onAction:eaten"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+           <column name="race" value="Koala bearkin"/>       
+           <column name="name" value="Iron Tummy 2"/> 
+           <column name="category" value="Saving Throw"/> 
+           <column name="affected_name" value="disease"/>
+           <column name="affect" value="immune"/>
+           <column name="description" value="onAction:eaten"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+           <column name="race" value="Koala bearkin"/>       
+           <column name="name" value="Tree Born"/> 
+           <column name="category" value="Movement"/>
+           <column name="affected_name" value="Climb"/>
+           <column name="affect" value="30ft"/> 
+           <column name="description" value="You've grown up in trees."/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+           <column name="race" value="Panda bearkin"/>       
+           <column name="name" value="Keen Smell"/>            
+           <column name="category" value="Skill Check"/>          
+           <column name="affected_name" value="Perception"/>           
+           <column name="affect" value="advantage"/>      
+           <column name="description" value="targetAffect:Smell"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+           <column name="race" value="Panda bearkin"/>       
+           <column name="name" value="Animal Knowledge"/>            
+           <column name="category" value="Proficiency Skill"/> 
+           <column name="affected_name" value="Nature"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+           <column name="race" value="Panda bearkin"/>       
+           <column name="name" value="Claws"/>            
+           <column name="category" value="Proficiency Skill"/> 
+           <column name="affected_name" value="Claws"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+           <column name="race" value="Panda bearkin"/>       
+           <column name="name" value="Natural Healer"/>            
+           <column name="category" value="Proficiency Skill"/> 
+           <column name="affected_name" value="Medicine"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+           <column name="race" value="Panda bearkin"/>       
+           <column name="name" value="Plant Spirit"/>            
+           <column name="category" value="Spell"/> 
+           <column name="affected_name" value="Speak with Plants"/>
+           <column name="recharge_on" value="Sunrise"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+           <column name="race" value="Polar bearkin"/>       
+           <column name="name" value="Keen Smell"/>            
+           <column name="category" value="Skill Check"/>          
+           <column name="affected_name" value="Perception"/>           
+           <column name="affect" value="advantage"/>      
+           <column name="description" value="targetAffect:Smell"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+           <column name="race" value="Polar bearkin"/>       
+           <column name="name" value="Animal Knowledge"/>            
+           <column name="category" value="Proficiency Skill"/> 
+           <column name="affected_name" value="Nature"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+           <column name="race" value="Polar bearkin"/>       
+           <column name="name" value="Claws"/>            
+           <column name="category" value="Proficiency Skill"/> 
+           <column name="affected_name" value="Claws"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+           <column name="race" value="Polar bearkin"/>       
+           <column name="name" value="Winter Hide"/>            
+           <column name="category" value="Saving Throw"/> 
+           <column name="affected_name" value="Cold"/>
+           <column name="affect" value="resistant"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+           <column name="race" value="Polar bearkin"/>       
+           <column name="name" value="History of Violence"/>            
+           <column name="category" value="Skill Check"/> 
+           <column name="affected_name" value="Intimidation"/>
+           <column name="affect" value="advantage"/>
+           <column name="description" value="creatureSize:Medium,comparison:SmallerThan"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+           <column name="race" value="Polar bearkin"/>       
+           <column name="name" value="Powerful Build"/> 
+           <column name="category" value="Feat"/> 
+           <column name="description" value="You count as one size larger when determining your carrying capacity and the weight you can push, drag, or lift."/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+           <column name="race" value="Kobold"/>       
+           <column name="name" value="Darkvision"/>            
+           <column name="category" value="Vision"/>           
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+           <column name="race" value="Kobold"/>       
+           <column name="name" value="Pack Tactics"/> 
+           <column name="category" value="Attack"/> 
+           <column name="affect" value="advantage"/>
+           <column name="description" value="targetAffect:AllyWithin5ft"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+           <column name="race" value="Kobold"/>       
+           <column name="name" value="Slim Build"/> 
+           <column name="category" value="Feat"/> 
+           <column name="description" value="You count as one size smaller when determining your carrying capacity and the weight you can push, drag, or lift."/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+           <column name="race" value="Kobold"/>       
+           <column name="name" value="Sunlight Sensitivity"/> 
+           <column name="category" value="Attack"/> 
+           <column name="affect" value="disadvantage"/>
+           <column name="description" value="targetAffect:inDirectSunlight"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+           <column name="race" value="Kobold"/>       
+           <column name="name" value="Sunlight Sensitivity"/>            
+           <column name="category" value="Skill Check"/>          
+           <column name="affected_name" value="Perception"/>           
+           <column name="affect" value="disadvantage"/>      
+           <column name="description" value="targetAffect:inDirectSunlight"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+           <column name="race" value="Burrows kobold"/>       
+           <column name="name" value="Ambusher"/>            
+           <column name="category" value="Damage Given"/>           
+           <column name="affected_name" value="Melee Attack"/>
+           <column name="affect" value="rerole damage, use higher total"/>
+           <column name="description" value="targetAffect:Surprise"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+           <column name="race" value="Burrows kobold"/>       
+           <column name="name" value="Good with locks"/>            
+           <column name="category" value="Proficiency Skill"/>           
+           <column name="affected_name" value="Thieves' tools"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+           <column name="race" value="Loredrake kobold"/>       
+           <column name="name" value="Sorcerous Initiate 1"/>            
+           <column name="category" value="Spell"/> 
+           <column name="affected_name" value="Cantrip"/>
+           <column name="affected_adj" value="2"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+           <column name="race" value="Loredrake kobold"/>       
+           <column name="name" value="Sorcerous Initiate 2"/>            
+           <column name="category" value="Spell"/> 
+           <column name="affected_name" value="level:1"/>
+           <column name="recharge_on" value="Long Rest"/>
+           <column name="description" value="castAbility:Charisma"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+           <column name="race" value="Winged kobold"/>       
+           <column name="name" value="Flying"/>            
+           <column name="category" value="Movement"/> 
+           <column name="affected_name" value="Fly"/>
+           <column name="affect" value="30ft."/>
+        </insert>
+<insert schemaName="dnd_5e" tableName="lu_racial_trait">
+           <column name="race" value="Goblin"/>       
+           <column name="name" value="Darkvision"/>            
+           <column name="category" value="Vision"/>           
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+           <column name="race" value="Goblin"/>       
+           <column name="name" value="Nimble Escape"/>            
+           <column name="category" value="Damage Received"/>           
+           <column name="affected_name" value="toHit"/>
+           <column name="affect" value="disadvantage"/>
+           <column name="description" value="targetAffect:AttackOfOpportunity"/>
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+           <column name="race" value="Greenskin goblin"/>       
+           <column name="name" value="Mud Slinger"/>            
+           <column name="category" value="Spell"/> 
+           <column name="affected_name" value="Vicious mockery"/>
+           <column name="description" value="castAbility:Charisma"/>
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+            <column name="race" value="Greenskin goblin" />
+            <column name="name" value="Worg Rider" />
+            <column name="category" value="Proficiency Skill" />
+            <column name="affected_name" value="Animal handling" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+           <column name="race" value="Greenskin goblin"/>       
+           <column name="name" value="Run For It"/> 
+           <column name="category" value="Feat"/> 
+           <column name="description" value="When using the disengage action, difficult terrain doesn't cost you extra movement on that turn."/>
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+            <column name="race" value="Boggart goblin" />
+            <column name="name" value="Boggart Weapon Proficiency 1" />
+            <column name="category" value="Proficiency Skill" />
+            <column name="affected_name" value="Blowdart" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+            <column name="race" value="Boggart goblin" />
+            <column name="name" value="Boggart Weapon Proficiency 2" />
+            <column name="category" value="Proficiency Skill" />
+            <column name="affected_name" value="Net" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+           <column name="race" value="Boggart goblin"/>       
+           <column name="name" value="Swamp Immunity 1"/> 
+           <column name="category" value="Saving Throw"/> 
+           <column name="affected_name" value="poison"/>
+           <column name="affect" value="advantage"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+           <column name="race" value="Boggart goblin"/>       
+           <column name="name" value="Swamp Immunity 2"/> 
+           <column name="category" value="Saving Throw"/> 
+           <column name="affected_name" value="disease"/>
+           <column name="affect" value="advantage"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+           <column name="race" value="Boggart goblin"/>       
+           <column name="name" value="Swamp Immunity"/> 
+           <column name="category" value="Damage Received"/> 
+           <column name="affected_name" value="poison"/>
+           <column name="affect" value="resistant"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+           <column name="race" value="Boggart goblin"/>       
+           <column name="name" value="Bog Swimmer"/>            
+           <column name="category" value="Movement"/> 
+           <column name="affected_name" value="Swim"/>
+           <column name="affect" value="25ft."/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+           <column name="race" value="Gremlin goblin"/>       
+           <column name="name" value="Almost Fire Proof"/> 
+           <column name="category" value="Damage Received"/> 
+           <column name="affected_name" value="Fire"/>
+           <column name="affect" value="resistant"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+           <column name="race" value="Gremlin goblin"/>       
+           <column name="name" value="Dangerous Tinker"/>            
+           <column name="category" value="Proficiency Skill"/>           
+           <column name="affected_name" value="Tinker's tools"/>
+        </insert>
+
+    </changeSet>
+    <changeSet author="mdbdba" id="lu_racial_trait_4">
+        <createView
+            replaceIfExists="true"
+            schemaName="dnd_5e"
+            viewName="v_racial_trait">select race,
+case when name like '% _' then substring(name, 1, length(name) -2 )
+else "name"
+end as trait_name,
+case when name like '% _' then substring(name, length(name), 1 )
+else '1'
+end as trait_orderby, category, affected_name, affected_multiplier,
+affected_die, affected_adj, affect, recharge_on, variable_recharge_multiplier,
+variable_recharge_die, variable_recharge_adj, description
+from lu_racial_trait
+order by race, trait_name, trait_orderby</createView>
+    </changeSet>
+</databaseChangeLog>
+
