@@ -187,4 +187,11 @@
            <column name="modifier" value="1"/> 
         </insert>
     </changeSet>
+    <changeSet author="mdbdba" id="lu_racial_ability_score_modifier_2">
+        <insert schemaName="dnd_5e" tableName="lu_racial_ability_score_modifier">
+           <column name="race" value="Half-Elf"/> 
+           <column name="ability" value="Charisma"/> 
+           <column name="modifier" value="2"/> 
+        </insert>
+    </changeSet>
 </databaseChangeLog>

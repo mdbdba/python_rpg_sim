@@ -63,3 +63,4 @@ class InvokePSQL(object):
 
 if __name__ == '__main__':
     a1 = InvokePSQL()
+    print(a1.db_version)

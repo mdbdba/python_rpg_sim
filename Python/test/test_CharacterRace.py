@@ -10,21 +10,13 @@ def test_Race_Default():
     db = InvokePSQL()
     a = CharacterRace(db)
     assert(len(a.race) > 3)
-    assert(a.ability_bonuses[0] != 0 or
-           a.ability_bonuses[1] != 0 or
-           a.ability_bonuses[3] != 0 or
-           a.ability_bonuses[4] != 0 or
-           a.ability_bonuses[5] != 0)
+    assert(any([v != 0 for v in a.ability_bonuses]))
 
 
 def test_Race_Default_noRASM():
     db = InvokePSQL()
     a = CharacterRace(db, 'Random', False)
-    assert(a.ability_bonuses[0] == 0 and
-           a.ability_bonuses[1] == 0 and
-           a.ability_bonuses[3] == 0 and
-           a.ability_bonuses[4] == 0 and
-           a.ability_bonuses[5] == 0)
+    assert(all([v == 0 for v in a.ability_bonuses]))
 
 
 def test_Race_Case():
@@ -54,6 +46,7 @@ def test_Race_Highelf():
     assert(fey_ancestry_ind == 1)
     assert(cantrip_ind == 1)
     assert(extra_language_ind == 1)
+    assert(any([v != 0 for v in a.ability_bonuses]))
 
 
 def test_Race_Hilldwarf():
@@ -73,6 +66,7 @@ def test_Race_Hilldwarf():
     assert(darkvision_ind == 1)
     assert(dwarven_resillience_ind == 1)
     assert(dwarven_toughness_ind == 1)
+    assert(any([v != 0 for v in a.ability_bonuses]))
 
 
 def test_Race_Lightfoothalfling():
@@ -96,6 +90,7 @@ def test_Race_Lightfoothalfling():
     assert(halfling_nimbleness_ind == 1)
     assert(lucky_ind == 1)
     assert(naturally_stealthy_ind == 1)
+    assert(any([v != 0 for v in a.ability_bonuses]))
 
 
 def test_Race_Mountaindwarf():
@@ -111,12 +106,14 @@ def test_Race_Mountaindwarf():
             dwarven_resillience_ind = 1
     assert(darkvision_ind == 1)
     assert(dwarven_resillience_ind == 1)
+    assert(any([v != 0 for v in a.ability_bonuses]))
 
 
 def test_Race_Woodelf():
     db = InvokePSQL()
     a = CharacterRace(db, 'Wood elf')
     assert(a.race == 'Wood elf')
+    assert(any([v != 0 for v in a.ability_bonuses]))
 
 
 def test_Race_Stouthalfling():
@@ -140,6 +137,7 @@ def test_Race_Stouthalfling():
     assert(halfling_nimbleness_ind == 1)
     assert(lucky_ind == 1)
     assert(stout_resilience_ind == 1)
+    assert(any([v != 0 for v in a.ability_bonuses]))
 
 
 def test_Race_Halfelf():
@@ -159,6 +157,7 @@ def test_Race_Halfelf():
     assert(darkvision_ind == 1)
     assert(fey_ancestry_ind == 1)
     assert(skill_versatility_ind == 1)
+    assert(any([v != 0 for v in a.ability_bonuses]))
 
 
 # test the case that a random subrace will be chosen
@@ -171,6 +170,7 @@ def test_Race_Dragonborn():
         if (b.trait_name == 'Draconic Ancestry'):
             draconic_ancestry_ind = 1
     assert(draconic_ancestry_ind == 1)
+    assert(any([v != 0 for v in a.ability_bonuses]))
 
 
 def test_Race_Blackdragonborn():
@@ -183,6 +183,7 @@ def test_Race_Blackdragonborn():
            and b.affected_name == 'Dragonborn Breath Weapon - Black'):
                 draconic_ancestry_ind = 1
     assert(draconic_ancestry_ind == 1)
+    assert(any([v != 0 for v in a.ability_bonuses]))
 
 
 def test_Race_Bluedragonborn():
@@ -195,6 +196,7 @@ def test_Race_Bluedragonborn():
            and b.affected_name == 'Dragonborn Breath Weapon - Blue'):
             draconic_ancestry_ind = 1
     assert(draconic_ancestry_ind == 1)
+    assert(any([v != 0 for v in a.ability_bonuses]))
 
 
 def test_Race_Brassdragonborn():
@@ -207,6 +209,7 @@ def test_Race_Brassdragonborn():
            and b.affected_name == 'Dragonborn Breath Weapon - Brass'):
             draconic_ancestry_ind = 1
     assert(draconic_ancestry_ind == 1)
+    assert(any([v != 0 for v in a.ability_bonuses]))
 
 
 def test_Race_Bronzedragonborn():
@@ -219,6 +222,7 @@ def test_Race_Bronzedragonborn():
            and b.affected_name == 'Dragonborn Breath Weapon - Bronze'):
             draconic_ancestry_ind = 1
     assert(draconic_ancestry_ind == 1)
+    assert(any([v != 0 for v in a.ability_bonuses]))
 
 
 def test_Race_Copperdragonborn():
@@ -231,6 +235,7 @@ def test_Race_Copperdragonborn():
            and b.affected_name == 'Dragonborn Breath Weapon - Copper'):
             draconic_ancestry_ind = 1
     assert(draconic_ancestry_ind == 1)
+    assert(any([v != 0 for v in a.ability_bonuses]))
 
 
 def test_Race_Golddragonborn():
@@ -243,6 +248,7 @@ def test_Race_Golddragonborn():
            and b.affected_name == 'Dragonborn Breath Weapon - Gold'):
             draconic_ancestry_ind = 1
     assert(draconic_ancestry_ind == 1)
+    assert(any([v != 0 for v in a.ability_bonuses]))
 
 
 def test_Race_Greendragonborn():
@@ -255,6 +261,7 @@ def test_Race_Greendragonborn():
            and b.affected_name == 'Dragonborn Breath Weapon - Green'):
             draconic_ancestry_ind = 1
     assert(draconic_ancestry_ind == 1)
+    assert(any([v != 0 for v in a.ability_bonuses]))
 
 
 def test_Race_Reddragonborn():
@@ -267,6 +274,7 @@ def test_Race_Reddragonborn():
            and b.affected_name == 'Dragonborn Breath Weapon - Red'):
             draconic_ancestry_ind = 1
     assert(draconic_ancestry_ind == 1)
+    assert(any([v != 0 for v in a.ability_bonuses]))
 
 
 def test_Race_Silverdragonborn():
@@ -279,6 +287,7 @@ def test_Race_Silverdragonborn():
            and b.affected_name == 'Dragonborn Breath Weapon - Silver'):
             draconic_ancestry_ind = 1
     assert(draconic_ancestry_ind == 1)
+    assert(any([v != 0 for v in a.ability_bonuses]))
 
 
 def test_Race_Whitedragonborn():
@@ -291,6 +300,7 @@ def test_Race_Whitedragonborn():
            and b.affected_name == 'Dragonborn Breath Weapon - White'):
             draconic_ancestry_ind = 1
     assert(draconic_ancestry_ind == 1)
+    assert(any([v != 0 for v in a.ability_bonuses]))
 
 
 def test_Race_Rockgnome():
@@ -306,6 +316,7 @@ def test_Race_Rockgnome():
             gnome_cunning_ind = 1
     assert(darkvision_ind == 1)
     assert(gnome_cunning_ind == 1)
+    assert(any([v != 0 for v in a.ability_bonuses]))
 
 
 def test_Race_HalfOrc():
@@ -325,6 +336,7 @@ def test_Race_HalfOrc():
     assert(darkvision_ind == 1)
     assert(relentless_ind == 1)
     assert(savage_attacks_ind == 1)
+    assert(any([v != 0 for v in a.ability_bonuses]))
 
 
 def test_Race_Tiefling():
@@ -344,6 +356,7 @@ def test_Race_Tiefling():
     assert(darkvision_ind == 1)
     assert(hellish_resistance_ind == 1)
     assert(infernal_legacy_ind == 1)
+    assert(any([v != 0 for v in a.ability_bonuses]))
 
 
 def test_Race_Centaur():
@@ -359,6 +372,7 @@ def test_Race_Centaur():
             hybrid_nature_ind = 1
     assert(charge_ind == 1)
     assert(hybrid_nature_ind == 1)
+    assert(any([v != 0 for v in a.ability_bonuses]))
 
 
 def test_Race_Blackbearkin():
@@ -374,6 +388,7 @@ def test_Race_Blackbearkin():
             keen_smell_ind = 1
     assert(darkvision_ind == 1)
     assert(keen_smell_ind == 1)
+    assert(any([v != 0 for v in a.ability_bonuses]))
 
 
 def test_Race_Brownbearkin():
@@ -393,6 +408,7 @@ def test_Race_Brownbearkin():
     assert(keen_smell_ind == 1)
     assert(protector_ind == 1)
     assert(powerful_build_ind == 1)
+    assert(any([v != 0 for v in a.ability_bonuses]))
 
 
 def test_Race_Koalabearkin():
@@ -416,6 +432,7 @@ def test_Race_Koalabearkin():
     assert(bear_drop_ind == 1)
     assert(iron_tummy_ind == 1)
     assert(tree_born_ind == 1)
+    assert(any([v != 0 for v in a.ability_bonuses]))
 
 
 def test_Race_Pandabearkin():
@@ -431,6 +448,7 @@ def test_Race_Pandabearkin():
             plant_spirit_ind = 1
     assert(keen_smell_ind == 1)
     assert(plant_spirit_ind == 1)
+    assert(any([v != 0 for v in a.ability_bonuses]))
 
 
 def test_Race_Polarbearkin():
@@ -450,6 +468,7 @@ def test_Race_Polarbearkin():
     assert(keen_smell_ind == 1)
     assert(winter_hide_ind == 1)
     assert(history_of_violence_ind == 1)
+    assert(any([v != 0 for v in a.ability_bonuses]))
 
 
 def test_Race_Burrowskobold():
@@ -477,6 +496,7 @@ def test_Race_Burrowskobold():
     assert(slim_build_ind == 1)
     assert(sunlight_sensitivity_ind == 1)
     assert(ambusher_ind == 1)
+    assert(any([v != 0 for v in a.ability_bonuses]))
 
 
 def test_Race_Loredrakekobold():
@@ -504,6 +524,7 @@ def test_Race_Loredrakekobold():
     assert(slim_build_ind == 1)
     assert(sunlight_sensitivity_ind == 1)
     assert(sorcerous_initiate_ind == 1)
+    assert(any([v != 0 for v in a.ability_bonuses]))
 
 
 def test_Race_Wingedkobold():
@@ -531,6 +552,7 @@ def test_Race_Wingedkobold():
     assert(slim_build_ind == 1)
     assert(sunlight_sensitivity_ind == 1)
     assert(flying_ind == 1)
+    assert(any([v != 0 for v in a.ability_bonuses]))
 
 
 def test_Race_Greenskingoblin():
@@ -554,6 +576,7 @@ def test_Race_Greenskingoblin():
     assert(nimble_escape_ind == 1)
     assert(mud_slinger_ind == 1)
     assert(run_for_it_ind == 1)
+    assert(any([v != 0 for v in a.ability_bonuses]))
 
 
 def test_Race_Boggartgoblin():
@@ -577,6 +600,7 @@ def test_Race_Boggartgoblin():
     assert(nimble_escape_ind == 1)
     assert(swamp_immunity_ind == 1)
     assert(bog_swimmer_ind == 1)
+    assert(any([v != 0 for v in a.ability_bonuses]))
 
 
 def test_Race_Gremlingoblin():
@@ -600,3 +624,4 @@ def test_Race_Gremlingoblin():
     assert(nimble_escape_ind == 1)
     assert(dangerous_tinker_ind == 1)
     assert(almost_fire_proof_ind == 1)
+    assert(any([v != 0 for v in a.ability_bonuses]))
