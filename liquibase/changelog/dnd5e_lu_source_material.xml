@@ -53,5 +53,11 @@
             <column name="description" value="Dungeon Master's Guide" />
         </insert>
     </changeSet>
+    <changeSet author="mdbdba" id="lu_source_material_2">
+        <insert schemaName="dnd_5e" tableName="lu_source_material">
+            <column name="value" value="VOL"/>
+            <column name="description" value="Volo's Guide to Monsters" />
+        </insert>
+    </changeSet>
 </databaseChangeLog>
 
