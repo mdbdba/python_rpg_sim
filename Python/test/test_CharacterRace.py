@@ -6,6 +6,17 @@ from CharacterRace import CharacterRace    # NOQA
 from InvokePSQL import InvokePSQL    # NOQA
 
 
+# add tests for random racial traits here
+def test_getAlignment():
+    db = InvokePSQL()
+    a = CharacterRace(db)
+    alignmentObj = a.getAlignment(db)
+    assert(len(a.race) > 3)
+    assert('abbreviation' in alignmentObj)
+    assert('alignment' in alignmentObj)
+
+
+# add tests for specific race types below, including random
 def test_Race_Default():
     db = InvokePSQL()
     a = CharacterRace(db)
@@ -47,6 +58,14 @@ def test_Race_Highelf():
     assert(cantrip_ind == 1)
     assert(extra_language_ind == 1)
     assert(any([v != 0 for v in a.ability_bonuses]))
+    alignmentObj = a.getAlignment(db)
+    assert('abbreviation' in alignmentObj)
+    assert('alignment' in alignmentObj)
+    assert(a.getSkinTone(db))
+    assert(a.getHairColor(db))
+    assert(a.getHairType(db))
+    assert(a.getEyeColor(db))
+    assert(a.getName(db, 'U'))
 
 
 def test_Race_Hilldwarf():
@@ -67,6 +86,14 @@ def test_Race_Hilldwarf():
     assert(dwarven_resillience_ind == 1)
     assert(dwarven_toughness_ind == 1)
     assert(any([v != 0 for v in a.ability_bonuses]))
+    alignmentObj = a.getAlignment(db)
+    assert('abbreviation' in alignmentObj)
+    assert('alignment' in alignmentObj)
+    assert(a.getSkinTone(db))
+    assert(a.getHairColor(db))
+    assert(a.getHairType(db))
+    assert(a.getEyeColor(db))
+    assert(a.getName(db, 'U'))
 
 
 def test_Race_Lightfoothalfling():
@@ -91,6 +118,14 @@ def test_Race_Lightfoothalfling():
     assert(lucky_ind == 1)
     assert(naturally_stealthy_ind == 1)
     assert(any([v != 0 for v in a.ability_bonuses]))
+    alignmentObj = a.getAlignment(db)
+    assert('abbreviation' in alignmentObj)
+    assert('alignment' in alignmentObj)
+    assert(a.getSkinTone(db))
+    assert(a.getHairColor(db))
+    assert(a.getHairType(db))
+    assert(a.getEyeColor(db))
+    assert(a.getName(db, 'U'))
 
 
 def test_Race_Mountaindwarf():
@@ -107,6 +142,14 @@ def test_Race_Mountaindwarf():
     assert(darkvision_ind == 1)
     assert(dwarven_resillience_ind == 1)
     assert(any([v != 0 for v in a.ability_bonuses]))
+    alignmentObj = a.getAlignment(db)
+    assert('abbreviation' in alignmentObj)
+    assert('alignment' in alignmentObj)
+    assert(a.getSkinTone(db))
+    assert(a.getHairColor(db))
+    assert(a.getHairType(db))
+    assert(a.getEyeColor(db))
+    assert(a.getName(db, 'U'))
 
 
 def test_Race_Woodelf():
@@ -114,6 +157,14 @@ def test_Race_Woodelf():
     a = CharacterRace(db, 'Wood elf')
     assert(a.race == 'Wood elf')
     assert(any([v != 0 for v in a.ability_bonuses]))
+    alignmentObj = a.getAlignment(db)
+    assert('abbreviation' in alignmentObj)
+    assert('alignment' in alignmentObj)
+    assert(a.getSkinTone(db))
+    assert(a.getHairColor(db))
+    assert(a.getHairType(db))
+    assert(a.getEyeColor(db))
+    assert(a.getName(db, 'U'))
 
 
 def test_Race_Stouthalfling():
@@ -138,6 +189,14 @@ def test_Race_Stouthalfling():
     assert(lucky_ind == 1)
     assert(stout_resilience_ind == 1)
     assert(any([v != 0 for v in a.ability_bonuses]))
+    alignmentObj = a.getAlignment(db)
+    assert('abbreviation' in alignmentObj)
+    assert('alignment' in alignmentObj)
+    assert(a.getSkinTone(db))
+    assert(a.getHairColor(db))
+    assert(a.getHairType(db))
+    assert(a.getEyeColor(db))
+    assert(a.getName(db, 'U'))
 
 
 def test_Race_Halfelf():
@@ -158,6 +217,14 @@ def test_Race_Halfelf():
     assert(fey_ancestry_ind == 1)
     assert(skill_versatility_ind == 1)
     assert(any([v != 0 for v in a.ability_bonuses]))
+    alignmentObj = a.getAlignment(db)
+    assert('abbreviation' in alignmentObj)
+    assert('alignment' in alignmentObj)
+    assert(a.getSkinTone(db))
+    assert(a.getHairColor(db))
+    assert(a.getHairType(db))
+    assert(a.getEyeColor(db))
+    assert(a.getName(db, 'U'))
 
 
 # test the case that a random subrace will be chosen
@@ -171,6 +238,14 @@ def test_Race_Dragonborn():
             draconic_ancestry_ind = 1
     assert(draconic_ancestry_ind == 1)
     assert(any([v != 0 for v in a.ability_bonuses]))
+    alignmentObj = a.getAlignment(db)
+    assert('abbreviation' in alignmentObj)
+    assert('alignment' in alignmentObj)
+    assert(a.getSkinTone(db))
+    assert(a.getHairColor(db))
+    assert(a.getHairType(db))
+    assert(a.getEyeColor(db))
+    assert(a.getName(db, 'U'))
 
 
 def test_Race_Blackdragonborn():
@@ -184,6 +259,14 @@ def test_Race_Blackdragonborn():
                 draconic_ancestry_ind = 1
     assert(draconic_ancestry_ind == 1)
     assert(any([v != 0 for v in a.ability_bonuses]))
+    alignmentObj = a.getAlignment(db)
+    assert('abbreviation' in alignmentObj)
+    assert('alignment' in alignmentObj)
+    assert(a.getSkinTone(db))
+    assert(a.getHairColor(db))
+    assert(a.getHairType(db))
+    assert(a.getEyeColor(db))
+    assert(a.getName(db, 'U'))
 
 
 def test_Race_Bluedragonborn():
@@ -197,6 +280,14 @@ def test_Race_Bluedragonborn():
             draconic_ancestry_ind = 1
     assert(draconic_ancestry_ind == 1)
     assert(any([v != 0 for v in a.ability_bonuses]))
+    alignmentObj = a.getAlignment(db)
+    assert('abbreviation' in alignmentObj)
+    assert('alignment' in alignmentObj)
+    assert(a.getSkinTone(db))
+    assert(a.getHairColor(db))
+    assert(a.getHairType(db))
+    assert(a.getEyeColor(db))
+    assert(a.getName(db, 'U'))
 
 
 def test_Race_Brassdragonborn():
@@ -210,6 +301,14 @@ def test_Race_Brassdragonborn():
             draconic_ancestry_ind = 1
     assert(draconic_ancestry_ind == 1)
     assert(any([v != 0 for v in a.ability_bonuses]))
+    alignmentObj = a.getAlignment(db)
+    assert('abbreviation' in alignmentObj)
+    assert('alignment' in alignmentObj)
+    assert(a.getSkinTone(db))
+    assert(a.getHairColor(db))
+    assert(a.getHairType(db))
+    assert(a.getEyeColor(db))
+    assert(a.getName(db, 'U'))
 
 
 def test_Race_Bronzedragonborn():
@@ -223,6 +322,14 @@ def test_Race_Bronzedragonborn():
             draconic_ancestry_ind = 1
     assert(draconic_ancestry_ind == 1)
     assert(any([v != 0 for v in a.ability_bonuses]))
+    alignmentObj = a.getAlignment(db)
+    assert('abbreviation' in alignmentObj)
+    assert('alignment' in alignmentObj)
+    assert(a.getSkinTone(db))
+    assert(a.getHairColor(db))
+    assert(a.getHairType(db))
+    assert(a.getEyeColor(db))
+    assert(a.getName(db, 'U'))
 
 
 def test_Race_Copperdragonborn():
@@ -236,6 +343,14 @@ def test_Race_Copperdragonborn():
             draconic_ancestry_ind = 1
     assert(draconic_ancestry_ind == 1)
     assert(any([v != 0 for v in a.ability_bonuses]))
+    alignmentObj = a.getAlignment(db)
+    assert('abbreviation' in alignmentObj)
+    assert('alignment' in alignmentObj)
+    assert(a.getSkinTone(db))
+    assert(a.getHairColor(db))
+    assert(a.getHairType(db))
+    assert(a.getEyeColor(db))
+    assert(a.getName(db, 'U'))
 
 
 def test_Race_Golddragonborn():
@@ -249,6 +364,14 @@ def test_Race_Golddragonborn():
             draconic_ancestry_ind = 1
     assert(draconic_ancestry_ind == 1)
     assert(any([v != 0 for v in a.ability_bonuses]))
+    alignmentObj = a.getAlignment(db)
+    assert('abbreviation' in alignmentObj)
+    assert('alignment' in alignmentObj)
+    assert(a.getSkinTone(db))
+    assert(a.getHairColor(db))
+    assert(a.getHairType(db))
+    assert(a.getEyeColor(db))
+    assert(a.getName(db, 'U'))
 
 
 def test_Race_Greendragonborn():
@@ -262,6 +385,14 @@ def test_Race_Greendragonborn():
             draconic_ancestry_ind = 1
     assert(draconic_ancestry_ind == 1)
     assert(any([v != 0 for v in a.ability_bonuses]))
+    alignmentObj = a.getAlignment(db)
+    assert('abbreviation' in alignmentObj)
+    assert('alignment' in alignmentObj)
+    assert(a.getSkinTone(db))
+    assert(a.getHairColor(db))
+    assert(a.getHairType(db))
+    assert(a.getEyeColor(db))
+    assert(a.getName(db, 'U'))
 
 
 def test_Race_Reddragonborn():
@@ -275,6 +406,14 @@ def test_Race_Reddragonborn():
             draconic_ancestry_ind = 1
     assert(draconic_ancestry_ind == 1)
     assert(any([v != 0 for v in a.ability_bonuses]))
+    alignmentObj = a.getAlignment(db)
+    assert('abbreviation' in alignmentObj)
+    assert('alignment' in alignmentObj)
+    assert(a.getSkinTone(db))
+    assert(a.getHairColor(db))
+    assert(a.getHairType(db))
+    assert(a.getEyeColor(db))
+    assert(a.getName(db, 'U'))
 
 
 def test_Race_Silverdragonborn():
@@ -288,6 +427,14 @@ def test_Race_Silverdragonborn():
             draconic_ancestry_ind = 1
     assert(draconic_ancestry_ind == 1)
     assert(any([v != 0 for v in a.ability_bonuses]))
+    alignmentObj = a.getAlignment(db)
+    assert('abbreviation' in alignmentObj)
+    assert('alignment' in alignmentObj)
+    assert(a.getSkinTone(db))
+    assert(a.getHairColor(db))
+    assert(a.getHairType(db))
+    assert(a.getEyeColor(db))
+    assert(a.getName(db, 'U'))
 
 
 def test_Race_Whitedragonborn():
@@ -301,6 +448,14 @@ def test_Race_Whitedragonborn():
             draconic_ancestry_ind = 1
     assert(draconic_ancestry_ind == 1)
     assert(any([v != 0 for v in a.ability_bonuses]))
+    alignmentObj = a.getAlignment(db)
+    assert('abbreviation' in alignmentObj)
+    assert('alignment' in alignmentObj)
+    assert(a.getSkinTone(db))
+    assert(a.getHairColor(db))
+    assert(a.getHairType(db))
+    assert(a.getEyeColor(db))
+    assert(a.getName(db, 'U'))
 
 
 def test_Race_Rockgnome():
@@ -317,6 +472,14 @@ def test_Race_Rockgnome():
     assert(darkvision_ind == 1)
     assert(gnome_cunning_ind == 1)
     assert(any([v != 0 for v in a.ability_bonuses]))
+    alignmentObj = a.getAlignment(db)
+    assert('abbreviation' in alignmentObj)
+    assert('alignment' in alignmentObj)
+    assert(a.getSkinTone(db))
+    assert(a.getHairColor(db))
+    assert(a.getHairType(db))
+    assert(a.getEyeColor(db))
+    assert(a.getName(db, 'U'))
 
 
 def test_Race_HalfOrc():
@@ -337,6 +500,14 @@ def test_Race_HalfOrc():
     assert(relentless_ind == 1)
     assert(savage_attacks_ind == 1)
     assert(any([v != 0 for v in a.ability_bonuses]))
+    alignmentObj = a.getAlignment(db)
+    assert('abbreviation' in alignmentObj)
+    assert('alignment' in alignmentObj)
+    assert(a.getSkinTone(db))
+    assert(a.getHairColor(db))
+    assert(a.getHairType(db))
+    assert(a.getEyeColor(db))
+    assert(a.getName(db, 'U'))
 
 
 def test_Race_Tiefling():
@@ -357,6 +528,14 @@ def test_Race_Tiefling():
     assert(hellish_resistance_ind == 1)
     assert(infernal_legacy_ind == 1)
     assert(any([v != 0 for v in a.ability_bonuses]))
+    alignmentObj = a.getAlignment(db)
+    assert('abbreviation' in alignmentObj)
+    assert('alignment' in alignmentObj)
+    assert(a.getSkinTone(db))
+    assert(a.getHairColor(db))
+    assert(a.getHairType(db))
+    assert(a.getEyeColor(db))
+    assert(a.getName(db, 'U'))
 
 
 def test_Race_Centaur():
@@ -373,6 +552,14 @@ def test_Race_Centaur():
     assert(charge_ind == 1)
     assert(hybrid_nature_ind == 1)
     assert(any([v != 0 for v in a.ability_bonuses]))
+    alignmentObj = a.getAlignment(db)
+    assert('abbreviation' in alignmentObj)
+    assert('alignment' in alignmentObj)
+    assert(a.getSkinTone(db))
+    assert(a.getHairColor(db))
+    assert(a.getHairType(db))
+    assert(a.getEyeColor(db))
+    assert(a.getName(db, 'U'))
 
 
 def test_Race_Blackbearkin():
@@ -389,6 +576,14 @@ def test_Race_Blackbearkin():
     assert(darkvision_ind == 1)
     assert(keen_smell_ind == 1)
     assert(any([v != 0 for v in a.ability_bonuses]))
+    alignmentObj = a.getAlignment(db)
+    assert('abbreviation' in alignmentObj)
+    assert('alignment' in alignmentObj)
+    assert(a.getSkinTone(db))
+    assert(a.getHairColor(db))
+    assert(a.getHairType(db))
+    assert(a.getEyeColor(db))
+    assert(a.getName(db, 'U'))
 
 
 def test_Race_Brownbearkin():
@@ -409,6 +604,14 @@ def test_Race_Brownbearkin():
     assert(protector_ind == 1)
     assert(powerful_build_ind == 1)
     assert(any([v != 0 for v in a.ability_bonuses]))
+    alignmentObj = a.getAlignment(db)
+    assert('abbreviation' in alignmentObj)
+    assert('alignment' in alignmentObj)
+    assert(a.getSkinTone(db))
+    assert(a.getHairColor(db))
+    assert(a.getHairType(db))
+    assert(a.getEyeColor(db))
+    assert(a.getName(db, 'U'))
 
 
 def test_Race_Koalabearkin():
@@ -433,6 +636,14 @@ def test_Race_Koalabearkin():
     assert(iron_tummy_ind == 1)
     assert(tree_born_ind == 1)
     assert(any([v != 0 for v in a.ability_bonuses]))
+    alignmentObj = a.getAlignment(db)
+    assert('abbreviation' in alignmentObj)
+    assert('alignment' in alignmentObj)
+    assert(a.getSkinTone(db))
+    assert(a.getHairColor(db))
+    assert(a.getHairType(db))
+    assert(a.getEyeColor(db))
+    assert(a.getName(db, 'U'))
 
 
 def test_Race_Pandabearkin():
@@ -449,6 +660,14 @@ def test_Race_Pandabearkin():
     assert(keen_smell_ind == 1)
     assert(plant_spirit_ind == 1)
     assert(any([v != 0 for v in a.ability_bonuses]))
+    alignmentObj = a.getAlignment(db)
+    assert('abbreviation' in alignmentObj)
+    assert('alignment' in alignmentObj)
+    assert(a.getSkinTone(db))
+    assert(a.getHairColor(db))
+    assert(a.getHairType(db))
+    assert(a.getEyeColor(db))
+    assert(a.getName(db, 'U'))
 
 
 def test_Race_Polarbearkin():
@@ -469,6 +688,14 @@ def test_Race_Polarbearkin():
     assert(winter_hide_ind == 1)
     assert(history_of_violence_ind == 1)
     assert(any([v != 0 for v in a.ability_bonuses]))
+    alignmentObj = a.getAlignment(db)
+    assert('abbreviation' in alignmentObj)
+    assert('alignment' in alignmentObj)
+    assert(a.getSkinTone(db))
+    assert(a.getHairColor(db))
+    assert(a.getHairType(db))
+    assert(a.getEyeColor(db))
+    assert(a.getName(db, 'U'))
 
 
 def test_Race_Burrowskobold():
@@ -497,6 +724,14 @@ def test_Race_Burrowskobold():
     assert(sunlight_sensitivity_ind == 1)
     assert(ambusher_ind == 1)
     assert(any([v != 0 for v in a.ability_bonuses]))
+    alignmentObj = a.getAlignment(db)
+    assert('abbreviation' in alignmentObj)
+    assert('alignment' in alignmentObj)
+    assert(a.getSkinTone(db))
+    assert(a.getHairColor(db))
+    assert(a.getHairType(db))
+    assert(a.getEyeColor(db))
+    assert(a.getName(db, 'U'))
 
 
 def test_Race_Loredrakekobold():
@@ -525,6 +760,14 @@ def test_Race_Loredrakekobold():
     assert(sunlight_sensitivity_ind == 1)
     assert(sorcerous_initiate_ind == 1)
     assert(any([v != 0 for v in a.ability_bonuses]))
+    alignmentObj = a.getAlignment(db)
+    assert('abbreviation' in alignmentObj)
+    assert('alignment' in alignmentObj)
+    assert(a.getSkinTone(db))
+    assert(a.getHairColor(db))
+    assert(a.getHairType(db))
+    assert(a.getEyeColor(db))
+    assert(a.getName(db, 'U'))
 
 
 def test_Race_Wingedkobold():
@@ -553,6 +796,14 @@ def test_Race_Wingedkobold():
     assert(sunlight_sensitivity_ind == 1)
     assert(flying_ind == 1)
     assert(any([v != 0 for v in a.ability_bonuses]))
+    alignmentObj = a.getAlignment(db)
+    assert('abbreviation' in alignmentObj)
+    assert('alignment' in alignmentObj)
+    assert(a.getSkinTone(db))
+    assert(a.getHairColor(db))
+    assert(a.getHairType(db))
+    assert(a.getEyeColor(db))
+    assert(a.getName(db, 'U'))
 
 
 def test_Race_Greenskingoblin():
@@ -577,6 +828,14 @@ def test_Race_Greenskingoblin():
     assert(mud_slinger_ind == 1)
     assert(run_for_it_ind == 1)
     assert(any([v != 0 for v in a.ability_bonuses]))
+    alignmentObj = a.getAlignment(db)
+    assert('abbreviation' in alignmentObj)
+    assert('alignment' in alignmentObj)
+    assert(a.getSkinTone(db))
+    assert(a.getHairColor(db))
+    assert(a.getHairType(db))
+    assert(a.getEyeColor(db))
+    assert(a.getName(db, 'U'))
 
 
 def test_Race_Boggartgoblin():
@@ -601,6 +860,14 @@ def test_Race_Boggartgoblin():
     assert(swamp_immunity_ind == 1)
     assert(bog_swimmer_ind == 1)
     assert(any([v != 0 for v in a.ability_bonuses]))
+    alignmentObj = a.getAlignment(db)
+    assert('abbreviation' in alignmentObj)
+    assert('alignment' in alignmentObj)
+    assert(a.getSkinTone(db))
+    assert(a.getHairColor(db))
+    assert(a.getHairType(db))
+    assert(a.getEyeColor(db))
+    assert(a.getName(db, 'U'))
 
 
 def test_Race_Gremlingoblin():
@@ -625,3 +892,11 @@ def test_Race_Gremlingoblin():
     assert(dangerous_tinker_ind == 1)
     assert(almost_fire_proof_ind == 1)
     assert(any([v != 0 for v in a.ability_bonuses]))
+    alignmentObj = a.getAlignment(db)
+    assert('abbreviation' in alignmentObj)
+    assert('alignment' in alignmentObj)
+    assert(a.getSkinTone(db))
+    assert(a.getHairColor(db))
+    assert(a.getHairType(db))
+    assert(a.getEyeColor(db))
+    assert(a.getName(db, 'U'))

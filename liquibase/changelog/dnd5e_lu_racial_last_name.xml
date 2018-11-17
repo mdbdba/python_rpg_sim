@@ -634,160 +634,160 @@
             <column name="race" value="Kobold"/><column name="value" value="None"/><column name="gender" value="U"/>
         </insert>
         <insert schemaName="dnd_5e" tableName="lu_racial_last_name">
-            <column name="race" value="Greenskin Goblin"/>
+            <column name="race" value="Greenskin goblin"/>
             <column name="value" value="The Cursed"/><column name="gender" value="U"/>
         </insert>
         <insert schemaName="dnd_5e" tableName="lu_racial_last_name">
-            <column name="race" value="Boggart Goblin"/>
+            <column name="race" value="Boggart goblin"/>
             <column name="value" value="The Cursed"/><column name="gender" value="U"/>
         </insert>
         <insert schemaName="dnd_5e" tableName="lu_racial_last_name">
-            <column name="race" value="Gremlin Goblin"/>
+            <column name="race" value="Gremlin goblin"/>
             <column name="value" value="The Cursed"/><column name="gender" value="U"/>
         </insert>
 
         <insert schemaName="dnd_5e" tableName="lu_racial_last_name">
-            <column name="race" value="Greenskin Goblin"/>
+            <column name="race" value="Greenskin goblin"/>
             <column name="value" value="BlastBang"/><column name="gender" value="U"/>
         </insert>
         <insert schemaName="dnd_5e" tableName="lu_racial_last_name">
-            <column name="race" value="Boggart Goblin"/>
+            <column name="race" value="Boggart goblin"/>
             <column name="value" value="BlastBang"/><column name="gender" value="U"/>
         </insert>
         <insert schemaName="dnd_5e" tableName="lu_racial_last_name">
-            <column name="race" value="Gremlin Goblin"/>
+            <column name="race" value="Gremlin goblin"/>
             <column name="value" value="BlastBang"/><column name="gender" value="U"/>
         </insert>
         <insert schemaName="dnd_5e" tableName="lu_racial_last_name">
-            <column name="race" value="Greenskin Goblin"/>
+            <column name="race" value="Greenskin goblin"/>
             <column name="value" value="Frizzlewhiz"/><column name="gender" value="U"/>
         </insert>
         <insert schemaName="dnd_5e" tableName="lu_racial_last_name">
-            <column name="race" value="Boggart Goblin"/>
+            <column name="race" value="Boggart goblin"/>
             <column name="value" value="Frizzlewhiz"/><column name="gender" value="U"/>
         </insert>
         <insert schemaName="dnd_5e" tableName="lu_racial_last_name">
-            <column name="race" value="Gremlin Goblin"/>
+            <column name="race" value="Gremlin goblin"/>
             <column name="value" value="Frizzlewhiz"/><column name="gender" value="U"/>
         </insert>
         <insert schemaName="dnd_5e" tableName="lu_racial_last_name">
-            <column name="race" value="Greenskin Goblin"/>
+            <column name="race" value="Greenskin goblin"/>
             <column name="value" value="The Gruff"/><column name="gender" value="U"/>
         </insert>
         <insert schemaName="dnd_5e" tableName="lu_racial_last_name">
-            <column name="race" value="Boggart Goblin"/>
+            <column name="race" value="Boggart goblin"/>
             <column name="value" value="The Gruff"/><column name="gender" value="U"/>
         </insert>
         <insert schemaName="dnd_5e" tableName="lu_racial_last_name">
-            <column name="race" value="Gremlin Goblin"/>
+            <column name="race" value="Gremlin goblin"/>
             <column name="value" value="The Gruff"/><column name="gender" value="U"/>
         </insert>
         <insert schemaName="dnd_5e" tableName="lu_racial_last_name">
-            <column name="race" value="Greenskin Goblin"/>
+            <column name="race" value="Greenskin goblin"/>
             <column name="value" value="The Brave"/><column name="gender" value="U"/>
         </insert>
         <insert schemaName="dnd_5e" tableName="lu_racial_last_name">
-            <column name="race" value="Boggart Goblin"/>
+            <column name="race" value="Boggart goblin"/>
             <column name="value" value="The Brave"/><column name="gender" value="U"/>
         </insert>
         <insert schemaName="dnd_5e" tableName="lu_racial_last_name">
-            <column name="race" value="Gremlin Goblin"/>
+            <column name="race" value="Gremlin goblin"/>
             <column name="value" value="The Brave"/><column name="gender" value="U"/>
         </insert>
         <insert schemaName="dnd_5e" tableName="lu_racial_last_name">
-            <column name="race" value="Greenskin Goblin"/>
+            <column name="race" value="Greenskin goblin"/>
             <column name="value" value="The Sly"/><column name="gender" value="U"/>
         </insert>
         <insert schemaName="dnd_5e" tableName="lu_racial_last_name">
-            <column name="race" value="Boggart Goblin"/>
+            <column name="race" value="Boggart goblin"/>
             <column name="value" value="The Sly"/><column name="gender" value="U"/>
         </insert>
         <insert schemaName="dnd_5e" tableName="lu_racial_last_name">
-            <column name="race" value="Gremlin Goblin"/>
+            <column name="race" value="Gremlin goblin"/>
             <column name="value" value="The Sly"/><column name="gender" value="U"/>
         </insert>
         <insert schemaName="dnd_5e" tableName="lu_racial_last_name">
-            <column name="race" value="Greenskin Goblin"/>
+            <column name="race" value="Greenskin goblin"/>
             <column name="value" value="Grizzlegrax"/><column name="gender" value="U"/>
         </insert>
         <insert schemaName="dnd_5e" tableName="lu_racial_last_name">
-            <column name="race" value="Boggart Goblin"/>
+            <column name="race" value="Boggart goblin"/>
             <column name="value" value="Grizzlegrax"/><column name="gender" value="U"/>
         </insert>
         <insert schemaName="dnd_5e" tableName="lu_racial_last_name">
-            <column name="race" value="Gremlin Goblin"/>
+            <column name="race" value="Gremlin goblin"/>
             <column name="value" value="Grizzlegrax"/><column name="gender" value="U"/>
         </insert>
         <insert schemaName="dnd_5e" tableName="lu_racial_last_name">
-            <column name="race" value="Greenskin Goblin"/>
+            <column name="race" value="Greenskin goblin"/>
             <column name="value" value="Vyce"/><column name="gender" value="U"/>
         </insert>
         <insert schemaName="dnd_5e" tableName="lu_racial_last_name">
-            <column name="race" value="Boggart Goblin"/>
+            <column name="race" value="Boggart goblin"/>
             <column name="value" value="Vyce"/><column name="gender" value="U"/>
         </insert>
         <insert schemaName="dnd_5e" tableName="lu_racial_last_name">
-            <column name="race" value="Gremlin Goblin"/>
+            <column name="race" value="Gremlin goblin"/>
             <column name="value" value="Vyce"/><column name="gender" value="U"/>
         </insert>
         <insert schemaName="dnd_5e" tableName="lu_racial_last_name">
-            <column name="race" value="Greenskin Goblin"/>
+            <column name="race" value="Greenskin goblin"/>
             <column name="value" value="Hullywick"/><column name="gender" value="U"/>
         </insert>
         <insert schemaName="dnd_5e" tableName="lu_racial_last_name">
-            <column name="race" value="Boggart Goblin"/>
+            <column name="race" value="Boggart goblin"/>
             <column name="value" value="Hullywick"/><column name="gender" value="U"/>
         </insert>
         <insert schemaName="dnd_5e" tableName="lu_racial_last_name">
-            <column name="race" value="Gremlin Goblin"/>
+            <column name="race" value="Gremlin goblin"/>
             <column name="value" value="Hullywick"/><column name="gender" value="U"/>
         </insert>
         <insert schemaName="dnd_5e" tableName="lu_racial_last_name">
-            <column name="race" value="Greenskin Goblin"/>
+            <column name="race" value="Greenskin goblin"/>
             <column name="value" value="Goldclamp"/><column name="gender" value="U"/>
         </insert>
         <insert schemaName="dnd_5e" tableName="lu_racial_last_name">
-            <column name="race" value="Boggart Goblin"/>
+            <column name="race" value="Boggart goblin"/>
             <column name="value" value="Goldclamp"/><column name="gender" value="U"/>
         </insert>
         <insert schemaName="dnd_5e" tableName="lu_racial_last_name">
-            <column name="race" value="Gremlin Goblin"/>
+            <column name="race" value="Gremlin goblin"/>
             <column name="value" value="Goldclamp"/><column name="gender" value="U"/>
         </insert>
         <insert schemaName="dnd_5e" tableName="lu_racial_last_name">
-            <column name="race" value="Greenskin Goblin"/>
+            <column name="race" value="Greenskin goblin"/>
             <column name="value" value="Venture"/><column name="gender" value="U"/>
         </insert>
         <insert schemaName="dnd_5e" tableName="lu_racial_last_name">
-            <column name="race" value="Boggart Goblin"/>
+            <column name="race" value="Boggart goblin"/>
             <column name="value" value="Venture"/><column name="gender" value="U"/>
         </insert>
         <insert schemaName="dnd_5e" tableName="lu_racial_last_name">
-            <column name="race" value="Gremlin Goblin"/>
+            <column name="race" value="Gremlin goblin"/>
             <column name="value" value="Venture"/><column name="gender" value="U"/>
         </insert>
         <insert schemaName="dnd_5e" tableName="lu_racial_last_name">
-            <column name="race" value="Greenskin Goblin"/>
+            <column name="race" value="Greenskin goblin"/>
             <column name="value" value="Greenwatch"/><column name="gender" value="U"/>
         </insert>
         <insert schemaName="dnd_5e" tableName="lu_racial_last_name">
-            <column name="race" value="Boggart Goblin"/>
+            <column name="race" value="Boggart goblin"/>
             <column name="value" value="Greenwatch"/><column name="gender" value="U"/>
         </insert>
         <insert schemaName="dnd_5e" tableName="lu_racial_last_name">
-            <column name="race" value="Gremlin Goblin"/>
+            <column name="race" value="Gremlin goblin"/>
             <column name="value" value="Greenwatch"/><column name="gender" value="U"/>
         </insert>
         <insert schemaName="dnd_5e" tableName="lu_racial_last_name">
-            <column name="race" value="Greenskin Goblin"/>
+            <column name="race" value="Greenskin goblin"/>
             <column name="value" value="The Bold"/><column name="gender" value="U"/>
         </insert>
         <insert schemaName="dnd_5e" tableName="lu_racial_last_name">
-            <column name="race" value="Boggart Goblin"/>
+            <column name="race" value="Boggart goblin"/>
             <column name="value" value="The Bold"/><column name="gender" value="U"/>
         </insert>
         <insert schemaName="dnd_5e" tableName="lu_racial_last_name">
-            <column name="race" value="Gremlin Goblin"/>
+            <column name="race" value="Gremlin goblin"/>
             <column name="value" value="The Bold"/><column name="gender" value="U"/>
         </insert>
     </changeSet>

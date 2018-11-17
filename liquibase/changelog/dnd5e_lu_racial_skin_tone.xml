@@ -202,27 +202,27 @@
         <insert schemaName="dnd_5e" tableName="lu_racial_skin_tone">
             <column name="race" value="Kobold"/><column name="value" value="White scales"/></insert>
         <insert schemaName="dnd_5e" tableName="lu_racial_skin_tone">
-            <column name="race" value="Greenskin Goblin"/>
+            <column name="race" value="Greenskin goblin"/>
             <column name="value" value="Green"/>
         </insert>
         <insert schemaName="dnd_5e" tableName="lu_racial_skin_tone">
-            <column name="race" value="Greenskin Goblin"/>
+            <column name="race" value="Greenskin goblin"/>
             <column name="value" value="Greenish yellow"/>
         </insert>
         <insert schemaName="dnd_5e" tableName="lu_racial_skin_tone">
-            <column name="race" value="Boggart Goblin"/>
+            <column name="race" value="Boggart goblin"/>
             <column name="value" value="Brown"/>
         </insert>
         <insert schemaName="dnd_5e" tableName="lu_racial_skin_tone">
-            <column name="race" value="Boggart Goblin"/>
+            <column name="race" value="Boggart goblin"/>
             <column name="value" value="Black"/>
         </insert>
         <insert schemaName="dnd_5e" tableName="lu_racial_skin_tone">
-            <column name="race" value="Gremlin Goblin"/>
+            <column name="race" value="Gremlin goblin"/>
             <column name="value" value="Turquoise"/>
         </insert>
         <insert schemaName="dnd_5e" tableName="lu_racial_skin_tone">
-            <column name="race" value="Gremlin Goblin"/>
+            <column name="race" value="Gremlin goblin"/>
             <column name="value" value="Red"/>
         </insert>
     </changeSet>

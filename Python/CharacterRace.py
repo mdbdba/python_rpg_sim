@@ -1,5 +1,7 @@
 import random
+from InvokePSQL import InvokePSQL
 from RacialTraits import RacialTraits
+from Die import Die
 
 
 class CharacterRace(object):
@@ -90,6 +92,192 @@ class CharacterRace(object):
             return True
         else:
             return False
+
+    def getAlignment(self, db):
+        """
+        Preferred racial alignment is based on a percentage. So, generate
+            a random percentage and pick the alignment that percentage belongs
+            in.
+        """
+        d = Die(100)
+        rndPct = d.roll()
+        sql = (f"select count(alignment) from dnd_5e.v_alignment_preference "
+               f"where race = '{self.race}';")
+        cntResult = db.query(sql)
+        if cntResult[0][0] > 0:
+            useRace = self.race
+        else:
+            useRace = self.subrace_of
+
+        sql = (f"select count(alignment) from dnd_5e.v_alignment_preference "
+               f"where race = '{useRace}';")
+        cntResult = db.query(sql)
+        if cntResult[0][0] > 0:
+            sql = (f"select b.abbreviation, b.value as alignment "
+                   f"from dnd_5e.v_alignment_preference as a "
+                   f"join lu_alignment as b on a.alignment = b.abbreviation "
+                   f"where race = '{useRace}' "
+                   f"and lowerbound < {rndPct} and upperbound >= {rndPct};")
+            alignmentResults = db.query(sql)
+            return {"abbreviation": alignmentResults[0][0],
+                    "alignment": alignmentResults[0][1]}
+
+    def tableRefRandom(self, db, tablename, columnname, value, gender="N"):
+        sql = (f"select count({columnname}) from {tablename} "
+               f"where {columnname} = '{value}'")
+        if gender != "N":
+            if gender == "U":
+                genderstr = " = 'U'"
+            else:
+                genderstr = (f" in ('{gender}','U')")
+            sql = (f"{sql} and gender {genderstr} ;")
+        else:
+            sql = (f"{sql};")
+        results = db.query(sql)
+        rMax = results[0][0]
+        return random.randint(1, rMax)
+
+    def getSkinTone(self, db):
+        sql = (f"select count(id) from dnd_5e.lu_racial_skin_tone "
+               f"where race = '{self.race}' ")
+        results = db.query(sql)
+        if results[0][0] > 0:
+            tmprace = self.race
+        else:
+            tmprace = self.subrace_of
+
+        rNbr = self.tableRefRandom(db, 'dnd_5e.lu_racial_skin_tone',
+                                   'race', tmprace)
+        sql = (f"with tb as (select value, row_number() over "
+               f"(partition by race order by id) "
+               f"as orderBy from dnd_5e.lu_racial_skin_tone "
+               f"where lower(race) = lower('{tmprace}') )"
+               f"select value, orderby from tb where orderby = {rNbr};")
+        sRes = db.query(sql)
+        return sRes[0][0]
+
+    def getHairColor(self, db):
+        sql = (f"select count(id) from dnd_5e.lu_racial_hair_color "
+               f"where race = '{self.race}' ")
+        results = db.query(sql)
+        if results[0][0] > 0:
+            tmprace = self.race
+        else:
+            tmprace = self.subrace_of
+
+        rNbr = self.tableRefRandom(db, 'dnd_5e.lu_racial_hair_color',
+                                   'race', tmprace)
+        sql = (f"with tb as (select value, row_number() over "
+               f"(partition by race order by id) "
+               f"as orderBy from dnd_5e.lu_racial_hair_color "
+               f"where lower(race) = lower('{tmprace}') )"
+               f"select value, orderby from tb where orderby = {rNbr};")
+        sRes = db.query(sql)
+        return sRes[0][0]
+
+    def getHairType(self, db):
+        sql = (f"select count(id) from dnd_5e.lu_racial_hair_type "
+               f"where race = '{self.race}' ")
+        results = db.query(sql)
+        print(results[0][0])
+        if results[0][0] > 0:
+            tmprace = self.race
+        else:
+            tmprace = self.subrace_of
+
+        rNbr = self.tableRefRandom(db, 'dnd_5e.lu_racial_hair_type',
+                                   'race', tmprace)
+        sql = (f"with tb as (select value, row_number() over "
+               f"(partition by race order by id) "
+               f"as orderBy from dnd_5e.lu_racial_hair_type "
+               f"where lower(race) = lower('{tmprace}') )"
+               f"select value, orderby from tb where orderby = {rNbr};")
+        sRes = db.query(sql)
+        return sRes[0][0]
+
+    def getEyeColor(self, db):
+        sql = (f"select count(id) from dnd_5e.lu_racial_eye_color "
+               f"where race = '{self.race}' ")
+        results = db.query(sql)
+        if results[0][0] > 0:
+            tmprace = self.race
+        else:
+            tmprace = self.subrace_of
+
+        rNbr = self.tableRefRandom(db, 'dnd_5e.lu_racial_eye_color',
+                                   'race', tmprace)
+        sql = (f"with tb as (select value, row_number() over "
+               f"(partition by race order by id) "
+               f"as orderBy from dnd_5e.lu_racial_eye_color "
+               f"where lower(race) = lower('{tmprace}') )"
+               f"select value, orderby from tb where orderby = {rNbr};")
+        sRes = db.query(sql)
+        return sRes[0][0]
+
+    def getName(self, db, gender):
+        firstName = ""
+        d = Die(2)
+
+        if self.race == 'Half-Elf':
+            rndpick = d.roll()
+            if rndpick == 1:
+                tmprace = 'Human'
+            else:
+                tmprace = 'Elf'
+        else:
+            sql = (f"select count(id) from dnd_5e.lu_racial_first_name "
+                   f"where race = '{self.race}' ")
+            results = db.query(sql)
+            if results[0][0] > 0:
+                tmprace = self.race
+            else:
+                tmprace = self.subrace_of
+
+        fNbr = self.tableRefRandom(db, 'dnd_5e.lu_racial_first_name',
+                                   'race', tmprace, gender)
+        sql = (f"with tb as (select value, row_number() over "
+               f"(partition by race order by id) "
+               f"as orderBy from dnd_5e.lu_racial_first_name "
+               f"where lower(race) = lower('{tmprace}') ")
+        if gender == "U":
+            genderstr = " = 'U'"
+        else:
+            genderstr = (f" in ('{gender}','U')")
+
+        sql = (f"{sql} and gender {genderstr} )"
+               f"select value, orderby from tb where orderby = {fNbr};")
+
+        fRes = db.query(sql)
+        firstName = fRes[0][0]
+
+        if self.race == 'Half-Elf':
+            rndpick = d.roll()
+            if rndpick == 1:
+                tmprace = 'Elf'
+            else:
+                tmprace = 'Human'
+
+        lNbr = self.tableRefRandom(db, 'dnd_5e.lu_racial_last_name',
+                                   'race', tmprace, gender)
+        sql = (f"with tb as (select value, row_number() over "
+               f"(partition by race order by id) "
+               f"as orderBy from dnd_5e.lu_racial_last_name "
+               f"where lower(race) = lower('{tmprace}') ")
+        if gender == "U":
+            genderstr = " = 'U'"
+        else:
+            genderstr = (f" in ('{gender}','U')")
+
+        sql = (f"{sql} and gender {genderstr} )"
+               f"select value, orderby from tb where orderby = {lNbr};")
+
+        lres = db.query(sql)
+        if (lres[0][0] == "None"):
+            retstr = firstName
+        else:
+            retstr = (f"{firstName} {lres[0][0]}")
+
+        return retstr
 
     def populateDetails(self, raceCandidate, db):
         sql = (f"select race, subrace_of, maturity_age, avg_max_age, "
@@ -222,3 +410,16 @@ class CharacterRace(object):
 
         outstr = (f'{outstr}\n)\n')
         return outstr
+
+
+if __name__ == '__main__':
+    db = InvokePSQL()
+    a = CharacterRace(db)
+    alignmentObj = a.getAlignment(db)
+    print(a.race)
+    print(alignmentObj)
+    print(a.getSkinTone(db))
+    print(a.getHairColor(db))
+    print(a.getHairType(db))
+    print(a.getEyeColor(db))
+    print(a.getName(db, 'U'))
