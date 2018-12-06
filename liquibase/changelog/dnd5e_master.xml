@@ -27,8 +27,6 @@
     <include file="dnd5e_lu_racial_last_name.xml"/>
     <include file="dnd5e_lu_racial_skin_tone.xml"/>
     <include file="dnd5e_lu_racial_trait.xml"/>
-    <includeAll path="licensedContent/"/>
-    <includeAll path="myContent/"/>
     <include file="dnd5e_lu_class.xml"/>
     <include file="dnd5e_lu_class_level_feature.xml"/>
     <include file="dnd5e_lu_damage_type.xml"/>
@@ -37,4 +35,6 @@
     <include file="dnd5e_lu_weapon_weapon_property.xml"/>
     <include file="dnd5e_lu_weapon_property.xml"/>
     <include file="dnd5e_lu_armor.xml"/>
+    <includeAll path="licensedContent/"/>
+    <includeAll path="myContent/"/>
 </databaseChangeLog>
