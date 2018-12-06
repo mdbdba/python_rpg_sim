@@ -651,7 +651,7 @@
            <column name="race" value="Koala bearkin"/>       
            <column name="name" value="Bear Drop"/>            
            <column name="category" value="Damage Received"/> 
-           <column name="affected_name" value="falling damage"/>
+           <column name="affected_name" value="Falling Damage"/>
            <column name="affect" value="halved"/>
            <column name="recharge_on" value="Short Rest"/>
         </insert>
@@ -888,7 +888,7 @@
            <column name="race" value="Boggart goblin"/>       
            <column name="name" value="Swamp Immunity"/> 
            <column name="category" value="Damage Received"/> 
-           <column name="affected_name" value="poison"/>
+           <column name="affected_name" value="Poison"/>
            <column name="affect" value="resistant"/>
         </insert>
         <insert schemaName="dnd_5e" tableName="lu_racial_trait">

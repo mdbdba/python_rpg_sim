@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    
+    <changeSet author="mdbdba" id="lu_weapon_property_1">
+
+       <createTable 
+                schemaName="dnd_5e"
+                tableName="lu_weapon_property">
+            <column name="value" type="varchar(64)"/>
+        </createTable>
+        <addPrimaryKey 
+            columnNames="value"
+            constraintName="lu_weapon_property_pk"
+            schemaName="dnd_5e"
+            tableName="lu_weapon_property"/>
+
+        <insert schemaName="dnd_5e" tableName="lu_weapon_property">
+           <column name="value" value="Light"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon_property">
+           <column name="value" value="Finesse"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon_property">
+           <column name="value" value="Thrown"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon_property">
+           <column name="value" value="Range: 20/60"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon_property">
+           <column name="value" value="Two-handed"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon_property">
+           <column name="value" value="Versatile: 1d8"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon_property">
+           <column name="value" value="Versatile: 1d10"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon_property">
+           <column name="value" value="Ammunition"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon_property">
+           <column name="value" value="Heavy"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon_property">
+           <column name="value" value="Reach"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon_property">
+           <column name="value" value="Special"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon_property">
+           <column name="value" value="Louding"/> 
+        </insert>
+
+    </changeSet>
+
+
+</databaseChangeLog>

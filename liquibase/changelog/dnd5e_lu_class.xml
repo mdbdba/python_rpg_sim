@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+<changeSet author="mdbdba" id="lu_class_1">
+        <createTable 
+                schemaName="dnd_5e"
+                tableName="lu_class">
+            <column name="class" type="varchar(64)"/>
+            <column name="hit_die" type="int"/>
+            <column name="ability_pref_str" type="varchar(32)"/>
+            <column name="source_material" type="varchar(64)"/>
+            <column name="source_credit_url" type="varchar(255)"/>
+            <column name="source_credit_comment" type="varchar(255)"/>
+        </createTable>
+
+        <addPrimaryKey 
+            columnNames="class"
+            constraintName="lu_class_pk"
+            schemaName="dnd_5e"
+            tableName="lu_class"/>
+
+        <insert schemaName="dnd_5e" tableName="lu_class">
+           <column name="class" value="Barbarian"/> 
+           <column name="hit_die" value="12"/> 
+           <column name="ability_pref_str" value="0,2,1,4,5,3"/> 
+           <column name="source_material" value="SRD5"/> 
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_class">
+           <column name="class" value="Bard"/> 
+           <column name="hit_die" value="8"/> 
+           <column name="ability_pref_str" value="5,1,2,0,4,3"/> 
+           <column name="source_material" value="SRD5"/> 
+        </insert>
+
+
+    </changeSet>
+
+</databaseChangeLog>

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet author="mdbdba" id="my_lu_racial_trait_1">
+
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+           <column name="race" value="Dryad"/>       
+           <column name="name" value="Darkvision"/>           
+           <column name="category" value="Vision"/>
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+           <column name="race" value="Dryad"/>       
+           <column name="name" value="Speak with Beasts and Plants 1"/>            
+           <column name="category" value="Spell"/>           
+           <column name="affected_name" value="Speak with Plants"/>
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+           <column name="race" value="Dryad"/>       
+           <column name="name" value="Speak with Beasts and Plants 2"/>            
+           <column name="category" value="Spell"/>           
+           <column name="affected_name" value="Speak with Animals"/>
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+           <column name="race" value="Dryad"/>       
+           <column name="name" value="Fey Blessing 1"/>            
+           <column name="category" value="Saving Throw"/>           
+           <column name="affected_name" value="Intelligence"/>           
+           <column name="affect" value="advantage"/>           
+           <column name="recharge_on" value="Long or Short Rest"/>           
+           <column name="description" value="targetAffect:Magic"/>           
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+           <column name="race" value="Dryad"/>       
+           <column name="name" value="Fey Blessing 2"/>            
+           <column name="category" value="Saving Throw"/>           
+           <column name="affected_name" value="Wisdom"/>           
+           <column name="affect" value="advantage"/>           
+           <column name="recharge_on" value="Long or Short Rest"/>           
+           <column name="description" value="targetAffect:Magic"/>
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+           <column name="race" value="Dryad"/>       
+           <column name="name" value="Fey Blessing 3"/>            
+           <column name="category" value="Saving Throw"/>           
+           <column name="affected_name" value="Charisma"/>           
+           <column name="affect" value="advantage"/>           
+           <column name="recharge_on" value="Long or Short Rest"/>           
+           <column name="description" value="targetAffect:Magic"/>
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+           <column name="race" value="Dryad"/>       
+           <column name="name" value="Woodland Magic 1"/>            
+           <column name="category" value="Spell"/>           
+           <column name="affected_name" value="Druidcraft"/>           
+           <column name="recharge_on" value="Long Rest"/>           
+           <column name="description" value="onLevel:1"/>
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+           <column name="race" value="Dryad"/>       
+           <column name="name" value="Woodland Magic 2"/>            
+           <column name="category" value="Spell"/>           
+           <column name="affected_name" value="Charm Person"/>           
+           <column name="recharge_on" value="Long Rest"/>           
+           <column name="description" value="onLevel:3"/>
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+           <column name="race" value="Dryad"/>       
+           <column name="name" value="Woodland Magic 3"/>            
+           <column name="category" value="Spell"/>           
+           <column name="affected_name" value="Barkskin"/>           
+           <column name="recharge_on" value="Long Rest"/>           
+           <column name="description" value="onLevel:5"/>
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+           <column name="race" value="Dryad"/>       
+           <column name="name" value="Treebound Armor"/>            
+           <column name="category" value="Armor Class"/>           
+           <column name="affected_name" value="base armor class"/>           
+           <column name="affected_adj" value="3"/>
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait">
+           <column name="race" value="Dryad"/>       
+           <column name="name" value="Forest Step"/>            
+           <column name="category" value="Spell"/>           
+           <column name="affected_name" value="Tree $tride"/>           
+           <column name="description" value="Cost:Movement(15feet);Range:60feet"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>

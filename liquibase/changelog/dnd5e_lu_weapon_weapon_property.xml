@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    
+    <changeSet author="mdbdba" id="lu_weapon_weapon_property_1">
+    <createTable 
+                schemaName="dnd_5e"
+                tableName="lu_weapon_weapon_property">
+            <column name="weapon" type="varchar(64)"/>
+            <column name="property" type="varchar(64)"/>
+        </createTable>
+
+        <addPrimaryKey 
+            columnNames="weapon, property"
+            constraintName="lu_weapon_weapon_property_pk"
+            schemaName="dnd_5e"
+            tableName="lu_weapon_weapon_property"/>
+
+        <insert schemaName="dnd_5e" tableName="lu_weapon_weapon_property">
+           <column name="weapon" value="Club"/>
+           <column name="property" value="Light"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon_weapon_property">
+           <column name="weapon" value="Dagger"/>
+           <column name="property" value="Finesse"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon_weapon_property">
+           <column name="weapon" value="Dagger"/>
+           <column name="property" value="Light"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon_weapon_property">
+           <column name="weapon" value="Dagger"/>
+           <column name="property" value="Thrown"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon_weapon_property">
+           <column name="weapon" value="Greatclub"/>
+           <column name="property" value="Two-handed"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon_weapon_property">
+           <column name="weapon" value="Handaxe"/>
+           <column name="property" value="Light"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon_weapon_property">
+           <column name="weapon" value="Handaxe"/>
+           <column name="property" value="Thrown"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon_weapon_property">
+           <column name="weapon" value="Javelin"/>
+           <column name="property" value="Thrown"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon_weapon_property">
+           <column name="weapon" value="Light hammer"/>
+           <column name="property" value="Light"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon_weapon_property">
+           <column name="weapon" value="Light hammer"/>
+           <column name="property" value="Thrown"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon_weapon_property">
+           <column name="weapon" value="Quarterstaff"/>
+           <column name="property" value="Versatile (1d8)"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon_weapon_property">
+           <column name="weapon" value="Sickle"/>
+           <column name="property" value="Light"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon_weapon_property">
+           <column name="weapon" value="Spear"/>
+           <column name="property" value="Thrown"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon_weapon_property">
+           <column name="weapon" value="Spear"/>
+           <column name="property" value="Versatile (1d8)"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon_weapon_property">
+           <column name="weapon" value="Crossbow, light"/>
+           <column name="property" value="Ammunition"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon_weapon_property">
+           <column name="weapon" value="Crossbow, light"/>
+           <column name="property" value="Loading"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon_weapon_property">
+           <column name="weapon" value="Crossbow, light"/>
+           <column name="property" value="Two-handed"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon_weapon_property">
+           <column name="weapon" value="Dart"/>
+           <column name="property" value="Finesse"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon_weapon_property">
+           <column name="weapon" value="Dart"/>
+           <column name="property" value="Thrown"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon_weapon_property">
+           <column name="weapon" value="Shortbow"/>
+           <column name="property" value="Ammunition"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon_weapon_property">
+           <column name="weapon" value="Shortbow"/>
+           <column name="property" value="Two-handed"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon_weapon_property">
+           <column name="weapon" value="Sling"/>
+           <column name="property" value="Ammunition"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon_weapon_property">
+           <column name="weapon" value="Battleaxe"/>
+           <column name="property" value="Versatile (1d10)"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon_weapon_property">
+           <column name="weapon" value="Glaive"/>
+           <column name="property" value="Heavy"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon_weapon_property">
+           <column name="weapon" value="Glaive"/>
+           <column name="property" value="Reach"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon_weapon_property">
+           <column name="weapon" value="Glaive"/>
+           <column name="property" value="Two-handed"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon_weapon_property">
+           <column name="weapon" value="Greataxe"/>
+           <column name="property" value="Heavy"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon_weapon_property">
+           <column name="weapon" value="Greataxe"/>
+           <column name="property" value="Two-handed"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon_weapon_property">
+           <column name="weapon" value="Greatsword"/>
+           <column name="property" value="Heavy"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon_weapon_property">
+           <column name="weapon" value="Greatsword"/>
+           <column name="property" value="Two-handed"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon_weapon_property">
+           <column name="weapon" value="Halberd"/>
+           <column name="property" value="Heavy"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon_weapon_property">
+           <column name="weapon" value="Halberd"/>
+           <column name="property" value="Reach"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon_weapon_property">
+           <column name="weapon" value="Halberd"/>
+           <column name="property" value="Two-handed"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon_weapon_property">
+           <column name="weapon" value="Lance"/>
+           <column name="property" value="Reach"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon_weapon_property">
+           <column name="weapon" value="Lance"/>
+           <column name="property" value="Special"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon_weapon_property">
+           <column name="weapon" value="Longsword"/>
+           <column name="property" value="Versatile (1d10)"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon_weapon_property">
+           <column name="weapon" value="Maul"/>
+           <column name="property" value="Heavy"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon_weapon_property">
+           <column name="weapon" value="Maul"/>
+           <column name="property" value="Two-handed"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon_weapon_property">
+           <column name="weapon" value="Pike"/>
+           <column name="property" value="Heavy"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon_weapon_property">
+           <column name="weapon" value="Pike"/>
+           <column name="property" value="Reach"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon_weapon_property">
+           <column name="weapon" value="Pike"/>
+           <column name="property" value="Two-handed"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon_weapon_property">
+           <column name="weapon" value="Rapier"/>
+           <column name="property" value="Finesse"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon_weapon_property">
+           <column name="weapon" value="Scimitar"/>
+           <column name="property" value="Finesse"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon_weapon_property">
+           <column name="weapon" value="Scimitar"/>
+           <column name="property" value="Light"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon_weapon_property">
+           <column name="weapon" value="Shortsword"/>
+           <column name="property" value="Finesse"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon_weapon_property">
+           <column name="weapon" value="Shortsword"/>
+           <column name="property" value="Light"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon_weapon_property">
+           <column name="weapon" value="Trident"/>
+           <column name="property" value="Thrown"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon_weapon_property">
+           <column name="weapon" value="Trident"/>
+           <column name="property" value="Versatile (1d8)"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon_weapon_property">
+           <column name="weapon" value="Warhammer"/>
+           <column name="property" value="Versatile (1d10)"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon_weapon_property">
+           <column name="weapon" value="Whip"/>
+           <column name="property" value="Finesse"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon_weapon_property">
+           <column name="weapon" value="Whip"/>
+           <column name="property" value="Reach"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon_weapon_property">
+           <column name="weapon" value="Blowgun"/>
+           <column name="property" value="Ammunition"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon_weapon_property">
+           <column name="weapon" value="Blowgun"/>
+           <column name="property" value="Loading"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon_weapon_property">
+           <column name="weapon" value="Crossbow, hand"/>
+           <column name="property" value="Ammunition"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon_weapon_property">
+           <column name="weapon" value="Crossbow, hand"/>
+           <column name="property" value="Light"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon_weapon_property">
+           <column name="weapon" value="Crossbow, hand"/>
+           <column name="property" value="Loading"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon_weapon_property">
+           <column name="weapon" value="Crossbow, heavy"/>
+           <column name="property" value="Ammunition"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon_weapon_property">
+           <column name="weapon" value="Crossbow, heavy"/>
+           <column name="property" value="Heavy"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon_weapon_property">
+           <column name="weapon" value="Crossbow, heavy"/>
+           <column name="property" value="Loading"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon_weapon_property">
+           <column name="weapon" value="Crossbow, heavy"/>
+           <column name="property" value="Two-handed"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon_weapon_property">
+           <column name="weapon" value="Longbow"/>
+           <column name="property" value="Ammunition"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon_weapon_property">
+           <column name="weapon" value="Longbow"/>
+           <column name="property" value="Heavy"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon_weapon_property">
+           <column name="weapon" value="Longbow"/>
+           <column name="property" value="Two-handed"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon_weapon_property">
+           <column name="weapon" value="Net"/>
+           <column name="property" value="Special"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon_weapon_property">
+           <column name="weapon" value="Net"/>
+           <column name="property" value="Thrown"/>
+        </insert>
+
+    </changeSet>
+
+</databaseChangeLog>

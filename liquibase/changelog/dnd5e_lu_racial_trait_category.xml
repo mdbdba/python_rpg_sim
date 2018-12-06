@@ -41,5 +41,9 @@
         <insert schemaName="dnd_5e" tableName="lu_racial_trait_category">
            <column name="value" value="Skill Check"/></insert>
     </changeSet>
+    <changeSet author="mdbdba" id="lu_racial_trait_category_2">
+        <insert schemaName="dnd_5e" tableName="lu_racial_trait_category">
+           <column name="value" value="Armor Class"/></insert>
+    </changeSet>
 </databaseChangeLog>
 

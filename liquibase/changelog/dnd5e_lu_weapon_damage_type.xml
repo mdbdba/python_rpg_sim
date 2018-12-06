@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet author="mdbdba" id="lu_weapon_damage_type_1">
+        <createTable 
+                schemaName="dnd_5e"
+                tableName="lu_weapon_damage_type">
+            <column name="weapon" type="varchar(64)"/>
+            <column name="damage_type" type="varchar(64)"/>
+        </createTable>
+        <insert schemaName="dnd_5e" tableName="lu_weapon_damage_type">
+           <column name="weapon" value="Club"/> 
+           <column name="damage_type" value="Bludgeoning"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon_damage_type">
+           <column name="weapon" value="Dagger"/> 
+           <column name="damage_type" value="Piercing"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon_damage_type">
+           <column name="weapon" value="Greatclub"/> 
+           <column name="damage_type" value="Bludgeoning"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon_damage_type">
+           <column name="weapon" value="Handaxe"/> 
+           <column name="damage_type" value="Slashing"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon_damage_type">
+           <column name="weapon" value="Javelin"/> 
+           <column name="damage_type" value="Piercing"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon_damage_type">
+           <column name="weapon" value="Light hammer"/> 
+           <column name="damage_type" value="Bludgeoning"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon_damage_type">
+           <column name="weapon" value="Mace"/> 
+           <column name="damage_type" value="Bludgeoning"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon_damage_type">
+           <column name="weapon" value="Quarterstaff"/> 
+           <column name="damage_type" value="Bludgeoning"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon_damage_type">
+           <column name="weapon" value="Sickle"/> 
+           <column name="damage_type" value="Slashing"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon_damage_type">
+           <column name="weapon" value="Spear"/> 
+           <column name="damage_type" value="Piercing"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon_damage_type">
+           <column name="weapon" value="Crossbow, light"/> 
+           <column name="damage_type" value="Piercing"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon_damage_type">
+           <column name="weapon" value="Dart"/> 
+           <column name="damage_type" value="Piercing"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon_damage_type">
+           <column name="weapon" value="Shortbow"/> 
+           <column name="damage_type" value="Piercing"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon_damage_type">
+           <column name="weapon" value="Sling"/> 
+           <column name="damage_type" value="Bludgeoning"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon_damage_type">
+           <column name="weapon" value="Battleaxe"/> 
+           <column name="damage_type" value="Slashing"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon_damage_type">
+           <column name="weapon" value="Flail"/> 
+           <column name="damage_type" value="Bludgeoning"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon_damage_type">
+           <column name="weapon" value="Glaive"/> 
+           <column name="damage_type" value="Slashing"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon_damage_type">
+           <column name="weapon" value="Greataxe"/> 
+           <column name="damage_type" value="Slashing"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon_damage_type">
+           <column name="weapon" value="Greatsword"/> 
+           <column name="damage_type" value="Slashing"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon_damage_type">
+           <column name="weapon" value="Halberd"/> 
+           <column name="damage_type" value="Slashing"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon_damage_type">
+           <column name="weapon" value="Lance"/> 
+           <column name="damage_type" value="Piercing"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon_damage_type">
+           <column name="weapon" value="Longsword"/> 
+           <column name="damage_type" value="Slashing"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon_damage_type">
+           <column name="weapon" value="Maul"/> 
+           <column name="damage_type" value="Bludgeoning"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon_damage_type">
+           <column name="weapon" value="Morningstar"/> 
+           <column name="damage_type" value="Piercing"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon_damage_type">
+           <column name="weapon" value="Pike"/> 
+           <column name="damage_type" value="Piercing"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon_damage_type">
+           <column name="weapon" value="Rapier"/> 
+           <column name="damage_type" value="Piercing"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon_damage_type">
+           <column name="weapon" value="Scimitar"/> 
+           <column name="damage_type" value="Slashing"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon_damage_type">
+           <column name="weapon" value="Shortsword"/> 
+           <column name="damage_type" value="Piercing"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon_damage_type">
+           <column name="weapon" value="Trident"/> 
+           <column name="damage_type" value="Piercing"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon_damage_type">
+           <column name="weapon" value="War pick"/> 
+           <column name="damage_type" value="Piercing"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon_damage_type">
+           <column name="weapon" value="Warhammer"/> 
+           <column name="damage_type" value="Bludgeoning"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon_damage_type">
+           <column name="weapon" value="Whip"/> 
+           <column name="damage_type" value="Slashing"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon_damage_type">
+           <column name="weapon" value="Blowgun"/> 
+           <column name="damage_type" value="Piercing"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon_damage_type">
+           <column name="weapon" value="Crossbow, hand"/> 
+           <column name="damage_type" value="Piercing"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon_damage_type">
+           <column name="weapon" value="Crossbow, heavy"/> 
+           <column name="damage_type" value="Piercing"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon_damage_type">
+           <column name="weapon" value="Longbow"/> 
+           <column name="damage_type" value="Piercing"/> 
+        </insert>
+    </changeSet>
+</databaseChangeLog>

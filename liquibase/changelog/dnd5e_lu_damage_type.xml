@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    
+    <changeSet author="mdbdba" id="lu_damage_type_1">
+        <createTable 
+                schemaName="dnd_5e"
+                tableName="lu_damage_type">
+            <column name="value" type="varchar(64)"/>
+        </createTable>
+        <insert schemaName="dnd_5e" tableName="lu_damage_type">
+           <column name="value" value="Bludgeoning"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_damage_type">
+           <column name="value" value="Piercing"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_damage_type">
+           <column name="value" value="Slashing"/> 
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>

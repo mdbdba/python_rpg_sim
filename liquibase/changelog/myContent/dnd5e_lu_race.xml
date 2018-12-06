@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet author="mdbdba" id="my_lu_race_1">
+        <insert schemaName="dnd_5e" tableName="lu_race">
+            <column name="race" value="Dryad"/>
+            <column name="maturity_age" value="5"/>
+            <column name="avg_max_age" value="150"/>
+            <column name="base_walking_speed" value="30"/>
+            <column name="height_min_inches" value="46"/>
+            <column name="height_modifier_multiplier"  value="2"/>
+            <column name="height_modifier_die" value="12"/>
+            <column name="height_modifier_adj" value="0"/>
+            <column name="weight_min_pounds" value="95"/>
+            <column name="weight_modifier_multiplier"  value="5"/>
+            <column name="weight_modifier_die" value="10"/>
+            <column name="weight_modifier_adj" value="0"/>
+            <column name="size" value="Medium"/>
+            <column name="source_material" value="homebrew"/>
+            <column name="source_credit_url" value="https://www.dndbeyond.com/characters/races/2716-dryad"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>

@@ -618,5 +618,4 @@
             <column name="source_credit_url" value="https://www.dandwiki.com/wiki/Goblin_(5e_Race_Variant)"/>
         </insert>
     </changeSet>
-
 </databaseChangeLog>

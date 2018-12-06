@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    
+    <changeSet author="mdbdba" id="lu_armor_1">
+    <createTable 
+                schemaName="dnd_5e"
+                tableName="lu_armor">
+            <column name="name" type="varchar(64)"/>
+            <column name="category" type="varchar(64)"/>
+            <column name="cost" type="int"/>
+            <column name="cost_quantifier" type="varchar(8)"/>
+            <column name="ac_base" type="int"/>
+            <column name="ac_use_dex_mod" type="boolean"/>
+            <column name="ac_dex_mod_max" type="int"/>
+            <column name="ac_modifier" type="int"/>
+            <column name="strength_req" type="tinyInt"/>
+            <column name="stealth_vantage" type="varchar(24)"/>
+            <column name="weight_lbs" type="numeric(5,2)"/>
+        </createTable>
+
+        <addPrimaryKey 
+            columnNames="name"
+            constraintName="lu_armor_pk"
+            schemaName="dnd_5e"
+            tableName="lu_armor"/>
+
+        <insert schemaName="dnd_5e" tableName="lu_armor">
+           <column name="name" value="Padded"/>
+           <column name="category" value="Light"/>
+            <column name="cost" value="5"/>
+            <column name="cost_quantifier" value="gp"/>
+            <column name="ac_base" value="11"/>
+            <column name="ac_use_dex_mod" value="true"/>
+            <column name="ac_dex_mod_max" value="-1"/>
+            <column name="ac_modifier" value="-1"/>
+            <column name="strength_req" value="-1"/>
+            <column name="stealth_vantage" value="Disadvantage"/>
+            <column name="weight_lbs" value="8"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_armor">
+           <column name="name" value="Leather"/>
+           <column name="category" value="Light"/>
+            <column name="cost" value="10"/>
+            <column name="cost_quantifier" value="gp"/>
+            <column name="ac_base" value="11"/>
+            <column name="ac_use_dex_mod" value="true"/>
+            <column name="ac_dex_mod_max" value="-1"/>
+            <column name="ac_modifier" value="-1"/>
+            <column name="strength_req" value="-1"/>
+            <column name="weight_lbs" value="10"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_armor">
+           <column name="name" value="Studded leather"/>
+           <column name="category" value="Light"/>
+            <column name="cost" value="45"/>
+            <column name="cost_quantifier" value="gp"/>
+            <column name="ac_base" value="12"/>
+            <column name="ac_use_dex_mod" value="true"/>
+            <column name="ac_dex_mod_max" value="-1"/>
+            <column name="ac_modifier" value="-1"/>
+            <column name="strength_req" value="-1"/>
+            <column name="weight_lbs" value="13"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_armor">
+           <column name="name" value="Hide"/>
+           <column name="category" value="Medium"/>
+            <column name="cost" value="10"/>
+            <column name="cost_quantifier" value="gp"/>
+            <column name="ac_base" value="12"/>
+            <column name="ac_use_dex_mod" value="true"/>
+            <column name="ac_dex_mod_max" value="2"/>
+            <column name="ac_modifier" value="-1"/>
+            <column name="strength_req" value="-1"/>
+            <column name="weight_lbs" value="12"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_armor">
+           <column name="name" value="Chain shirt"/>
+           <column name="category" value="Medium"/>
+            <column name="cost" value="50"/>
+            <column name="cost_quantifier" value="gp"/>
+            <column name="ac_base" value="13"/>
+            <column name="ac_use_dex_mod" value="true"/>
+            <column name="ac_dex_mod_max" value="2"/>
+            <column name="ac_modifier" value="-1"/>
+            <column name="strength_req" value="-1"/>
+            <column name="weight_lbs" value="20"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_armor">
+           <column name="name" value="Scale mail"/>
+           <column name="category" value="Medium"/>
+            <column name="cost" value="50"/>
+            <column name="cost_quantifier" value="gp"/>
+            <column name="ac_base" value="14"/>
+            <column name="ac_use_dex_mod" value="true"/>
+            <column name="ac_dex_mod_max" value="2"/>
+            <column name="ac_modifier" value="-1"/>
+            <column name="strength_req" value="-1"/>
+            <column name="stealth_vantage" value="Disadvantage"/>
+            <column name="weight_lbs" value="45"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_armor">
+           <column name="name" value="Breastplate"/>
+           <column name="category" value="Medium"/>
+            <column name="cost" value="400"/>
+            <column name="cost_quantifier" value="gp"/>
+            <column name="ac_base" value="14"/>
+            <column name="ac_use_dex_mod" value="true"/>
+            <column name="ac_dex_mod_max" value="2"/>
+            <column name="ac_modifier" value="-1"/>
+            <column name="strength_req" value="-1"/>
+            <column name="weight_lbs" value="20"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_armor">
+           <column name="name" value="Half plate"/>
+           <column name="category" value="Medium"/>
+            <column name="cost" value="750"/>
+            <column name="cost_quantifier" value="gp"/>
+            <column name="ac_base" value="15"/>
+            <column name="ac_use_dex_mod" value="true"/>
+            <column name="ac_dex_mod_max" value="2"/>
+            <column name="ac_modifier" value="-1"/>
+            <column name="strength_req" value="-1"/>
+            <column name="stealth_vantage" value="Disadvantage"/>
+            <column name="weight_lbs" value="40"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_armor">
+           <column name="name" value="Ring mail"/>
+           <column name="category" value="Heavy"/>
+            <column name="cost" value="30"/>
+            <column name="cost_quantifier" value="gp"/>
+            <column name="ac_base" value="14"/>
+            <column name="ac_use_dex_mod" value="false"/>
+            <column name="ac_dex_mod_max" value="-1"/>
+            <column name="ac_modifier" value="-1"/>
+            <column name="strength_req" value="-1"/>
+            <column name="stealth_vantage" value="Disadvantage"/>
+            <column name="weight_lbs" value="40"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_armor">
+           <column name="name" value="Chain mail"/>
+           <column name="category" value="Heavy"/>
+            <column name="cost" value="75"/>
+            <column name="cost_quantifier" value="gp"/>
+            <column name="ac_base" value="16"/>
+            <column name="ac_use_dex_mod" value="false"/>
+            <column name="ac_dex_mod_max" value="-1"/>
+            <column name="ac_modifier" value="-1"/>
+            <column name="strength_req" value="13"/>
+            <column name="stealth_vantage" value="Disadvantage"/>
+            <column name="weight_lbs" value="55"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_armor">
+           <column name="name" value="Splint"/>
+           <column name="category" value="Heavy"/>
+            <column name="cost" value="200"/>
+            <column name="cost_quantifier" value="gp"/>
+            <column name="ac_base" value="17"/>
+            <column name="ac_use_dex_mod" value="false"/>
+            <column name="ac_dex_mod_max" value="-1"/>
+            <column name="ac_modifier" value="-1"/>
+            <column name="strength_req" value="15"/>
+            <column name="stealth_vantage" value="Disadvantage"/>
+            <column name="weight_lbs" value="60"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_armor">
+           <column name="name" value="Plate"/>
+           <column name="category" value="Heavy"/>
+            <column name="cost" value="1500"/>
+            <column name="cost_quantifier" value="gp"/>
+            <column name="ac_base" value="18"/>
+            <column name="ac_use_dex_mod" value="false"/>
+            <column name="ac_dex_mod_max" value="-1"/>
+            <column name="ac_modifier" value="-1"/>
+            <column name="strength_req" value="15"/>
+            <column name="stealth_vantage" value="Disadvantage"/>
+            <column name="weight_lbs" value="65"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_armor">
+           <column name="name" value="Shield"/>
+           <column name="category" value="Shield"/>
+            <column name="cost" value="10"/>
+            <column name="cost_quantifier" value="gp"/>
+            <column name="ac_base" value="-1"/>
+            <column name="ac_use_dex_mod" value="false"/>
+            <column name="ac_dex_mod_max" value="-1"/>
+            <column name="ac_modifier" value="2"/>
+            <column name="strength_req" value="-1"/>
+            <column name="weight_lbs" value="6"/>
+        </insert>
+
+
+    </changeSet>
+
+</databaseChangeLog>

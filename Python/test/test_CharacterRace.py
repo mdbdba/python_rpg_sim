@@ -900,3 +900,44 @@ def test_Race_Gremlingoblin():
     assert(a.getHairType(db))
     assert(a.getEyeColor(db))
     assert(a.getName(db, 'U'))
+
+
+def test_Race_Dryad():
+    db = InvokePSQL()
+    a = CharacterRace(db, 'Dryad')
+    assert(a.race == 'Dryad')
+    darkvision_ind = 0
+    speak_with_beasts_and_plants_ind = 0
+    fey_blessing_ind = 0
+    woodland_magic_ind = 0
+    forest_step_ind = 0
+    treebound_armor_ind = 0
+    for b in a.traitContainer.traits:
+        if (b.trait_name == 'Darkvision'):
+            darkvision_ind = 1
+        if (b.trait_name == 'Speak with Beasts and Plants'):
+            speak_with_beasts_and_plants_ind = 1
+        if (b.trait_name == 'Fey Blessing'):
+            fey_blessing_ind = 1
+        if (b.trait_name == 'Woodland Magic'):
+            woodland_magic_ind = 1
+        if (b.trait_name == 'Forest Step'):
+            forest_step_ind = 1
+        if (b.trait_name == 'Treebound Armor'):
+            treebound_armor_ind = 1
+
+    assert(darkvision_ind == 1)
+    assert(speak_with_beasts_and_plants_ind == 1)
+    assert(fey_blessing_ind == 1)
+    assert(woodland_magic_ind == 1)
+    assert(forest_step_ind == 1)
+    assert(treebound_armor_ind == 1)
+    assert(any([v != 0 for v in a.ability_bonuses]))
+    alignmentObj = a.getAlignment(db)
+    assert('abbreviation' in alignmentObj)
+    assert('alignment' in alignmentObj)
+    assert(a.getSkinTone(db))
+    assert(a.getHairColor(db))
+    assert(a.getHairType(db))
+    assert(a.getEyeColor(db))
+    assert(a.getName(db, 'U'))

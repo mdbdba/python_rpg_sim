@@ -179,7 +179,6 @@ class CharacterRace(object):
         sql = (f"select count(id) from dnd_5e.lu_racial_hair_type "
                f"where race = '{self.race}' ")
         results = db.query(sql)
-        print(results[0][0])
         if results[0][0] > 0:
             tmprace = self.race
         else:
@@ -414,7 +413,7 @@ class CharacterRace(object):
 
 if __name__ == '__main__':
     db = InvokePSQL()
-    a = CharacterRace(db)
+    a = CharacterRace(db, 'Dryad')
     alignmentObj = a.getAlignment(db)
     print(a.race)
     print(alignmentObj)
@@ -423,3 +422,5 @@ if __name__ == '__main__':
     print(a.getHairType(db))
     print(a.getEyeColor(db))
     print(a.getName(db, 'U'))
+    for b in a.traitContainer.traits:
+        print(b.trait_name)

@@ -1,0 +1,390 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    
+    <changeSet author="mdbdba" id="lu_weapon_1">
+
+        <createTable 
+                schemaName="dnd_5e"
+                tableName="lu_weapon">
+            <column name="name" type="varchar(64)"/>
+            <column name="category" type="varchar(64)"/>
+            <column name="cost" type="tinyInt"/>
+            <column name="cost_quantifier" type="varchar(8)"/>
+            <column name="damage_modifier" type="int"/>
+            <column name="damage_die" type="int"/>
+            <column name="weight_lbs" type="numeric(5,2)"/>
+            <column name="range_1" type="int"/>
+            <column name="range_2" type="int"/>
+        </createTable>
+
+        <addPrimaryKey 
+            columnNames="name"
+            constraintName="lu_weapon_pk"
+            schemaName="dnd_5e"
+            tableName="lu_weapon"/>
+
+        <insert schemaName="dnd_5e" tableName="lu_weapon">
+           <column name="name" value="Club"/> 
+           <column name="category" value="Simple Melee"/> 
+           <column name="cost" value="1"/> 
+           <column name="cost_quantifier" value="sp"/>
+           <column name="damage_modifier" value="1"/>
+           <column name="damage_die" value="4"/>
+           <column name="weight_lbs" value="2"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon">
+           <column name="name" value="Dagger"/> 
+           <column name="category" value="Simple Melee"/> 
+           <column name="cost" value="2"/> 
+           <column name="cost_quantifier" value="gp"/>
+           <column name="damage_modifier" value="1"/>
+           <column name="damage_die" value="4"/>
+           <column name="weight_lbs" value="1"/>
+           <column name="range_1" value="20"/>
+           <column name="range_2" value="60"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon">
+           <column name="name" value="Greatclub"/> 
+           <column name="category" value="Simple Melee"/> 
+           <column name="cost" value="2"/> 
+           <column name="cost_quantifier" value="sp"/>
+           <column name="damage_modifier" value="1"/>
+           <column name="damage_die" value="8"/>
+           <column name="weight_lbs" value="10"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon">
+           <column name="name" value="Handaxe"/> 
+           <column name="category" value="Simple Melee"/> 
+           <column name="cost" value="5"/> 
+           <column name="cost_quantifier" value="gp"/>
+           <column name="damage_modifier" value="1"/>
+           <column name="damage_die" value="6"/>
+           <column name="weight_lbs" value="2"/>
+           <column name="range_1" value="20"/>
+           <column name="range_2" value="60"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon">
+           <column name="name" value="Javelin"/> 
+           <column name="category" value="Simple Melee"/> 
+           <column name="cost" value="5"/> 
+           <column name="cost_quantifier" value="sp"/>
+           <column name="damage_modifier" value="1"/>
+           <column name="damage_die" value="6"/>
+           <column name="weight_lbs" value="2"/>
+           <column name="range_1" value="30"/>
+           <column name="range_2" value="120"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon">
+           <column name="name" value="Light hammer"/> 
+           <column name="category" value="Simple Melee"/> 
+           <column name="cost" value="2"/> 
+           <column name="cost_quantifier" value="gp"/>
+           <column name="damage_modifier" value="1"/>
+           <column name="damage_die" value="4"/>
+           <column name="weight_lbs" value="2"/>
+           <column name="range_1" value="20"/>
+           <column name="range_2" value="60"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon">
+           <column name="name" value="Mace"/> 
+           <column name="category" value="Simple Melee"/> 
+           <column name="cost" value="5"/> 
+           <column name="cost_quantifier" value="gp"/>
+           <column name="damage_modifier" value="1"/>
+           <column name="damage_die" value="6"/>
+           <column name="weight_lbs" value="4"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon">
+           <column name="name" value="Quarterstaff"/> 
+           <column name="category" value="Simple Melee"/> 
+           <column name="cost" value="2"/> 
+           <column name="cost_quantifier" value="sp"/>
+           <column name="damage_modifier" value="1"/>
+           <column name="damage_die" value="6"/>
+           <column name="weight_lbs" value="4"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon">
+           <column name="name" value="Sickle"/> 
+           <column name="category" value="Simple Melee"/> 
+           <column name="cost" value="1"/> 
+           <column name="cost_quantifier" value="gp"/>
+           <column name="damage_modifier" value="1"/>
+           <column name="damage_die" value="4"/>
+           <column name="weight_lbs" value="2"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon">
+           <column name="name" value="Spear"/> 
+           <column name="category" value="Simple Melee"/> 
+           <column name="cost" value="1"/> 
+           <column name="cost_quantifier" value="gp"/>
+           <column name="damage_modifier" value="1"/>
+           <column name="damage_die" value="6"/>
+           <column name="weight_lbs" value="3"/>
+           <column name="range_1" value="20"/>
+           <column name="range_2" value="60"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon">
+           <column name="name" value="Crossbow, light"/> 
+           <column name="category" value="Simple Ranged"/> 
+           <column name="cost" value="25"/> 
+           <column name="cost_quantifier" value="gp"/>
+           <column name="damage_modifier" value="1"/>
+           <column name="damage_die" value="8"/>
+           <column name="weight_lbs" value="5"/>
+           <column name="range_1" value="80"/>
+           <column name="range_2" value="320"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon">
+           <column name="name" value="Dart"/> 
+           <column name="category" value="Simple Ranged"/> 
+           <column name="cost" value="5"/> 
+           <column name="cost_quantifier" value="cp"/>
+           <column name="damage_modifier" value="1"/>
+           <column name="damage_die" value="4"/>
+           <column name="weight_lbs" value=".25"/>
+           <column name="range_1" value="20"/>
+           <column name="range_2" value="60"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon">
+           <column name="name" value="Shortbow"/> 
+           <column name="category" value="Simple Ranged"/> 
+           <column name="cost" value="25"/> 
+           <column name="cost_quantifier" value="gp"/>
+           <column name="damage_modifier" value="1"/>
+           <column name="damage_die" value="6"/>
+           <column name="weight_lbs" value="2"/>
+           <column name="range_1" value="80"/>
+           <column name="range_2" value="320"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon">
+           <column name="name" value="Sling"/> 
+           <column name="category" value="Simple Ranged"/> 
+           <column name="cost" value="1"/> 
+           <column name="cost_quantifier" value="sp"/>
+           <column name="damage_modifier" value="1"/>
+           <column name="damage_die" value="4"/>
+           <column name="weight_lbs" value=".1"/>
+           <column name="range_1" value="30"/>
+           <column name="range_2" value="120"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon">
+           <column name="name" value="Battleaxe"/> 
+           <column name="category" value="Martial Melee"/> 
+           <column name="cost" value="10"/> 
+           <column name="cost_quantifier" value="gp"/>
+           <column name="damage_modifier" value="1"/>
+           <column name="damage_die" value="8"/>
+           <column name="weight_lbs" value="4"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon">
+           <column name="name" value="Flail"/> 
+           <column name="category" value="Martial Melee"/> 
+           <column name="cost" value="10"/> 
+           <column name="cost_quantifier" value="gp"/>
+           <column name="damage_modifier" value="1"/>
+           <column name="damage_die" value="8"/>
+           <column name="weight_lbs" value="2"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon">
+           <column name="name" value="Glaive"/> 
+           <column name="category" value="Martial Melee"/> 
+           <column name="cost" value="20"/> 
+           <column name="cost_quantifier" value="gp"/>
+           <column name="damage_modifier" value="1"/>
+           <column name="damage_die" value="10"/>
+           <column name="weight_lbs" value="6"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon">
+           <column name="name" value="Greataxe"/> 
+           <column name="category" value="Martial Melee"/> 
+           <column name="cost" value="30"/> 
+           <column name="cost_quantifier" value="gp"/>
+           <column name="damage_modifier" value="1"/>
+           <column name="damage_die" value="12"/>
+           <column name="weight_lbs" value="7"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon">
+           <column name="name" value="Greatsword"/> 
+           <column name="category" value="Martial Melee"/> 
+           <column name="cost" value="50"/> 
+           <column name="cost_quantifier" value="gp"/>
+           <column name="damage_modifier" value="2"/>
+           <column name="damage_die" value="6"/>
+           <column name="weight_lbs" value="6"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon">
+           <column name="name" value="Halberd"/> 
+           <column name="category" value="Martial Melee"/> 
+           <column name="cost" value="20"/> 
+           <column name="cost_quantifier" value="gp"/>
+           <column name="damage_modifier" value="1"/>
+           <column name="damage_die" value="10"/>
+           <column name="weight_lbs" value="6"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon">
+           <column name="name" value="Lance"/> 
+           <column name="category" value="Martial Melee"/> 
+           <column name="cost" value="10"/> 
+           <column name="cost_quantifier" value="gp"/>
+           <column name="damage_modifier" value="1"/>
+           <column name="damage_die" value="12"/>
+           <column name="weight_lbs" value="6"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon">
+           <column name="name" value="Longsword"/> 
+           <column name="category" value="Martial Melee"/> 
+           <column name="cost" value="15"/> 
+           <column name="cost_quantifier" value="gp"/>
+           <column name="damage_modifier" value="1"/>
+           <column name="damage_die" value="8"/>
+           <column name="weight_lbs" value="3"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon">
+           <column name="name" value="Maul"/> 
+           <column name="category" value="Martial Melee"/> 
+           <column name="cost" value="10"/> 
+           <column name="cost_quantifier" value="gp"/>
+           <column name="damage_modifier" value="2"/>
+           <column name="damage_die" value="6"/>
+           <column name="weight_lbs" value="10"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon">
+           <column name="name" value="Morningstar"/> 
+           <column name="category" value="Martial Melee"/> 
+           <column name="cost" value="15"/> 
+           <column name="cost_quantifier" value="gp"/>
+           <column name="damage_modifier" value="1"/>
+           <column name="damage_die" value="8"/>
+           <column name="weight_lbs" value="4"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon">
+           <column name="name" value="Pike"/> 
+           <column name="category" value="Martial Melee"/> 
+           <column name="cost" value="5"/> 
+           <column name="cost_quantifier" value="gp"/>
+           <column name="damage_modifier" value="1"/>
+           <column name="damage_die" value="10"/>
+           <column name="weight_lbs" value="18"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon">
+           <column name="name" value="Rapier"/> 
+           <column name="category" value="Martial Melee"/> 
+           <column name="cost" value="25"/> 
+           <column name="cost_quantifier" value="gp"/>
+           <column name="damage_modifier" value="1"/>
+           <column name="damage_die" value="8"/>
+           <column name="weight_lbs" value="2"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon">
+           <column name="name" value="Scimitar"/> 
+           <column name="category" value="Martial Melee"/> 
+           <column name="cost" value="25"/> 
+           <column name="cost_quantifier" value="gp"/>
+           <column name="damage_modifier" value="1"/>
+           <column name="damage_die" value="6"/>
+           <column name="weight_lbs" value="3"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon">
+           <column name="name" value="Shortsword"/> 
+           <column name="category" value="Martial Melee"/> 
+           <column name="cost" value="10"/> 
+           <column name="cost_quantifier" value="gp"/>
+           <column name="damage_modifier" value="1"/>
+           <column name="damage_die" value="6"/>
+           <column name="weight_lbs" value="2"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon">
+           <column name="name" value="Trident"/> 
+           <column name="category" value="Martial Melee"/> 
+           <column name="cost" value="5"/> 
+           <column name="cost_quantifier" value="gp"/>
+           <column name="damage_modifier" value="1"/>
+           <column name="damage_die" value="6"/>
+           <column name="weight_lbs" value="4"/>
+           <column name="range_1" value="20"/>
+           <column name="range_2" value="60"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon">
+           <column name="name" value="War pick"/> 
+           <column name="category" value="Martial Melee"/> 
+           <column name="cost" value="5"/> 
+           <column name="cost_quantifier" value="gp"/>
+           <column name="damage_modifier" value="1"/>
+           <column name="damage_die" value="8"/>
+           <column name="weight_lbs" value="2"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon">
+           <column name="name" value="Warhammer"/> 
+           <column name="category" value="Martial Melee"/> 
+           <column name="cost" value="15"/> 
+           <column name="cost_quantifier" value="gp"/>
+           <column name="damage_modifier" value="1"/>
+           <column name="damage_die" value="8"/>
+           <column name="weight_lbs" value="2"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon">
+           <column name="name" value="Whip"/> 
+           <column name="category" value="Martial Melee"/> 
+           <column name="cost" value="2"/> 
+           <column name="cost_quantifier" value="gp"/>
+           <column name="damage_modifier" value="1"/>
+           <column name="damage_die" value="4"/>
+           <column name="weight_lbs" value="3"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon">
+           <column name="name" value="Blowgun"/> 
+           <column name="category" value="Martial Ranged"/> 
+           <column name="cost" value="10"/> 
+           <column name="cost_quantifier" value="gp"/>
+           <column name="damage_modifier" value="1"/>
+           <column name="damage_die" value="1"/>
+           <column name="weight_lbs" value="1"/>
+           <column name="range_1" value="25"/>
+           <column name="range_2" value="100"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon">
+           <column name="name" value="Crossbow, hand"/> 
+           <column name="category" value="Martial Ranged"/> 
+           <column name="cost" value="75"/> 
+           <column name="cost_quantifier" value="gp"/>
+           <column name="damage_modifier" value="1"/>
+           <column name="damage_die" value="6"/>
+           <column name="weight_lbs" value="3"/>
+           <column name="range_1" value="30"/>
+           <column name="range_2" value="120"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon">
+           <column name="name" value="Crossbow, heavy"/> 
+           <column name="category" value="Martial Ranged"/> 
+           <column name="cost" value="50"/> 
+           <column name="cost_quantifier" value="gp"/>
+           <column name="damage_modifier" value="1"/>
+           <column name="damage_die" value="10"/>
+           <column name="weight_lbs" value="18"/>
+           <column name="range_1" value="100"/>
+           <column name="range_2" value="400"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon">
+           <column name="name" value="Longbow"/> 
+           <column name="category" value="Martial Ranged"/> 
+           <column name="cost" value="50"/> 
+           <column name="cost_quantifier" value="gp"/>
+           <column name="damage_modifier" value="1"/>
+           <column name="damage_die" value="8"/>
+           <column name="weight_lbs" value="2"/>
+           <column name="range_1" value="150"/>
+           <column name="range_2" value="600"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_weapon">
+           <column name="name" value="Net"/> 
+           <column name="category" value="Martial Ranged"/> 
+           <column name="cost" value="1"/> 
+           <column name="cost_quantifier" value="gp"/>
+           <column name="weight_lbs" value="3"/>
+           <column name="range_1" value="5"/>
+           <column name="range_2" value="15"/>
+        </insert>
+
+    </changeSet>
+    
+</databaseChangeLog>

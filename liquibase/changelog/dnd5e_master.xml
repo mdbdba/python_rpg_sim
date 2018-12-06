@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd ">
     
-    <include file="./dnd5e_lu_alignment.xml"/>
-    <include file="./dnd5e_lu_spell.xml"/>
+    <include file="dnd5e_lu_alignment.xml"/>
+    <include file="dnd5e_lu_spell.xml"/>
     <include file="dnd5e_lu_ability.xml"/>
     <include file="dnd5e_lu_recharge_on.xml"/>
     <include file="dnd5e_lu_size.xml"/>
@@ -27,6 +27,14 @@
     <include file="dnd5e_lu_racial_last_name.xml"/>
     <include file="dnd5e_lu_racial_skin_tone.xml"/>
     <include file="dnd5e_lu_racial_trait.xml"/>
-    <includeAll path="./licensedContent/"/>
-    <includeAll path="./myContent/"/>
+    <includeAll path="licensedContent/"/>
+    <includeAll path="myContent/"/>
+    <include file="dnd5e_lu_class.xml"/>
+    <include file="dnd5e_lu_class_level_feature.xml"/>
+    <include file="dnd5e_lu_damage_type.xml"/>
+    <include file="dnd5e_lu_weapon.xml"/>
+    <include file="dnd5e_lu_weapon_damage_type.xml"/>
+    <include file="dnd5e_lu_weapon_weapon_property.xml"/>
+    <include file="dnd5e_lu_weapon_property.xml"/>
+    <include file="dnd5e_lu_armor.xml"/>
 </databaseChangeLog>

@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet author="mdbdba" id="my_lu_racial_first_name_1">
+        
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Dryad"/>
+            <column name="value" value="Erevan"/>
+            <column name="gender" value="U"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Dryad"/>
+            <column name="value" value="Aloria"/>
+            <column name="gender" value="U"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Dryad"/>
+            <column name="value" value="Casaraine"/>
+            <column name="gender" value="U"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Dryad"/>
+            <column name="value" value="Ethissia"/>
+            <column name="gender" value="U"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Dryad"/>
+            <column name="value" value="Lathesae"/>
+            <column name="gender" value="U"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Dryad"/>
+            <column name="value" value="Nadasei"/>
+            <column name="gender" value="U"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Dryad"/>
+            <column name="value" value="Satharia"/>
+            <column name="gender" value="U"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Dryad"/>
+            <column name="value" value="Theralin"/>
+            <column name="gender" value="U"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Dryad"/>
+            <column name="value" value="Yalasee"/>
+            <column name="gender" value="U"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Dryad"/>
+            <column name="value" value="Paelias"/>
+            <column name="gender" value="U"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Dryad"/>
+            <column name="value" value="Paqen"/>
+            <column name="gender" value="U"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Dryad"/>
+            <column name="value" value="Soveliss"/>
+            <column name="gender" value="U"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Dryad"/>
+            <column name="value" value="Theren"/>
+            <column name="gender" value="U"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Dryad"/>
+            <column name="value" value="Salihn"/>
+            <column name="gender" value="U"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Dryad"/>
+            <column name="value" value="Ayla"/>
+            <column name="gender" value="U"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Dryad"/>
+            <column name="value" value="Maylin"/>
+            <column name="gender" value="U"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Dryad"/>
+            <column name="value" value="Keya"/>
+            <column name="gender" value="U"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Dryad"/>
+            <column name="value" value="Caeda"/>
+            <column name="gender" value="U"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Dryad"/>
+            <column name="value" value="Falael"/>
+            <column name="gender" value="U"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Dryad"/>
+            <column name="value" value="Ryllae"/>
+            <column name="gender" value="U"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_first_name">
+            <column name="race" value="Dryad"/>
+            <column name="value" value="Minuvae"/>
+            <column name="gender" value="U"/>
+        </insert>
+
+    </changeSet>
+
+
+
+</databaseChangeLog>
+
