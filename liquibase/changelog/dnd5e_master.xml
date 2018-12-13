@@ -35,6 +35,8 @@
     <include file="dnd5e_lu_weapon_weapon_property.xml"/>
     <include file="dnd5e_lu_weapon_property.xml"/>
     <include file="dnd5e_lu_armor.xml"/>
+    <include file="dnd5e_lu_character_altering_class_feature_option.xml"/>
+    <include file="dnd5e_v_character_altering_class_feature_combination.xml"/>
     <includeAll path="licensedContent/"/>
     <includeAll path="myContent/"/>
 </databaseChangeLog>

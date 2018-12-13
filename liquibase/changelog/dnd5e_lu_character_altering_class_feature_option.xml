@@ -1,0 +1,1126 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+<changeSet author="mdbdba" id="lu_character_altering_class_feature_1">
+        <createTable 
+                schemaName="dnd_5e"
+                tableName="lu_character_altering_class_feature_option">
+            <column name="id" type="int"/>
+            <column name="feature_id" type="int"/>
+            <column name="class" type="varchar(64)"/>
+            <column name="class_order_by" type="int"/>
+            <column name="feature_order_by" type="int"/>
+            <column name="option_order_by" type="int"/>
+            <column name="feature_string" type ="varchar(512)"/>
+            <column name="feature_label_1" type="varchar(64)"/>
+            <column name="feature_label_2" type="varchar(64)"/>
+            <column name="feature_label_3" type="varchar(64)"/>
+            <column name="feature_label_4" type="varchar(64)"/>
+            <column name="feature_label_5" type="varchar(64)"/>
+            <column name="option_value" type="varchar(128)"/>
+            <column name="source_material" type="varchar(64)"/>
+            <column name="source_credit_url" type="varchar(255)"/>
+            <column name="source_credit_comment" type="varchar(255)"/>
+        </createTable>
+
+        <addPrimaryKey 
+            columnNames="id"
+            constraintName="lu_character_altering_class_feature_option_pk"
+            schemaName="dnd_5e"
+            tableName="lu_character_altering_class_feature_option"/>
+
+        <insert schemaName="dnd_5e" tableName="lu_character_altering_class_feature_option">
+           <column name="id" value="1"/>
+           <column name="feature_id" value="1"/>
+           <column name="feature_order_by" value="1"/>
+          <column name="class" value="Barbarian"/>
+          <column name="class_order_by" value="1"/>
+          <column name="option_order_by" value="1"/>
+          <column name="feature_string" value="Primal Path"/>
+          <column name="feature_label_1" value="Primal Path"/>
+          <column name="option_value" value="Path of the Berserker"/>
+          <column name="source_material" value="SRD"/>
+        </insert>
+
+
+        <insert schemaName="dnd_5e" tableName="lu_character_altering_class_feature_option">
+           <column name="id" value="2"/>
+           <column name="feature_id" value="2"/>
+           <column name="feature_order_by" value="1"/>
+          <column name="class" value="Bard"/>
+          <column name="class_order_by" value="1"/>
+          <column name="option_order_by" value="1"/>
+          <column name="feature_string" value="Bard College"/>
+          <column name="feature_label_1" value="Bard College"/>
+          <column name="option_value" value="College of Lore"/>
+          <column name="source_material" value="SRD"/>
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_character_altering_class_feature_option">
+           <column name="id" value="3"/>
+           <column name="feature_id" value="3"/>
+           <column name="feature_order_by" value="1"/>
+          <column name="class" value="Cleric"/>
+          <column name="class_order_by" value="1"/>
+          <column name="option_order_by" value="1"/>
+          <column name="feature_string" value="Divine Domain"/>
+          <column name="feature_label_1" value="Divine Domain"/>
+          <column name="option_value" value="Life Domain"/>
+          <column name="source_material" value="SRD"/>
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_character_altering_class_feature_option">
+           <column name="id" value="4"/>
+           <column name="feature_id" value="4"/>
+           <column name="feature_order_by" value="1"/>
+          <column name="class" value="Druid"/>
+          <column name="class_order_by" value="1"/>
+          <column name="option_order_by" value="1"/>
+          <column name="feature_string" value="Druid Circle/Circle of the Land/Wild Shape"/>
+          <column name="feature_label_1" value="Druid Circle"/>
+          <column name="feature_label_2" value="Circle of the Land"/>
+          <column name="feature_label_3" value="Wild Shape"/>
+          <column name="option_value" value="2:Wolf;4:Crocodile;8:Dire Wolf"/>
+          <column name="source_material" value="SRD"/>
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_character_altering_class_feature_option">
+           <column name="id" value="5"/>
+           <column name="feature_id" value="4"/>
+           <column name="feature_order_by" value="1"/>
+          <column name="class" value="Druid"/>
+          <column name="class_order_by" value="2"/>
+          <column name="option_order_by" value="2"/>
+          <column name="feature_string" value="Druid Circle/Circle of the Land/Wild Shape"/>
+          <column name="feature_label_1" value="Druid Circle"/>
+          <column name="feature_label_2" value="Circle of the Land"/>
+          <column name="feature_label_3" value="Wild Shape"/>
+          <column name="option_value" value="2:Skeleton;4:Black Bear;8:Giant Eagle"/>
+          <column name="source_material" value="SRD"/>
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_character_altering_class_feature_option">
+           <column name="id" value="6"/>
+           <column name="feature_id" value="5"/>
+           <column name="feature_order_by" value="2"/>
+          <column name="class" value="Druid"/>
+          <column name="class_order_by" value="3"/>
+          <column name="option_order_by" value="1"/>
+          <column name="feature_string" value="Druid Circle/Circle of the Land/Influence of the Land"/>
+          <column name="feature_label_1" value="Druid Circle"/>
+          <column name="feature_label_2" value="Circle of the Land"/>
+          <column name="feature_label_3" value="Influence of the Land"/>
+          <column name="option_value" value="Artic"/>
+          <column name="source_material" value="SRD"/>
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_character_altering_class_feature_option">
+           <column name="id" value="7"/>
+           <column name="feature_id" value="5"/>
+           <column name="feature_order_by" value="2"/>
+          <column name="class" value="Druid"/>
+          <column name="class_order_by" value="4"/>
+          <column name="option_order_by" value="2"/>
+          <column name="feature_string" value="Druid Circle/Circle of the Land/Influence of the Land"/>
+          <column name="feature_label_1" value="Druid Circle"/>
+          <column name="feature_label_2" value="Circle of the Land"/>
+          <column name="feature_label_3" value="Influence of the Land"/>
+          <column name="option_value" value="Coast"/>
+          <column name="source_material" value="SRD"/>
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_character_altering_class_feature_option">
+           <column name="id" value="8"/>
+           <column name="feature_id" value="5"/>
+           <column name="feature_order_by" value="2"/>
+          <column name="class" value="Druid"/>
+          <column name="class_order_by" value="5"/>
+          <column name="option_order_by" value="3"/>
+          <column name="feature_string" value="Druid Circle/Circle of the Land/Influence of the Land"/>
+          <column name="feature_label_1" value="Druid Circle"/>
+          <column name="feature_label_2" value="Circle of the Land"/>
+          <column name="feature_label_3" value="Influence of the Land"/>
+          <column name="option_value" value="Desert"/>
+          <column name="source_material" value="SRD"/>
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_character_altering_class_feature_option">
+           <column name="id" value="9"/>
+           <column name="feature_id" value="5"/>
+           <column name="feature_order_by" value="2"/>
+          <column name="class" value="Druid"/>
+          <column name="class_order_by" value="6"/>
+          <column name="option_order_by" value="4"/>
+          <column name="feature_string" value="Druid Circle/Circle of the Land/Influence of the Land"/>
+          <column name="feature_label_1" value="Druid Circle"/>
+          <column name="feature_label_2" value="Circle of the Land"/>
+          <column name="feature_label_3" value="Influence of the Land"/>
+          <column name="option_value" value="Forest"/>
+          <column name="source_material" value="SRD"/>
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_character_altering_class_feature_option">
+           <column name="id" value="10"/>
+           <column name="feature_id" value="5"/>
+           <column name="feature_order_by" value="2"/>
+          <column name="class" value="Druid"/>
+          <column name="class_order_by" value="7"/>
+          <column name="option_order_by" value="5"/>
+          <column name="feature_string" value="Druid Circle/Circle of the Land/Influence of the Land"/>
+          <column name="feature_label_1" value="Druid Circle"/>
+          <column name="feature_label_2" value="Circle of the Land"/>
+          <column name="feature_label_3" value="Influence of the Land"/>
+          <column name="option_value" value="Grassland"/>
+          <column name="source_material" value="SRD"/>
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_character_altering_class_feature_option">
+           <column name="id" value="11"/>
+           <column name="feature_id" value="5"/>
+           <column name="feature_order_by" value="2"/>
+          <column name="class" value="Druid"/>
+          <column name="class_order_by" value="8"/>
+          <column name="option_order_by" value="6"/>
+          <column name="feature_string" value="Druid Circle/Circle of the Land/Influence of the Land"/>
+          <column name="feature_label_1" value="Druid Circle"/>
+          <column name="feature_label_2" value="Circle of the Land"/>
+          <column name="feature_label_3" value="Influence of the Land"/>
+          <column name="option_value" value="Mountain"/>
+          <column name="source_material" value="SRD"/>
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_character_altering_class_feature_option">
+           <column name="id" value="12"/>
+           <column name="feature_id" value="5"/>
+           <column name="feature_order_by" value="2"/>
+          <column name="class" value="Druid"/>
+          <column name="class_order_by" value="9"/>
+          <column name="option_order_by" value="7"/>
+          <column name="feature_string" value="Druid Circle/Circle of the Land/Influence of the Land"/>
+          <column name="feature_label_1" value="Druid Circle"/>
+          <column name="feature_label_2" value="Circle of the Land"/>
+          <column name="feature_label_3" value="Influence of the Land"/>
+          <column name="option_value" value="Swamp"/>
+          <column name="source_material" value="SRD"/>
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_character_altering_class_feature_option">
+           <column name="id" value="13"/>
+           <column name="feature_id" value="6"/>
+           <column name="feature_order_by" value="2"/>
+          <column name="class" value="Fighter"/>
+          <column name="class_order_by" value="1"/>
+          <column name="option_order_by" value="1"/>
+          <column name="feature_string" value="Martial Archetype"/>
+          <column name="feature_label_1" value="Martial Archetype"/>
+          <column name="option_value" value="Champion"/>
+          <column name="source_material" value="SRD"/>
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_character_altering_class_feature_option">
+           <column name="id" value="14"/>
+           <column name="feature_id" value="7"/>
+           <column name="feature_order_by" value="1"/>
+          <column name="class" value="Fighter"/>
+          <column name="class_order_by" value="2"/>
+          <column name="option_order_by" value="1"/>
+          <column name="feature_string" value="Fighting Style"/>
+          <column name="feature_label_1" value="Fighting Style"/>
+          <column name="option_value" value="Archery"/>
+          <column name="source_material" value="SRD"/>
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_character_altering_class_feature_option">
+           <column name="id" value="15"/>
+           <column name="feature_id" value="7"/>
+           <column name="feature_order_by" value="1"/>
+          <column name="class" value="Fighter"/>
+          <column name="class_order_by" value="3"/>
+          <column name="option_order_by" value="2"/>
+          <column name="feature_string" value="Fighting Style"/>
+          <column name="feature_label_1" value="Fighting Style"/>
+          <column name="option_value" value="Defense"/>
+          <column name="source_material" value="SRD"/>
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_character_altering_class_feature_option">
+           <column name="id" value="16"/>
+           <column name="feature_id" value="7"/>
+           <column name="feature_order_by" value="2"/>
+          <column name="class" value="Fighter"/>
+          <column name="class_order_by" value="4"/>
+          <column name="option_order_by" value="3"/>
+          <column name="feature_string" value="Fighting Style"/>
+          <column name="feature_label_1" value="Fighting Style"/>
+          <column name="option_value" value="Dueling"/>
+          <column name="source_material" value="SRD"/>
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_character_altering_class_feature_option">
+           <column name="id" value="17"/>
+           <column name="feature_id" value="7"/>
+           <column name="feature_order_by" value="2"/>
+          <column name="class" value="Fighter"/>
+          <column name="class_order_by" value="5"/>
+          <column name="option_order_by" value="4"/>
+          <column name="feature_string" value="Fighting Style"/>
+          <column name="feature_label_1" value="Fighting Style"/>
+          <column name="option_value" value="Great Weapon Fighting"/>
+          <column name="source_material" value="SRD"/>
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_character_altering_class_feature_option">
+           <column name="id" value="18"/>
+           <column name="feature_id" value="7"/>
+           <column name="feature_order_by" value="2"/>
+          <column name="class" value="Fighter"/>
+          <column name="class_order_by" value="6"/>
+          <column name="option_order_by" value="5"/>
+          <column name="feature_string" value="Fighting Style"/>
+          <column name="feature_label_1" value="Fighting Style"/>
+          <column name="option_value" value="Protection"/>
+          <column name="source_material" value="SRD"/>
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_character_altering_class_feature_option">
+           <column name="id" value="19"/>
+           <column name="feature_id" value="7"/>
+           <column name="feature_order_by" value="2"/>
+          <column name="class" value="Fighter"/>
+          <column name="class_order_by" value="7"/>
+          <column name="option_order_by" value="6"/>
+          <column name="feature_string" value="Fighting Style"/>
+          <column name="feature_label_1" value="Fighting Style"/>
+          <column name="option_value" value="Two-Weapon Fighting"/>
+          <column name="source_material" value="SRD"/>
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_character_altering_class_feature_option">
+           <column name="id" value="20"/>
+           <column name="feature_id" value="8"/>
+           <column name="feature_order_by" value="1"/>
+          <column name="class" value="Monk"/>
+          <column name="class_order_by" value="1"/>
+          <column name="option_order_by" value="1"/>
+          <column name="feature_string" value="Monastic Tradition"/>
+          <column name="feature_label_1" value="Monastic Tradition"/>
+          <column name="option_value" value="Way of the Open Hand"/>
+          <column name="source_material" value="SRD"/>
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_character_altering_class_feature_option">
+           <column name="id" value="21"/>
+           <column name="feature_id" value="9"/>
+           <column name="feature_order_by" value="1"/>
+          <column name="class" value="Paladin"/>
+          <column name="class_order_by" value="1"/>
+          <column name="option_order_by" value="1"/>
+          <column name="feature_string" value="Sacred Oath"/>
+          <column name="feature_label_1" value="Sacred Oath"/>
+          <column name="option_value" value="Oath of Devotion"/>
+          <column name="source_material" value="SRD"/>
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_character_altering_class_feature_option">
+           <column name="id" value="22"/>
+           <column name="feature_id" value="10"/>
+           <column name="feature_order_by" value="1"/>
+          <column name="class" value="Ranger"/>
+          <column name="class_order_by" value="1"/>
+          <column name="option_order_by" value="1"/>
+          <column name="feature_string" value="Ranger Archetype/Hunter/Hunter's Prey"/>
+          <column name="feature_label_1" value="Ranger Archetype"/>
+          <column name="feature_label_2" value="Hunter"/>
+          <column name="feature_label_3" value="Hunter's Prey"/>
+          <column name="option_value" value="Colossus Slayer"/>
+          <column name="source_material" value="SRD"/>
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_character_altering_class_feature_option">
+           <column name="id" value="23"/>
+           <column name="feature_id" value="10"/>
+           <column name="feature_order_by" value="1"/>
+          <column name="class" value="Ranger"/>
+          <column name="class_order_by" value="2"/>
+          <column name="option_order_by" value="2"/>
+          <column name="feature_string" value="Ranger Archetype/Hunter/Hunter's Prey"/>
+          <column name="feature_label_1" value="Ranger Archetype"/>
+          <column name="feature_label_2" value="Hunter"/>
+          <column name="feature_label_3" value="Hunter's Prey"/>
+          <column name="option_value" value="Giant Killer"/>
+          <column name="source_material" value="SRD"/>
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_character_altering_class_feature_option">
+           <column name="id" value="24"/>
+           <column name="feature_id" value="10"/>
+           <column name="feature_order_by" value="1"/>
+          <column name="class" value="Ranger"/>
+          <column name="class_order_by" value="3"/>
+          <column name="option_order_by" value="3"/>
+          <column name="feature_string" value="Ranger Archetype/Hunter/Hunter's Prey"/>
+          <column name="feature_label_1" value="Ranger Archetype"/>
+          <column name="feature_label_2" value="Hunter"/>
+          <column name="feature_label_3" value="Hunter's Prey"/>
+          <column name="option_value" value="Horde Breaker"/>
+          <column name="source_material" value="SRD"/>
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_character_altering_class_feature_option">
+           <column name="id" value="25"/>
+           <column name="feature_id" value="11"/>
+           <column name="feature_order_by" value="2"/>
+          <column name="class" value="Ranger"/>
+          <column name="class_order_by" value="4"/>
+          <column name="option_order_by" value="1"/>
+          <column name="feature_string" value="Ranger Archetype/Hunter/Defensive Tactics"/>
+          <column name="feature_label_1" value="Ranger Archetype"/>
+          <column name="feature_label_2" value="Hunter"/>
+          <column name="feature_label_3" value="Defensive Tactics"/>
+          <column name="option_value" value="Escape the Horde"/>
+          <column name="source_material" value="SRD"/>
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_character_altering_class_feature_option">
+           <column name="id" value="26"/>
+           <column name="feature_id" value="11"/>
+           <column name="feature_order_by" value="2"/>
+          <column name="class" value="Ranger"/>
+          <column name="class_order_by" value="5"/>
+          <column name="option_order_by" value="2"/>
+          <column name="feature_string" value="Ranger Archetype/Hunter/Defensive Tactics"/>
+          <column name="feature_label_1" value="Ranger Archetype"/>
+          <column name="feature_label_2" value="Hunter"/>
+          <column name="feature_label_3" value="Defensive Tactics"/>
+          <column name="option_value" value="Multiattack Defense"/>
+          <column name="source_material" value="SRD"/>
+        </insert>
+ 
+        <insert schemaName="dnd_5e" tableName="lu_character_altering_class_feature_option">
+           <column name="id" value="27"/>
+           <column name="feature_id" value="11"/>
+           <column name="feature_order_by" value="2"/>
+          <column name="class" value="Ranger"/>
+          <column name="class_order_by" value="6"/>
+          <column name="option_order_by" value="3"/>
+          <column name="feature_string" value="Ranger Archetype/Hunter/Defensive Tactics"/>
+          <column name="feature_label_1" value="Ranger Archetype"/>
+          <column name="feature_label_2" value="Hunter"/>
+          <column name="feature_label_3" value="Defensive Tactics"/>
+          <column name="option_value" value="Steel Will"/>
+          <column name="source_material" value="SRD"/>
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_character_altering_class_feature_option">
+           <column name="id" value="28"/>
+           <column name="feature_id" value="12"/>
+           <column name="feature_order_by" value="3"/>
+          <column name="class" value="Ranger"/>
+          <column name="class_order_by" value="7"/>
+          <column name="option_order_by" value="1"/>
+          <column name="feature_string" value="Ranger Archetype/Hunter/Superior Hunter's Defense"/>
+          <column name="feature_label_1" value="Ranger Archetype"/>
+          <column name="feature_label_2" value="Hunter"/>
+          <column name="feature_label_3" value="Superior Hunter's Defense"/>
+          <column name="option_value" value="Evasion"/>
+          <column name="source_material" value="SRD"/>
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_character_altering_class_feature_option">
+           <column name="id" value="29"/>
+           <column name="feature_id" value="12"/>
+           <column name="feature_order_by" value="3"/>
+          <column name="class" value="Ranger"/>
+          <column name="class_order_by" value="8"/>
+          <column name="option_order_by" value="2"/>
+          <column name="feature_string" value="Ranger Archetype/Hunter/Superior Hunter's Defense"/>
+          <column name="feature_label_1" value="Ranger Archetype"/>
+          <column name="feature_label_2" value="Hunter"/>
+          <column name="feature_label_3" value="Superior Hunter's Defense"/>
+          <column name="option_value" value="Stand Against the Tide"/>
+          <column name="source_material" value="SRD"/>
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_character_altering_class_feature_option">
+           <column name="id" value="30"/>
+           <column name="feature_id" value="12"/>
+           <column name="feature_order_by" value="3"/>
+          <column name="class" value="Ranger"/>
+          <column name="class_order_by" value="9"/>
+          <column name="option_order_by" value="3"/>
+          <column name="feature_string" value="Ranger Archetype/Hunter/Superior Hunter's Defense"/>
+          <column name="feature_label_1" value="Ranger Archetype"/>
+          <column name="feature_label_2" value="Hunter"/>
+          <column name="feature_label_3" value="Superior Hunter's Defense"/>
+          <column name="option_value" value="Uncanny Dodge"/>
+          <column name="source_material" value="SRD"/>
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_character_altering_class_feature_option">
+           <column name="id" value="31"/>
+           <column name="feature_id" value="13"/>
+           <column name="feature_order_by" value="4"/>
+          <column name="class" value="Ranger"/>
+          <column name="class_order_by" value="10"/>
+          <column name="option_order_by" value="1"/>
+          <column name="feature_string" value="Favored Enemy"/>
+          <column name="feature_label_1" value="Favored Enemy"/>
+          <column name="option_value" value="Aberration"/>
+          <column name="source_material" value="SRD"/>
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_character_altering_class_feature_option">
+           <column name="id" value="32"/>
+           <column name="feature_id" value="13"/>
+           <column name="feature_order_by" value="4"/>
+          <column name="class" value="Ranger"/>
+          <column name="class_order_by" value="11"/>
+        <column name="option_order_by" value="2"/>
+          <column name="feature_string" value="Favored Enemy"/>
+          <column name="feature_label_1" value="Favored Enemy"/>
+          <column name="option_value" value="Beast"/>
+          <column name="source_material" value="SRD"/>
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_character_altering_class_feature_option">
+           <column name="id" value="33"/>
+           <column name="feature_id" value="13"/>
+           <column name="feature_order_by" value="4"/>
+          <column name="class" value="Ranger"/>
+          <column name="class_order_by" value="12"/>
+          <column name="option_order_by" value="3"/>
+          <column name="feature_string" value="Favored Enemy"/>
+          <column name="feature_label_1" value="Favored Enemy"/>
+          <column name="option_value" value="Celestial"/>
+          <column name="source_material" value="SRD"/>
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_character_altering_class_feature_option">
+           <column name="id" value="34"/>
+           <column name="feature_id" value="13"/>
+           <column name="feature_order_by" value="4"/>
+          <column name="class" value="Ranger"/>
+          <column name="class_order_by" value="13"/>
+          <column name="option_order_by" value="4"/>
+          <column name="feature_string" value="Favored Enemy"/>
+          <column name="feature_label_1" value="Favored Enemy"/>
+          <column name="option_value" value="Dragon"/>
+          <column name="source_material" value="SRD"/>
+        </insert>
+ 
+        <insert schemaName="dnd_5e" tableName="lu_character_altering_class_feature_option">
+           <column name="id" value="35"/>
+           <column name="feature_id" value="13"/>
+           <column name="feature_order_by" value="4"/>
+          <column name="class" value="Ranger"/>
+          <column name="class_order_by" value="14"/>
+          <column name="option_order_by" value="5"/>
+          <column name="feature_string" value="Favored Enemy"/>
+          <column name="feature_label_1" value="Favored Enemy"/>
+          <column name="option_value" value="Elemental"/>
+          <column name="source_material" value="SRD"/>
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_character_altering_class_feature_option">
+           <column name="id" value="36"/>
+           <column name="feature_id" value="13"/>
+           <column name="feature_order_by" value="4"/>
+          <column name="class" value="Ranger"/>
+          <column name="class_order_by" value="15"/>
+          <column name="option_order_by" value="6"/>
+          <column name="feature_string" value="Favored Enemy"/>
+          <column name="feature_label_1" value="Favored Enemy"/>
+          <column name="option_value" value="Fey"/>
+          <column name="source_material" value="SRD"/>
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_character_altering_class_feature_option">
+           <column name="id" value="37"/>
+           <column name="feature_id" value="13"/>
+           <column name="feature_order_by" value="4"/>
+          <column name="class" value="Ranger"/>
+          <column name="class_order_by" value="16"/>
+          <column name="option_order_by" value="7"/>
+          <column name="feature_string" value="Favored Enemy"/>
+          <column name="feature_label_1" value="Favored Enemy"/>
+          <column name="option_value" value="Fiend"/>
+          <column name="source_material" value="SRD"/>
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_character_altering_class_feature_option">
+           <column name="id" value="38"/>
+           <column name="feature_id" value="13"/>
+           <column name="feature_order_by" value="4"/>
+          <column name="class" value="Ranger"/>
+          <column name="class_order_by" value="17"/>
+          <column name="option_order_by" value="8"/>
+          <column name="feature_string" value="Favored Enemy"/>
+          <column name="feature_label_1" value="Favored Enemy"/>
+          <column name="option_value" value="Giant"/>
+          <column name="source_material" value="SRD"/>
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_character_altering_class_feature_option">
+           <column name="id" value="39"/>
+           <column name="feature_id" value="13"/>
+           <column name="feature_order_by" value="4"/>
+          <column name="class" value="Ranger"/>
+          <column name="class_order_by" value="18"/>
+          <column name="option_order_by" value="9"/>
+          <column name="feature_string" value="Favored Enemy"/>
+          <column name="feature_label_1" value="Favored Enemy"/>
+          <column name="option_value" value="Monstrosity"/>
+          <column name="source_material" value="SRD"/>
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_character_altering_class_feature_option">
+           <column name="id" value="40"/>
+           <column name="feature_id" value="13"/>
+           <column name="feature_order_by" value="4"/>
+          <column name="class" value="Ranger"/>
+          <column name="class_order_by" value="19"/>
+          <column name="option_order_by" value="10"/>
+          <column name="feature_string" value="Favored Enemy"/>
+          <column name="feature_label_1" value="Favored Enemy"/>
+          <column name="option_value" value="Ooze"/>
+          <column name="source_material" value="SRD"/>
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_character_altering_class_feature_option">
+           <column name="id" value="41"/>
+           <column name="feature_id" value="13"/>
+           <column name="feature_order_by" value="4"/>
+          <column name="class" value="Ranger"/>
+          <column name="class_order_by" value="20"/>
+          <column name="option_order_by" value="11"/>
+          <column name="feature_string" value="Favored Enemy"/>
+          <column name="feature_label_1" value="Favored Enemy"/>
+          <column name="option_value" value="Plant"/>
+          <column name="source_material" value="SRD"/>
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_character_altering_class_feature_option">
+           <column name="id" value="42"/>
+           <column name="feature_id" value="13"/>
+           <column name="feature_order_by" value="4"/>
+          <column name="class" value="Ranger"/>
+          <column name="class_order_by" value="21"/>
+          <column name="option_order_by" value="12"/>
+          <column name="feature_string" value="Favored Enemy"/>
+          <column name="feature_label_1" value="Favored Enemy"/>
+          <column name="option_value" value="Undead"/>
+          <column name="source_material" value="SRD"/>
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_character_altering_class_feature_option">
+           <column name="id" value="43"/>
+           <column name="feature_id" value="13"/>
+           <column name="feature_order_by" value="4"/>
+          <column name="class" value="Ranger"/>
+          <column name="class_order_by" value="22"/>
+          <column name="option_order_by" value="13"/>
+          <column name="feature_string" value="Favored Enemy"/>
+          <column name="feature_label_1" value="Favored Enemy"/>
+          <column name="option_value" value="@@Races:Gnoll;Orc"/>
+          <column name="source_material" value="SRD"/>
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_character_altering_class_feature_option">
+           <column name="id" value="44"/>
+           <column name="feature_id" value="14"/>
+           <column name="feature_order_by" value="5"/>
+          <column name="class" value="Ranger"/>
+          <column name="class_order_by" value="23"/>
+          <column name="option_order_by" value="1"/>
+          <column name="feature_string" value="Fighting Style"/>
+          <column name="feature_label_1" value="Fighting Style"/>
+          <column name="option_value" value="Archery"/>
+          <column name="source_material" value="SRD"/>
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_character_altering_class_feature_option">
+           <column name="id" value="45"/>
+           <column name="feature_id" value="14"/>
+           <column name="feature_order_by" value="5"/>
+          <column name="class" value="Ranger"/>
+          <column name="class_order_by" value="24"/>
+          <column name="option_order_by" value="2"/>
+          <column name="feature_string" value="Fighting Style"/>
+          <column name="feature_label_1" value="Fighting Style"/>
+          <column name="option_value" value="Defense"/>
+          <column name="source_material" value="SRD"/>
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_character_altering_class_feature_option">
+           <column name="id" value="46"/>
+           <column name="feature_id" value="14"/>
+           <column name="feature_order_by" value="5"/>
+          <column name="class" value="Ranger"/>
+          <column name="class_order_by" value="25"/>
+          <column name="option_order_by" value="3"/>
+          <column name="feature_string" value="Fighting Style"/>
+          <column name="feature_label_1" value="Fighting Style"/>
+          <column name="option_value" value="Dueling"/>
+          <column name="source_material" value="SRD"/>
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_character_altering_class_feature_option">
+           <column name="id" value="47"/>
+           <column name="feature_id" value="15"/>
+           <column name="feature_order_by" value="1"/>
+          <column name="class" value="Rogue"/>
+            <column name="class_order_by" value="1"/>
+          <column name="option_order_by" value="1"/>
+          <column name="feature_string" value="Roguish Archetype"/>
+          <column name="feature_label_1" value="Roguish Archetype"/>
+          <column name="option_value" value="Thief"/>
+          <column name="source_material" value="SRD"/>
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_character_altering_class_feature_option">
+           <column name="id" value="48"/>
+           <column name="feature_id" value="16"/>
+           <column name="feature_order_by" value="1"/>
+          <column name="class" value="Sorcerer"/>
+          <column name="class_order_by" value="1"/>
+          <column name="option_order_by" value="1"/>
+          <column name="feature_string" value="Sorcerous Origin"/>
+          <column name="feature_label_1" value="Sorcerous Origin"/>
+          <column name="option_value" value="Draconic Bloodline"/>
+          <column name="source_material" value="SRD"/>
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_character_altering_class_feature_option">
+           <column name="id" value="49"/>
+           <column name="feature_id" value="17"/>
+           <column name="feature_order_by" value="2"/>
+          <column name="class" value="Sorcerer"/>
+          <column name="class_order_by" value="2"/>
+          <column name="option_order_by" value="1"/>
+          <column name="feature_string" value="Metamagic"/>
+          <column name="feature_label_1" value="Metamagic"/>
+          <column name="option_value" value="Careful Spell;Distant Spell"/>
+          <column name="source_material" value="SRD"/>
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_character_altering_class_feature_option">
+           <column name="id" value="50"/>
+           <column name="feature_id" value="17"/>
+           <column name="feature_order_by" value="2"/>
+          <column name="class" value="Sorcerer"/>
+          <column name="class_order_by" value="3"/>
+          <column name="option_order_by" value="2"/>
+          <column name="feature_string" value="Metamagic"/>
+          <column name="feature_label_1" value="Metamagic"/>
+          <column name="option_value" value="Careful Spell;Empowered Spell"/>
+          <column name="source_material" value="SRD"/>
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_character_altering_class_feature_option">
+           <column name="id" value="51"/>
+           <column name="feature_id" value="17"/>
+           <column name="feature_order_by" value="2"/>
+          <column name="class" value="Sorcerer"/>
+          <column name="class_order_by" value="4"/>
+          <column name="option_order_by" value="3"/>
+          <column name="feature_string" value="Metamagic"/>
+          <column name="feature_label_1" value="Metamagic"/>
+          <column name="option_value" value="Careful Spell;Extended Spell"/>
+          <column name="source_material" value="SRD"/>
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_character_altering_class_feature_option">
+           <column name="id" value="52"/>
+           <column name="feature_id" value="17"/>
+           <column name="feature_order_by" value="2"/>
+          <column name="class" value="Sorcerer"/>
+          <column name="class_order_by" value="5"/>
+          <column name="option_order_by" value="4"/>
+          <column name="feature_string" value="Metamagic"/>
+          <column name="feature_label_1" value="Metamagic"/>
+          <column name="option_value" value="Careful Spell;Heightened Spell"/>
+          <column name="source_material" value="SRD"/>
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_character_altering_class_feature_option">
+           <column name="id" value="53"/>
+           <column name="feature_id" value="17"/>
+           <column name="feature_order_by" value="2"/>
+          <column name="class" value="Sorcerer"/>
+          <column name="class_order_by" value="6"/>
+          <column name="option_order_by" value="5"/>
+          <column name="feature_string" value="Metamagic"/>
+          <column name="feature_label_1" value="Metamagic"/>
+          <column name="option_value" value="Careful Spell;Quickened Spell"/>
+          <column name="source_material" value="SRD"/>
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_character_altering_class_feature_option">
+           <column name="id" value="54"/>
+           <column name="feature_id" value="17"/>
+           <column name="feature_order_by" value="2"/>
+          <column name="class" value="Sorcerer"/>
+          <column name="class_order_by" value="7"/>
+          <column name="option_order_by" value="6"/>
+          <column name="feature_string" value="Metamagic"/>
+          <column name="feature_label_1" value="Metamagic"/>
+          <column name="option_value" value="Careful Spell;Subtle Spell"/>
+          <column name="source_material" value="SRD"/>
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_character_altering_class_feature_option">
+           <column name="id" value="55"/>
+           <column name="feature_id" value="17"/>
+           <column name="feature_order_by" value="2"/>
+          <column name="class" value="Sorcerer"/>
+          <column name="class_order_by" value="8"/>
+          <column name="option_order_by" value="7"/>
+          <column name="feature_string" value="Metamagic"/>
+          <column name="feature_label_1" value="Metamagic"/>
+          <column name="option_value" value="Careful Spell;Twinned Spell"/>
+          <column name="source_material" value="SRD"/>
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_character_altering_class_feature_option">
+           <column name="id" value="56"/>
+           <column name="feature_id" value="17"/>
+           <column name="feature_order_by" value="2"/>
+          <column name="class" value="Sorcerer"/>
+          <column name="class_order_by" value="9"/>
+          <column name="option_order_by" value="8"/>
+          <column name="feature_string" value="Metamagic"/>
+          <column name="feature_label_1" value="Metamagic"/>
+          <column name="option_value" value="Distant Spell;Empowered Spell"/>
+          <column name="source_material" value="SRD"/>
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_character_altering_class_feature_option">
+           <column name="id" value="57"/>
+           <column name="feature_id" value="17"/>
+           <column name="feature_order_by" value="2"/>
+          <column name="class" value="Sorcerer"/>
+          <column name="class_order_by" value="10"/>
+          <column name="option_order_by" value="9"/>
+          <column name="feature_string" value="Metamagic"/>
+          <column name="feature_label_1" value="Metamagic"/>
+          <column name="option_value" value="Distant Spell;Extended Spell"/>
+          <column name="source_material" value="SRD"/>
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_character_altering_class_feature_option">
+           <column name="id" value="58"/>
+           <column name="feature_id" value="17"/>
+           <column name="feature_order_by" value="2"/>
+          <column name="class" value="Sorcerer"/>
+          <column name="class_order_by" value="11"/>
+          <column name="option_order_by" value="10"/>
+          <column name="feature_string" value="Metamagic"/>
+          <column name="feature_label_1" value="Metamagic"/>
+          <column name="option_value" value="Distant Spell;Heightened Spell"/>
+          <column name="source_material" value="SRD"/>
+        </insert>
+ 
+        <insert schemaName="dnd_5e" tableName="lu_character_altering_class_feature_option">
+           <column name="id" value="59"/>
+           <column name="feature_id" value="17"/>
+           <column name="feature_order_by" value="2"/>
+          <column name="class" value="Sorcerer"/>
+          <column name="class_order_by" value="12"/>
+          <column name="option_order_by" value="11"/>
+          <column name="feature_string" value="Metamagic"/>
+          <column name="feature_label_1" value="Metamagic"/>
+          <column name="option_value" value="Distant Spell;Quickened Spell"/>
+          <column name="source_material" value="SRD"/>
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_character_altering_class_feature_option">
+           <column name="id" value="60"/>
+           <column name="feature_id" value="17"/>
+           <column name="feature_order_by" value="2"/>
+          <column name="class" value="Sorcerer"/>
+          <column name="class_order_by" value="13"/>
+          <column name="option_order_by" value="12"/>
+          <column name="feature_string" value="Metamagic"/>
+          <column name="feature_label_1" value="Metamagic"/>
+          <column name="option_value" value="Distant Spell;Subtle Spell"/>
+          <column name="source_material" value="SRD"/>
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_character_altering_class_feature_option">
+           <column name="id" value="61"/>
+           <column name="feature_id" value="17"/>
+           <column name="feature_order_by" value="2"/>
+          <column name="class" value="Sorcerer"/>
+          <column name="class_order_by" value="14"/>
+          <column name="option_order_by" value="13"/>
+          <column name="feature_string" value="Metamagic"/>
+          <column name="feature_label_1" value="Metamagic"/>
+          <column name="option_value" value="Distant Spell;Twinned Spell"/>
+          <column name="source_material" value="SRD"/>
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_character_altering_class_feature_option">
+           <column name="id" value="62"/>
+           <column name="feature_id" value="17"/>
+           <column name="feature_order_by" value="2"/>
+          <column name="class" value="Sorcerer"/>
+          <column name="class_order_by" value="15"/>
+          <column name="option_order_by" value="14"/>
+          <column name="feature_string" value="Metamagic"/>
+          <column name="feature_label_1" value="Metamagic"/>
+          <column name="option_value" value="Empowered Spell;Extended Spell"/>
+          <column name="source_material" value="SRD"/>
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_character_altering_class_feature_option">
+           <column name="id" value="63"/>
+           <column name="feature_id" value="17"/>
+           <column name="feature_order_by" value="2"/>
+          <column name="class" value="Sorcerer"/>
+          <column name="class_order_by" value="16"/>
+          <column name="option_order_by" value="15"/>
+          <column name="feature_string" value="Metamagic"/>
+          <column name="feature_label_1" value="Metamagic"/>
+          <column name="option_value" value="Empowered Spell;Heightened Spell"/>
+          <column name="source_material" value="SRD"/>
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_character_altering_class_feature_option">
+           <column name="id" value="64"/>
+           <column name="feature_id" value="17"/>
+           <column name="feature_order_by" value="2"/>
+          <column name="class" value="Sorcerer"/>
+          <column name="class_order_by" value="17"/>
+          <column name="option_order_by" value="16"/>
+          <column name="feature_string" value="Metamagic"/>
+          <column name="feature_label_1" value="Metamagic"/>
+          <column name="option_value" value="Empowered Spell;Quickened Spell"/>
+          <column name="source_material" value="SRD"/>
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_character_altering_class_feature_option">
+           <column name="id" value="65"/>
+           <column name="feature_id" value="17"/>
+           <column name="feature_order_by" value="2"/>
+          <column name="class" value="Sorcerer"/>
+          <column name="class_order_by" value="18"/>
+          <column name="option_order_by" value="17"/>
+          <column name="feature_string" value="Metamagic"/>
+          <column name="feature_label_1" value="Metamagic"/>
+          <column name="option_value" value="Empowered Spell;Subtle Spell"/>
+          <column name="source_material" value="SRD"/>
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_character_altering_class_feature_option">
+           <column name="id" value="66"/>
+           <column name="feature_id" value="17"/>
+           <column name="feature_order_by" value="2"/>
+          <column name="class" value="Sorcerer"/>
+          <column name="class_order_by" value="19"/>
+          <column name="option_order_by" value="18"/>
+          <column name="feature_string" value="Metamagic"/>
+          <column name="feature_label_1" value="Metamagic"/>
+          <column name="option_value" value="Empowered Spell;Twinned Spell"/>
+          <column name="source_material" value="SRD"/>
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_character_altering_class_feature_option">
+           <column name="id" value="67"/>
+           <column name="feature_id" value="17"/>
+           <column name="feature_order_by" value="2"/>
+          <column name="class" value="Sorcerer"/>
+          <column name="class_order_by" value="20"/>
+          <column name="option_order_by" value="19"/>
+          <column name="feature_string" value="Metamagic"/>
+          <column name="feature_label_1" value="Metamagic"/>
+          <column name="option_value" value="Extended Spell;Heightened Spell"/>
+          <column name="source_material" value="SRD"/>
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_character_altering_class_feature_option">
+           <column name="id" value="68"/>
+           <column name="feature_id" value="17"/>
+           <column name="feature_order_by" value="2"/>
+          <column name="class" value="Sorcerer"/>
+          <column name="class_order_by" value="21"/>
+          <column name="option_order_by" value="20"/>
+          <column name="feature_string" value="Metamagic"/>
+          <column name="feature_label_1" value="Metamagic"/>
+          <column name="option_value" value="Extended Spell;Quickened Spell"/>
+          <column name="source_material" value="SRD"/>
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_character_altering_class_feature_option">
+           <column name="id" value="69"/>
+           <column name="feature_id" value="17"/>
+           <column name="feature_order_by" value="2"/>
+          <column name="class" value="Sorcerer"/>
+          <column name="class_order_by" value="22"/>
+          <column name="option_order_by" value="21"/>
+          <column name="feature_string" value="Metamagic"/>
+          <column name="feature_label_1" value="Metamagic"/>
+          <column name="option_value" value="Extended Spell;Subtle Spell"/>
+          <column name="source_material" value="SRD"/>
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_character_altering_class_feature_option">
+           <column name="id" value="70"/>
+           <column name="feature_id" value="17"/>
+           <column name="feature_order_by" value="2"/>
+          <column name="class" value="Sorcerer"/>
+          <column name="class_order_by" value="23"/>
+          <column name="option_order_by" value="22"/>
+          <column name="feature_string" value="Metamagic"/>
+          <column name="feature_label_1" value="Metamagic"/>
+          <column name="option_value" value="Extended Spell;Twinned Spell"/>
+          <column name="source_material" value="SRD"/>
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_character_altering_class_feature_option">
+           <column name="id" value="71"/>
+           <column name="feature_id" value="17"/>
+           <column name="feature_order_by" value="2"/>
+          <column name="class" value="Sorcerer"/>
+          <column name="class_order_by" value="24"/>
+          <column name="option_order_by" value="23"/>
+          <column name="feature_string" value="Metamagic"/>
+          <column name="feature_label_1" value="Metamagic"/>
+          <column name="option_value" value="Heightened Spell;Quickened Spell"/>
+          <column name="source_material" value="SRD"/>
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_character_altering_class_feature_option">
+           <column name="id" value="72"/>
+           <column name="feature_id" value="17"/>
+           <column name="feature_order_by" value="2"/>
+          <column name="class" value="Sorcerer"/>
+          <column name="class_order_by" value="25"/>
+          <column name="option_order_by" value="24"/>
+          <column name="feature_string" value="Metamagic"/>
+          <column name="feature_label_1" value="Metamagic"/>
+          <column name="option_value" value="Heightened Spell;Subtle Spell"/>
+          <column name="source_material" value="SRD"/>
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_character_altering_class_feature_option">
+           <column name="id" value="73"/>
+           <column name="feature_id" value="17"/>
+           <column name="feature_order_by" value="2"/>
+          <column name="class" value="Sorcerer"/>
+          <column name="class_order_by" value="26"/>
+          <column name="option_order_by" value="25"/>
+          <column name="feature_string" value="Metamagic"/>
+          <column name="feature_label_1" value="Metamagic"/>
+          <column name="option_value" value="Heightened Spell;Twinned Spell"/>
+          <column name="source_material" value="SRD"/>
+        </insert>
+ 
+        <insert schemaName="dnd_5e" tableName="lu_character_altering_class_feature_option">
+           <column name="id" value="74"/>
+           <column name="feature_id" value="17"/>
+           <column name="feature_order_by" value="2"/>
+          <column name="class" value="Sorcerer"/>
+          <column name="class_order_by" value="27"/>
+          <column name="option_order_by" value="26"/>
+          <column name="feature_string" value="Metamagic"/>
+          <column name="feature_label_1" value="Metamagic"/>
+          <column name="option_value" value="Quickened Spell;Subtle Spell"/>
+          <column name="source_material" value="SRD"/>
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_character_altering_class_feature_option">
+           <column name="id" value="75"/>
+           <column name="feature_id" value="17"/>
+           <column name="feature_order_by" value="2"/>
+          <column name="class" value="Sorcerer"/>
+          <column name="class_order_by" value="28"/>
+          <column name="option_order_by" value="27"/>
+          <column name="feature_string" value="Metamagic"/>
+          <column name="feature_label_1" value="Metamagic"/>
+          <column name="option_value" value="Quickened Spell;Twinned Spell"/>
+          <column name="source_material" value="SRD"/>
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_character_altering_class_feature_option">
+           <column name="id" value="76"/>
+           <column name="feature_id" value="17"/>
+           <column name="feature_order_by" value="2"/>
+          <column name="class" value="Sorcerer"/>
+          <column name="class_order_by" value="29"/>
+          <column name="option_order_by" value="28"/>
+          <column name="feature_string" value="Metamagic"/>
+          <column name="feature_label_1" value="Metamagic"/>
+          <column name="option_value" value="Subtle Spell;Twinned Spell"/>
+          <column name="source_material" value="SRD"/>
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_character_altering_class_feature_option">
+           <column name="id" value="77"/>
+           <column name="feature_id" value="18"/>
+           <column name="feature_order_by" value="1"/>
+          <column name="class" value="Warlock"/>
+          <column name="class_order_by" value="1"/>
+          <column name="option_order_by" value="1"/>
+          <column name="feature_string" value="Otherworldly Patron"/>
+          <column name="feature_label_1" value="Otherworldly Patron"/>
+          <column name="option_value" value="The Fiend"/>
+          <column name="source_material" value="SRD"/>
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_character_altering_class_feature_option">
+           <column name="id" value="78"/>
+           <column name="feature_id" value="19"/>
+           <column name="feature_order_by" value="2"/>
+          <column name="class" value="Warlock"/>
+          <column name="class_order_by" value="2"/>
+          <column name="option_order_by" value="1"/>
+          <column name="feature_string" value="Otherworldly Patron/Pact Boon"/>
+          <column name="feature_label_1" value="Otherworldly Patron"/>
+          <column name="feature_label_2" value="Pact Boon"/>
+          <column name="option_value" value="Pact of the Chain"/>
+          <column name="source_material" value="SRD"/>
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_character_altering_class_feature_option">
+           <column name="id" value="79"/>
+           <column name="feature_id" value="19"/>
+           <column name="feature_order_by" value="2"/>
+          <column name="class" value="Warlock"/>
+          <column name="class_order_by" value="3"/>
+          <column name="option_order_by" value="2"/>
+          <column name="feature_string" value="Otherworldly Patron/Pact Boon"/>
+          <column name="feature_label_1" value="Otherworldly Patron"/>
+          <column name="feature_label_2" value="Pact Boon"/>
+          <column name="option_value" value="Pact of the Blade"/>
+          <column name="source_material" value="SRD"/>
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_character_altering_class_feature_option">
+           <column name="id" value="80"/>
+           <column name="feature_id" value="19"/>
+           <column name="feature_order_by" value="2"/>
+          <column name="class" value="Warlock"/>
+          <column name="class_order_by" value="4"/>
+          <column name="option_order_by" value="3"/>
+          <column name="feature_string" value="Otherworldly Patron/Pact Boon"/>
+          <column name="feature_label_1" value="Otherworldly Patron"/>
+          <column name="feature_label_2" value="Pact Boon"/>
+          <column name="option_value" value="Pact of the Tome"/>
+          <column name="source_material" value="SRD"/>
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_character_altering_class_feature_option">
+           <column name="id" value="81"/>
+           <column name="feature_id" value="20"/>
+           <column name="feature_order_by" value="1"/>
+          <column name="class" value="Wizard"/>
+          <column name="class_order_by" value="1"/>
+          <column name="option_order_by" value="1"/>
+          <column name="feature_string" value="Arcane Tradition"/>
+          <column name="feature_label_1" value="Arcane Tradition"/>
+          <column name="option_value" value="School of Evocation"/>
+          <column name="source_material" value="SRD"/>
+        </insert>
+
+
+    </changeSet>
+</databaseChangeLog>

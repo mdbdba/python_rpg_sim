@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+
+
+    <changeSet author="mdbdba" id="v_character_altering_class_feature_combination_1">
+            <createView
+            replaceIfExists="true"
+            schemaName="dnd_5e"
+            viewName="v_character_altering_class_feature_combination">select a.class, a.feature_string as feature_1,  a.option_value as option_1,
+                b.feature_string as feature_2,  b.option_value as option_2,
+                c.feature_string as feature_3,  c.option_value as option_3,
+                d.feature_string as feature_4,  d.option_value as option_4,
+                e.feature_string as feature_5,  e.option_value as option_5,
+                f.feature_string as feature_6,  f.option_value as option_6
+from lu_character_altering_class_feature_option a
+left join lu_character_altering_class_feature_option b on a.class = b.class
+    and b.feature_order_by = 2
+left join lu_character_altering_class_feature_option c on a.class = c.class
+    and c.feature_order_by = 3
+left join lu_character_altering_class_feature_option d on a.class = d.class
+    and d.feature_order_by = 4
+left join lu_character_altering_class_feature_option e on a.class = e.class
+    and e.feature_order_by = 5
+left join lu_character_altering_class_feature_option f on a.class = f.class
+    and f.feature_order_by = 6
+where a.feature_order_by = 1
+order by class</createView>
+
+    </changeSet>
+
+
+
+
+</databaseChangeLog>
