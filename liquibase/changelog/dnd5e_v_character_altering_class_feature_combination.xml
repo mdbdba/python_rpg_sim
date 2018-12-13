@@ -7,12 +7,12 @@
             <createView
             replaceIfExists="true"
             schemaName="dnd_5e"
-            viewName="v_character_altering_class_feature_combination">select a.class, a.feature_string as feature_1,  a.option_value as option_1,
-                b.feature_string as feature_2,  b.option_value as option_2,
-                c.feature_string as feature_3,  c.option_value as option_3,
-                d.feature_string as feature_4,  d.option_value as option_4,
-                e.feature_string as feature_5,  e.option_value as option_5,
-                f.feature_string as feature_6,  f.option_value as option_6
+            viewName="v_character_altering_class_feature_combination">select a.class, a.feature_string as feature_1,  a.option_value as option_1, a.source_material as source_material_1,
+                b.feature_string as feature_2,  b.option_value as option_2, b.source_material as source_material_2,
+                c.feature_string as feature_3,  c.option_value as option_3, c.source_material as source_material_3,
+                d.feature_string as feature_4,  d.option_value as option_4, d.source_material as source_material_4,
+                e.feature_string as feature_5,  e.option_value as option_5, e.source_material as source_material_5,
+                f.feature_string as feature_6,  f.option_value as option_6, f.source_material as source_material_6
 from lu_character_altering_class_feature_option a
 left join lu_character_altering_class_feature_option b on a.class = b.class
     and b.feature_order_by = 2
@@ -28,7 +28,22 @@ where a.feature_order_by = 1
 order by class</createView>
 
     </changeSet>
+    <changeSet author="mdbdba" id="v_character_altering_class_feature_combination_2">
+            <createView
+            replaceIfExists="true"
+            schemaName="dnd_5e"
+            viewName="v_character_altering_class_feature_racial_combination">with r1 as (select race, source_material as race_source_material from lu_race)
+select r1.race, r1.race_source_material, c.class, c.feature_1,  c.option_1, c.source_material_1,
+                         c.feature_2,  c.option_2, c.source_material_2,
+                         c.feature_3,  c.option_3, c.source_material_3,
+                         c.feature_4,  c.option_4, c.source_material_4,
+                         c.feature_5,  c.option_5, c.source_material_5,
+                         c.feature_6,  c.option_6, c.source_material_6
+from v_character_altering_class_feature_combination c
+cross join r1
+order by r1.race, c.class</createView>
 
+    </changeSet>
 
 
 
