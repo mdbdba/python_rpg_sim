@@ -20,7 +20,10 @@ def getRandomClassName(db):
 
 
 class PlayerCharacterClass(object):
-    def __init__(self, db, classCandidate="Random"):
+    def __init__(self,
+                 db,
+                 classCandidate="Random",
+                 characterAlteringClassOptions=None):
         self.name = ""
         self.subclass_of = ""
         # Strength = 0
@@ -43,6 +46,8 @@ class PlayerCharacterClass(object):
         self.ranged_ammunition_amt = 0
         self.armor = None
         self.shield = None
+        self.CACF_option_candidate_array = characterAlteringClassOptions
+        self.CACF_option_array = []
 
         if classCandidate == "Random":
             classCandidate = getRandomClassName(db)
@@ -51,6 +56,8 @@ class PlayerCharacterClass(object):
             self.populateDetails(classCandidate, db)
         else:
             raise Exception(f'Could not find class: {classCandidate}')
+
+        self.setCharacterAlteringClassFeatures(db)
 
     def setArmorWeapons(self):
         pass
@@ -101,15 +108,52 @@ class PlayerCharacterClass(object):
     def getClass(self):
         return self.name
 
+    def setCharacterAlteringClassFeatures(self, db):
+        """ If an array of dictionaries was not passed as the
+            characterAlteringClassOptions arg, randomly select the
+            options for the character. """
+
+        if self.CACF_option_candidate_array is None:
+            sql = (f"with tb as (select feature_id, class, class_order_by, "
+                   f"feature_order_by, option_order_by, feature_string, "
+                   f"option_value, row_number() over ( "
+                   f"partition by feature_string "
+                   f"order by random() ) as random_feature "
+                   f"from lu_character_altering_class_feature_option "
+                   f"where class = '{self.name}' ) "
+                   f"select feature_id, class, class_order_by, "
+                   f"feature_order_by, option_order_by, "
+                   f"feature_string, option_value "
+                   f"from tb where random_feature = 1 "
+                   f"order by feature_order_by")
+            results = db.query(sql)
+            ret_array = []
+            if results is not None:
+                for p in range(len(results)):
+                    if results[p] is not None:
+                        tmpDict = {
+                            "class": results[p][1],
+                            "feature_order_by": results[p][3],
+                            "feature_string": results[p][5],
+                            "option_value": results[p][6]
+                        }
+                        ret_array.append(tmpDict)
+            self.CACF_option_array = ret_array
+        else:
+            self.CACF_option_array = self.CACF_option_candidate_array
+
+    def getCharacterAlteringClassFeatures(self):
+        return self.CACF_option_array
+
     def getClassLevelFeature(self, level, db):
         sql = (f"SELECT class, level, feature, label_1, value_1, "
                f"label_2, value_2, label_3, value_3, label_4, value_4 "
                f"from dnd_5e.lu_class_level_feature "
                f"where class = '{self.name}' "
                f"and (( level <= {level} "
-               f"  and feature not in ('proficiency_bonus', 'Spellcasting')) "
-               f"  or (level = {level} "
-               f"    and feature in ('proficiency_bonus', 'Spellcasting')))"
+               f"  and feature not in ('proficiency_bonus', "
+               f"'Spellcasting')) or (level = {level} "
+               f"and feature in ('proficiency_bonus', 'Spellcasting'))) "
                f"order by level desc, feature;")
 
         return db.query(sql)
@@ -117,10 +161,8 @@ class PlayerCharacterClass(object):
     def __str__(self):
         outstr = (f'\nObject: {self.__class__.__name__}('
                   f'\n   class:                      {self.name},'
-                  f'\n   archetype_label:            {self.archetype_label}'
-                  f'\n   hit_die:                    {self.hit_die}'
-                  f'\n   ability_sort_array:         '
-                  f'{self.ability_sort_array}'
+                  f'\n   archetype_label:            {self.archetype_label},'
+                  f'\n   hit_die:                    {self.hit_die},'
                   f'\n   source_material:            '
                   f'{self.source_material}')
         if self.source_credit_url:
@@ -133,46 +175,22 @@ class PlayerCharacterClass(object):
             outstr = (f'{outstr},\n   Melee Weapon:               '
                       f'{self.melee_weapon}')
         if self.ranged_weapon is not None:
-            outstr = (f'{outstr},\n   Ranged Weapon:               '
+            outstr = (f'{outstr},\n   Ranged Weapon:              '
                       f'{self.ranged_weapon}')
         if self.ranged_ammunition_amt is not None:
-            outstr = (f'{outstr},\n   Ranged Ammo:                 '
+            outstr = (f'{outstr},\n   Ranged Ammo:                '
                       f'{self.ranged_ammunition_amt}')
 
         if self.ability_sort_array is not None:
             outstr = (f'{outstr},\n   ability_sort_array:         [')
             for p in range(len(self.ability_sort_array)):
-                outstr = (f'{outstr}{self.ability_sort_array[p]},')
+                outstr = (f'{outstr}{self.ability_sort_array[p]}, ')
 
-            outstr = (f'{outstr}],\n   ability_sort_str_array     [')
+            outstr = (f'{outstr[:-2]}],\n   ability_sort_str_array      [')
             for p in range(len(self.ability_sort_str_array)):
-                outstr = (f'{outstr}{self.ability_sort_str_array[p]},')
-            outstr = (f'{outstr}]')
+                outstr = (f'{outstr}{self.ability_sort_str_array[p]}, ')
+            outstr = (f'{outstr[:-2]}]')
 
         outstr = (f'{outstr}\n)\n')
         return outstr
-
-
-class BarbarianClass(PlayerCharacterClass):
-    def __init__(self, db):
-        PlayerCharacterClass.__init__(self, db, "Barbarian")
-        self.archetype_label = "Primal Path"
-        self.ranged_weapon = "Javelin"
-        self.melee_weapon = "Greataxe"
-        self.ranged_ammunition_type = "Javelin"
-        self.ranged_ammunition_amt = 4
-        self.armor = None
-        self.shield = None
-
-
-class BardClass(PlayerCharacterClass):
-    def __init__(self, db):
-        PlayerCharacterClass.__init__(self, db, "Bard")
-        self.archetype_label = "Bard College"
-        self.ranged_weapon = "Dagger"
-        self.melee_weapon = "Rapier"
-        self.ranged_ammunition_type = "Dagger"
-        self.ranged_ammunition_amt = 1
-        self.armor = "Leather"
-        self.shield = None
 

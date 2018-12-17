@@ -34,5 +34,22 @@
 
 
     </changeSet>
+    <changeSet author="mdbdba" id="lu_class_2">
+        <insert schemaName="dnd_5e" tableName="lu_class">
+           <column name="class" value="Cleric"/> 
+           <column name="hit_die" value="8"/> 
+           <column name="ability_pref_str" value="4,2,0,1,5,3"/> 
+           <column name="source_material" value="SRD5"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class">
+           <column name="class" value="Druid"/> 
+           <column name="hit_die" value="8"/> 
+           <column name="ability_pref_str" value="4,2,1,3,5,0"/> 
+           <column name="source_material" value="SRD5"/> 
+        </insert>
+
+
+
+    </changeSet>
 
 </databaseChangeLog>
