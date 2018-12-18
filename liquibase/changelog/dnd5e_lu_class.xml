@@ -48,8 +48,28 @@
            <column name="source_material" value="SRD5"/> 
         </insert>
 
-
+    </changeSet>
+    <changeSet author="mdbdba" id="lu_class_3">
+        <insert schemaName="dnd_5e" tableName="lu_class">
+           <column name="class" value="Fighter"/> 
+           <column name="hit_die" value="10"/> 
+           <column name="ability_pref_str" value="0,2,1,5,4,3"/> 
+           <column name="source_material" value="SRD5"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class">
+           <column name="class" value="Monk"/> 
+           <column name="hit_die" value="8"/> 
+           <column name="ability_pref_str" value="1,4,2,0,3,5"/> 
+           <column name="source_material" value="SRD5"/> 
+        </insert>
 
     </changeSet>
-
+    <changeSet author="mdbdba" id="lu_class_4">
+        <insert schemaName="dnd_5e" tableName="lu_class">
+           <column name="class" value="Paladin"/> 
+           <column name="hit_die" value="10"/> 
+           <column name="ability_pref_str" value="0,5,2,4,1,3"/> 
+           <column name="source_material" value="SRD5"/> 
+        </insert>
+    </changeSet>
 </databaseChangeLog>

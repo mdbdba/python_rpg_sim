@@ -1,9 +1,9 @@
 from InvokePSQL import InvokePSQL
 # from PlayerCharacterClass import PlayerCharacterClass
-from DruidPCClass import DruidPCClass
+from PaladinPCClass import PaladinPCClass
 
 db = InvokePSQL()
 
-a = DruidPCClass(db)
+a = PaladinPCClass(db)
 print(a)
 print(a.getCharacterAlteringClassFeatures())
