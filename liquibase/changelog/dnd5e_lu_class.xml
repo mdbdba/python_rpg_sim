@@ -72,4 +72,12 @@
            <column name="source_material" value="SRD5"/> 
         </insert>
     </changeSet>
+    <changeSet author="mdbdba" id="lu_class_5">
+        <insert schemaName="dnd_5e" tableName="lu_class">
+           <column name="class" value="Ranger"/> 
+           <column name="hit_die" value="10"/> 
+           <column name="ability_pref_str" value="1,4,2,0,3,5"/> 
+           <column name="source_material" value="SRD5"/> 
+        </insert>
+    </changeSet>
 </databaseChangeLog>
