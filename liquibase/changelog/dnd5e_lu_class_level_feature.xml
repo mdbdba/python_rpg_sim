@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
     
-    <changeSet author="mdbdba" id="50">
+    <changeSet author="mdbdba" id="lu_class_level_feature_1">
         <createTable 
                 schemaName="dnd_5e"
                 tableName="lu_class_level_feature">
@@ -16,6 +16,10 @@
             <column name="value_3" type="varchar(64)"/>
             <column name="label_4" type="varchar(64)"/>
             <column name="value_4" type="varchar(64)"/>
+            <column name="label_5" type="varchar(64)"/>
+            <column name="value_5" type="varchar(64)"/>
+            <column name="label_6" type="varchar(64)"/>
+            <column name="value_6" type="varchar(64)"/>
         </createTable>
 
         <addPrimaryKey 
@@ -1332,13 +1336,6 @@
         <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
            <column name="class" value="Cleric"/> 
            <column name="level" value="15"/> 
-           <column name="feature" value="Clericic Inspiration"/> 
-           <column name="label_1" value="Die to Use"/> 
-           <column name="value_1" value="12"/> 
-        </insert>
-        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
-           <column name="class" value="Cleric"/> 
-           <column name="level" value="15"/> 
            <column name="feature" value="Spellcasting"/> 
            <column name="label_1" value="Spell Slots"/> 
            <column name="value_1" value="4,3,3,3,2,1,1,1,0"/> 
@@ -2189,7 +2186,7 @@
            <column name="feature" value="Martial Arts"/> 
            <column name="label_1" value="Modifier"/> 
            <column name="value_1" value="1"/> 
-           <column name="label_2" value="Die"/> 
+           <column name="label_2" value="Die to Use"/> 
            <column name="value_2" value="4"/> 
         </insert>
         <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
@@ -2216,7 +2213,7 @@
            <column name="feature" value="Martial Arts"/> 
            <column name="label_1" value="Modifier"/> 
            <column name="value_1" value="1"/> 
-           <column name="label_2" value="Die"/> 
+           <column name="label_2" value="Die to Use"/> 
            <column name="value_2" value="4"/> 
         </insert>
         <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
@@ -2257,7 +2254,7 @@
            <column name="feature" value="Martial Arts"/> 
            <column name="label_1" value="Modifier"/> 
            <column name="value_1" value="1"/> 
-           <column name="label_2" value="Die"/> 
+           <column name="label_2" value="Die to Use"/> 
            <column name="value_2" value="4"/> 
         </insert>
         <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
@@ -2298,7 +2295,7 @@
            <column name="feature" value="Martial Arts"/> 
            <column name="label_1" value="Modifier"/> 
            <column name="value_1" value="1"/> 
-           <column name="label_2" value="Die"/> 
+           <column name="label_2" value="Die to Use"/> 
            <column name="value_2" value="4"/> 
         </insert>
         <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
@@ -2339,7 +2336,7 @@
            <column name="feature" value="Martial Arts"/> 
            <column name="label_1" value="Modifier"/> 
            <column name="value_1" value="1"/> 
-           <column name="label_2" value="Die"/> 
+           <column name="label_2" value="Die to Use"/> 
            <column name="value_2" value="6"/> 
         </insert>
         <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
@@ -2380,7 +2377,7 @@
            <column name="feature" value="Martial Arts"/> 
            <column name="label_1" value="Modifier"/> 
            <column name="value_1" value="1"/> 
-           <column name="label_2" value="Die"/> 
+           <column name="label_2" value="Die to Use"/> 
            <column name="value_2" value="6"/> 
         </insert>
         <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
@@ -2421,7 +2418,7 @@
            <column name="feature" value="Martial Arts"/> 
            <column name="label_1" value="Modifier"/> 
            <column name="value_1" value="1"/> 
-           <column name="label_2" value="Die"/> 
+           <column name="label_2" value="Die to Use"/> 
            <column name="value_2" value="6"/> 
         </insert>
         <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
@@ -2462,7 +2459,7 @@
            <column name="feature" value="Martial Arts"/> 
            <column name="label_1" value="Modifier"/> 
            <column name="value_1" value="1"/> 
-           <column name="label_2" value="Die"/> 
+           <column name="label_2" value="Die to Use"/> 
            <column name="value_2" value="6"/> 
         </insert>
         <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
@@ -2499,7 +2496,7 @@
            <column name="feature" value="Martial Arts"/> 
            <column name="label_1" value="Modifier"/> 
            <column name="value_1" value="1"/> 
-           <column name="label_2" value="Die"/> 
+           <column name="label_2" value="Die to Use"/> 
            <column name="value_2" value="6"/> 
         </insert>
         <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
@@ -2537,7 +2534,7 @@
            <column name="feature" value="Martial Arts"/> 
            <column name="label_1" value="Modifier"/> 
            <column name="value_1" value="1"/> 
-           <column name="label_2" value="Die"/> 
+           <column name="label_2" value="Die to Use"/> 
            <column name="value_2" value="6"/> 
         </insert>
         <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
@@ -2573,7 +2570,7 @@
            <column name="feature" value="Martial Arts"/> 
            <column name="label_1" value="Modifier"/> 
            <column name="value_1" value="1"/> 
-           <column name="label_2" value="Die"/> 
+           <column name="label_2" value="Die to Use"/> 
            <column name="value_2" value="8"/> 
         </insert>
         <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
@@ -2610,7 +2607,7 @@
            <column name="feature" value="Martial Arts"/> 
            <column name="label_1" value="Modifier"/> 
            <column name="value_1" value="1"/> 
-           <column name="label_2" value="Die"/> 
+           <column name="label_2" value="Die to Use"/> 
            <column name="value_2" value="8"/> 
         </insert>
         <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
@@ -2646,7 +2643,7 @@
            <column name="feature" value="Martial Arts"/> 
            <column name="label_1" value="Modifier"/> 
            <column name="value_1" value="1"/> 
-           <column name="label_2" value="Die"/> 
+           <column name="label_2" value="Die to Use"/> 
            <column name="value_2" value="8"/> 
         </insert>
         <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
@@ -2683,7 +2680,7 @@
            <column name="feature" value="Martial Arts"/> 
            <column name="label_1" value="Modifier"/> 
            <column name="value_1" value="1"/> 
-           <column name="label_2" value="Die"/> 
+           <column name="label_2" value="Die to Use"/> 
            <column name="value_2" value="8"/> 
         </insert>
         <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
@@ -2719,7 +2716,7 @@
            <column name="feature" value="Martial Arts"/> 
            <column name="label_1" value="Modifier"/> 
            <column name="value_1" value="1"/> 
-           <column name="label_2" value="Die"/> 
+           <column name="label_2" value="Die to Use"/> 
            <column name="value_2" value="8"/> 
         </insert>
         <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
@@ -2755,7 +2752,7 @@
            <column name="feature" value="Martial Arts"/> 
            <column name="label_1" value="Modifier"/> 
            <column name="value_1" value="1"/> 
-           <column name="label_2" value="Die"/> 
+           <column name="label_2" value="Die to Use"/> 
            <column name="value_2" value="8"/> 
         </insert>
         <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
@@ -2792,7 +2789,7 @@
            <column name="feature" value="Martial Arts"/> 
            <column name="label_1" value="Modifier"/> 
            <column name="value_1" value="1"/> 
-           <column name="label_2" value="Die"/> 
+           <column name="label_2" value="Die to Use"/> 
            <column name="value_2" value="10"/> 
         </insert>
         <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
@@ -2829,7 +2826,7 @@
            <column name="feature" value="Martial Arts"/> 
            <column name="label_1" value="Modifier"/> 
            <column name="value_1" value="1"/> 
-           <column name="label_2" value="Die"/> 
+           <column name="label_2" value="Die to Use"/> 
            <column name="value_2" value="10"/> 
         </insert>
         <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
@@ -2865,7 +2862,7 @@
            <column name="feature" value="Martial Arts"/> 
            <column name="label_1" value="Modifier"/> 
            <column name="value_1" value="1"/> 
-           <column name="label_2" value="Die"/> 
+           <column name="label_2" value="Die to Use"/> 
            <column name="value_2" value="10"/> 
         </insert>
         <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
@@ -2900,7 +2897,7 @@
            <column name="feature" value="Martial Arts"/> 
            <column name="label_1" value="Modifier"/> 
            <column name="value_1" value="1"/> 
-           <column name="label_2" value="Die"/> 
+           <column name="label_2" value="Die to Use"/> 
            <column name="value_2" value="10"/> 
         </insert>
         <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
@@ -3235,7 +3232,7 @@
         </insert>
         <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
            <column name="class" value="Paladin"/> 
-           <column name="level" value="3"/> 
+           <column name="level" value="16"/> 
            <column name="feature" value="Ability Score Improvement"/> 
         </insert>
         <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
@@ -3674,7 +3671,7 @@
         </insert>
         <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
            <column name="class" value="Ranger"/> 
-           <column name="level" value="3"/> 
+           <column name="level" value="16"/> 
            <column name="feature" value="Ability Score Improvement"/> 
         </insert>
         <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
@@ -3764,6 +3761,2008 @@
            <column name="value_1" value="4,3,3,3,2,0,0,0,0"/> 
            <column name="label_2" value="Spells Known"/> 
            <column name="value_2" value="11"/> 
+        </insert>
+
+    </changeSet>
+    <changeSet author="mdbdba" id="lu_class_level_feature_6">
+
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Rogue"/> 
+           <column name="level" value="1"/> 
+           <column name="feature" value="proficiency_bonus"/> 
+           <column name="label_1" value="Proficiency Bonus Value"/> 
+           <column name="value_1" value="2"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Rogue"/> 
+           <column name="level" value="1"/> 
+           <column name="feature" value="Expertise"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Rogue"/> 
+           <column name="level" value="1"/> 
+           <column name="feature" value="Sneak Attack feature"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Rogue"/> 
+           <column name="level" value="1"/> 
+           <column name="feature" value="Thieves' Cant"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Rogue"/> 
+           <column name="level" value="1"/> 
+           <column name="feature" value="Sneak Attack"/>
+           <column name="label_1" value="Modifier"/> 
+           <column name="value_1" value="1"/> 
+           <column name="label_2" value="Die to Use"/> 
+           <column name="value_2" value="6"/> 
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Rogue"/> 
+           <column name="level" value="2"/> 
+           <column name="feature" value="proficiency_bonus"/> 
+           <column name="label_1" value="Proficiency Bonus Value"/> 
+           <column name="value_1" value="2"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Rogue"/> 
+           <column name="level" value="2"/> 
+           <column name="feature" value="Cunning Action"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Rogue"/> 
+           <column name="level" value="2"/> 
+           <column name="feature" value="Sneak Attack"/>
+           <column name="label_1" value="Modifier"/> 
+           <column name="value_1" value="1"/> 
+           <column name="label_2" value="Die to Use"/> 
+           <column name="value_2" value="6"/> 
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Rogue"/> 
+           <column name="level" value="3"/> 
+           <column name="feature" value="proficiency_bonus"/> 
+           <column name="label_1" value="Proficiency Bonus Value"/> 
+           <column name="value_1" value="2"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Rogue"/> 
+           <column name="level" value="3"/> 
+           <column name="feature" value="Roguish Archetype"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Rogue"/> 
+           <column name="level" value="3"/> 
+           <column name="feature" value="Sneak Attack"/>
+           <column name="label_1" value="Modifier"/> 
+           <column name="value_1" value="2"/> 
+           <column name="label_2" value="Die to Use"/> 
+           <column name="value_2" value="6"/> 
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Rogue"/> 
+           <column name="level" value="4"/> 
+           <column name="feature" value="proficiency_bonus"/> 
+           <column name="label_1" value="Proficiency Bonus Value"/> 
+           <column name="value_1" value="2"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Rogue"/> 
+           <column name="level" value="4"/> 
+           <column name="feature" value="Ability Score Improvement"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Rogue"/> 
+           <column name="level" value="4"/> 
+           <column name="feature" value="Sneak Attack"/>
+           <column name="label_1" value="Modifier"/> 
+           <column name="value_1" value="2"/> 
+           <column name="label_2" value="Die to Use"/> 
+           <column name="value_2" value="6"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Rogue"/> 
+           <column name="level" value="5"/> 
+           <column name="feature" value="proficiency_bonus"/> 
+           <column name="label_1" value="Proficiency Bonus Value"/> 
+           <column name="value_1" value="3"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Rogue"/> 
+           <column name="level" value="5"/> 
+           <column name="feature" value="Uncanny Dodge"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Rogue"/> 
+           <column name="level" value="5"/> 
+           <column name="feature" value="Sneak Attack"/>
+           <column name="label_1" value="Modifier"/> 
+           <column name="value_1" value="3"/> 
+           <column name="label_2" value="Die to Use"/> 
+           <column name="value_2" value="6"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Rogue"/> 
+           <column name="level" value="6"/> 
+           <column name="feature" value="proficiency_bonus"/> 
+           <column name="label_1" value="Proficiency Bonus Value"/> 
+           <column name="value_1" value="3"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Rogue"/> 
+           <column name="level" value="6"/> 
+           <column name="feature" value="Expertise"/> 
+        </insert> 
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Rogue"/> 
+           <column name="level" value="6"/> 
+           <column name="feature" value="Sneak Attack"/>
+           <column name="label_1" value="Modifier"/> 
+           <column name="value_1" value="3"/> 
+           <column name="label_2" value="Die to Use"/> 
+           <column name="value_2" value="6"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Rogue"/> 
+           <column name="level" value="7"/> 
+           <column name="feature" value="proficiency_bonus"/> 
+           <column name="label_1" value="Proficiency Bonus Value"/> 
+           <column name="value_1" value="3"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Rogue"/> 
+           <column name="level" value="7"/> 
+           <column name="feature" value="Evasion"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Rogue"/> 
+           <column name="level" value="7"/> 
+           <column name="feature" value="Sneak Attack"/>
+           <column name="label_1" value="Modifier"/> 
+           <column name="value_1" value="4"/> 
+           <column name="label_2" value="Die to Use"/> 
+           <column name="value_2" value="6"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Rogue"/> 
+           <column name="level" value="8"/> 
+           <column name="feature" value="proficiency_bonus"/> 
+           <column name="label_1" value="Proficiency Bonus Value"/> 
+           <column name="value_1" value="3"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Rogue"/> 
+           <column name="level" value="8"/> 
+           <column name="feature" value="Ability Score Improvement"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Rogue"/> 
+           <column name="level" value="8"/> 
+           <column name="feature" value="Sneak Attack"/>
+           <column name="label_1" value="Modifier"/> 
+           <column name="value_1" value="4"/> 
+           <column name="label_2" value="Die to Use"/> 
+           <column name="value_2" value="6"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Rogue"/> 
+           <column name="level" value="9"/> 
+           <column name="feature" value="proficiency_bonus"/> 
+           <column name="label_1" value="Proficiency Bonus Value"/> 
+           <column name="value_1" value="4"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Rogue"/> 
+           <column name="level" value="9"/> 
+           <column name="feature" value="Roguish Archetype feature"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Rogue"/> 
+           <column name="level" value="9"/> 
+           <column name="feature" value="Sneak Attack"/>
+           <column name="label_1" value="Modifier"/> 
+           <column name="value_1" value="5"/> 
+           <column name="label_2" value="Die to Use"/> 
+           <column name="value_2" value="6"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Rogue"/> 
+           <column name="level" value="10"/> 
+           <column name="feature" value="proficiency_bonus"/> 
+           <column name="label_1" value="Proficiency Bonus Value"/> 
+           <column name="value_1" value="4"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Rogue"/> 
+           <column name="level" value="10"/> 
+           <column name="feature" value="Ability Score Improvement"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Rogue"/> 
+           <column name="level" value="10"/> 
+           <column name="feature" value="Sneak Attack"/>
+           <column name="label_1" value="Modifier"/> 
+           <column name="value_1" value="5"/> 
+           <column name="label_2" value="Die to Use"/> 
+           <column name="value_2" value="6"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Rogue"/> 
+           <column name="level" value="11"/> 
+           <column name="feature" value="proficiency_bonus"/> 
+           <column name="label_1" value="Proficiency Bonus Value"/> 
+           <column name="value_1" value="4"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Rogue"/> 
+           <column name="level" value="11"/> 
+           <column name="feature" value="Reliable Talent"/> 
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Rogue"/> 
+           <column name="level" value="11"/> 
+           <column name="feature" value="Sneak Attack"/>
+           <column name="label_1" value="Modifier"/> 
+           <column name="value_1" value="6"/> 
+           <column name="label_2" value="Die to Use"/> 
+           <column name="value_2" value="6"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Rogue"/> 
+           <column name="level" value="12"/> 
+           <column name="feature" value="proficiency_bonus"/> 
+           <column name="label_1" value="Proficiency Bonus Value"/> 
+           <column name="value_1" value="4"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Rogue"/> 
+           <column name="level" value="12"/> 
+           <column name="feature" value="Ability Score Improvement"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Rogue"/> 
+           <column name="level" value="12"/> 
+           <column name="feature" value="Sneak Attack"/>
+           <column name="label_1" value="Modifier"/> 
+           <column name="value_1" value="6"/> 
+           <column name="label_2" value="Die to Use"/> 
+           <column name="value_2" value="6"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Rogue"/> 
+           <column name="level" value="13"/> 
+           <column name="feature" value="proficiency_bonus"/> 
+           <column name="label_1" value="Proficiency Bonus Value"/> 
+           <column name="value_1" value="5"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Rogue"/> 
+           <column name="level" value="13"/> 
+           <column name="feature" value="Roguish Archetype feature"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Rogue"/> 
+           <column name="level" value="13"/> 
+           <column name="feature" value="Sneak Attack"/>
+           <column name="label_1" value="Modifier"/> 
+           <column name="value_1" value="7"/> 
+           <column name="label_2" value="Die to Use"/> 
+           <column name="value_2" value="6"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Rogue"/> 
+           <column name="level" value="14"/> 
+           <column name="feature" value="proficiency_bonus"/> 
+           <column name="label_1" value="Proficiency Bonus Value"/> 
+           <column name="value_1" value="5"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Rogue"/> 
+           <column name="level" value="14"/> 
+           <column name="feature" value="Blindsense"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Rogue"/> 
+           <column name="level" value="14"/> 
+           <column name="feature" value="Vanish"/> 
+        </insert>
+
+
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Rogue"/> 
+           <column name="level" value="14"/> 
+           <column name="feature" value="Sneak Attack"/>
+           <column name="label_1" value="Modifier"/> 
+           <column name="value_1" value="7"/> 
+           <column name="label_2" value="Die to Use"/> 
+           <column name="value_2" value="6"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Rogue"/> 
+           <column name="level" value="15"/> 
+           <column name="feature" value="proficiency_bonus"/> 
+           <column name="label_1" value="Proficiency Bonus Value"/> 
+           <column name="value_1" value="5"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Rogue"/> 
+           <column name="level" value="15"/> 
+           <column name="feature" value="Slippery Mind"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Rogue"/> 
+           <column name="level" value="15"/> 
+           <column name="feature" value="Sneak Attack"/>
+           <column name="label_1" value="Modifier"/> 
+           <column name="value_1" value="8"/> 
+           <column name="label_2" value="Die to Use"/> 
+           <column name="value_2" value="6"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Rogue"/> 
+           <column name="level" value="16"/> 
+           <column name="feature" value="proficiency_bonus"/> 
+           <column name="label_1" value="Proficiency Bonus Value"/> 
+           <column name="value_1" value="5"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Rogue"/> 
+           <column name="level" value="16"/> 
+           <column name="feature" value="Ability Score Improvement"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Rogue"/> 
+           <column name="level" value="16"/> 
+           <column name="feature" value="Sneak Attack"/>
+           <column name="label_1" value="Modifier"/> 
+           <column name="value_1" value="8"/> 
+           <column name="label_2" value="Die to Use"/> 
+           <column name="value_2" value="6"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Rogue"/> 
+           <column name="level" value="17"/> 
+           <column name="feature" value="proficiency_bonus"/> 
+           <column name="label_1" value="Proficiency Bonus Value"/> 
+           <column name="value_1" value="6"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Rogue"/> 
+           <column name="level" value="17"/> 
+           <column name="feature" value="Roguish Archetype feature"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Rogue"/> 
+           <column name="level" value="17"/> 
+           <column name="feature" value="Sneak Attack"/>
+           <column name="label_1" value="Modifier"/> 
+           <column name="value_1" value="9"/> 
+           <column name="label_2" value="Die to Use"/> 
+           <column name="value_2" value="6"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Rogue"/> 
+           <column name="level" value="18"/> 
+           <column name="feature" value="proficiency_bonus"/> 
+           <column name="label_1" value="Proficiency Bonus Value"/> 
+           <column name="value_1" value="6"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Rogue"/> 
+           <column name="level" value="18"/> 
+           <column name="feature" value="Elusive"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Rogue"/> 
+           <column name="level" value="18"/> 
+           <column name="feature" value="Sneak Attack"/>
+           <column name="label_1" value="Modifier"/> 
+           <column name="value_1" value="9"/> 
+           <column name="label_2" value="Die to Use"/> 
+           <column name="value_2" value="6"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Rogue"/> 
+           <column name="level" value="19"/> 
+           <column name="feature" value="proficiency_bonus"/> 
+           <column name="label_1" value="Proficiency Bonus Value"/> 
+           <column name="value_1" value="6"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Rogue"/> 
+           <column name="level" value="19"/> 
+           <column name="feature" value="Ability Score Impreovement"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Rogue"/> 
+           <column name="level" value="19"/> 
+           <column name="feature" value="Sneak Attack"/>
+           <column name="label_1" value="Modifier"/> 
+           <column name="value_1" value="10"/> 
+           <column name="label_2" value="Die to Use"/> 
+           <column name="value_2" value="6"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Rogue"/> 
+           <column name="level" value="20"/> 
+           <column name="feature" value="proficiency_bonus"/> 
+           <column name="label_1" value="Proficiency Bonus Value"/> 
+           <column name="value_1" value="6"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Rogue"/> 
+           <column name="level" value="20"/> 
+           <column name="feature" value="Stroke of Luck"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Rogue"/> 
+           <column name="level" value="20"/> 
+           <column name="feature" value="Sneak Attack"/>
+           <column name="label_1" value="Modifier"/> 
+           <column name="value_1" value="10"/> 
+           <column name="label_2" value="Die to Use"/> 
+           <column name="value_2" value="6"/> 
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Sorcerer"/> 
+           <column name="level" value="1"/> 
+           <column name="feature" value="proficiency_bonus"/> 
+           <column name="label_1" value="Proficiency Bonus Value"/> 
+           <column name="value_1" value="2"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Sorcerer"/> 
+           <column name="level" value="1"/> 
+           <column name="feature" value="Spellcasting feature"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Sorcerer"/> 
+           <column name="level" value="1"/> 
+           <column name="feature" value="Sorcerous Origin"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Sorcerer"/> 
+           <column name="level" value="1"/> 
+           <column name="feature" value="Spellcasting"/> 
+           <column name="label_1" value="Spell Slots"/> 
+           <column name="value_1" value="2,0,0,0,0,0,0,0,0"/> 
+           <column name="label_2" value="Spells Known"/> 
+           <column name="value_2" value="2"/> 
+           <column name="label_3" value="Cantrips Known"/> 
+           <column name="value_3" value="4"/> 
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Sorcerer"/> 
+           <column name="level" value="2"/> 
+           <column name="feature" value="proficiency_bonus"/> 
+           <column name="label_1" value="Proficiency Bonus Value"/> 
+           <column name="value_1" value="2"/> 
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Sorcerer"/> 
+           <column name="level" value="2"/> 
+           <column name="feature" value="Sorcery Points"/> 
+           <column name="label_1" value="Total Amount"/> 
+           <column name="value_1" value="2"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Sorcerer"/> 
+           <column name="level" value="2"/> 
+           <column name="feature" value="Font of Magic"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Sorcerer"/> 
+           <column name="level" value="2"/> 
+           <column name="feature" value="Spellcasting"/> 
+           <column name="label_1" value="Spell Slots"/> 
+           <column name="value_1" value="3,0,0,0,0,0,0,0,0"/> 
+           <column name="label_2" value="Spells Known"/> 
+           <column name="value_2" value="3"/> 
+           <column name="label_3" value="Cantrips Known"/> 
+           <column name="value_3" value="4"/> 
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Sorcerer"/> 
+           <column name="level" value="3"/> 
+           <column name="feature" value="proficiency_bonus"/> 
+           <column name="label_1" value="Proficiency Bonus Value"/> 
+           <column name="value_1" value="2"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Sorcerer"/> 
+           <column name="level" value="3"/> 
+           <column name="feature" value="Sorcery Points"/> 
+           <column name="label_1" value="Total Amount"/> 
+           <column name="value_1" value="3"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Sorcerer"/> 
+           <column name="level" value="3"/> 
+           <column name="feature" value="Metamagic"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Sorcerer"/> 
+           <column name="level" value="3"/> 
+           <column name="feature" value="Spellcasting"/> 
+           <column name="label_1" value="Spell Slots"/> 
+           <column name="value_1" value="4,2,0,0,0,0,0,0,0"/> 
+           <column name="label_2" value="Spells Known"/> 
+           <column name="value_2" value="4"/> 
+           <column name="label_3" value="Cantrips Known"/> 
+           <column name="value_3" value="4"/> 
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Sorcerer"/> 
+           <column name="level" value="4"/> 
+           <column name="feature" value="proficiency_bonus"/> 
+           <column name="label_1" value="Proficiency Bonus Value"/> 
+           <column name="value_1" value="2"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Sorcerer"/> 
+           <column name="level" value="4"/> 
+           <column name="feature" value="Sorcery Points"/> 
+           <column name="label_1" value="Total Amount"/> 
+           <column name="value_1" value="4"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Sorcerer"/> 
+           <column name="level" value="4"/> 
+           <column name="feature" value="Ability Score Improvement"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Sorcerer"/> 
+           <column name="level" value="4"/> 
+           <column name="feature" value="Spellcasting"/> 
+           <column name="label_1" value="Spell Slots"/> 
+           <column name="value_1" value="4,3,0,0,0,0,0,0,0"/> 
+           <column name="label_2" value="Spells Known"/> 
+           <column name="value_2" value="5"/> 
+           <column name="label_3" value="Cantrips Known"/> 
+           <column name="value_3" value="5"/> 
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Sorcerer"/> 
+           <column name="level" value="5"/> 
+           <column name="feature" value="proficiency_bonus"/> 
+           <column name="label_1" value="Proficiency Bonus Value"/> 
+           <column name="value_1" value="3"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Sorcerer"/> 
+           <column name="level" value="5"/> 
+           <column name="feature" value="Sorcery Points"/> 
+           <column name="label_1" value="Total Amount"/> 
+           <column name="value_1" value="5"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Sorcerer"/> 
+           <column name="level" value="5"/> 
+           <column name="feature" value="Sorcereric Inspiration"/> 
+           <column name="label_1" value="Die to Use"/> 
+           <column name="value_1" value="8"/>  
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Sorcerer"/> 
+           <column name="level" value="5"/> 
+           <column name="feature" value="Spellcasting"/> 
+           <column name="label_1" value="Spell Slots"/> 
+           <column name="value_1" value="4,3,2,0,0,0,0,0,0"/> 
+           <column name="label_2" value="Spells Known"/> 
+           <column name="value_2" value="6"/> 
+           <column name="label_3" value="Cantrips Known"/> 
+           <column name="value_3" value="5"/> 
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Sorcerer"/> 
+           <column name="level" value="6"/> 
+           <column name="feature" value="proficiency_bonus"/> 
+           <column name="label_1" value="Proficiency Bonus Value"/> 
+           <column name="value_1" value="3"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Sorcerer"/> 
+           <column name="level" value="6"/> 
+           <column name="feature" value="Sorcery Points"/> 
+           <column name="label_1" value="Total Amount"/> 
+           <column name="value_1" value="6"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Sorcerer"/> 
+           <column name="level" value="6"/> 
+           <column name="feature" value="Sourcerous Origin feature"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Sorcerer"/> 
+           <column name="level" value="6"/> 
+           <column name="feature" value="Spellcasting"/> 
+           <column name="label_1" value="Spell Slots"/> 
+           <column name="value_1" value="4,3,3,0,0,0,0,0,0"/> 
+           <column name="label_2" value="Spells Known"/> 
+           <column name="value_2" value="7"/> 
+           <column name="label_3" value="Cantrips Known"/> 
+           <column name="value_3" value="5"/> 
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Sorcerer"/> 
+           <column name="level" value="7"/> 
+           <column name="feature" value="proficiency_bonus"/> 
+           <column name="label_1" value="Proficiency Bonus Value"/> 
+           <column name="value_1" value="3"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Sorcerer"/> 
+           <column name="level" value="7"/> 
+           <column name="feature" value="Sorcery Points"/> 
+           <column name="label_1" value="Total Amount"/> 
+           <column name="value_1" value="7"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Sorcerer"/> 
+           <column name="level" value="7"/> 
+           <column name="feature" value="Spellcasting"/> 
+           <column name="label_1" value="Spell Slots"/> 
+           <column name="value_1" value="4,3,3,1,0,0,0,0,0"/> 
+           <column name="label_2" value="Spells Known"/> 
+           <column name="value_2" value="8"/> 
+           <column name="label_3" value="Cantrips Known"/> 
+           <column name="value_3" value="5"/> 
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Sorcerer"/> 
+           <column name="level" value="8"/> 
+           <column name="feature" value="proficiency_bonus"/> 
+           <column name="label_1" value="Proficiency Bonus Value"/> 
+           <column name="value_1" value="3"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Sorcerer"/> 
+           <column name="level" value="8"/> 
+           <column name="feature" value="Sorcery Points"/> 
+           <column name="label_1" value="Total Amount"/> 
+           <column name="value_1" value="8"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Sorcerer"/> 
+           <column name="level" value="8"/> 
+           <column name="feature" value="Ability Score Improvement"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Sorcerer"/> 
+           <column name="level" value="8"/> 
+           <column name="feature" value="Spellcasting"/> 
+           <column name="label_1" value="Spell Slots"/> 
+           <column name="value_1" value="4,3,3,2,0,0,0,0,0"/> 
+           <column name="label_2" value="Spells Known"/> 
+           <column name="value_2" value="9"/> 
+           <column name="label_3" value="Cantrips Known"/> 
+           <column name="value_3" value="5"/> 
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Sorcerer"/> 
+           <column name="level" value="9"/> 
+           <column name="feature" value="proficiency_bonus"/> 
+           <column name="label_1" value="Proficiency Bonus Value"/> 
+           <column name="value_1" value="4"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Sorcerer"/> 
+           <column name="level" value="9"/> 
+           <column name="feature" value="Sorcery Points"/> 
+           <column name="label_1" value="Total Amount"/> 
+           <column name="value_1" value="9"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Sorcerer"/> 
+           <column name="level" value="9"/> 
+           <column name="feature" value="Spellcasting"/> 
+           <column name="label_1" value="Spell Slots"/> 
+           <column name="value_1" value="4,3,3,3,1,0,0,0,0"/> 
+           <column name="label_2" value="Spells Known"/> 
+           <column name="value_2" value="10"/> 
+           <column name="label_3" value="Cantrips Known"/> 
+           <column name="value_3" value="6"/> 
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Sorcerer"/> 
+           <column name="level" value="10"/> 
+           <column name="feature" value="proficiency_bonus"/> 
+           <column name="label_1" value="Proficiency Bonus Value"/> 
+           <column name="value_1" value="4"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Sorcerer"/> 
+           <column name="level" value="10"/> 
+           <column name="feature" value="Sorcery Points"/> 
+           <column name="label_1" value="Total Amount"/> 
+           <column name="value_1" value="10"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Sorcerer"/> 
+           <column name="level" value="10"/> 
+           <column name="feature" value="Metamagic"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Sorcerer"/> 
+           <column name="level" value="10"/> 
+           <column name="feature" value="Spellcasting"/> 
+           <column name="label_1" value="Spell Slots"/> 
+           <column name="value_1" value="4,3,3,3,2,0,0,0,0"/> 
+           <column name="label_2" value="Spells Known"/> 
+           <column name="value_2" value="11"/> 
+           <column name="label_3" value="Cantrips Known"/> 
+           <column name="value_3" value="6"/> 
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Sorcerer"/> 
+           <column name="level" value="11"/> 
+           <column name="feature" value="proficiency_bonus"/> 
+           <column name="label_1" value="Proficiency Bonus Value"/> 
+           <column name="value_1" value="4"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Sorcerer"/> 
+           <column name="level" value="11"/> 
+           <column name="feature" value="Sorcery Points"/> 
+           <column name="label_1" value="Total Amount"/> 
+           <column name="value_1" value="11"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Sorcerer"/> 
+           <column name="level" value="11"/> 
+           <column name="feature" value="Spellcasting"/> 
+           <column name="label_1" value="Spell Slots"/> 
+           <column name="value_1" value="4,3,3,3,2,1,0,0,0"/> 
+           <column name="label_2" value="Spells Known"/> 
+           <column name="value_2" value="12"/> 
+           <column name="label_3" value="Cantrips Known"/> 
+           <column name="value_3" value="6"/> 
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Sorcerer"/> 
+           <column name="level" value="12"/> 
+           <column name="feature" value="proficiency_bonus"/> 
+           <column name="label_1" value="Proficiency Bonus Value"/> 
+           <column name="value_1" value="4"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Sorcerer"/> 
+           <column name="level" value="12"/> 
+           <column name="feature" value="Sorcery Points"/> 
+           <column name="label_1" value="Total Amount"/> 
+           <column name="value_1" value="12"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Sorcerer"/> 
+           <column name="level" value="12"/> 
+           <column name="feature" value="Ability Score Improvement"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Sorcerer"/> 
+           <column name="level" value="12"/> 
+           <column name="feature" value="Spellcasting"/> 
+           <column name="label_1" value="Spell Slots"/> 
+           <column name="value_1" value="4,3,3,3,2,1,0,0,0"/> 
+           <column name="label_2" value="Spells Known"/> 
+           <column name="value_2" value="12"/> 
+           <column name="label_3" value="Cantrips Known"/> 
+           <column name="value_3" value="6"/> 
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Sorcerer"/> 
+           <column name="level" value="13"/> 
+           <column name="feature" value="proficiency_bonus"/> 
+           <column name="label_1" value="Proficiency Bonus Value"/> 
+           <column name="value_1" value="5"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Sorcerer"/> 
+           <column name="level" value="13"/> 
+           <column name="feature" value="Sorcery Points"/> 
+           <column name="label_1" value="Total Amount"/> 
+           <column name="value_1" value="13"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Sorcerer"/> 
+           <column name="level" value="13"/> 
+           <column name="feature" value="Spellcasting"/> 
+           <column name="label_1" value="Spell Slots"/> 
+           <column name="value_1" value="4,3,3,3,2,1,1,0,0"/> 
+           <column name="label_2" value="Spells Known"/> 
+           <column name="value_2" value="13"/> 
+           <column name="label_3" value="Cantrips Known"/> 
+           <column name="value_3" value="6"/> 
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Sorcerer"/> 
+           <column name="level" value="14"/> 
+           <column name="feature" value="proficiency_bonus"/> 
+           <column name="label_1" value="Proficiency Bonus Value"/> 
+           <column name="value_1" value="5"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Sorcerer"/> 
+           <column name="level" value="14"/> 
+           <column name="feature" value="Sorcery Points"/> 
+           <column name="label_1" value="Total Amount"/> 
+           <column name="value_1" value="14"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Sorcerer"/> 
+           <column name="level" value="14"/> 
+           <column name="feature" value="Sorcerous Origin feature"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Sorcerer"/> 
+           <column name="level" value="14"/> 
+           <column name="feature" value="Spellcasting"/> 
+           <column name="label_1" value="Spell Slots"/> 
+           <column name="value_1" value="4,3,3,3,2,1,1,0,0"/> 
+           <column name="label_2" value="Spells Known"/> 
+           <column name="value_2" value="13"/> 
+           <column name="label_3" value="Cantrips Known"/> 
+           <column name="value_3" value="6"/> 
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Sorcerer"/> 
+           <column name="level" value="15"/> 
+           <column name="feature" value="proficiency_bonus"/> 
+           <column name="label_1" value="Proficiency Bonus Value"/> 
+           <column name="value_1" value="5"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Sorcerer"/> 
+           <column name="level" value="15"/> 
+           <column name="feature" value="Sorcery Points"/> 
+           <column name="label_1" value="Total Amount"/> 
+           <column name="value_1" value="15"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Sorcerer"/> 
+           <column name="level" value="15"/> 
+           <column name="feature" value="Spellcasting"/> 
+           <column name="label_1" value="Spell Slots"/> 
+           <column name="value_1" value="4,3,3,3,2,1,1,1,0"/> 
+           <column name="label_2" value="Spells Known"/> 
+           <column name="value_2" value="14"/> 
+           <column name="label_3" value="Cantrips Known"/> 
+           <column name="value_3" value="6"/> 
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Sorcerer"/> 
+           <column name="level" value="16"/> 
+           <column name="feature" value="proficiency_bonus"/> 
+           <column name="label_1" value="Proficiency Bonus Value"/> 
+           <column name="value_1" value="5"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Sorcerer"/> 
+           <column name="level" value="16"/> 
+           <column name="feature" value="Sorcery Points"/> 
+           <column name="label_1" value="Total Amount"/> 
+           <column name="value_1" value="16"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Sorcerer"/> 
+           <column name="level" value="16"/> 
+           <column name="feature" value="Ability Score Improvement"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Sorcerer"/> 
+           <column name="level" value="16"/> 
+           <column name="feature" value="Spellcasting"/> 
+           <column name="label_1" value="Spell Slots"/> 
+           <column name="value_1" value="4,3,3,3,2,1,1,1,0"/> 
+           <column name="label_2" value="Spells Known"/> 
+           <column name="value_2" value="14"/> 
+           <column name="label_3" value="Cantrips Known"/> 
+           <column name="value_3" value="6"/> 
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Sorcerer"/> 
+           <column name="level" value="17"/> 
+           <column name="feature" value="proficiency_bonus"/> 
+           <column name="label_1" value="Proficiency Bonus Value"/> 
+           <column name="value_1" value="6"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Sorcerer"/> 
+           <column name="level" value="17"/> 
+           <column name="feature" value="Sorcery Points"/> 
+           <column name="label_1" value="Total Amount"/> 
+           <column name="value_1" value="17"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Sorcerer"/> 
+           <column name="level" value="17"/> 
+           <column name="feature" value="Metamagic"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Sorcerer"/> 
+           <column name="level" value="17"/> 
+           <column name="feature" value="Spellcasting"/> 
+           <column name="label_1" value="Spell Slots"/> 
+           <column name="value_1" value="4,3,3,3,2,1,1,1,1"/> 
+           <column name="label_2" value="Spells Known"/> 
+           <column name="value_2" value="15"/> 
+           <column name="label_3" value="Cantrips Known"/> 
+           <column name="value_3" value="6"/> 
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Sorcerer"/> 
+           <column name="level" value="18"/> 
+           <column name="feature" value="proficiency_bonus"/> 
+           <column name="label_1" value="Proficiency Bonus Value"/> 
+           <column name="value_1" value="6"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Sorcerer"/> 
+           <column name="level" value="18"/> 
+           <column name="feature" value="Sorcery Points"/> 
+           <column name="label_1" value="Total Amount"/> 
+           <column name="value_1" value="18"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Sorcerer"/> 
+           <column name="level" value="18"/> 
+           <column name="feature" value="Sorcerous Origin feature"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Sorcerer"/> 
+           <column name="level" value="18"/> 
+           <column name="feature" value="Spellcasting"/> 
+           <column name="label_1" value="Spell Slots"/> 
+           <column name="value_1" value="4,3,3,3,3,1,1,1,1"/> 
+           <column name="label_2" value="Spells Known"/> 
+           <column name="value_2" value="15"/> 
+           <column name="label_3" value="Cantrips Known"/> 
+           <column name="value_3" value="6"/> 
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Sorcerer"/> 
+           <column name="level" value="19"/> 
+           <column name="feature" value="proficiency_bonus"/> 
+           <column name="label_1" value="Proficiency Bonus Value"/> 
+           <column name="value_1" value="6"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Sorcerer"/> 
+           <column name="level" value="19"/> 
+           <column name="feature" value="Sorcery Points"/> 
+           <column name="label_1" value="Total Amount"/> 
+           <column name="value_1" value="19"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Sorcerer"/> 
+           <column name="level" value="19"/> 
+           <column name="feature" value="Ability Score Improvement"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Sorcerer"/> 
+           <column name="level" value="19"/> 
+           <column name="feature" value="Spellcasting"/> 
+           <column name="label_1" value="Spell Slots"/> 
+           <column name="value_1" value="4,3,3,3,3,2,1,1,1"/> 
+           <column name="label_2" value="Spells Known"/> 
+           <column name="value_2" value="15"/> 
+           <column name="label_3" value="Cantrips Known"/> 
+           <column name="value_3" value="6"/> 
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Sorcerer"/> 
+           <column name="level" value="20"/> 
+           <column name="feature" value="proficiency_bonus"/> 
+           <column name="label_1" value="Proficiency Bonus Value"/> 
+           <column name="value_1" value="6"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Sorcerer"/> 
+           <column name="level" value="20"/> 
+           <column name="feature" value="Sorcery Points"/> 
+           <column name="label_1" value="Total Amount"/> 
+           <column name="value_1" value="20"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Sorcerer"/> 
+           <column name="level" value="20"/> 
+           <column name="feature" value="Sorcerous Restoration"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Sorcerer"/> 
+           <column name="level" value="20"/> 
+           <column name="feature" value="Spellcasting"/> 
+           <column name="label_1" value="Spell Slots"/> 
+           <column name="value_1" value="4,3,3,3,3,2,2,1,1"/> 
+           <column name="label_2" value="Spells Known"/> 
+           <column name="value_2" value="15"/> 
+           <column name="label_3" value="Cantrips Known"/> 
+           <column name="value_3" value="6"/> 
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Warlock"/> 
+           <column name="level" value="1"/> 
+           <column name="feature" value="proficiency_bonus"/> 
+           <column name="label_1" value="Proficiency Bonus Value"/> 
+           <column name="value_1" value="2"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Warlock"/> 
+           <column name="level" value="1"/> 
+           <column name="feature" value="Otherworldly Patron"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Warlock"/> 
+           <column name="level" value="1"/> 
+           <column name="feature" value="Pact Magic"/> 
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Warlock"/> 
+           <column name="level" value="1"/> 
+           <column name="feature" value="Spellcasting"/> 
+           <column name="label_1" value="Spell Slots"/> 
+           <column name="value_1" value="1"/> 
+           <column name="label_2" value="Slot Level"/> 
+           <column name="value_2" value="1"/> 
+           <column name="label_3" value="Spells Known"/> 
+           <column name="value_3" value="2"/> 
+           <column name="label_4" value="Cantrips Known"/> 
+           <column name="value_4" value="2"/> 
+           <column name="label_5" value="Invocations Known"/> 
+           <column name="value_5" value="0"/> 
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Warlock"/> 
+           <column name="level" value="2"/> 
+           <column name="feature" value="proficiency_bonus"/> 
+           <column name="label_1" value="Proficiency Bonus Value"/> 
+           <column name="value_1" value="2"/> 
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Warlock"/> 
+           <column name="level" value="2"/> 
+           <column name="feature" value="Eldritch Invocations"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Warlock"/> 
+           <column name="level" value="2"/> 
+           <column name="feature" value="Spellcasting"/> 
+           <column name="label_1" value="Spell Slots"/> 
+           <column name="value_1" value="1"/> 
+           <column name="label_2" value="Slot Level"/> 
+           <column name="value_2" value="1"/> 
+           <column name="label_3" value="Spells Known"/> 
+           <column name="value_3" value="3"/> 
+           <column name="label_4" value="Cantrips Known"/> 
+           <column name="value_4" value="2"/> 
+           <column name="label_5" value="Invocations Known"/> 
+           <column name="value_5" value="2"/>  
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Warlock"/> 
+           <column name="level" value="3"/> 
+           <column name="feature" value="proficiency_bonus"/> 
+           <column name="label_1" value="Proficiency Bonus Value"/> 
+           <column name="value_1" value="2"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Warlock"/> 
+           <column name="level" value="3"/> 
+           <column name="feature" value="Pact Boon"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Warlock"/> 
+           <column name="level" value="3"/> 
+           <column name="feature" value="Spellcasting"/> 
+           <column name="label_1" value="Spell Slots"/> 
+           <column name="value_1" value="1"/> 
+           <column name="label_2" value="Slot Level"/> 
+           <column name="value_2" value="2"/> 
+           <column name="label_3" value="Spells Known"/> 
+           <column name="value_3" value="4"/> 
+           <column name="label_4" value="Cantrips Known"/> 
+           <column name="value_4" value="2"/> 
+           <column name="label_5" value="Invocations Known"/> 
+           <column name="value_5" value="2"/>
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Warlock"/> 
+           <column name="level" value="4"/> 
+           <column name="feature" value="proficiency_bonus"/> 
+           <column name="label_1" value="Proficiency Bonus Value"/> 
+           <column name="value_1" value="2"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Warlock"/> 
+           <column name="level" value="4"/> 
+           <column name="feature" value="Ability Score Improvement"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Warlock"/> 
+           <column name="level" value="4"/> 
+           <column name="feature" value="Spellcasting"/> 
+           <column name="label_1" value="Spell Slots"/> 
+           <column name="value_1" value="1"/> 
+           <column name="label_2" value="Slot Level"/> 
+           <column name="value_2" value="2"/> 
+           <column name="label_3" value="Spells Known"/> 
+           <column name="value_3" value="5"/> 
+           <column name="label_4" value="Cantrips Known"/> 
+           <column name="value_4" value="3"/> 
+           <column name="label_5" value="Invocations Known"/> 
+           <column name="value_5" value="2"/> 
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Warlock"/> 
+           <column name="level" value="5"/> 
+           <column name="feature" value="proficiency_bonus"/> 
+           <column name="label_1" value="Proficiency Bonus Value"/> 
+           <column name="value_1" value="3"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Warlock"/> 
+           <column name="level" value="5"/> 
+           <column name="feature" value="Spellcasting"/> 
+           <column name="label_1" value="Spell Slots"/> 
+           <column name="value_1" value="1"/> 
+           <column name="label_2" value="Slot Level"/> 
+           <column name="value_2" value="3"/> 
+           <column name="label_3" value="Spells Known"/> 
+           <column name="value_3" value="6"/> 
+           <column name="label_4" value="Cantrips Known"/> 
+           <column name="value_4" value="3"/> 
+           <column name="label_5" value="Invocations Known"/> 
+           <column name="value_5" value="3"/> 
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Warlock"/> 
+           <column name="level" value="6"/> 
+           <column name="feature" value="proficiency_bonus"/> 
+           <column name="label_1" value="Proficiency Bonus Value"/> 
+           <column name="value_1" value="3"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Warlock"/> 
+           <column name="level" value="6"/> 
+           <column name="feature" value="Otherworldly Patron feature"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Warlock"/> 
+           <column name="level" value="6"/> 
+           <column name="feature" value="Spellcasting"/> 
+           <column name="label_1" value="Spell Slots"/> 
+           <column name="value_1" value="1"/> 
+           <column name="label_2" value="Slot Level"/> 
+           <column name="value_2" value="3"/> 
+           <column name="label_3" value="Spells Known"/> 
+           <column name="value_3" value="7"/> 
+           <column name="label_4" value="Cantrips Known"/> 
+           <column name="value_4" value="3"/> 
+           <column name="label_5" value="Invocations Known"/> 
+           <column name="value_5" value="3"/>
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Warlock"/> 
+           <column name="level" value="7"/> 
+           <column name="feature" value="proficiency_bonus"/> 
+           <column name="label_1" value="Proficiency Bonus Value"/> 
+           <column name="value_1" value="3"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Warlock"/> 
+           <column name="level" value="7"/> 
+           <column name="feature" value="Spellcasting"/> 
+           <column name="label_1" value="Spell Slots"/> 
+           <column name="value_1" value="1"/> 
+           <column name="label_2" value="Slot Level"/> 
+           <column name="value_2" value="4"/> 
+           <column name="label_3" value="Spells Known"/> 
+           <column name="value_3" value="8"/> 
+           <column name="label_4" value="Cantrips Known"/> 
+           <column name="value_4" value="3"/> 
+           <column name="label_5" value="Invocations Known"/> 
+           <column name="value_5" value="4"/> 
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Warlock"/> 
+           <column name="level" value="8"/> 
+           <column name="feature" value="proficiency_bonus"/> 
+           <column name="label_1" value="Proficiency Bonus Value"/> 
+           <column name="value_1" value="3"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Warlock"/> 
+           <column name="level" value="8"/> 
+           <column name="feature" value="Ability Score Improvement"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Warlock"/> 
+           <column name="level" value="8"/> 
+           <column name="feature" value="Spellcasting"/> 
+           <column name="label_1" value="Spell Slots"/> 
+           <column name="value_1" value="1"/> 
+           <column name="label_2" value="Slot Level"/> 
+           <column name="value_2" value="4"/> 
+           <column name="label_3" value="Spells Known"/> 
+           <column name="value_3" value="9"/> 
+           <column name="label_4" value="Cantrips Known"/> 
+           <column name="value_4" value="3"/> 
+           <column name="label_5" value="Invocations Known"/> 
+           <column name="value_5" value="4"/>
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Warlock"/> 
+           <column name="level" value="9"/> 
+           <column name="feature" value="proficiency_bonus"/> 
+           <column name="label_1" value="Proficiency Bonus Value"/> 
+           <column name="value_1" value="4"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Warlock"/> 
+           <column name="level" value="9"/> 
+           <column name="feature" value="Spellcasting"/> 
+           <column name="label_1" value="Spell Slots"/> 
+           <column name="value_1" value="1"/> 
+           <column name="label_2" value="Slot Level"/> 
+           <column name="value_2" value="5"/> 
+           <column name="label_3" value="Spells Known"/> 
+           <column name="value_3" value="10"/> 
+           <column name="label_4" value="Cantrips Known"/> 
+           <column name="value_4" value="3"/> 
+           <column name="label_5" value="Invocations Known"/> 
+           <column name="value_5" value="5"/> 
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Warlock"/> 
+           <column name="level" value="10"/> 
+           <column name="feature" value="proficiency_bonus"/> 
+           <column name="label_1" value="Proficiency Bonus Value"/> 
+           <column name="value_1" value="4"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Warlock"/> 
+           <column name="level" value="10"/> 
+           <column name="feature" value="Otherworldly Patron feature"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Warlock"/> 
+           <column name="level" value="10"/> 
+           <column name="feature" value="Spellcasting"/> 
+           <column name="label_1" value="Spell Slots"/> 
+           <column name="value_1" value="1"/> 
+           <column name="label_2" value="Slot Level"/> 
+           <column name="value_2" value="5"/> 
+           <column name="label_3" value="Spells Known"/> 
+           <column name="value_3" value="10"/> 
+           <column name="label_4" value="Cantrips Known"/> 
+           <column name="value_4" value="4"/> 
+           <column name="label_5" value="Invocations Known"/> 
+           <column name="value_5" value="5"/> 
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Warlock"/> 
+           <column name="level" value="11"/> 
+           <column name="feature" value="proficiency_bonus"/> 
+           <column name="label_1" value="Proficiency Bonus Value"/> 
+           <column name="value_1" value="4"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Warlock"/> 
+           <column name="level" value="11"/> 
+           <column name="feature" value="Mystic Arcanum"/>
+           <column name="label_1" value="Spell Level"/> 
+           <column name="value_1" value="6"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Warlock"/> 
+           <column name="level" value="11"/> 
+           <column name="feature" value="Spellcasting"/> 
+           <column name="label_1" value="Spell Slots"/> 
+           <column name="value_1" value="1"/> 
+           <column name="label_2" value="Slot Level"/> 
+           <column name="value_2" value="5"/> 
+           <column name="label_3" value="Spells Known"/> 
+           <column name="value_3" value="11"/> 
+           <column name="label_4" value="Cantrips Known"/> 
+           <column name="value_4" value="4"/> 
+           <column name="label_5" value="Invocations Known"/> 
+           <column name="value_5" value="5"/>
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Warlock"/> 
+           <column name="level" value="12"/> 
+           <column name="feature" value="proficiency_bonus"/> 
+           <column name="label_1" value="Proficiency Bonus Value"/> 
+           <column name="value_1" value="4"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Warlock"/> 
+           <column name="level" value="12"/> 
+           <column name="feature" value="Ability Score Improvement"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Warlock"/> 
+           <column name="level" value="12"/> 
+           <column name="feature" value="Spellcasting"/> 
+           <column name="label_1" value="Spell Slots"/> 
+           <column name="value_1" value="1"/> 
+           <column name="label_2" value="Slot Level"/> 
+           <column name="value_2" value="5"/> 
+           <column name="label_3" value="Spells Known"/> 
+           <column name="value_3" value="11"/> 
+           <column name="label_4" value="Cantrips Known"/> 
+           <column name="value_4" value="4"/> 
+           <column name="label_5" value="Invocations Known"/> 
+           <column name="value_5" value="6"/> 
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Warlock"/> 
+           <column name="level" value="13"/> 
+           <column name="feature" value="proficiency_bonus"/> 
+           <column name="label_1" value="Proficiency Bonus Value"/> 
+           <column name="value_1" value="5"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Warlock"/> 
+           <column name="level" value="13"/> 
+           <column name="feature" value="Mystic Arcanum"/>
+           <column name="label_1" value="Spell Level"/> 
+           <column name="value_1" value="7"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Warlock"/> 
+           <column name="level" value="13"/> 
+           <column name="feature" value="Spellcasting"/> 
+           <column name="label_1" value="Spell Slots"/> 
+           <column name="value_1" value="1"/> 
+           <column name="label_2" value="Slot Level"/> 
+           <column name="value_2" value="5"/> 
+           <column name="label_3" value="Spells Known"/> 
+           <column name="value_3" value="12"/> 
+           <column name="label_4" value="Cantrips Known"/> 
+           <column name="value_4" value="4"/> 
+           <column name="label_5" value="Invocations Known"/> 
+           <column name="value_5" value="6"/> 
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Warlock"/> 
+           <column name="level" value="14"/> 
+           <column name="feature" value="proficiency_bonus"/> 
+           <column name="label_1" value="Proficiency Bonus Value"/> 
+           <column name="value_1" value="5"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Warlock"/> 
+           <column name="level" value="14"/> 
+           <column name="feature" value="Otherworldly Patron feature"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Warlock"/> 
+           <column name="level" value="14"/> 
+           <column name="feature" value="Spellcasting"/> 
+           <column name="label_1" value="Spell Slots"/> 
+           <column name="value_1" value="1"/> 
+           <column name="label_2" value="Slot Level"/> 
+           <column name="value_2" value="5"/> 
+           <column name="label_3" value="Spells Known"/> 
+           <column name="value_3" value="12"/> 
+           <column name="label_4" value="Cantrips Known"/> 
+           <column name="value_4" value="4"/> 
+           <column name="label_5" value="Invocations Known"/> 
+           <column name="value_5" value="6"/> 
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Warlock"/> 
+           <column name="level" value="15"/> 
+           <column name="feature" value="proficiency_bonus"/> 
+           <column name="label_1" value="Proficiency Bonus Value"/> 
+           <column name="value_1" value="5"/> 
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Warlock"/> 
+           <column name="level" value="15"/> 
+           <column name="feature" value="Mystic Arcanum"/>
+           <column name="label_1" value="Spell Level"/> 
+           <column name="value_1" value="8"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Warlock"/> 
+           <column name="level" value="15"/> 
+           <column name="feature" value="Spellcasting"/> 
+           <column name="label_1" value="Spell Slots"/> 
+           <column name="value_1" value="1"/> 
+           <column name="label_2" value="Slot Level"/> 
+           <column name="value_2" value="5"/> 
+           <column name="label_3" value="Spells Known"/> 
+           <column name="value_3" value="13"/> 
+           <column name="label_4" value="Cantrips Known"/> 
+           <column name="value_4" value="4"/> 
+           <column name="label_5" value="Invocations Known"/> 
+           <column name="value_5" value="7"/> 
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Warlock"/> 
+           <column name="level" value="16"/> 
+           <column name="feature" value="proficiency_bonus"/> 
+           <column name="label_1" value="Proficiency Bonus Value"/> 
+           <column name="value_1" value="5"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Warlock"/> 
+           <column name="level" value="16"/> 
+           <column name="feature" value="Ability Score Improvement"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Warlock"/> 
+           <column name="level" value="16"/> 
+           <column name="feature" value="Spellcasting"/> 
+           <column name="label_1" value="Spell Slots"/> 
+           <column name="value_1" value="1"/> 
+           <column name="label_2" value="Slot Level"/> 
+           <column name="value_2" value="5"/> 
+           <column name="label_3" value="Spells Known"/> 
+           <column name="value_3" value="13"/> 
+           <column name="label_4" value="Cantrips Known"/> 
+           <column name="value_4" value="4"/> 
+           <column name="label_5" value="Invocations Known"/> 
+           <column name="value_5" value="7"/> 
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Warlock"/> 
+           <column name="level" value="17"/> 
+           <column name="feature" value="proficiency_bonus"/> 
+           <column name="label_1" value="Proficiency Bonus Value"/> 
+           <column name="value_1" value="6"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Warlock"/> 
+           <column name="level" value="17"/> 
+           <column name="feature" value="Mystic Arcanum"/>
+           <column name="label_1" value="Spell Level"/> 
+           <column name="value_1" value="9"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Warlock"/> 
+           <column name="level" value="17"/> 
+           <column name="feature" value="Spellcasting"/> 
+           <column name="label_1" value="Spell Slots"/> 
+           <column name="value_1" value="1"/> 
+           <column name="label_2" value="Slot Level"/> 
+           <column name="value_2" value="5"/> 
+           <column name="label_3" value="Spells Known"/> 
+           <column name="value_3" value="14"/> 
+           <column name="label_4" value="Cantrips Known"/> 
+           <column name="value_4" value="4"/> 
+           <column name="label_5" value="Invocations Known"/> 
+           <column name="value_5" value="7"/>
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Warlock"/> 
+           <column name="level" value="18"/> 
+           <column name="feature" value="proficiency_bonus"/> 
+           <column name="label_1" value="Proficiency Bonus Value"/> 
+           <column name="value_1" value="6"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Warlock"/> 
+           <column name="level" value="18"/> 
+           <column name="feature" value="Spellcasting"/> 
+           <column name="label_1" value="Spell Slots"/> 
+           <column name="value_1" value="1"/> 
+           <column name="label_2" value="Slot Level"/> 
+           <column name="value_2" value="5"/> 
+           <column name="label_3" value="Spells Known"/> 
+           <column name="value_3" value="14"/> 
+           <column name="label_4" value="Cantrips Known"/> 
+           <column name="value_4" value="4"/> 
+           <column name="label_5" value="Invocations Known"/> 
+           <column name="value_5" value="8"/>
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Warlock"/> 
+           <column name="level" value="19"/> 
+           <column name="feature" value="proficiency_bonus"/> 
+           <column name="label_1" value="Proficiency Bonus Value"/> 
+           <column name="value_1" value="6"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Warlock"/> 
+           <column name="level" value="19"/> 
+           <column name="feature" value="Ability Score Improvement"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Warlock"/> 
+           <column name="level" value="19"/> 
+           <column name="feature" value="Spellcasting"/> 
+           <column name="label_1" value="Spell Slots"/> 
+           <column name="value_1" value="1"/> 
+           <column name="label_2" value="Slot Level"/> 
+           <column name="value_2" value="5"/> 
+           <column name="label_3" value="Spells Known"/> 
+           <column name="value_3" value="15"/> 
+           <column name="label_4" value="Cantrips Known"/> 
+           <column name="value_4" value="4"/> 
+           <column name="label_5" value="Invocations Known"/> 
+           <column name="value_5" value="8"/> 
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Warlock"/> 
+           <column name="level" value="20"/> 
+           <column name="feature" value="proficiency_bonus"/> 
+           <column name="label_1" value="Proficiency Bonus Value"/> 
+           <column name="value_1" value="6"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Warlock"/> 
+           <column name="level" value="20"/> 
+           <column name="feature" value="Eldritch Master"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Warlock"/> 
+           <column name="level" value="20"/> 
+           <column name="feature" value="Spellcasting"/> 
+           <column name="label_1" value="Spell Slots"/> 
+           <column name="value_1" value="4"/> 
+           <column name="label_2" value="Slot Level"/> 
+           <column name="value_2" value="5"/> 
+           <column name="label_3" value="Spells Known"/> 
+           <column name="value_3" value="15"/> 
+           <column name="label_4" value="Cantrips Known"/> 
+           <column name="value_4" value="4"/> 
+           <column name="label_5" value="Invocations Known"/> 
+           <column name="value_5" value="8"/>
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Wizard"/> 
+           <column name="level" value="1"/> 
+           <column name="feature" value="proficiency_bonus"/> 
+           <column name="label_1" value="Proficiency Bonus Value"/> 
+           <column name="value_1" value="2"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Wizard"/> 
+           <column name="level" value="1"/> 
+           <column name="feature" value="Spellcasting feature"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Wizard"/> 
+           <column name="level" value="1"/> 
+           <column name="feature" value="Arcane Recovery"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Wizard"/> 
+           <column name="level" value="1"/> 
+           <column name="feature" value="Spellcasting"/> 
+           <column name="label_1" value="Spell Slots"/> 
+           <column name="value_1" value="2,0,0,0,0,0,0,0,0"/> 
+           <column name="label_2" value="Cantrips Known"/> 
+           <column name="value_2" value="3"/> 
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Wizard"/> 
+           <column name="level" value="2"/> 
+           <column name="feature" value="proficiency_bonus"/> 
+           <column name="label_1" value="Proficiency Bonus Value"/> 
+           <column name="value_1" value="2"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Wizard"/> 
+           <column name="level" value="2"/> 
+           <column name="feature" value="Arcane Tradition"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Wizard"/> 
+           <column name="level" value="2"/> 
+           <column name="feature" value="Spellcasting"/> 
+           <column name="label_1" value="Spell Slots"/> 
+           <column name="value_1" value="3,0,0,0,0,0,0,0,0"/> 
+           <column name="label_2" value="Cantrips Known"/> 
+           <column name="value_2" value="3"/> 
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Wizard"/> 
+           <column name="level" value="3"/> 
+           <column name="feature" value="proficiency_bonus"/> 
+           <column name="label_1" value="Proficiency Bonus Value"/> 
+           <column name="value_1" value="2"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Wizard"/> 
+           <column name="level" value="3"/> 
+           <column name="feature" value="Spellcasting"/> 
+           <column name="label_1" value="Spell Slots"/> 
+           <column name="value_1" value="4,2,0,0,0,0,0,0,0"/> 
+           <column name="label_2" value="Cantrips Known"/> 
+           <column name="value_2" value="3"/> 
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Wizard"/> 
+           <column name="level" value="4"/> 
+           <column name="feature" value="proficiency_bonus"/> 
+           <column name="label_1" value="Proficiency Bonus Value"/> 
+           <column name="value_1" value="2"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Wizard"/> 
+           <column name="level" value="4"/> 
+           <column name="feature" value="Ability Score Improvement"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Wizard"/> 
+           <column name="level" value="4"/> 
+           <column name="feature" value="Spellcasting"/> 
+           <column name="label_1" value="Spell Slots"/> 
+           <column name="value_1" value="4,3,0,0,0,0,0,0,0"/> 
+           <column name="label_2" value="Cantrips Known"/> 
+           <column name="value_2" value="4"/> 
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Wizard"/> 
+           <column name="level" value="5"/> 
+           <column name="feature" value="proficiency_bonus"/> 
+           <column name="label_1" value="Proficiency Bonus Value"/> 
+           <column name="value_1" value="3"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Wizard"/> 
+           <column name="level" value="5"/> 
+           <column name="feature" value="Spellcasting"/> 
+           <column name="label_1" value="Spell Slots"/> 
+           <column name="value_1" value="4,3,2,0,0,0,0,0,0"/>  
+           <column name="label_2" value="Cantrips Known"/> 
+           <column name="value_2" value="4"/> 
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Wizard"/> 
+           <column name="level" value="6"/> 
+           <column name="feature" value="proficiency_bonus"/> 
+           <column name="label_1" value="Proficiency Bonus Value"/> 
+           <column name="value_1" value="3"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Wizard"/> 
+           <column name="level" value="6"/> 
+           <column name="feature" value="Arcane Tradition feature"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Wizard"/> 
+           <column name="level" value="6"/> 
+           <column name="feature" value="Spellcasting"/> 
+           <column name="label_1" value="Spell Slots"/> 
+           <column name="value_1" value="4,3,3,0,0,0,0,0,0"/> 
+           <column name="label_2" value="Cantrips Known"/> 
+           <column name="value_2" value="4"/> 
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Wizard"/> 
+           <column name="level" value="7"/> 
+           <column name="feature" value="proficiency_bonus"/> 
+           <column name="label_1" value="Proficiency Bonus Value"/> 
+           <column name="value_1" value="3"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Wizard"/> 
+           <column name="level" value="7"/> 
+           <column name="feature" value="Spellcasting"/> 
+           <column name="label_1" value="Spell Slots"/> 
+           <column name="value_1" value="4,3,3,1,0,0,0,0,0"/> 
+           <column name="label_2" value="Cantrips Known"/> 
+           <column name="value_2" value="4"/> 
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Wizard"/> 
+           <column name="level" value="8"/> 
+           <column name="feature" value="proficiency_bonus"/> 
+           <column name="label_1" value="Proficiency Bonus Value"/> 
+           <column name="value_1" value="3"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Wizard"/> 
+           <column name="level" value="8"/> 
+           <column name="feature" value="Ability Score Improvement"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Wizard"/> 
+           <column name="level" value="8"/> 
+           <column name="feature" value="Spellcasting"/> 
+           <column name="label_1" value="Spell Slots"/> 
+           <column name="value_1" value="4,3,3,2,0,0,0,0,0"/> 
+           <column name="label_2" value="Cantrips Known"/> 
+           <column name="value_2" value="4"/> 
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Wizard"/> 
+           <column name="level" value="9"/> 
+           <column name="feature" value="proficiency_bonus"/> 
+           <column name="label_1" value="Proficiency Bonus Value"/> 
+           <column name="value_1" value="4"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Wizard"/> 
+           <column name="level" value="9"/> 
+           <column name="feature" value="Spellcasting"/> 
+           <column name="label_1" value="Spell Slots"/> 
+           <column name="value_1" value="4,3,3,3,1,0,0,0,0"/> 
+           <column name="label_2" value="Cantrips Known"/> 
+           <column name="value_2" value="4"/> 
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Wizard"/> 
+           <column name="level" value="10"/> 
+           <column name="feature" value="proficiency_bonus"/> 
+           <column name="label_1" value="Proficiency Bonus Value"/> 
+           <column name="value_1" value="4"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Wizard"/> 
+           <column name="level" value="10"/> 
+           <column name="feature" value="Arcane Tradition feature"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Wizard"/> 
+           <column name="level" value="10"/> 
+           <column name="feature" value="Spellcasting"/> 
+           <column name="label_1" value="Spell Slots"/> 
+           <column name="value_1" value="4,3,3,3,2,0,0,0,0"/> 
+           <column name="label_2" value="Cantrips Known"/> 
+           <column name="value_2" value="5"/> 
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Wizard"/> 
+           <column name="level" value="11"/> 
+           <column name="feature" value="proficiency_bonus"/> 
+           <column name="label_1" value="Proficiency Bonus Value"/> 
+           <column name="value_1" value="4"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Wizard"/> 
+           <column name="level" value="11"/> 
+           <column name="feature" value="Spellcasting"/> 
+           <column name="label_1" value="Spell Slots"/> 
+           <column name="value_1" value="4,3,3,3,2,1,0,0,0"/>  
+           <column name="label_2" value="Cantrips Known"/> 
+           <column name="value_2" value="5"/> 
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Wizard"/> 
+           <column name="level" value="12"/> 
+           <column name="feature" value="proficiency_bonus"/> 
+           <column name="label_1" value="Proficiency Bonus Value"/> 
+           <column name="value_1" value="4"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Wizard"/> 
+           <column name="level" value="12"/> 
+           <column name="feature" value="Ability Score Improvement"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Wizard"/> 
+           <column name="level" value="12"/> 
+           <column name="feature" value="Spellcasting"/> 
+           <column name="label_1" value="Spell Slots"/> 
+           <column name="value_1" value="4,3,3,3,2,1,0,0,0"/> 
+           <column name="label_2" value="Cantrips Known"/> 
+           <column name="value_2" value="5"/> 
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Wizard"/> 
+           <column name="level" value="13"/> 
+           <column name="feature" value="proficiency_bonus"/> 
+           <column name="label_1" value="Proficiency Bonus Value"/> 
+           <column name="value_1" value="5"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Wizard"/> 
+           <column name="level" value="13"/> 
+           <column name="feature" value="Spellcasting"/> 
+           <column name="label_1" value="Spell Slots"/> 
+           <column name="value_1" value="4,3,3,3,2,1,1,0,0"/> 
+           <column name="label_2" value="Cantrips Known"/> 
+           <column name="value_2" value="5"/> 
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Wizard"/> 
+           <column name="level" value="14"/> 
+           <column name="feature" value="proficiency_bonus"/> 
+           <column name="label_1" value="Proficiency Bonus Value"/> 
+           <column name="value_1" value="5"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Wizard"/> 
+           <column name="level" value="14"/> 
+           <column name="feature" value="Arcane Tradition feature"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Wizard"/> 
+           <column name="level" value="14"/> 
+           <column name="feature" value="Spellcasting"/> 
+           <column name="label_1" value="Spell Slots"/> 
+           <column name="value_1" value="4,3,3,3,2,1,1,0,0"/>  
+           <column name="label_2" value="Cantrips Known"/> 
+           <column name="value_2" value="5"/> 
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Wizard"/> 
+           <column name="level" value="15"/> 
+           <column name="feature" value="proficiency_bonus"/> 
+           <column name="label_1" value="Proficiency Bonus Value"/> 
+           <column name="value_1" value="5"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Wizard"/> 
+           <column name="level" value="15"/> 
+           <column name="feature" value="Spellcasting"/> 
+           <column name="label_1" value="Spell Slots"/> 
+           <column name="value_1" value="4,3,3,3,2,1,1,1,0"/> 
+           <column name="label_2" value="Cantrips Known"/> 
+           <column name="value_2" value="5"/> 
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Wizard"/> 
+           <column name="level" value="16"/> 
+           <column name="feature" value="proficiency_bonus"/> 
+           <column name="label_1" value="Proficiency Bonus Value"/> 
+           <column name="value_1" value="5"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Wizard"/> 
+           <column name="level" value="16"/> 
+           <column name="feature" value="Ability Score Improvement"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Wizard"/> 
+           <column name="level" value="16"/> 
+           <column name="feature" value="Spellcasting"/> 
+           <column name="label_1" value="Spell Slots"/> 
+           <column name="value_1" value="4,3,3,3,2,1,1,1,0"/> 
+           <column name="label_2" value="Cantrips Known"/> 
+           <column name="value_2" value="5"/> 
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Wizard"/> 
+           <column name="level" value="17"/> 
+           <column name="feature" value="proficiency_bonus"/> 
+           <column name="label_1" value="Proficiency Bonus Value"/> 
+           <column name="value_1" value="6"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Wizard"/> 
+           <column name="level" value="17"/> 
+           <column name="feature" value="Spellcasting"/> 
+           <column name="label_1" value="Spell Slots"/> 
+           <column name="value_1" value="4,3,3,3,2,1,1,1,1"/> 
+           <column name="label_2" value="Cantrips Known"/> 
+           <column name="value_2" value="5"/> 
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Wizard"/> 
+           <column name="level" value="18"/> 
+           <column name="feature" value="proficiency_bonus"/> 
+           <column name="label_1" value="Proficiency Bonus Value"/> 
+           <column name="value_1" value="6"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Wizard"/> 
+           <column name="level" value="18"/> 
+           <column name="feature" value="Spell Mastery"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Wizard"/> 
+           <column name="level" value="18"/> 
+           <column name="feature" value="Spellcasting"/> 
+           <column name="label_1" value="Spell Slots"/> 
+           <column name="value_1" value="4,3,3,3,3,1,1,1,1"/> 
+           <column name="label_2" value="Cantrips Known"/> 
+           <column name="value_2" value="5"/> 
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Wizard"/> 
+           <column name="level" value="19"/> 
+           <column name="feature" value="proficiency_bonus"/> 
+           <column name="label_1" value="Proficiency Bonus Value"/> 
+           <column name="value_1" value="6"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Wizard"/> 
+           <column name="level" value="19"/> 
+           <column name="feature" value="Ability Score Improvement"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Wizard"/> 
+           <column name="level" value="19"/> 
+           <column name="feature" value="Spellcasting"/> 
+           <column name="label_1" value="Spell Slots"/> 
+           <column name="value_1" value="4,3,3,3,3,2,1,1,1"/> 
+           <column name="label_2" value="Cantrips Known"/> 
+           <column name="value_2" value="5"/> 
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Wizard"/> 
+           <column name="level" value="20"/> 
+           <column name="feature" value="proficiency_bonus"/> 
+           <column name="label_1" value="Proficiency Bonus Value"/> 
+           <column name="value_1" value="6"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Wizard"/> 
+           <column name="level" value="20"/> 
+           <column name="feature" value="Signature Spell"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
+           <column name="class" value="Wizard"/> 
+           <column name="level" value="20"/> 
+           <column name="feature" value="Spellcasting"/> 
+           <column name="label_1" value="Spell Slots"/> 
+           <column name="value_1" value="4,3,3,3,3,2,2,1,1"/> 
+           <column name="label_2" value="Cantrips Known"/> 
+           <column name="value_2" value="5"/> 
         </insert>
     </changeSet>
 

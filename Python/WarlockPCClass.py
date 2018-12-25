@@ -1,16 +1,17 @@
 from PlayerCharacterClass import PlayerCharacterClass
 
 
-class ClericPCClass(PlayerCharacterClass):
+class WarlockPCClass(PlayerCharacterClass):
     def __init__(self, db,
                  characterAlteringClassOptions=None):
-        PlayerCharacterClass.__init__(self, db, "Cleric",
+        PlayerCharacterClass.__init__(self, db, "Warlock",
                                       characterAlteringClassOptions)
-        self.archetype_label = "Divine Domain"
+        self.archetype_label = "Otherworldly Patron"
+        self.melee_weapon = "Dagger"
+        self.melee_weapon_offhand = "Dagger"
         self.ranged_weapon = "Crossbow, light"
-        self.melee_weapon = "Warhammer"
         self.ranged_ammunition_type = "Bolt"
         self.ranged_ammunition_amt = 20
-        self.armor = "Scale mail"
-        self.shield = "Shield"
-        self.background = "Acolyte"
+        self.armor = "Leather"
+        self.background = "Charlatan"
+

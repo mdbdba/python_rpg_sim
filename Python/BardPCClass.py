@@ -13,3 +13,4 @@ class BardPCClass(PlayerCharacterClass):
         self.ranged_ammunition_amt = 1
         self.armor = "Leather"
         self.shield = None
+        self.background = "Entertainer"

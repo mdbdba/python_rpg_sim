@@ -12,3 +12,4 @@ class FighterPCClass(PlayerCharacterClass):
         self.ranged_ammunition_type = "Bolt"
         self.ranged_ammunition_amt = 20
         self.armor = "Chain mail"
+        self.background = "Soldier"

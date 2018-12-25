@@ -13,3 +13,4 @@ class BarbarianPCClass(PlayerCharacterClass):
         self.ranged_ammunition_amt = 4
         self.armor = None
         self.shield = None
+        self.background = "Outlander"

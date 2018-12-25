@@ -12,3 +12,4 @@ class PaladinPCClass(PlayerCharacterClass):
         self.ranged_ammunition_type = "Javelin"
         self.ranged_ammunition_amt = 5
         self.armor = "Chain mail"
+        self.background = "Noble"

@@ -10,3 +10,4 @@ class DruidPCClass(PlayerCharacterClass):
         self.melee_weapon = "Scimitar"
         self.armor = "Leather"
         self.shield = "Shield"
+        self.background = "Hermit"

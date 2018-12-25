@@ -79,5 +79,31 @@
            <column name="ability_pref_str" value="1,4,2,0,3,5"/> 
            <column name="source_material" value="SRD5"/> 
         </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class">
+           <column name="class" value="Rogue"/> 
+           <column name="hit_die" value="8"/> 
+           <column name="ability_pref_str" value="1,5,2,3,0,4"/> 
+           <column name="source_material" value="SRD5"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class">
+           <column name="class" value="Sorcerer"/> 
+           <column name="hit_die" value="6"/> 
+           <column name="ability_pref_str" value="5,2,1,4,3,0"/> 
+           <column name="source_material" value="SRD5"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class">
+           <column name="class" value="Warlock"/> 
+           <column name="hit_die" value="8"/> 
+           <column name="ability_pref_str" value="5,2,1,4,3,0"/> 
+           <column name="source_material" value="SRD5"/> 
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_class">
+           <column name="class" value="Wizard"/> 
+           <column name="hit_die" value="6"/> 
+           <column name="ability_pref_str" value="3,1,2,4,0,5"/> 
+           <column name="source_material" value="SRD5"/> 
+        </insert>
+
     </changeSet>
+
 </databaseChangeLog>

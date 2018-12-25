@@ -12,6 +12,10 @@ from FighterPCClass import FighterPCClass    # NOQA
 from MonkPCClass import MonkPCClass    # NOQA
 from PaladinPCClass import PaladinPCClass    # NOQA
 from RangerPCClass import RangerPCClass    # NOQA
+from RoguePCClass import RoguePCClass    # NOQA
+from SorcererPCClass import SorcererPCClass    # NOQA
+from WarlockPCClass import WarlockPCClass    # NOQA
+from WizardPCClass import WizardPCClass    # NOQA
 from InvokePSQL import InvokePSQL    # NOQA
 
 
@@ -35,6 +39,7 @@ def test_Class_Barbarian():
     assert(a.ranged_ammunition_amt == 4)
     assert(a.armor is None)
     assert(a.shield is None)
+    assert(a.background == "Outlander")
 
 
 def test_Class_Bard():
@@ -51,6 +56,7 @@ def test_Class_Bard():
     assert(a.ranged_ammunition_amt == 1)
     assert(a.armor == "Leather")
     assert(a.shield is None)
+    assert(a.background == "Entertainer")
 
 
 def test_Class_Cleric():
@@ -67,6 +73,7 @@ def test_Class_Cleric():
     assert(a.ranged_ammunition_amt == 20)
     assert(a.armor == "Scale mail")
     assert(a.shield == "Shield")
+    assert(a.background == "Acolyte")
 
 
 def test_Class_Druid():
@@ -83,6 +90,7 @@ def test_Class_Druid():
     assert(a.ranged_ammunition_amt == 0)
     assert(a.armor == "Leather")
     assert(a.shield == "Shield")
+    assert(a.background == "Hermit")
 
 
 def test_Class_Fighter():
@@ -99,6 +107,7 @@ def test_Class_Fighter():
     assert(a.ranged_ammunition_amt == 20)
     assert(a.armor == "Chain mail")
     assert(a.shield is None)
+    assert(a.background == "Soldier")
 
 
 def test_Class_Monk():
@@ -115,6 +124,7 @@ def test_Class_Monk():
     assert(a.ranged_ammunition_amt == 10)
     assert(a.armor is None)
     assert(a.shield is None)
+    assert(a.background == "Hermit")
 
 
 def test_Class_Paladin():
@@ -131,6 +141,7 @@ def test_Class_Paladin():
     assert(a.ranged_ammunition_amt == 5)
     assert(a.armor == "Chain mail")
     assert(a.shield is None)
+    assert(a.background == "Noble")
 
 
 def test_Class_Ranger():
@@ -148,4 +159,75 @@ def test_Class_Ranger():
     assert(a.ranged_ammunition_amt == 20)
     assert(a.armor == "Leather")
     assert(a.shield is None)
+    assert(a.background == "Outlander")
 
+
+def test_Class_Rogue():
+    db = InvokePSQL()
+    a = RoguePCClass(db)
+    assert(a.name == 'Rogue')
+    assert(a.hit_die == 8)
+    assert(a.ability_sort_array == [1, 5, 2, 3, 0, 4])
+    assert(a.source_material == 'SRD5')
+    assert(a.archetype_label == 'Roguish Archetype')
+    assert(a.ranged_weapon == "Shortbow")
+    assert(a.melee_weapon == "Rapier")
+    assert(a.melee_weapon_offhand == "Dagger")
+    assert(a.ranged_ammunition_type == "Arrow")
+    assert(a.ranged_ammunition_amt == 20)
+    assert(a.armor == "Leather")
+    assert(a.background == "Charlatan")
+    assert(a.shield is None)
+
+
+def test_Class_Sorcerer():
+    db = InvokePSQL()
+    a = SorcererPCClass(db)
+    assert(a.name == 'Sorcerer')
+    assert(a.hit_die == 6)
+    assert(a.ability_sort_array == [5, 2, 1, 4, 3, 0])
+    assert(a.source_material == 'SRD5')
+    assert(a.archetype_label == 'Sorcerous Origin')
+    assert(a.ranged_weapon == "Crossbow, light")
+    assert(a.melee_weapon == "Dagger")
+    assert(a.melee_weapon_offhand == "Dagger")
+    assert(a.ranged_ammunition_type == "Bolt")
+    assert(a.ranged_ammunition_amt == 20)
+    assert(a.armor is None)
+    assert(a.shield is None)
+    assert(a.background == "Hermit")
+
+
+def test_Class_Warlock():
+    db = InvokePSQL()
+    a = WarlockPCClass(db)
+    assert(a.name == 'Warlock')
+    assert(a.hit_die == 8)
+    assert(a.ability_sort_array == [5, 2, 1, 4, 3, 0])
+    assert(a.source_material == 'SRD5')
+    assert(a.archetype_label == 'Otherworldly Patron')
+    assert(a.ranged_weapon == "Crossbow, light")
+    assert(a.melee_weapon == "Dagger")
+    assert(a.melee_weapon_offhand == "Dagger")
+    assert(a.ranged_ammunition_type == "Bolt")
+    assert(a.ranged_ammunition_amt == 20)
+    assert(a.armor == "Leather")
+    assert(a.shield is None)
+    assert(a.background == "Charlatan")
+
+
+def test_Class_Wizard():
+    db = InvokePSQL()
+    a = WizardPCClass(db)
+    assert(a.name == 'Wizard')
+    assert(a.hit_die == 6)
+    assert(a.ability_sort_array == [3, 1, 2, 4, 0, 5])
+    assert(a.source_material == 'SRD5')
+    assert(a.archetype_label == 'Arcane Tradition')
+    assert(a.ranged_weapon is None)
+    assert(a.melee_weapon == "Dagger")
+    assert(a.ranged_ammunition_type is None)
+    assert(a.ranged_ammunition_amt == 0)
+    assert(a.armor is None)
+    assert(a.shield is None)
+    assert(a.background == "Sage")
