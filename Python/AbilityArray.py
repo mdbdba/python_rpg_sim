@@ -18,8 +18,8 @@ Parameters:
 
 class AbilityArray(object):
     def __init__(self, array_type="Common",
-                 pref_array=[3, 2, 1, 5, 4, 0],
-                 ignore_pref_array=False,
+                 raw_array=None,
+                 pref_array=None,
                  debugInd=False):
         """
         Generate a list of values to serve as Ability Scores
@@ -31,6 +31,7 @@ class AbilityArray(object):
         """
         self.array_type = array_type
         self.pref_array = pref_array
+        self.raw_array = raw_array
         self.ability_base_array = []
         self.ability_dsc = {'Strength': "Natural athleticism, bodily power",
                             'Dexterity':
@@ -40,11 +41,14 @@ class AbilityArray(object):
                             "Mental acuity, info recall, analytical skill",
                             'Wisdom': "Awareness, intuition, insight",
                             'Charisma': "Confidence, eloquence, leadership"}
-        self.ignore_pref_array = ignore_pref_array
         self.candidate_array = []
         self.ability_base_array = []
         self.classEval = []
         self.debugInd = debugInd
+        if (self.pref_array):
+            ignore_pref_array = False
+        else:
+            ignore_pref_array = True
         self.classEval.append({"array_type": array_type,
                                "pref_array": pref_array,
                                "ignore_pref_array": ignore_pref_array,
@@ -62,7 +66,9 @@ class AbilityArray(object):
         PointBuy_TwoMax = [15, 15, 11, 10, 10, 10]
         PointBuy_ThreeMax = [15, 15, 15, 8, 8, 8]
 
-        if self.array_type == "Standard":
+        if self.array_type == "Predefined":
+            self.candidate_array = self.raw_array
+        elif self.array_type == "Standard":
             self.candidate_array = Standard
         elif self.array_type == "PointBuy_Even":
             self.candidate_array = PointBuy_Even
@@ -85,16 +91,20 @@ class AbilityArray(object):
         if self.debugInd:
             self.classEval[-1]["candidate_array"] = self.candidate_array[:]
 
-        self.setAbilityPreferences(self.pref_array)
+        self.setAbilityPreferences()
 
-    def setAbilityPreferences(self, prefArray):
+    def setPreferenceArray(self, prefArray):
+        self.pref_array = prefArray
+
+    def setAbilityPreferences(self):
         """
         Arrange the ability array by a defined order.
 
         :param prefArray: array describing the order
         """
 
-        if self.ignore_pref_array:
+        # if self.ignore_pref_array:
+        if (self.pref_array is None):
             self.ability_base_array = self.candidate_array[:]
         else:
             self.ability_base_array = [0, 0, 0, 0, 0, 0]
@@ -104,15 +114,16 @@ class AbilityArray(object):
             self.candidate_array.sort(reverse=True)
             # loop through the prefArray putting the rolled scores
             # in the appropriate order.
-            for r in range(len(prefArray)):
-                t = prefArray[r]
+            for r in range(len(self.pref_array)):
+                t = self.pref_array[r]
                 self.ability_base_array[t] = self.candidate_array[r]
 
         if self.debugInd and "ability_base_array" in self.classEval[-1]:
             self.classEval.append({"call": "setAbilityPreferences"})
 
         self.classEval[-1]["sorted_candidate_array"] = self.candidate_array[:]
-        self.classEval[-1]["preference_array"] = prefArray[:]
+        if (self.pref_array):
+            self.classEval[-1]["preference_array"] = self.pref_array[:]
         self.classEval[-1]["ability_base_array"] = self.ability_base_array[:]
 
     def getArray(self):

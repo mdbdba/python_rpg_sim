@@ -14,8 +14,18 @@ def test_AbilityArray_Default():
     assert(a.getClassEval()[0]['array_type'] == 'Common')
 
 
+def test_AbilityArray_Predefined():
+    compArray = [8, 12, 15, 14, 13, 10]
+    a = AbilityArray(array_type="Predefined",
+                     raw_array=compArray)
+    b = a.getArray()
+    for i in range(0, 6):
+        assert(compArray[i] == b[i])
+    assert(a.getClassEval()[0]['array_type'] == 'Predefined')
+
+
 def test_AbilityArray_Common():
-    a = AbilityArray("Common")
+    a = AbilityArray(array_type="Common")
     b = a.getArray()
     for i in range(0, 6):
         assert(18 >= b[i] >= 3)
@@ -27,7 +37,6 @@ def test_AbilityArray_Common_Sorted():
     prefArray = [3, 2, 1, 5, 4, 0]
     a = AbilityArray(array_type="Standard",
                      pref_array=prefArray,
-                     ignore_pref_array=False,
                      debugInd=True)
     b = a.getArray()
     assert(a.getClassEval()[0]['array_type'] == 'Standard')
@@ -38,7 +47,7 @@ def test_AbilityArray_Common_Sorted():
 
 
 def test_AbilityArray_Strict():
-    a = AbilityArray("Strict")
+    a = AbilityArray(array_type="Strict")
     b = a.getArray()
     for i in range(0, 6):
         assert(18 >= b[i] >= 3)
@@ -47,21 +56,21 @@ def test_AbilityArray_Strict():
 
 def test_AbilityArray_Standard():
     compArray = [15, 14, 13, 12, 10, 8]
+    prefArray = [0, 2, 1, 4, 5, 3]
     a = AbilityArray(array_type="Standard",
-                     ignore_pref_array=True,
+                     pref_array=prefArray,
                      debugInd=True)
     b = a.getArray()
     assert(a.getClassEval()[0]['array_type'] == 'Standard')
     c = a.getClassEval()[-1]
     for i in range(0, 6):
-        assert(compArray[i] == b[i])
+        assert(compArray[i] == b[prefArray[i]])
         assert(compArray[i] == c['candidate_array'][i])
 
 
 def test_AbilityArray_PointBuy_Even():
     compArray = [13, 13, 13, 12, 12, 12]
     a = AbilityArray(array_type="PointBuy_Even",
-                     ignore_pref_array=True,
                      debugInd=True)
     b = a.getArray()
     assert(a.getClassEval()[0]['array_type'] == 'PointBuy_Even')
@@ -74,7 +83,6 @@ def test_AbilityArray_PointBuy_Even():
 def test_AbilityArray_PointBuy_OneMax():
     compArray = [15, 12, 12, 12, 11, 11]
     a = AbilityArray(array_type="PointBuy_OneMax",
-                     ignore_pref_array=True,
                      debugInd=True)
     b = a.getArray()
     assert(a.getClassEval()[0]['array_type'] == 'PointBuy_OneMax')
@@ -87,7 +95,6 @@ def test_AbilityArray_PointBuy_OneMax():
 def test_AbilityArray_PointBuy_TwoMax():
     compArray = [15, 15, 11, 10, 10, 10]
     a = AbilityArray(array_type="PointBuy_TwoMax",
-                     ignore_pref_array=True,
                      debugInd=True)
     b = a.getArray()
     assert(a.getClassEval()[0]['array_type'] == 'PointBuy_TwoMax')
@@ -100,7 +107,6 @@ def test_AbilityArray_PointBuy_TwoMax():
 def test_AbilityArray_PointBuy_ThreeMax():
     compArray = [15, 15, 15, 8, 8, 8]
     a = AbilityArray(array_type="PointBuy_ThreeMax",
-                     ignore_pref_array=True,
                      debugInd=True)
     b = a.getArray()
     assert(a.getClassEval()[0]['array_type'] == 'PointBuy_ThreeMax')
