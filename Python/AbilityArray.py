@@ -1,4 +1,5 @@
 from Die import Die
+from CommonFunctions import arrayToString, stringToArray
 
 
 """
@@ -88,19 +89,22 @@ class AbilityArray(object):
 
                 self.candidate_array.append(r)
 
+        # set the raw_array to whatever we started with for candidate values
+        self.raw_array = self.candidate_array[:]
+
         if self.debugInd:
+            self.classEval[-1]["raw_array"] = self.raw_array[:]
             self.classEval[-1]["candidate_array"] = self.candidate_array[:]
 
         self.setAbilityPreferences()
 
     def setPreferenceArray(self, prefArray):
         self.pref_array = prefArray
+        self.setAbilityPreferences()
 
     def setAbilityPreferences(self):
         """
         Arrange the ability array by a defined order.
-
-        :param prefArray: array describing the order
         """
 
         # if self.ignore_pref_array:
@@ -126,6 +130,18 @@ class AbilityArray(object):
             self.classEval[-1]["preference_array"] = self.pref_array[:]
         self.classEval[-1]["ability_base_array"] = self.ability_base_array[:]
 
+    def getRawArray(self):
+        """
+        Return the originally generated or received array
+        """
+        return self.raw_array
+
+    def getPrefArray(self):
+        """
+        Return the preference array
+        """
+        return self.pref_array
+
     def getArray(self):
         """
         Return an array of Ability Scores
@@ -147,12 +163,22 @@ class AbilityArray(object):
 
 if __name__ == '__main__':
     a1 = AbilityArray()
+    print(a1.getRawArray())
+    print(a1.getPrefArray())
     print(a1.getArray())
     print(a1.getClassEval())
     a = AbilityArray(array_type="Standard",
-                     ignore_pref_array=True,
+                     pref_array=stringToArray('5,0,2,1,4,3'),
                      debugInd=True)
-    b = a.getArray()
-    c = a.getClassEval()[-1]
-    print(b)
-    print(c)
+    print(a.getRawArray())
+    print(a.getPrefArray())
+    print(a.getArray())
+    print(a.getClassEval()[-1])
+    a2 = AbilityArray(array_type="Common",
+                      pref_array=stringToArray('1,2,5,0,4,3'),
+                      debugInd=True)
+    print(a2.getRawArray())
+    print(a2.getPrefArray())
+    print(a2.getArray())
+    print(a2.getClassEval()[-1])
+
