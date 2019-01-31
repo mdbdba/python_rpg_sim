@@ -1,10 +1,7 @@
 from InvokePSQL import InvokePSQL
-from CommonFunctions import arrayToString, stringToArray
+from CommonFunctions import stringToArray
 from AbilityArray import AbilityArray
 from Die import Die
-
-import random
-import datetime
 
 
 class Character(object):
@@ -16,15 +13,16 @@ class Character(object):
                  debugInd=0):
 
         self.db = db
+        level = int(level)
+        if level < 1 or level > 20:
+            raise ValueError('Level should be between 1 and 20.')
+        else:
+            self.level = level
         self.ability_array_str = abilityArrayStr
-        if (not hasattr(self, 'ability_base_array')):
-            self.ability_base_array = [6, 6, 6, 6, 6, 6]
-        if (not hasattr(self, 'ability_sort_array')):
-            self.ability_sort_array = [5, 3, 2, 4, 1, 0]
-        if (not hasattr(self, 'ability_array')):
-            self.ability_array = [6, 6, 6, 6, 6, 6]
-        if (not hasattr(self, 'ability_modifier_array')):
-            self.ability_modifier_array = [0, 0, 0, 0, 0, 0]
+        self.ability_base_array = [6, 6, 6, 6, 6, 6]
+        self.ability_sort_array = [5, 3, 2, 4, 1, 0]
+        self.ability_array = [6, 6, 6, 6, 6, 6]
+        self.ability_modifier_array = [0, 0, 0, 0, 0, 0]
         self.damage_taken = dict(Acid=0, Bludgeoning=0, Cold=0,
                                  Fire=0, Force=0, Ligtning=0,
                                  Necrotic=0, Piercing=0, Poison=0,
@@ -43,18 +41,12 @@ class Character(object):
         self.alive = True
         self.stabilized = True
         self.level = level
-        if (not hasattr(self, 'hit_points')):
-            self.hit_points = None
-        if (not hasattr(self, 'temp_hit_points')):
-            self.temp_hit_points = None
-        if (not hasattr(self, 'cur_hit_points')):
-            self.cur_hit_points = None
-        if (not hasattr(self, 'height')):
-            self.height = None
-        if (not hasattr(self, 'weight')):
-            self.weight = None
-        if (not hasattr(self, 'cur_movement')):
-            self.cur_movement = None
+        self.hit_points = None
+        self.temp_hit_points = None
+        self.cur_hit_points = None
+        self.height = None
+        self.weight = None
+        self.cur_movement = None
 
         self.proficiency_bonus = None
         self.armor_class = 0
@@ -63,26 +55,32 @@ class Character(object):
         self.debugInd = debugInd
         self.debugStr = ''
         self.lastMethodLog = ''
-        if (not hasattr(self, 'ranged_weapon')):
-            self.ranged_weapon = None
+        if genderCandidate == "Random":
+            self.gender = self.assignGender(db)
+        else:
+            self.gender = genderCandidate
 
-        if (not hasattr(self, 'melee_weapon')):
-            self.melee_weapon = None
+        self.ranged_weapon = None
+        self.melee_weapon = None
+        self.ranged_ammunition_type = None
+        self.ranged_ammunition_amt = None
+        self.armor = None
+        self.shield = None
 
-        if (not hasattr(self, 'ranged_ammunition_type')):
-            self.ranged_ammunition_type = None
+    def assignGender(self, db):
+        self.lastMethodLog = (f'assignGender(db)')
+        d = Die(100)
+        a = d.roll()
+        if a <= 40:
+            result = "M"
+        elif a > 40 and a <= 90:
+            result = "F"
+        else:
+            result = "U"
+        return result
 
-        if (not hasattr(self, 'ranged_ammunition_amt')):
-            self.ranged_ammunition_amt = None
-
-        if (not hasattr(self, 'armor')):
-            self.armor = None
-
-        if (not hasattr(self, 'shield')):
-            self.shield = None
-
-        self.assignAbilityArray()
-        self.setArmorClass()
+    def getGender(self):
+        return self.gender
 
     def assignAbilityArray(self, sortArray=None):
         self.lastMethodLog = (f'assignAbilityArray('
@@ -213,12 +211,16 @@ class Character(object):
         self.armor_class = baseAC + shieldBonus + dexMod
 
 
-
 if __name__ == '__main__':
     db = InvokePSQL()
     a1 = Character(db)
+    a1.assignAbilityArray()
+    a1.setArmorClass()
+    print(a1.getGender())
     print(a1.rawAbilityArray)
     a2 = Character(db=db, abilityArrayStr='10,11,12,13,14,15')
+    a2.assignAbilityArray()
+    a2.setArmorClass()
     print(a2.getRawAbilityArray())
     print(a2.getAbilityPrefArray())
     print(a2.getSortedAbilityArray())
@@ -229,6 +231,6 @@ if __name__ == '__main__':
     print(a2.getAbilityPrefArray())
     print(a2.getSortedAbilityArray())
     print(a2.armor_class)
+    print(a2.getGender())
 
-
-
+    # a3 = Character(db, level=43)

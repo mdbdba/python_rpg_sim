@@ -1,4 +1,3 @@
-import random
 
 def arrayToString(srcArray):
     outstr = ""
@@ -27,4 +26,3 @@ def compareArrays(array1, array2):
             retval = False
 
     return retval
-
