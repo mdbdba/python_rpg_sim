@@ -31,6 +31,13 @@ class CharacterRace(object):
         # Strength, Dexterity, Constitution, Intelligence, Wisdom, Charisma
         self.ability_bonuses = [0, 0, 0, 0, 0, 0]
 
+        self.name = None
+        self.alignment = None
+        self.skinTone = None
+        self.hairColor = None
+        self.hairType = None
+        self.eyeColor = None
+
         if raceCandidate == "Random":
             raceCandidate = self.getRandomRaceName(db)
 
@@ -277,6 +284,31 @@ class CharacterRace(object):
             retstr = (f"{firstName} {lres[0][0]}")
 
         return retstr
+
+    def setRandoms(self, db=None,
+                   name=None,
+                   alignment=None,
+                   skinTone=None,
+                   hairColor=None,
+                   hairType=None,
+                   eyeColor=None,
+                   gender=None):
+        if (gender):
+            self.name = self.getName(db, gender)
+            self.alignment = self.getAlignment(db)
+            self.skinTone = self.getSkinTone(db)
+            self.hairColor = self.getHairColor(db)
+            self.hairType = self.getHairType(db)
+            self.eyeColor = self.getEyeColor(db)
+        else:
+            self.name = name
+            self.alignment = alignment
+            self.skinTone = skinTone
+            self.hairColor = hairColor
+            self.hairType = hairType
+            self.eyeColor = eyeColor
+
+
 
     def populateDetails(self, raceCandidate, db):
         sql = (f"select race, subrace_of, maturity_age, avg_max_age, "

@@ -3,6 +3,8 @@ from CommonFunctions import stringToArray
 from AbilityArray import AbilityArray
 from Die import Die
 
+import random
+
 
 class Character(object):
     def __init__(self,
@@ -18,6 +20,9 @@ class Character(object):
             raise ValueError('Level should be between 1 and 20.')
         else:
             self.level = level
+
+        self.TTA = self.assignTaliesinTempermentArchitype()
+        self.name = None
         self.ability_array_str = abilityArrayStr
         self.ability_base_array = [6, 6, 6, 6, 6, 6]
         self.ability_sort_array = [5, 3, 2, 4, 1, 0]
@@ -107,6 +112,19 @@ class Character(object):
 
     def getSortedAbilityArray(self):
         return self.ability_array_obj.getArray()
+
+    def assignTaliesinTempermentArchitype(self):
+        self.lastMethodLog = (f'assignTaliesinTempermentArchitype()')
+        alignArray = ['Bashful', 'Doc', 'Grumpy', 'Happy', 'Sneezy',
+                      'Sleepy', 'Dopey']
+        alignType = alignArray[(random.randint(0, 6))]
+        perArray = ['High', 'Mid', 'Low']
+        perType = perArray[(random.randint(0, 2))]
+
+        return (f"{alignType}/{perType}")
+
+    def getTTA(self):
+        return self.TTA
 
     def getMovement(self):
         return 15
