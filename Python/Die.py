@@ -141,6 +141,14 @@ class Die(object):
             self.callEval = {}
         return retval
 
+    def getSum(self, startingval, multiplier):
+        if self.debugInd:
+            self.callEval["called"] = "getSum"
+        if self.debugInd:
+            self.classEval.append(self.callEval)
+            self.callEval = {}
+        return (startingval + self.roll(multiplier))
+
 
 # Define a basic test case that'll just make sure the class works.
 if __name__ == '__main__':
@@ -150,4 +158,5 @@ if __name__ == '__main__':
     print(f'Roll with advantage: {d6.rollWithAdvantage()}')
     print(f'Roll with disadvantage: {d6.rollWithDisadvantage()}')
     print(f'Roll for damage with resistance: {d6.rollWithResistance(6)}')
+    print(f'getSum: {d6.getSum(3,1)}')
     print(d6.getClassEval()[-1])

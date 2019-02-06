@@ -34,6 +34,8 @@ class AbilityArray(object):
         self.pref_array = pref_array
         self.raw_array = raw_array
         self.ability_base_array = []
+        self.ability_label_array = ['Strength', 'Dexterity', 'Constitution',
+                                    'Intelligence', 'Wisdom', 'Charisma']
         self.ability_dsc = {'Strength': "Natural athleticism, bodily power",
                             'Dexterity':
                             "Physical agility, reflexes, balance, poise",

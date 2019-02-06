@@ -37,6 +37,8 @@ class CharacterRace(object):
         self.hairColor = None
         self.hairType = None
         self.eyeColor = None
+        self.height = None
+        self.weight = None
 
         if raceCandidate == "Random":
             raceCandidate = self.getRandomRaceName(db)
@@ -308,8 +310,6 @@ class CharacterRace(object):
             self.hairType = hairType
             self.eyeColor = eyeColor
 
-
-
     def populateDetails(self, raceCandidate, db):
         sql = (f"select race, subrace_of, maturity_age, avg_max_age, "
                f"base_walking_speed, height_min_inches, "
@@ -386,6 +386,13 @@ class CharacterRace(object):
         for l in langs:
             self.languages.append(l[0])
 
+        dh = Die(self.height_modifier_die)
+        self.height = dh.getSum(self.height_min_inches,
+                                self.height_modifier_multiplier)
+        dw = Die(self.weight_modifier_die)
+        self.weight = dw.getSum(self.weight_min_pounds,
+                                self.weight_modifier_multiplier)
+
     def getRace(self):
         return self.race
 
@@ -447,6 +454,7 @@ if __name__ == '__main__':
     db = InvokePSQL()
     a = CharacterRace(db, 'Dryad')
     alignmentObj = a.getAlignment(db)
+    a.setRandoms(db=db, gender='M')
     print(a.race)
     print(alignmentObj)
     print(a.getSkinTone(db))
@@ -455,4 +463,13 @@ if __name__ == '__main__':
     print(a.getEyeColor(db))
     print(a.getName(db, 'U'))
     for b in a.traitContainer.traits:
-        print(b.trait_name)
+        print(b)
+
+    print(a.name)
+    print(a.alignment)
+    print(a.skinTone)
+    print(a.hairColor)
+    print(a.hairType)
+    print(a.eyeColor)
+    print(a.height)
+    print(a.weight)

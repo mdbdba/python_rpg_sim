@@ -26,3 +26,9 @@ def compareArrays(array1, array2):
             retval = False
 
     return retval
+
+
+def inchesToFeet(inches):
+    feet = inches // 12
+    remainder = inches % 12
+    return (f"{feet}'{remainder}\"")

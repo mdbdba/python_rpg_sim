@@ -191,6 +191,13 @@ class Character(object):
 
         return res
 
+    def assignHitPoints(self, level, hit_die, modifier):
+        self.lastMethodLog = (f'assignHitPoints( '
+                              f'{level}, '
+                              f'{hit_die}, '
+                              f'{modifier})')
+        return ((level * hit_die) + (level * modifier))
+
     def setArmorClass(self):
         self.lastMethodLog = (f'setArmorClass()')
         dexMod = -99
