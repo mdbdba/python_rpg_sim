@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet author="mdbdba" id="character_1">
+        <createTable 
+                schemaName="dnd_5e"
+                tableName="character">
+            <column name="id" type="bigint" autoIncrement="true" startWith="1"/>
+            <column name="name" type="varchar(132)"/>
+            <column name="gender" type="varchar(2)"/>
+            <column name="race" type="varchar(64)"/>
+            <column name="class" type="varchar(64)"/>
+            <column name="level" type="int"/>
+            <column name="TTA" type="varchar(32)"/>
+            <column name="raw_ability_string" type="varchar(32)"/>
+            <column name="ability_base_string" type="varchar(32)"/>
+            <column name="ability_string" type="varchar(32)"/>
+            <column name="ability_racial_mod_string" type="varchar(32)"/>
+            <column name="ability_modifier_string" type="varchar(32)"/>
+            <column name="hit_points" type="int"/>
+            <column name="temp_hit_points" type="int"/>
+            <column name="cur_hit_points" type="int"/>
+            <column name="height" type="int"/>
+            <column name="weight" type="int"/>
+            <column name="alignment" type="varchar(24)"/>
+            <column name="alignment_abbrev" type="varchar(32)"/>
+            <column name="skin_tone" type="varchar(32)"/>
+            <column name="hair_color" type="varchar(32)"/>
+            <column name="hair_type" type="varchar(32)"/>
+            <column name="eye_color" type="varchar(32)"/>
+            <column name="ranged_weapon" type="varchar(64)"/>
+            <column name="melee_weapon" type="varchar(64)"/>
+            <column name="ranged_ammunition_type" type="varchar(64)"/>
+            <column name="ranged_ammunition_amt" type="int"/>
+            <column name="armor" type="varchar(64)"/>
+            <column name="shield" type="varchar(64)"/>
+        </createTable>
+        <addPrimaryKey 
+            columnNames="id"
+            constraintName="character_pk"
+            schemaName="dnd_5e"
+            tableName="character"/>
+
+    </changeSet>
+
+</databaseChangeLog>

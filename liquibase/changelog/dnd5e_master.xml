@@ -38,6 +38,7 @@
     <include file="dnd5e_lu_character_altering_class_feature_option.xml"/>
     <include file="dnd5e_v_character_altering_class_feature_combination.xml"/>
     <include file="dnd5e_lu_ability_array_option.xml"/>
+    <include file="dnd5e_character.xml"/>
     <includeAll path="licensedContent/"/>
     <includeAll path="myContent/"/>
 </databaseChangeLog>

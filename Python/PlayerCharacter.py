@@ -1,6 +1,6 @@
 from InvokePSQL import InvokePSQL
 from Character import Character
-# from CommonFunctions import arrayToString
+from CommonFunctions import arrayToString
 from CommonFunctions import stringToArray
 from CommonFunctions import inchesToFeet
 # from AbilityArray import AbilityArray
@@ -47,8 +47,10 @@ class PlayerCharacter(Character):
                                  genderCandidate,
                                  abilityArrayStr,
                                  self.level)
-            # self.saveCharacter(db)
-        self.characterId = characterId
+            self.saveCharacter(db)
+        else:
+            self.character_id = characterId
+            self.getCharacter(db, self.character_id)
 
         self.setFinesseAbility()
         self.setArmorClass()
@@ -110,6 +112,109 @@ class PlayerCharacter(Character):
             self.melee_weapon_obj.setWeaponProficient()
         if (self.classObj.ranged_weapon is not None):
             self.ranged_weapon_obj = Weapon(db, self.getRangedWeapon())
+
+    def saveCharacter(self, db):
+        self.lastMethodLog = (f'saveCharacter(db)')
+        raw_ability_string = arrayToString(self.rawAbilityArray)
+        ability_base_string = arrayToString(self.ability_base_array)
+        ability_string = arrayToString(self.ability_array)
+        ability_racial_mod_string = arrayToString(self.raceObj.ability_bonuses)
+        ability_modifier_string = arrayToString(self.ability_modifier_array)
+        sql = (f"insert into dnd_5e.character(name, gender, race, class, "
+               f"level, TTA, raw_ability_string, "
+               f"ability_base_string,ability_string, "
+               f"ability_racial_mod_string, ability_modifier_string, "
+               f"hit_points, temp_hit_points, cur_hit_points, height, "
+               f"weight, alignment, alignment_abbrev, skin_tone, hair_color, "
+               f"hair_type, eye_color, melee_weapon, ranged_weapon, "
+               f"ranged_ammunition_type, ranged_ammunition_amt, armor, shield"
+               f") values ('{self.getName()}', "
+               f"'{self.getGender()}',"
+               f" '{self.getRace()}','{self.getClass()}',{self.level},'{self.TTA}',"
+               f" '{raw_ability_string}', "
+               f"'{ability_base_string}', '{ability_string}', "
+               f"'{ability_racial_mod_string}', "
+               f"'{ability_modifier_string}', {self.hit_points}, "
+               f"{self.temp_hit_points}, {self.cur_hit_points}, {self.getHeight()},"
+               f"{self.getWeight()}, '{self.getAlignmentStr()}', '{self.getAlignmentAbbrev()}',"
+               f"'{self.getSkinTone()}', '{self.getHairColor()}', '{self.getHairType()}',"
+               f"'{self.getEyeColor()}', '{self.getMeleeWeapon()}', "
+               f"'{self.getRangedWeapon()}', '{self.getRangedAmmunitionType()}', "
+               f"{self.getRangedAmmunitionAmt()}, '{self.getArmor()}', "
+               f"'{self.getShield()}')")
+
+        self.character_id = db.insertAndReturnId(sql)
+
+    def validCharacterId(self, db, character_id):
+        self.lastMethodLog = (f'validCharacterId(db, '
+                              f'{character_id})')
+        sql = (f"select count(id) from dnd_5e.character where "
+               f"id = {character_id};")
+        results = db.query(sql)
+        idCnt = results[0][0]
+        if idCnt == 1:
+            return True
+        else:
+            return False
+
+    def getCharacter(self, db, character_id):
+        self.lastMethodLog = (f'getCharacter(db, '
+                              f'{character_id})')
+        if self.validCharacterId(db, character_id):
+            sql = (f"select name, gender, race, class, "
+                   f"level, TTA, raw_ability_string, "
+                   f"ability_base_string, ability_string, "
+                   f"ability_racial_mod_string, ability_modifier_string, "
+                   f"hit_points, temp_hit_points, cur_hit_points, height, "
+                   f"weight, alignment, alignment_abbrev, skin_tone, "
+                   f"hair_color, hair_type, eye_color, melee_weapon, "
+                   f"ranged_weapon, ranged_ammunition_type, "
+                   f"ranged_ammunition_amt, armor, shield "
+                   f"from dnd_5e.character where id = {character_id}")
+            results = db.query(sql)
+
+            self.gender = results[0][1]
+            self.raceObj = self.assignRace(results[0][2])
+            self.raceObj.setRandoms(
+                   name=results[0][0],
+                   alignment={"alignment": results[0][16],
+                              "abbreviation": results[0][17]},
+                   skinTone=results[0][18],
+                   hairColor=results[0][19],
+                   hairType=results[0][20],
+                   eyeColor=results[0][21])
+            self.raceObj.height = results[0][14]
+            self.raceObj.weight = results[0][15]
+            self.classObj = self.assignClass(results[0][3])
+            self.level = results[0][4]
+            self.TTA = results[0][5]
+            self.rawAbilityArray = stringToArray(results[0][6])
+            self.ability_base_array = stringToArray(results[0][7])
+            self.ability_array_str = results[0][8]
+            ability_racial_mod_string = results[0][9]
+            self.ability_modifier_array = stringToArray(results[0][10])
+            self.hit_points = results[0][11]
+            self.temp_hit_points = results[0][12]
+            self.cur_hit_points = results[0][13]
+
+            self.assignAbilityArray()
+
+            self.classObj.melee_weapon = results[0][22]
+            self.classObj.ranged_weapon = results[0][23]
+            self.classObj.ranged_ammunition_type = results[0][24]
+            self.classObj.ranged_ammunition_amt = results[0][25]
+            self.classObj.armor = results[0][26]
+            self.classObj.shield = results[0][27]
+
+            tmp_rab_str = arrayToString(self.raceObj.ability_bonuses)
+
+            if (ability_racial_mod_string != tmp_rab_str):
+                tmpStr = (f"\n**WARNING: "
+                          f"Racial Ability Array Mismatches: "
+                          f"{ability_racial_mod_string} "
+                          f"{tmp_rab_str}**\n")
+                print(tmpStr)
+            self.setArmorClass()
 
     def getAbilitySortArray(self):
         return self.classObj.ability_sort_array
@@ -211,7 +316,7 @@ class PlayerCharacter(Character):
     def __str__(self):
         outstr = (f'{self.__class__.__name__}\n'
                   f'Name:         {self.getName()}\n'
-                  f'Id            {self.characterId}\n'
+                  f'Id            {self.character_id}\n'
                   f'TTA:          {self.getTTA()}\n'
                   f'Gender:       {self.getGender()}\n'
                   f'Race:         {self.getRace()} ('
@@ -319,44 +424,11 @@ class PlayerCharacter(Character):
 if __name__ == '__main__':
     db = InvokePSQL()
     a1 = PlayerCharacter(db)
-    # print(a1.rawAbilityArray)
-    # print(a1.getGender())
-    # print(a1.getRace())
-    # print(a1.getClass())
-    # print(a1.getTTA())
-    # print(a1.getName())
-    # print(a1.getAlignmentStr())
-    # print(a1.getAlignmentAbbrev())
-    # print(a1.getSkinTone())
-    # print(a1.getHairColor())
-    # print(a1.getHairType())
-    # print(a1.getEyeColor())
-    # print(a1.getHeight())
-    # print(a1.getWeight())
     print(a1)
     a2 = PlayerCharacter(db=db, abilityArrayStr='10,11,12,13,14,15')
-    # print(a2.getRawAbilityArray())
-    # print(a2.getAbilityPrefArray())
-    # print(a2.getSortedAbilityArray())
     a2.ability_array_obj.setPreferenceArray(prefArray=stringToArray(
                                             '5,0,2,1,4,3'
                                             ))
-    # print(a2.getRawAbilityArray())
-    # print(a2.getAbilityPrefArray())
-    # print(a2.getSortedAbilityArray())
-    # print(a2.armor_class)
-    # print(a2.getGender())
-    # print(a2.getRace())
-    # print(a2.getClass())
-    # print(a2.getTTA())
-
-    # print(a2.getName())
-    # print(a2.getAlignmentStr())
-    # print(a2.getAlignmentAbbrev())
-    # print(a2.getSkinTone())
-    # print(a2.getHairColor())
-    # print(a2.getHairType())
-    # print(a2.getEyeColor())
-    # print(a2.getHeight())
-    # print(a2.getWeight())
     print(a2)
+    a3 = PlayerCharacter(db, characterId=10)
+    print(a3)
