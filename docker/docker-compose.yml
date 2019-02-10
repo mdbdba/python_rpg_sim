@@ -1,4 +1,4 @@
-version: '2'
+version: '3'
 
 services:
   pgs:
@@ -15,3 +15,23 @@ services:
     volumes:
      - ~/rpg/docker_data/pgs/data:/var/lib/postgresql/data
 
+  simrest:
+    build: ./simrest
+    container_name: simrest
+    volumes:
+      - ./simrest:/usr/src/app 
+    ports:
+      - 6080:80
+    depends_on:
+      - pgs
+
+#   web:
+#     image: php:apache  # pulling image from DockerHub
+#     container_name: web
+#     volumes:
+#       - ./web:/var/www/html
+#     ports:
+#       - 8081:80  # host:container
+#     depends_on:
+#       - simrest  # website is not going to work 
+#                  # unless observatory-service is running
