@@ -1,6 +1,7 @@
 from InvokePSQL import InvokePSQL
 from CommonFunctions import stringToArray
 from AbilityArray import AbilityArray
+from Attack import Attack
 from Die import Die
 
 import random
@@ -65,12 +66,34 @@ class Character(object):
         else:
             self.gender = genderCandidate
 
+        self.blinded_ind = False
+        self.charmed_ind = False
+        self.deafend_ind = False
+        self.fatigued_ind = False
+        self.frightened_ind = False
+        self.grappled_ind = False
+        self.incapacitated_ind = False
+        self.invisible_ind = False
+        self.paralyzed_ind = False
+        self.petrified_ind = False
+        self.poisoned_ind = False
+        self.prone_ind = False
+        self.stunned_ind = False
+        self.unconcious_ind = False
         self.ranged_weapon = None
         self.melee_weapon = None
         self.ranged_ammunition_type = None
         self.ranged_ammunition_amt = None
         self.armor = None
         self.shield = None
+
+        self.exhaustion_level = 0
+        # 1   Disadvantage on Ability Checks
+        # 2   Speed halved
+        # 3   Disadvantage on Attack rolls and Saving Throws
+        # 4   Hit point maximum halved
+        # 5   Speed reduced to 0
+        # 6   Death
 
     def assignGender(self, db):
         self.lastMethodLog = (f'assignGender(db)')
@@ -126,7 +149,7 @@ class Character(object):
     def getTTA(self):
         return self.TTA
 
-    def getMovement(self):
+    def getBaseMovement(self):
         return 15
 
     def zeroMovement(self):
@@ -235,6 +258,245 @@ class Character(object):
 
         self.armor_class = baseAC + shieldBonus + dexMod
 
+    def contestCheck(self, ability, vantage='Normal'):
+        self.lastMethodLog = (f'contestCheck('
+                              f'{ability}, {vantage})')
+        d = Die(20)
+        if (vantage == 'Normal'):
+            r = d.roll()
+        elif (vantage == 'Advantage'):
+            r = d.rollWithAdvantage()
+        elif (vantage == 'Disadvantage'):
+            r = d.rollWithDisadvantage()
+
+        mod = self.getAbilityModifier(ability)
+
+        return (r + mod)
+
+    def rollForInitiative(self, vantage='Normal'):
+        return self.contestCheck('Dexterity', vantage)
+
+    def checkProficiencySkill(self, ability):
+        self.lastMethodLog = (f'checkProficiencySkill('
+                              f'{ability})')
+        retValue = False
+        for b in self.raceObj.traitContainer.traits:
+                if b.category == "Proficiency Skill":
+                    if b.affected_name == ability:
+                        retValue = True
+
+        return retValue
+
+
+    def deathSave(self, vantage='Normal'):
+        self.lastMethodLog = (f'deathSave('
+                              f'{vantage})')
+        tmpStr = 'Performs death save.'
+        res = self.contestCheck('Death', vantage)
+        if (res == 20):  # character is stablized
+            self.cur_hit_points = 1
+            self.death_save_passed_cnt = 3
+            self.stabilized = 1
+            tmpStr = (f'{tmpStr}\nResult: Nat 20. Character Stabilized')
+        elif (res >= 10):  # normal pass
+            self.death_save_passed_cnt += 1
+            tmpStr = (f'{tmpStr}\nPassed. Current counts: (P/F) '
+                      f'{self.death_save_passed_cnt}/'
+                      f'{self.death_save_failed_cnt}')
+        elif (res == 1):   # crit fail
+            self.death_save_failed_cnt += 2
+            tmpStr = (f'{tmpStr}\nCrit fail. Current counts: (P/F) '
+                      f'{self.death_save_passed_cnt}/'
+                      f'{self.death_save_failed_cnt}')
+        else:   # res < 10 -- normal fail
+            self.death_save_failed_cnt += 1
+            tmpStr = (f'{tmpStr}\nFailed. Current counts: (P/F) '
+                      f'{self.death_save_passed_cnt}/'
+                      f'{self.death_save_failed_cnt}')
+
+        if (self.death_save_passed_cnt >= 3):
+            self.death_save_passed_cnt = 0
+            self.death_save_failed_cnt = 0
+            self.stabilized = True
+            tmpStr = (f'{tmpStr}\nThree passed death saves. '
+                      f'Character Stabilized')
+        elif (self.death_save_failed_cnt >= 3):
+            self.alive = False
+            tmpStr = (f'{tmpStr}\nThree failed death saves. '
+                      f'Character has died.')
+
+
+    def Check(self, skill, vantage='Normal', dc=10):
+        self.lastMethodLog = (f'Check({skill}, '
+                              f'{vantage}, {dc})')
+        tmpStr = ''
+        # Saving throw
+        if (skill == 'Strength' or skill == 'Dexterity'
+            or skill == 'Constitution' or skill == 'Intelligence'
+                or skill == 'Wisdom' or skill == 'Charisma'):
+                ability = skill
+                # at exhaustion level 3 saving throws are affected
+                if (self.exhaustion_level >= 3):
+                    if (vantage == 'Advantage'):
+                        vantage = 'Normal'
+                    else:
+                        vantage = 'Disadvantage'
+                adjustedRoll = self.contestCheck(ability, vantage)
+        else:
+            # Skill Check
+            if skill == 'Athletics':
+                ability = 'Strength'
+            elif (skill == 'Acrobatics'
+                  or skill == 'Sleight of Hand'
+                  or skill == 'Stealth'):
+                ability = 'Dexterity'
+            elif (skill == 'Arcana'
+                  or skill == 'History'
+                  or skill == 'Investigation'
+                  or skill == 'Nature'
+                  or skill == 'Religion'):
+                ability = 'Intelligence'
+            elif (skill == 'Animal Handling'
+                  or skill == 'Insight'
+                  or skill == 'Medicine'
+                  or skill == 'Perception'
+                  or skill == 'Survival'):
+                ability = 'Wisdom'
+            elif (skill == 'Deception'
+                  or skill == 'Intimidation'
+                  or skill == 'Performance'
+                  or skill == 'Persuasion'):
+                ability = 'Charisma'
+            if (self.debugInd):
+                tmpStr = (f'{tmpStr}{skill} ')
+            # at exhaustion level 1 skills checks are affected
+            if (self.exhaustion_level >= 1):
+                if (vantage == 'Advantage'):
+                    vantage = 'Normal'
+                else:
+                    vantage = 'Disadvantage'
+            adjustedRoll = self.contestCheck(ability, vantage)
+
+            if(self.checkProficiencySkill(skill)):
+                adjustedRoll = adjustedRoll + self.proficiency_bonus
+                tmpStr = (f'{tmpStr} + Prof({self.proficiency_bonus}) ')
+
+        if (adjustedRoll >= dc):
+            res = True
+        else:
+            res = False
+
+        if (self.debugInd):
+            tmpStr = (f'{tmpStr}{adjustedRoll} >= {dc} ')
+            if (res):
+                tmpStr = (f'{tmpStr} (true)\n')
+            else:
+                tmpStr = (f'{tmpStr} (false)\n')
+
+        return res
+
+    def rangedAttack(self, weaponObj, vantage='Normal'):
+        # determine modifier
+        # 1)  is this a martial weapon that needs specific proficiency
+        #     if it is and the character has that, or the weapon is a standard
+        #     one, add the character's proficiency bonus.
+        if     (weaponObj.martial_weapon_ind is False  # NOQA
+                or (weaponObj.martial_weapon_ind is True
+                and weaponObj.proficient_ind is True)):
+            modifier = int(self.proficiency_bonus)
+        else:
+            modifier = 0
+
+        modifier += self.getAbilityModifier('Dexterity')
+
+        attempt = Attack(weaponObj=weaponObj, attackModifier=modifier,
+                         versatile_use_2handed=False, vantage=vantage)
+
+        print(f'Attack Value: {attempt.attack_value}')
+        print(f'Poss. Damage: {attempt.possible_damage}')
+
+    def meleeAttack(self, weaponObj, vantage='Normal'):
+        # determine modifier
+        # 1)  is this a martial weapon that needs specific proficiency
+        #     if it is and the character has that, or the weapon is a standard
+        #     one, add the character's proficiency bonus.
+        if     (weaponObj.martial_weapon_ind is False  # NOQA
+                or (weaponObj.martial_weapon_ind is True
+                and weaponObj.proficient_ind is True)):
+            modifier = int(self.proficiency_bonus)
+        else:
+            modifier = 0
+        # 2)  Add the users Ability bonus, Strength for standard weapons
+        #     or self.finesse_ability_mod for Finesse wepons
+        if     (weaponObj.finesse_ind is True):  # NOQA
+            modifier += self.getAbilityModifier(self.self.finesse_ability_mod)
+        else:
+            modifier += self.getAbilityModifier('Strength')
+
+        if     (self.classObj.shield is None  # NoQA
+                and weaponObj.versatile_ind is True):
+            v2h = True
+        else:
+            v2h = False
+
+        attempt = Attack(weaponObj=weaponObj, attackModifier=modifier,
+                         versatile_use_2handed=v2h, vantage=vantage)
+
+        print(f'Attack Value: {attempt.attack_value}')
+        print(f'Poss. Damage: {attempt.possible_damage}')
+
+    def meleeDefend(self, modifier=0, vantage='Normal',
+                    possibleDamage=0, damageType='Unknown'):
+        self.lastMethodLog = (f'meleeDefend({modifier}, '
+                              f'{vantage}, {possibleDamage}, '
+                              f'{damageType})')
+        d = Die(20)
+        if self.prone_ind:
+            if vantage == 'Disadvantage':
+                vantage = 'Normal'
+            else:
+                vantage = 'Advantage'
+        value = d.roll() + modifier
+
+        if value >= self.armor_class:
+            tmpStr = (f'Fails against a melee attack roll: '
+                      f'{value} >= {self.armor_class}')
+            ret = False
+            if possibleDamage > 0:
+                self.Damage(possibleDamage, damageType)
+        else:
+            tmpStr = (f'Succeeds against a melee attack roll: '
+                      f'{value} < {self.armor_class}')
+            ret = True
+
+        return ret
+
+    def rangedDefend(self, modifier=0, vantage='Normal',
+                     possibleDamage=0, damageType='Unknown'):
+        self.lastMethodLog = (f'rangedDefend({modifier}, '
+                              f'{vantage}, {possibleDamage}'
+                              f'{damageType})')
+        d = Die(20)
+        if self.prone_ind:
+            if vantage == 'Advantage':
+                vantage = 'Normal'
+            else:
+                vantage = 'Disadvantage'
+        value = d.roll() + modifier
+
+        if value >= self.armor_class:
+            tmpStr = (f'Fails against a ranged attack roll: '
+                      f'{value} >= {self.armor_class}')
+            ret = False
+            if possibleDamage > 0:
+                self.Damage(possibleDamage, damageType)
+        else:
+            tmpStr = (f'Succeeds against a ranged attack roll: '
+                      f'{value} < {self.armor_class}')
+            ret = True
+
+        return ret
+
 
 if __name__ == '__main__':
     db = InvokePSQL()
@@ -259,3 +521,5 @@ if __name__ == '__main__':
     print(a2.getGender())
 
     # a3 = Character(db, level=43)
+
+

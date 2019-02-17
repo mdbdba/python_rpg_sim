@@ -52,9 +52,12 @@ class PlayerCharacter(Character):
             self.character_id = characterId
             self.getCharacter(db, self.character_id)
 
-        self.setFinesseAbility()
-        self.setArmorClass()
         self.featureObj = self.classObj.getClassLevelFeature(self.level, db)
+        self.resetMovement()
+        self.setFinesseAbility()
+        self.setProficiencyBonus()
+        self.setDamageAdjs(db)
+        self.setArmorClass()
 
     def assignRace(self, raceCandidate):
         self.lastMethodLog = (f'assignRace('
@@ -196,7 +199,15 @@ class PlayerCharacter(Character):
             self.hit_points = results[0][11]
             self.temp_hit_points = results[0][12]
             self.cur_hit_points = results[0][13]
-
+            # print(f"Raw:    {self.rawAbilityArray} ")
+            # print(f"Base:   {self.ability_base_array} ")
+            # print(f"Racial: {ability_racial_mod_string}")
+            # print(f"Str:    {self.ability_array_str} ")
+            # print(f"Mod:    {self.ability_modifier_array}")
+            for r in range(len(self.ability_base_array)):
+                self.ability_array[r] = (
+                    self.ability_base_array[r] +
+                    self.raceObj.ability_bonuses[r])
             self.assignAbilityArray()
 
             self.classObj.melee_weapon = results[0][22]
@@ -276,6 +287,9 @@ class PlayerCharacter(Character):
     def getShield(self):
         return self.classObj.shield
 
+    def getBaseMovement(self):
+        return self.raceObj.base_walking_speed
+
     def assignClass(self, classCandidate):
         self.lastMethodLog = (f'assignClass(db, '
                               f'{classCandidate})')
@@ -312,6 +326,98 @@ class PlayerCharacter(Character):
             self.finesse_ability_mod = 'Strength'
         else:
             self.finesse_ability_mod = 'Dexterity'
+
+    def setDamageAdjs(self, db):
+        self.lastMethodLog = (f'setDamagedAdjs(db)')
+        sql = (f"select rt.affected_name, rt.affect "
+               f"from lu_racial_trait as rt "
+               f"join lu_race as r on (rt.race = r.race "
+               f"or rt.race = r.subrace_of)"
+               f"where rt.category = 'Damage Received' "
+               f"and rt.affect is not null "
+               f"and rt.affected_name in ('Acid', 'Bludgeoning', "
+               f"'Cold', 'Fire', 'Force', 'Ligtning', 'Necrotic',"
+               f"'Piercing', 'Poison', 'Psychic', 'Radiant',"
+               f"'Slashing', 'Thunder')"
+               f"and (r.race = '{self.getRace()}' "
+               f"or r.subrace_of = '{self.getRace()}')")
+
+        rows = db.query(sql)
+        for row in rows:
+            self.damage_adj[row[0]] = row[1]
+
+    def setProficiencyBonus(self):
+        for a in range(len(self.featureObj)):
+            if self.featureObj[a][2] == 'proficiency_bonus':
+                self.proficiency_bonus = self.featureObj[a][4]
+
+    def Damage(self, amount, damageType="Unknown"):
+        self.lastMethodLog = (f'Damage({amount}, '
+                              f'{damageType})')
+
+        tmpType = self.damage_adj[damageType]
+
+        if (tmpType and tmpType == 'resistant'):
+            tmpStr = (f'Originally, {amount} points of {damageType} damage.\n')
+            amount = (amount // 2)
+            tmpStr = (f'Reduced to {amount} points due to '
+                      f'{damageType} resistance.')
+        elif (tmpType and tmpType == 'vulnerable'):
+            tmpStr = (f'Originally, {amount} points of {damageType} damage.')
+            amount = (amount * 2)
+            tmpStr = (f'Increased to {amount} points due to '
+                      f'{damageType} vulnerability.')
+        else:
+            tmpStr = (f'Suffers {amount} points of {damageType} damage.')
+
+        if (amount >= self.cur_hit_points):
+            tmpStr = (f'{tmpStr}\n{amount} exceeds current hit points'
+                      f'({self.cur_hit_points}): knocked unconsious')
+            self.stabilized = False
+            # Instant Death?
+            if ((amount - self.cur_hit_points) >= self.hit_points):
+                tmpStr = (f'{tmpStr}\n{(amount - self.cur_hit_points)}'
+                          f' exceeds hit points'
+                          f'({self.hit_points}): Instant Death')
+                self.death_save_failed_cnt = 3
+                self.alive = False
+
+            self.cur_hit_points = 0
+        else:
+            thp = self.cur_hit_points
+            self.cur_hit_points -= amount
+            tmpStr = (f'{tmpStr}\nResulting in ({thp} - {amount}) '
+                      f'{self.cur_hit_points} points')
+
+        self.damage_taken['Total'] += amount
+        self.damage_taken[damageType] += amount
+
+    def Heal(self, amount):
+        self.lastMethodLog = (f'Heal({amount})')
+        tmpStr = (f'Heals {amount} hit points.')
+        if (self.cur_hit_points == 0 and self.alive):
+            self.death_save_failed_cnt = 0
+            self.death_save_passed_cnt = 0
+            self.stabilized = True
+            # tmpStr = (f'{tmpStr}\nResulting in {self.cur_hit_points} points')
+
+        if ((self.cur_hit_points + amount) > self.hit_points):
+            self.cur_hit_points = self.hit_points
+            tmpStr = (f'{tmpStr}\nReturned to max {self.hit_points} points')
+        else:
+            thp = self.cur_hit_points
+            self.cur_hit_points += amount
+            tmpStr = (f'{tmpStr}\nResulting in ({thp} + {amount}) '
+                      f'{self.cur_hit_points} points')
+
+    def Revive(self):
+        self.lastMethodLog = (f'Revive()')
+        self.death_save_failed_cnt = 0
+        self.death_save_passed_cnt = 0
+        self.stabilized = True
+        self.alive = True
+        self.cur_hit_points = self.hit_points
+
 
     def __str__(self):
         outstr = (f'{self.__class__.__name__}\n'
@@ -378,7 +484,7 @@ class PlayerCharacter(Character):
         for c in range(len(labelArray)):
             outstr = (f'{outstr}\n{labelArray[c].ljust(16)}'
                       f'{str(self.ability_modifier_array[c]).rjust(3)}   '
-                      f'{str(self.ability_array[c]).rjust(2)}     ('
+                      f'{str(self.rawAbilityArray[c]).rjust(2)}     ('
                       f'{str(self.ability_base_array[c]).rjust(2)}  +   '
                       f'{str(self.raceObj.ability_bonuses[c]).rjust(2)}'
                       f'   +   0   +   0)\n')
@@ -432,3 +538,5 @@ if __name__ == '__main__':
     print(a2)
     a3 = PlayerCharacter(db, characterId=10)
     print(a3)
+    a4 = PlayerCharacter(db, characterId=138)
+    print(a4)
