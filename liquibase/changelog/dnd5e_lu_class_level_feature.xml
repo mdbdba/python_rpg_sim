@@ -118,7 +118,7 @@
         <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
            <column name="class" value="Barbarian"/> 
            <column name="level" value="4"/> 
-           <column name="feature" value="Ability score improvement"/> 
+           <column name="feature" value="Ability Score Improvement"/> 
         </insert>
 
         <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
@@ -211,7 +211,7 @@
         <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
            <column name="class" value="Barbarian"/> 
            <column name="level" value="8"/> 
-           <column name="feature" value="Ability score improvement"/> 
+           <column name="feature" value="Ability Score Improvement"/> 
         </insert>
 
         <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
@@ -391,7 +391,7 @@
         <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
            <column name="class" value="Barbarian"/> 
            <column name="level" value="16"/> 
-           <column name="feature" value="Ability score improvement"/> 
+           <column name="feature" value="Ability Score Improvement"/> 
         </insert>
 
         <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
@@ -458,7 +458,7 @@
         <insert schemaName="dnd_5e" tableName="lu_class_level_feature">
            <column name="class" value="Barbarian"/> 
            <column name="level" value="19"/> 
-           <column name="feature" value="Ability score improvement"/> 
+           <column name="feature" value="Ability Score Improvement"/> 
         </insert>
 
         <insert schemaName="dnd_5e" tableName="lu_class_level_feature">

@@ -25,9 +25,6 @@ class Character(object):
         self.TTA = self.assignTaliesinTempermentArchitype()
         self.name = None
         self.ability_array_str = abilityArrayStr
-        self.ability_base_array = [6, 6, 6, 6, 6, 6]
-        self.ability_sort_array = [5, 3, 2, 4, 1, 0]
-        self.ability_array = [6, 6, 6, 6, 6, 6]
         self.ability_modifier_array = [0, 0, 0, 0, 0, 0]
         self.damage_taken = dict(Acid=0, Bludgeoning=0, Cold=0,
                                  Fire=0, Force=0, Ligtning=0,
@@ -46,7 +43,6 @@ class Character(object):
         self.healing_received = 0
         self.alive = True
         self.stabilized = True
-        self.level = level
         self.hit_points = None
         self.temp_hit_points = None
         self.cur_hit_points = None
@@ -120,12 +116,12 @@ class Character(object):
             tmp_array = stringToArray(tmp)
             self.ability_array_obj = AbilityArray(array_type="Predefined",
                                                   raw_array=tmp_array,
-                                                  pref_array=sortArray)
-            self.rawAbilityArray = self.ability_array_obj.getArray()
+                                                  pref_array=sortArray,
+                                                  debugInd=self.debugInd)
         else:
             self.ability_array_obj = AbilityArray(array_type=tmp,
-                                                  pref_array=sortArray)
-            self.rawAbilityArray = self.ability_array_obj.getArray()
+                                                  pref_array=sortArray,
+                                                  debugInd=self.debugInd)
 
     def getRawAbilityArray(self):
         return self.ability_array_obj.getRawArray()
@@ -133,8 +129,20 @@ class Character(object):
     def getAbilityPrefArray(self):
         return self.ability_array_obj.getPrefArray()
 
+    def getNumericallySortedAbilityArray(self):
+        return self.ability_array_obj.getNumericalSortedArray()
+
+    def getAbilityPrefStrArray(self):
+        return self.ability_array_obj.getPrefStrArray()
+
     def getSortedAbilityArray(self):
+        return self.ability_array_obj.getSortedArray()
+
+    def getAbilityArray(self):
         return self.ability_array_obj.getArray()
+
+    def getAbilityImprovementArray(self):
+        return self.ability_array_obj.getImpArray()
 
     def assignTaliesinTempermentArchitype(self):
         self.lastMethodLog = (f'assignTaliesinTempermentArchitype()')

@@ -38,6 +38,7 @@ class PlayerCharacter(Character):
                  debugInd=0):
 
         self.db = db
+
         Character.__init__(self, db, genderCandidate, abilityArrayStr,
                            level, debugInd)
         if (characterId == -1):
@@ -47,7 +48,6 @@ class PlayerCharacter(Character):
                                  genderCandidate,
                                  abilityArrayStr,
                                  self.level)
-            self.saveCharacter(db)
         else:
             self.character_id = characterId
             self.getCharacter(db, self.character_id)
@@ -58,6 +58,8 @@ class PlayerCharacter(Character):
         self.setProficiencyBonus()
         self.setDamageAdjs(db)
         self.setArmorClass()
+        if (characterId == -1):
+            self.saveCharacter(db)
 
     def assignRace(self, raceCandidate):
         self.lastMethodLog = (f'assignRace('
@@ -88,25 +90,27 @@ class PlayerCharacter(Character):
         self.raceObj = self.assignRace(raceCandidate)
         self.classObj = self.assignClass(classCandidate)
         self.raceObj.setRandoms(db=self.db, gender=self.gender)
-        sortArray = self.getAbilitySortArray()
-        for r in range(len(sortArray)):
-            t = sortArray[r]
-            self.ability_base_array[t] = self.rawAbilityArray[r]
 
-        bonusArray = self.getRacialAbilityBonusArray()
-        for r in range(len(self.ability_base_array)):
-            self.ability_array[r] = (
-                self.ability_base_array[r] + bonusArray[r])
+        self.ability_array_obj.setPreferenceArray(self.getAbilitySortArray())
+#        sortArray = self.getAbilitySortArray()
+#        for r in range(len(sortArray)):
+#            t = sortArray[r]
+#            self.ability_base_array[t] = self.rawAbilityArray[r]
 
-            sql = (f"select modifier from dnd_5e.lu_ability_score_modifier "
-                   f"where value = '{self.ability_array[r]}';")
+        self.ability_array_obj.setRacialArray(self.getRacialAbilityBonusArray())
+#        bonusArray = self.getRacialAbilityBonusArray()
+#        for r in range(len(self.ability_base_array)):
+#            self.ability_array[r] = (
+#                self.ability_base_array[r] + bonusArray[r])
 
-            result = db.query(sql)
-            self.ability_modifier_array[r] = int(result[0][0])
+# Since ability array bonuses are figured when levels change we will figure
+# hit points the same way.  That way of the constitution mod changes from
+# level to level the hit points will reflect that.
 
-        self.hit_points = self.assignHitPoints(self.level,
-                                               self.getHitDie(),
-                                               self.ability_modifier_array[2])
+        # ability_array_history[0] will show the base array
+#        self.ability_array_history.append(self.ability_base_array)
+        self.hit_points = 0
+        self.adjustForLevels(db)
         self.cur_hit_points = self.hit_points
         self.temp_hit_points = 0
 
@@ -116,12 +120,48 @@ class PlayerCharacter(Character):
         if (self.classObj.ranged_weapon is not None):
             self.ranged_weapon_obj = Weapon(db, self.getRangedWeapon())
 
+    def adjustForLevels(self, db):
+        for l in range((self.level)):
+            level = l + 1  # range indexes start at 0.
+            # if there's ability change for this level make that change
+            sql = (f"select count(level) "
+                   f"from dnd_5e.lu_class_level_feature "
+                   f"where level = {level} "
+                   f"and class = '{self.getClass()}' "
+                   f"and feature = 'Ability Score Improvement';")
+            result = db.query(sql)
+            if (int(result[0][0]) == 1):
+                # print("\n\n\nDoing abilityScoreImprovement\n\n\n")
+                self.ability_array_obj.abilityScoreImprovement()
+            # repopulate the ability modifier array with any new values
+            q = self.getAbilityArray()
+            for r in range(len(q)):
+                sql = (f"select modifier "
+                       f"from dnd_5e.lu_ability_score_modifier "
+                       f"where value = '{q[r]}';")
+
+                result = db.query(sql)
+                self.ability_modifier_array[r] = int(result[0][0])
+
+            # Add new hit points
+            self.hit_points = self.addHitPoints(self.getHitDie(),
+                                                self.ability_modifier_array[2])
+
+
+    def addHitPoints(self, hit_die, modifier):
+        self.lastMethodLog = (f'assignHitPoints( '
+                              f'{hit_die}, '
+                              f'{modifier})')
+        return (self.hit_points + (hit_die + modifier))
+
     def saveCharacter(self, db):
         self.lastMethodLog = (f'saveCharacter(db)')
-        raw_ability_string = arrayToString(self.rawAbilityArray)
-        ability_base_string = arrayToString(self.ability_base_array)
-        ability_string = arrayToString(self.ability_array)
-        ability_racial_mod_string = arrayToString(self.raceObj.ability_bonuses)
+        raw_ability_string = arrayToString(self.getRawAbilityArray())
+        ability_base_string = arrayToString(self.getRawAbilityArray())
+        ability_string = arrayToString(self.getAbilityArray())
+        ability_racial_mod_string = (
+            arrayToString(self.getRacialAbilityBonusArray()))
+
         ability_modifier_string = arrayToString(self.ability_modifier_array)
         sql = (f"insert into dnd_5e.character(name, gender, race, class, "
                f"level, TTA, raw_ability_string, "
@@ -132,17 +172,19 @@ class PlayerCharacter(Character):
                f"hair_type, eye_color, melee_weapon, ranged_weapon, "
                f"ranged_ammunition_type, ranged_ammunition_amt, armor, shield"
                f") values ('{self.getName()}', "
-               f"'{self.getGender()}',"
-               f" '{self.getRace()}','{self.getClass()}',{self.level},'{self.TTA}',"
-               f" '{raw_ability_string}', "
+               f"'{self.getGender()}', '{self.getRace()}', "
+               f"'{self.getClass()}',{self.level}, '{self.TTA}', "
+               f"'{raw_ability_string}', "
                f"'{ability_base_string}', '{ability_string}', "
                f"'{ability_racial_mod_string}', "
                f"'{ability_modifier_string}', {self.hit_points}, "
-               f"{self.temp_hit_points}, {self.cur_hit_points}, {self.getHeight()},"
-               f"{self.getWeight()}, '{self.getAlignmentStr()}', '{self.getAlignmentAbbrev()}',"
-               f"'{self.getSkinTone()}', '{self.getHairColor()}', '{self.getHairType()}',"
-               f"'{self.getEyeColor()}', '{self.getMeleeWeapon()}', "
-               f"'{self.getRangedWeapon()}', '{self.getRangedAmmunitionType()}', "
+               f"{self.temp_hit_points}, {self.cur_hit_points}, "
+               f"{self.getHeight()}, {self.getWeight()}, "
+               f"'{self.getAlignmentStr()}', '{self.getAlignmentAbbrev()}', "
+               f"'{self.getSkinTone()}', '{self.getHairColor()}', "
+               f"'{self.getHairType()}', '{self.getEyeColor()}', "
+               f"'{self.getMeleeWeapon()}', '{self.getRangedWeapon()}', "
+               f"'{self.getRangedAmmunitionType()}', "
                f"{self.getRangedAmmunitionAmt()}, '{self.getArmor()}', "
                f"'{self.getShield()}')")
 
@@ -418,7 +460,6 @@ class PlayerCharacter(Character):
         self.alive = True
         self.cur_hit_points = self.hit_points
 
-
     def __str__(self):
         outstr = (f'{self.__class__.__name__}\n'
                   f'Name:         {self.getName()}\n'
@@ -474,20 +515,28 @@ class PlayerCharacter(Character):
             outstr = (f'{outstr}\nRanged Ammo:   '
                       f'{self.ranged_ammunition_amt}')
 
-        outstr = (f'{outstr}\n\nAbility Array:  {self.rawAbilityArray}\n'
-                  f'Sort Array:    {self.classObj.ability_sort_str_array}\n')
+        outstr = (f'{outstr}\n\nRaw Ability Array:  '
+                  f'{self.getRawAbilityArray()}\n'
+                  f'Ordered Array:      '
+                  f'{self.getNumericallySortedAbilityArray()}\n'
+                  f'Sort Array:    {self.getAbilityPrefStrArray()}\n'
+                  f'Nbr Sort Array:     {self.ability_array_obj.getPrefArray()}\n'
+                  f'Sorted:             {self.getSortedAbilityArray()}\n')
 
-        outstr = (f'{outstr}\nAbility         Mod  Total  (Base + '
-                  f'Racial + Bonus + Temp)\n')
+        outstr = (f'{outstr}\nAbility         Mod  Total = (Base + '
+                  f'Racial + Level Improvements)\n')
 
+        sorted_array = self.getSortedAbilityArray()
+        ability_array = self.getAbilityArray()
+        ability_imp_array = self.getAbilityImprovementArray()
         labelArray = self.ability_array_obj.ability_label_array
         for c in range(len(labelArray)):
             outstr = (f'{outstr}\n{labelArray[c].ljust(16)}'
                       f'{str(self.ability_modifier_array[c]).rjust(3)}   '
-                      f'{str(self.rawAbilityArray[c]).rjust(2)}     ('
-                      f'{str(self.ability_base_array[c]).rjust(2)}  +   '
+                      f'{str(ability_array[c]).rjust(2)}   = ('
+                      f'{str(sorted_array[c]).rjust(2)}  +   '
                       f'{str(self.raceObj.ability_bonuses[c]).rjust(2)}'
-                      f'   +   0   +   0)\n')
+                      f'   +   {str(ability_imp_array[c]).rjust(2)})\n')
 
         if self.raceObj.languages:
             outstr = (f'{outstr}\n\nLanguages:')
@@ -529,14 +578,19 @@ class PlayerCharacter(Character):
 
 if __name__ == '__main__':
     db = InvokePSQL()
-    a1 = PlayerCharacter(db)
+    a1 = PlayerCharacter(db, level=10)
     print(a1)
+    for key, value in a1.ability_array_obj.getClassEval()[-1].items():
+        print(f"{str(key).ljust(25)}: {value}")
+
     a2 = PlayerCharacter(db=db, abilityArrayStr='10,11,12,13,14,15')
     a2.ability_array_obj.setPreferenceArray(prefArray=stringToArray(
                                             '5,0,2,1,4,3'
                                             ))
     print(a2)
-    a3 = PlayerCharacter(db, characterId=10)
-    print(a3)
-    a4 = PlayerCharacter(db, characterId=138)
-    print(a4)
+    for key, value in a2.ability_array_obj.getClassEval()[-1].items():
+        print(f"{str(key).ljust(25)}: {value}")
+    # a3 = PlayerCharacter(db, characterId=10)
+    # print(a3)
+    # a4 = PlayerCharacter(db, characterId=138)
+    # print(a4)
