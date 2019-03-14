@@ -24,6 +24,7 @@ class Character(object):
 
         self.TTA = self.assignTaliesinTempermentArchitype()
         self.name = None
+        self.classEval = []
         self.ability_array_str = abilityArrayStr
         self.ability_modifier_array = [0, 0, 0, 0, 0, 0]
         self.damage_taken = dict(Acid=0, Bludgeoning=0, Cold=0,
@@ -101,6 +102,10 @@ class Character(object):
             result = "F"
         else:
             result = "U"
+
+        if self.debugInd:
+            self.classEval[-1]["Gender"] = result
+
         return result
 
     def getGender(self):
@@ -122,6 +127,12 @@ class Character(object):
             self.ability_array_obj = AbilityArray(array_type=tmp,
                                                   pref_array=sortArray,
                                                   debugInd=self.debugInd)
+
+    def getClassEval(self):
+        """
+        Return an array of lists that can be used for debugging/testing
+        """
+        return self.classEval
 
     def getRawAbilityArray(self):
         return self.ability_array_obj.getRawArray()
@@ -152,7 +163,11 @@ class Character(object):
         perArray = ['High', 'Mid', 'Low']
         perType = perArray[(random.randint(0, 2))]
 
-        return (f"{alignType}/{perType}")
+        retStr = (f"{alignType}/{perType}")
+        if self.debugInd:
+            self.classEval[-1]["TTA"] = retStr
+
+        return retStr
 
     def getTTA(self):
         return self.TTA
@@ -227,7 +242,12 @@ class Character(object):
                               f'{level}, '
                               f'{hit_die}, '
                               f'{modifier})')
-        return ((level * hit_die) + (level * modifier))
+
+        retStr = ((level * hit_die) + (level * modifier))
+        if self.debugInd:
+            self.classEval[-1]["hitPoints"] = retStr
+
+        return retStr
 
     def setArmorClass(self):
         self.lastMethodLog = (f'setArmorClass()')
@@ -265,6 +285,9 @@ class Character(object):
             shieldBonus = 0
 
         self.armor_class = baseAC + shieldBonus + dexMod
+
+        if self.debugInd:
+            self.classEval[-1]["armorClass"] = self.armor_class
 
     def contestCheck(self, ability, vantage='Normal'):
         self.lastMethodLog = (f'contestCheck('

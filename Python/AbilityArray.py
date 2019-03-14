@@ -103,6 +103,9 @@ class AbilityArray(object):
         if self.debugInd:
             self.classEval[-1]["raw_array"] = self.raw_array[:]
 
+        self.setAbilityArray()
+
+    def setAbilityArray(self):
         self.setAbilityPreferences()
 
         if self.racial_array:
@@ -112,9 +115,7 @@ class AbilityArray(object):
         self.pref_array = prefArray
         self.setPrefStrArray()
         self.ignore_pref_array = False
-        self.setAbilityPreferences()
-        if self.racial_array:
-            self.setRacialAdjustment()
+        self.setAbilityArray()
 
     def setPrefStrArray(self):
         for p in range(len(self.pref_array)):
@@ -216,7 +217,7 @@ class AbilityArray(object):
     def setRacialArray(self, bonusArray):
         self.racial_array = bonusArray
         self.classEval[-1]["racial_array"] = self.racial_array[:]
-        self.setRacialAdjustment()
+        self.setAbilityArray()
 
     def setRacialAdjustment(self):
         if (self.ignore_racial_bonus):

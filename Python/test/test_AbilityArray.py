@@ -35,15 +35,16 @@ def test_AbilityArray_Common():
 def test_AbilityArray_Common_Sorted():
     compArray = [15, 14, 13, 12, 10, 8]
     prefArray = [3, 2, 1, 5, 4, 0]
+    # [8, 13, 14, 15, 10, 12]
     a = AbilityArray(array_type="Standard",
                      pref_array=prefArray,
                      debugInd=True)
-    b = a.getArray()
+    b = a.getSortedArray()
     assert(a.getClassEval()[0]['array_type'] == 'Standard')
     c = a.getClassEval()[-1]
     for i in range(0, 6):
         assert(compArray[i] == b[prefArray[i]])
-        assert(compArray[i] == c['candidate_array'][i])
+        assert(compArray[i] == b[c['preference_array'][i]])
 
 
 def test_AbilityArray_Strict():
@@ -60,57 +61,57 @@ def test_AbilityArray_Standard():
     a = AbilityArray(array_type="Standard",
                      pref_array=prefArray,
                      debugInd=True)
-    b = a.getArray()
+    b = a.getSortedArray()
     assert(a.getClassEval()[0]['array_type'] == 'Standard')
     c = a.getClassEval()[-1]
     for i in range(0, 6):
         assert(compArray[i] == b[prefArray[i]])
-        assert(compArray[i] == c['candidate_array'][i])
+        assert(compArray[i] == b[c['preference_array'][i]])
 
 
 def test_AbilityArray_PointBuy_Even():
     compArray = [13, 13, 13, 12, 12, 12]
     a = AbilityArray(array_type="PointBuy_Even",
                      debugInd=True)
-    b = a.getArray()
+    b = a.getRawArray()
     assert(a.getClassEval()[0]['array_type'] == 'PointBuy_Even')
     c = a.getClassEval()[-1]
     for i in range(0, 6):
         assert(compArray[i] == b[i])
-        assert(compArray[i] == c['candidate_array'][i])
+        assert(compArray[i] == c['raw_array'][i])
 
 
 def test_AbilityArray_PointBuy_OneMax():
     compArray = [15, 12, 12, 12, 11, 11]
     a = AbilityArray(array_type="PointBuy_OneMax",
                      debugInd=True)
-    b = a.getArray()
+    b = a.getRawArray()
     assert(a.getClassEval()[0]['array_type'] == 'PointBuy_OneMax')
     c = a.getClassEval()[-1]
     for i in range(0, 6):
         assert(compArray[i] == b[i])
-        assert(compArray[i] == c['candidate_array'][i])
+        assert(compArray[i] == c['raw_array'][i])
 
 
 def test_AbilityArray_PointBuy_TwoMax():
     compArray = [15, 15, 11, 10, 10, 10]
     a = AbilityArray(array_type="PointBuy_TwoMax",
                      debugInd=True)
-    b = a.getArray()
+    b = a.getRawArray()
     assert(a.getClassEval()[0]['array_type'] == 'PointBuy_TwoMax')
     c = a.getClassEval()[-1]
     for i in range(0, 6):
         assert(compArray[i] == b[i])
-        assert(compArray[i] == c['candidate_array'][i])
+        assert(compArray[i] == c['raw_array'][i])
 
 
 def test_AbilityArray_PointBuy_ThreeMax():
     compArray = [15, 15, 15, 8, 8, 8]
     a = AbilityArray(array_type="PointBuy_ThreeMax",
                      debugInd=True)
-    b = a.getArray()
+    b = a.getRawArray()
     assert(a.getClassEval()[0]['array_type'] == 'PointBuy_ThreeMax')
     c = a.getClassEval()[-1]
     for i in range(0, 6):
         assert(compArray[i] == b[i])
-        assert(compArray[i] == c['candidate_array'][i])
+        assert(compArray[i] == c['raw_array'][i])

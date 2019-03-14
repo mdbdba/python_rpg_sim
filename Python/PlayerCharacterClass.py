@@ -108,6 +108,9 @@ class PlayerCharacterClass(object):
     def getClass(self):
         return self.name
 
+    def getClassAbilitySortArray(self):
+        return self.ability_sort_array
+
     def setCharacterAlteringClassFeatures(self, db):
         """ If an array of dictionaries was not passed as the
             characterAlteringClassOptions arg, randomly select the
