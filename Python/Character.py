@@ -22,9 +22,17 @@ class Character(object):
         else:
             self.level = level
 
-        self.TTA = self.assignTaliesinTempermentArchitype()
-        self.name = None
-        self.classEval = []
+        self.debugInd = debugInd
+        self.debugStr = ''
+        y = getattr(self, "classEval", None)
+        if (y is None):
+            self.classEval = []
+        self.classEval.append({
+                       "pythonClass": "Character",
+                       "genderCandidate": genderCandidate,
+                       "abilityArrayStr": abilityArrayStr,
+                       "level": level,
+                       "debugInd": debugInd})
         self.ability_array_str = abilityArrayStr
         self.ability_modifier_array = [0, 0, 0, 0, 0, 0]
         self.damage_taken = dict(Acid=0, Bludgeoning=0, Cold=0,
@@ -55,8 +63,9 @@ class Character(object):
         self.armor_class = 0
         self.death_save_passed_cnt = 0
         self.death_save_failed_cnt = 0
-        self.debugInd = debugInd
-        self.debugStr = ''
+        self.TTA = self.assignTaliesinTempermentArchitype()
+        self.name = None
+
         self.lastMethodLog = ''
         if genderCandidate == "Random":
             self.gender = self.assignGender(db)

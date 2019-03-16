@@ -8,6 +8,8 @@ services:
     container_name: pgs
     ports:
       - "5433:5432"
+    networks:
+      - rpg
     environment:
      - POSTGRES_USER=postgres
      - POSTGRES_PASSWORD=d&d5thedition
@@ -22,9 +24,22 @@ services:
       - ./simrest:/usr/src/app 
     ports:
       - 6080:80
+    networks:
+      - rpg
     depends_on:
       - pgs
 
+#  elk:
+#    image: sebp/elk
+#    container_name: elk
+#    ports:
+#      - "5601:5601"
+#      - "9200:9200"
+#      - "5044:5044"
+#    networks:
+#      - rpg
+#    volumes:
+#     - ~/rpg/docker_data/elk/data:/var/lib/elasticsearch
 #   web:
 #     image: php:apache  # pulling image from DockerHub
 #     container_name: web
@@ -35,3 +50,7 @@ services:
 #     depends_on:
 #       - simrest  # website is not going to work 
 #                  # unless observatory-service is running
+  
+networks:
+  rpg:
+    driver: bridge

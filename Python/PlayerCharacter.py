@@ -1,3 +1,4 @@
+import logging
 from InvokePSQL import InvokePSQL
 from Character import Character
 from CommonFunctions import arrayToString
@@ -37,11 +38,27 @@ class PlayerCharacter(Character):
                  level=1,
                  debugInd=0):
 
-        self.db = db
-        self.debugInd = debugInd
+        if (debugInd == 1):
+            logFmt = '%(asctime)s - %(levelname)s - %(message)s'
+            logging.basicConfig(format=logFmt, level=logging.DEBUG)
+            self.logger = logging.getLogger(__name__)
 
         Character.__init__(self, db, genderCandidate, abilityArrayStr,
                            level, debugInd)
+        if (characterId == -1):
+            newCharacterInd = True
+        else:
+            newCharacterInd = False
+        self.classEval.append({
+                       "pythonClass": "PlayerCharacter",
+                       "newCharacter": newCharacterInd,
+                       "raceCandidate": raceCandidate,
+                       "classCandidate": classCandidate,
+                       "genderCandidate": genderCandidate,
+                       "abilityArrayStr": abilityArrayStr,
+                       "level": level,
+                       "debugInd": debugInd})
+
         if (characterId == -1):
             self.createCharacter(db,
                                  raceCandidate,
@@ -59,8 +76,27 @@ class PlayerCharacter(Character):
         self.setProficiencyBonus()
         self.setDamageAdjs(db)
         self.setArmorClass()
+
         if (characterId == -1):
             self.saveCharacter(db)
+
+        self.classEval[-1]["characterId"] = self.character_id
+        self.classEval[-1]["race"] = self.getRace()
+        self.classEval[-1]["class"] = self.getClass()
+        self.classEval[-1]["gender"] = self.getGender()
+        self.classEval[-1]["rawAbilityArray"] = (
+            arrayToString(self.getRawAbilityArray()))
+        self.classEval[-1]["sortedAbilityArray"] = (
+            arrayToString(self.getSortedAbilityArray()))
+        self.classEval[-1]["racialAbilityArray"] = (
+            arrayToString(self.getRacialAbilityBonusArray()))
+        self.classEval[-1]["abilityImpArray"] = (
+            arrayToString(self.getAbilityImprovementArray()))
+        self.classEval[-1]["abilityArray"] = (
+            arrayToString(self.getAbilityArray()))
+
+        if (self.debugInd == 1):
+            self.logger.debug(self.__str__())
 
     def assignRace(self, raceCandidate):
         self.lastMethodLog = (f'assignRace('
@@ -71,8 +107,8 @@ class PlayerCharacter(Character):
         else:
             raceToUse = raceCandidate
 
-        if self.debugInd:
-            self.classEval[-1]["RaceToUse"] = raceToUse
+        # if (self.debugInd == 1):
+        #     self.classEval[-1]["RaceToUse"] = raceToUse
 
         return CharacterRace(self.db, raceToUse)
 
@@ -114,8 +150,6 @@ class PlayerCharacter(Character):
         self.cur_hit_points = self.hit_points
         self.temp_hit_points = 0
 
-
-
     def adjustForLevels(self, db):
         for l in range((self.level)):
             level = l + 1  # range indexes start at 0.
@@ -137,9 +171,9 @@ class PlayerCharacter(Character):
             # Add new hit points
             self.hit_points = self.addHitPoints(self.db, self.getHitDie(),
                                                 self.ability_modifier_array[2])
-            if self.debugInd:
-                hpStr = (f"hitPoints_level_{level}")
-                self.classEval[-1][hpStr] = self.hit_points
+            # if (self.debugInd ==1):
+            #     hpStr = (f"hitPoints_level_{level}")
+            #     self.classEval[-1][hpStr] = self.hit_points
 
     def setAbilityModifierArray(self, db):
         q = self.getAbilityArray()
@@ -250,22 +284,8 @@ class PlayerCharacter(Character):
             self.level = results[0][4]
             self.TTA = results[0][5]
             self.ability_array_str = results[0][6]
-            #ability_base_array = stringToArray(results[0][7])
-            #self.ability_array_str = results[0][8]
             ability_racial_mod_string = results[0][9]
             self.ability_modifier_array = stringToArray(results[0][10])
-            # self.hit_points = results[0][11]
-            # self.temp_hit_points = results[0][12]
-            # self.cur_hit_points = results[0][13]
-            # print(f"Raw:    {self.rawAbilityArray} ")
-            # print(f"Base:   {self.ability_base_array} ")
-            # print(f"Racial: {ability_racial_mod_string}")
-            # print(f"Str:    {self.ability_array_str} ")
-            # print(f"Mod:    {self.ability_modifier_array}")
-            #for r in range(len(self.ability_base_array)):
-            #    self.ability_array[r] = (
-            #        self.ability_base_array[r] +
-            #        self.raceObj.ability_bonuses[r])
             self.classObj.melee_weapon = results[0][22]
             self.classObj.ranged_weapon = results[0][23]
             self.classObj.ranged_ammunition_type = results[0][24]
@@ -306,6 +326,9 @@ class PlayerCharacter(Character):
 
     def getRacialAbilityBonusArray(self):
         return self.raceObj.ability_bonuses
+
+    def getAbilityImprovementArray(self):
+        return self.ability_array_obj.getImpArray()
 
     def getName(self):
         return self.raceObj.name
@@ -400,8 +423,6 @@ class PlayerCharacter(Character):
             self.finesse_ability_mod = 'Strength'
         else:
             self.finesse_ability_mod = 'Dexterity'
-
-
 
     def setDamageAdjs(self, db):
         self.lastMethodLog = (f'setDamagedAdjs(db)')
@@ -628,3 +649,7 @@ if __name__ == '__main__':
     # print(a3)
     # a4 = PlayerCharacter(db, characterId=138)
     # print(a4)
+    a3 = PlayerCharacter(db, raceCandidate='Hill dwarf', level=10, debugInd=1)
+    for i in range(len(a3.getClassEval())):
+        for key, value in a3.getClassEval()[i].items():
+            print(f"{i} -- {str(key).ljust(25)}: {value}")
