@@ -5,6 +5,7 @@ from Attack import Attack
 from Die import Die
 
 import random
+import logging
 
 
 class Character(object):
@@ -24,6 +25,13 @@ class Character(object):
 
         self.debugInd = debugInd
         self.debugStr = ''
+
+        if ((self.debugInd == 1) and
+           ((getattr(self, "logger", None)) is None)):
+            logFmt = '%(asctime)s - %(levelname)s - %(message)s'
+            logging.basicConfig(format=logFmt, level=logging.DEBUG)
+            self.logger = logging.getLogger(__name__)
+
         y = getattr(self, "classEval", None)
         if (y is None):
             self.classEval = []
@@ -63,8 +71,8 @@ class Character(object):
         self.armor_class = 0
         self.death_save_passed_cnt = 0
         self.death_save_failed_cnt = 0
-        self.TTA = self.assignTaliesinTempermentArchitype()
-        self.name = None
+        self.TTA = self.setTaliesinTempermentArchitype()
+        # self.name = None
 
         self.lastMethodLog = ''
         if genderCandidate == "Random":
@@ -101,6 +109,9 @@ class Character(object):
         # 5   Speed reduced to 0
         # 6   Death
 
+    def getName(self):
+        return "Unknown"
+
     def assignGender(self, db):
         self.lastMethodLog = (f'assignGender(db)')
         d = Die(100)
@@ -112,7 +123,7 @@ class Character(object):
         else:
             result = "U"
 
-        if self.debugInd:
+        if (self.debugInd == 1):
             self.classEval[-1]["Gender"] = result
 
         return result
@@ -164,7 +175,7 @@ class Character(object):
     def getAbilityImprovementArray(self):
         return self.ability_array_obj.getImpArray()
 
-    def assignTaliesinTempermentArchitype(self):
+    def setTaliesinTempermentArchitype(self):
         self.lastMethodLog = (f'assignTaliesinTempermentArchitype()')
         alignArray = ['Bashful', 'Doc', 'Grumpy', 'Happy', 'Sneezy',
                       'Sleepy', 'Dopey']
@@ -187,18 +198,34 @@ class Character(object):
     def zeroMovement(self):
         self.lastMethodLog = (f'zeroMovement()')
         self.cur_movement = 0
+        if (self.debugInd == 1):
+            msg = (f"{self.getName()}: zero movement to "
+                   f"{self.cur_movement}")
+            self.logger.debug(msg)
 
     def halfMovement(self):
         self.lastMethodLog = (f'halfMovement()')
         self.cur_movement = self.cur_movement // 2
+        if (self.debugInd == 1):
+            msg = (f"{self.getName()}: half movement to "
+                   f"{self.cur_movement}")
+            self.logger.debug(msg)
 
     def doubleMovement(self):
         self.lastMethodLog = (f'doubleMovement()')
         self.cur_movement = self.getBaseMovement() * 2
+        if (self.debugInd == 1):
+            msg = (f"{self.getName()}: double movement to "
+                   f"{self.cur_movement}")
+            self.logger.debug(msg)
 
     def resetMovement(self):
         self.lastMethodLog = (f'resetMovement()')
         self.cur_movement = self.getBaseMovement()
+        if (self.debugInd == 1):
+            msg = (f"{self.getName()}: reset movement to "
+                   f"{self.cur_movement}")
+            self.logger.debug(msg)
 
     def changeExhaustionLevel(self, amount):
         self.lastMethodLog = (f'changeExhaustionLevel({amount})')
@@ -226,6 +253,11 @@ class Character(object):
 
         if self.exhaustion_leve >= 6:
             self.alive = False
+
+        if (self.debugInd == 1):
+            msg = (f"{self.getName()}: exhaustion level change to "
+                   f"{self.exhaustion_level}")
+            self.logger.debug(msg)
 
     def getAbilityModifier(self, ability):
         self.lastMethodLog = (f'getAbilityModifier('
@@ -298,6 +330,11 @@ class Character(object):
         if self.debugInd:
             self.classEval[-1]["armorClass"] = self.armor_class
 
+        if (self.debugInd == 1):
+            msg = (f"{self.getName()}: armorClass set to "
+                   f"{self.armor_class}")
+            self.logger.debug(msg)
+
     def contestCheck(self, ability, vantage='Normal'):
         self.lastMethodLog = (f'contestCheck('
                               f'{ability}, {vantage})')
@@ -311,22 +348,37 @@ class Character(object):
 
         mod = self.getAbilityModifier(ability)
 
-        return (r + mod)
+        retval = (r + mod)
+
+        if (self.debugInd == 1):
+            msg = (f"{self.getName()}: contestCheck "
+                   f"{ability} with {vantage} vantage returned {retval}")
+            self.logger.debug(msg)
+
+        return retval
 
     def rollForInitiative(self, vantage='Normal'):
-        return self.contestCheck('Dexterity', vantage)
+        retval = self.contestCheck('Dexterity', vantage)
+        if (self.debugInd == 1):
+            msg = (f"{self.getName()}: rollForInitiative "
+                   f"with {vantage} vantage returned {retval}")
+            self.logger.debug(msg)
+        return retval
 
     def checkProficiencySkill(self, ability):
         self.lastMethodLog = (f'checkProficiencySkill('
                               f'{ability})')
-        retValue = False
+        retval = False
         for b in self.raceObj.traitContainer.traits:
                 if b.category == "Proficiency Skill":
                     if b.affected_name == ability:
-                        retValue = True
+                        retval = True
+        if (self.debugInd == 1):
+            msg = (f"{self.getName()}: Proficiency for "
+                   f"with {ability} returned {retval}")
+            self.logger.debug(msg)
 
-        return retValue
-
+        return retval
 
     def deathSave(self, vantage='Normal'):
         self.lastMethodLog = (f'deathSave('
@@ -365,6 +417,9 @@ class Character(object):
             tmpStr = (f'{tmpStr}\nThree failed death saves. '
                       f'Character has died.')
 
+        if (self.debugInd == 1):
+            msg = (f"{self.getName()}: {tmpStr}")
+            self.logger.debug(msg)
 
     def Check(self, skill, vantage='Normal', dc=10):
         self.lastMethodLog = (f'Check({skill}, '
@@ -426,14 +481,62 @@ class Character(object):
         else:
             res = False
 
-        if (self.debugInd):
+        if (self.debugInd == 1):
             tmpStr = (f'{tmpStr}{adjustedRoll} >= {dc} ')
             if (res):
                 tmpStr = (f'{tmpStr} (true)\n')
             else:
                 tmpStr = (f'{tmpStr} (false)\n')
 
+            msg = (f"{self.getName()}: {tmpStr}")
+            self.logger.debug(msg)
+
         return res
+
+    def Damage(self, amount, damageType="Unknown"):
+        self.lastMethodLog = (f'Damage({amount}, '
+                              f'{damageType})')
+
+        tmpType = self.damage_adj[damageType]
+
+        if (tmpType and tmpType == 'resistant'):
+            tmpStr = (f'Originally, {amount} points of {damageType} damage.\n')
+            amount = (amount // 2)
+            tmpStr = (f'Reduced to {amount} points due to '
+                      f'{damageType} resistance.')
+        elif (tmpType and tmpType == 'vulnerable'):
+            tmpStr = (f'Originally, {amount} points of {damageType} damage.')
+            amount = (amount * 2)
+            tmpStr = (f'Increased to {amount} points due to '
+                      f'{damageType} vulnerability.')
+        else:
+            tmpStr = (f'Suffers {amount} points of {damageType} damage.')
+
+        if (amount >= self.cur_hit_points):
+            tmpStr = (f'{tmpStr}\n{amount} exceeds current hit points'
+                      f'({self.cur_hit_points}): knocked unconsious')
+            self.stabilized = False
+            # Instant Death?
+            if ((amount - self.cur_hit_points) >= self.hit_points):
+                tmpStr = (f'{tmpStr}\n{(amount - self.cur_hit_points)}'
+                          f' exceeds hit points'
+                          f'({self.hit_points}): Instant Death')
+                self.death_save_failed_cnt = 3
+                self.alive = False
+
+            self.cur_hit_points = 0
+        else:
+            thp = self.cur_hit_points
+            self.cur_hit_points -= amount
+            tmpStr = (f'{tmpStr}\nResulting in ({thp} - {amount}) '
+                      f'{self.cur_hit_points} points')
+
+        self.damage_taken['Total'] += amount
+        self.damage_taken[damageType] += amount
+
+        if (self.debugInd == 1):
+            for i in tmpStr.splitlines():
+                self.logger.debug(f"{self.getName()}: {i}")
 
     def rangedAttack(self, weaponObj, vantage='Normal'):
         # determine modifier
@@ -452,8 +555,14 @@ class Character(object):
         attempt = Attack(weaponObj=weaponObj, attackModifier=modifier,
                          versatile_use_2handed=False, vantage=vantage)
 
-        print(f'Attack Value: {attempt.attack_value}')
-        print(f'Poss. Damage: {attempt.possible_damage}')
+        # print(f'Attack Value: {attempt.attack_value}')
+        # print(f'Poss. Damage: {attempt.possible_damage}')
+
+        if (self.debugInd == 1):
+            self.logger.debug(f"{self.getName()}: Ranged Attack Value: "
+                              f"{attempt.attack_value}")
+            self.logger.debug(f"{self.getName()}: Ranged Poss. Damage: "
+                              f"{attempt.possible_damage}")
 
     def meleeAttack(self, weaponObj, vantage='Normal'):
         # determine modifier
@@ -482,8 +591,13 @@ class Character(object):
         attempt = Attack(weaponObj=weaponObj, attackModifier=modifier,
                          versatile_use_2handed=v2h, vantage=vantage)
 
-        print(f'Attack Value: {attempt.attack_value}')
-        print(f'Poss. Damage: {attempt.possible_damage}')
+        # print(f'Attack Value: {attempt.attack_value}')
+        # print(f'Poss. Damage: {attempt.possible_damage}')
+        if (self.debugInd == 1):
+            self.logger.debug(f"{self.getName()}: Melee Attack Value: "
+                              f"{attempt.attack_value}")
+            self.logger.debug(f"{self.getName()}: Melee Poss. Damage: "
+                              f"{attempt.possible_damage}")
 
     def meleeDefend(self, modifier=0, vantage='Normal',
                     possibleDamage=0, damageType='Unknown'):
@@ -508,6 +622,10 @@ class Character(object):
             tmpStr = (f'Succeeds against a melee attack roll: '
                       f'{value} < {self.armor_class}')
             ret = True
+
+        if (self.debugInd == 1):
+            for i in tmpStr.splitlines():
+                self.logger.debug(f"{self.getName()}: {i}")
 
         return ret
 
@@ -535,7 +653,45 @@ class Character(object):
                       f'{value} < {self.armor_class}')
             ret = True
 
+        if (self.debugInd == 1):
+            msg = (f"{self.getName()}: {tmpStr}")
+            self.logger.debug(msg)
+
         return ret
+
+    def Heal(self, amount):
+        self.lastMethodLog = (f'Heal({amount})')
+        tmpStr = (f'Heals {amount} hit points.')
+        if (self.cur_hit_points == 0 and self.alive):
+            self.death_save_failed_cnt = 0
+            self.death_save_passed_cnt = 0
+            self.stabilized = True
+            # tmpStr = (f'{tmpStr}\nResulting in {self.cur_hit_points} points')
+
+        if ((self.cur_hit_points + amount) > self.hit_points):
+            self.cur_hit_points = self.hit_points
+            tmpStr = (f'{tmpStr}\nReturned to max {self.hit_points} points')
+        else:
+            thp = self.cur_hit_points
+            self.cur_hit_points += amount
+            tmpStr = (f'{tmpStr}\nResulting in ({thp} + {amount}) '
+                      f'{self.cur_hit_points} points')
+
+        if (self.debugInd == 1):
+            for i in tmpStr.splitlines():
+                self.logger.debug(f"{self.getName()}: {i}")
+
+    def Revive(self):
+        self.lastMethodLog = (f'Revive()')
+        self.death_save_failed_cnt = 0
+        self.death_save_passed_cnt = 0
+        self.stabilized = True
+        self.alive = True
+        self.cur_hit_points = self.hit_points
+
+        if (self.debugInd == 1):
+            msg = (f"{self.getName()}: Has been Revived.")
+            self.logger.debug(msg)
 
 
 if __name__ == '__main__':

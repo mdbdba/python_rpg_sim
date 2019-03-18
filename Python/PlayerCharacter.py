@@ -1,7 +1,8 @@
-import logging
+
 from InvokePSQL import InvokePSQL
 from Character import Character
 from CommonFunctions import arrayToString
+from CommonFunctions import dictToString
 from CommonFunctions import stringToArray
 from CommonFunctions import inchesToFeet
 # from AbilityArray import AbilityArray
@@ -37,11 +38,6 @@ class PlayerCharacter(Character):
                  abilityArrayStr="Common",
                  level=1,
                  debugInd=0):
-
-        if (debugInd == 1):
-            logFmt = '%(asctime)s - %(levelname)s - %(message)s'
-            logging.basicConfig(format=logFmt, level=logging.DEBUG)
-            self.logger = logging.getLogger(__name__)
 
         Character.__init__(self, db, genderCandidate, abilityArrayStr,
                            level, debugInd)
@@ -96,7 +92,8 @@ class PlayerCharacter(Character):
             arrayToString(self.getAbilityArray()))
 
         if (self.debugInd == 1):
-            self.logger.debug(self.__str__())
+            for i in self.__str__().splitlines():
+                self.logger.debug(f"{self.getName()}: {i}")
 
     def assignRace(self, raceCandidate):
         self.lastMethodLog = (f'assignRace('
@@ -171,9 +168,15 @@ class PlayerCharacter(Character):
             # Add new hit points
             self.hit_points = self.addHitPoints(self.db, self.getHitDie(),
                                                 self.ability_modifier_array[2])
-            # if (self.debugInd ==1):
-            #     hpStr = (f"hitPoints_level_{level}")
-            #     self.classEval[-1][hpStr] = self.hit_points
+            if (self.debugInd == 1):
+                hpStr = (f"hitPoints_level_{level}")
+                self.classEval[-1][hpStr] = self.hit_points
+                if (level > 1):
+                    tl = level - 1
+                    tlstr = (f"hitPoints_level_{tl}")
+                    tlhp = self.classEval[-1][tlstr]
+                    dfstr = (f"hpdiff_level_{level}")
+                    self.classEval[-1][dfstr] = (self.hit_points - tlhp)
 
     def setAbilityModifierArray(self, db):
         q = self.getAbilityArray()
@@ -443,77 +446,17 @@ class PlayerCharacter(Character):
         for row in rows:
             self.damage_adj[row[0]] = row[1]
 
+        if (self.debugInd == 1):
+            self.classEval[-1]["Damage Adjust"] = (
+                dictToString(self.damage_adj))
+
     def setProficiencyBonus(self):
         for a in range(len(self.featureObj)):
             if self.featureObj[a][2] == 'proficiency_bonus':
                 self.proficiency_bonus = self.featureObj[a][4]
 
-    def Damage(self, amount, damageType="Unknown"):
-        self.lastMethodLog = (f'Damage({amount}, '
-                              f'{damageType})')
-
-        tmpType = self.damage_adj[damageType]
-
-        if (tmpType and tmpType == 'resistant'):
-            tmpStr = (f'Originally, {amount} points of {damageType} damage.\n')
-            amount = (amount // 2)
-            tmpStr = (f'Reduced to {amount} points due to '
-                      f'{damageType} resistance.')
-        elif (tmpType and tmpType == 'vulnerable'):
-            tmpStr = (f'Originally, {amount} points of {damageType} damage.')
-            amount = (amount * 2)
-            tmpStr = (f'Increased to {amount} points due to '
-                      f'{damageType} vulnerability.')
-        else:
-            tmpStr = (f'Suffers {amount} points of {damageType} damage.')
-
-        if (amount >= self.cur_hit_points):
-            tmpStr = (f'{tmpStr}\n{amount} exceeds current hit points'
-                      f'({self.cur_hit_points}): knocked unconsious')
-            self.stabilized = False
-            # Instant Death?
-            if ((amount - self.cur_hit_points) >= self.hit_points):
-                tmpStr = (f'{tmpStr}\n{(amount - self.cur_hit_points)}'
-                          f' exceeds hit points'
-                          f'({self.hit_points}): Instant Death')
-                self.death_save_failed_cnt = 3
-                self.alive = False
-
-            self.cur_hit_points = 0
-        else:
-            thp = self.cur_hit_points
-            self.cur_hit_points -= amount
-            tmpStr = (f'{tmpStr}\nResulting in ({thp} - {amount}) '
-                      f'{self.cur_hit_points} points')
-
-        self.damage_taken['Total'] += amount
-        self.damage_taken[damageType] += amount
-
-    def Heal(self, amount):
-        self.lastMethodLog = (f'Heal({amount})')
-        tmpStr = (f'Heals {amount} hit points.')
-        if (self.cur_hit_points == 0 and self.alive):
-            self.death_save_failed_cnt = 0
-            self.death_save_passed_cnt = 0
-            self.stabilized = True
-            # tmpStr = (f'{tmpStr}\nResulting in {self.cur_hit_points} points')
-
-        if ((self.cur_hit_points + amount) > self.hit_points):
-            self.cur_hit_points = self.hit_points
-            tmpStr = (f'{tmpStr}\nReturned to max {self.hit_points} points')
-        else:
-            thp = self.cur_hit_points
-            self.cur_hit_points += amount
-            tmpStr = (f'{tmpStr}\nResulting in ({thp} + {amount}) '
-                      f'{self.cur_hit_points} points')
-
-    def Revive(self):
-        self.lastMethodLog = (f'Revive()')
-        self.death_save_failed_cnt = 0
-        self.death_save_passed_cnt = 0
-        self.stabilized = True
-        self.alive = True
-        self.cur_hit_points = self.hit_points
+        if (self.debugInd == 1):
+            self.classEval[-1]["Proficiency Bonus"] = self.proficiency_bonus
 
     def __str__(self):
         outstr = (f'{self.__class__.__name__}\n'
@@ -633,23 +576,35 @@ class PlayerCharacter(Character):
 
 if __name__ == '__main__':
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, raceCandidate='Hill dwarf', level=10)
-    print(a1)
-    for key, value in a1.ability_array_obj.getClassEval()[-1].items():
-        print(f"{str(key).ljust(25)}: {value}")
+    a1 = PlayerCharacter(db, raceCandidate='Hill dwarf', level=10, debugInd=1)
 
-    a2 = PlayerCharacter(db=db, abilityArrayStr='10,11,12,13,14,15')
+    a2 = PlayerCharacter(db=db,
+                         abilityArrayStr='10,11,12,13,14,15',
+                         debugInd=1)
     a2.ability_array_obj.setPreferenceArray(prefArray=stringToArray(
                                             '5,0,2,1,4,3'
                                             ))
-    print(a2)
-    for key, value in a2.ability_array_obj.getClassEval()[-1].items():
-        print(f"{str(key).ljust(25)}: {value}")
+    # print(a2)
+    # for key, value in a2.ability_array_obj.getClassEval()[-1].items():
+    #     print(f"{str(key).ljust(25)}: {value}")
     # a3 = PlayerCharacter(db, characterId=10)
     # print(a3)
     # a4 = PlayerCharacter(db, characterId=138)
     # print(a4)
-    a3 = PlayerCharacter(db, raceCandidate='Hill dwarf', level=10, debugInd=1)
-    for i in range(len(a3.getClassEval())):
-        for key, value in a3.getClassEval()[i].items():
+    a5 = PlayerCharacter(db, raceCandidate='Hill dwarf', level=10, debugInd=1)
+    for i in range(len(a5.getClassEval())):
+        for key, value in a5.getClassEval()[i].items():
             print(f"{i} -- {str(key).ljust(25)}: {value}")
+
+    a6 = PlayerCharacter(db,
+                         abilityArrayStr="18,12,12,10,10,8",
+                         raceCandidate="Mountain Dwarf",
+                         classCandidate="Barbarian",
+                         debugInd=1)
+
+    a6.meleeDefend(modifier=13, possibleDamage=a6.hit_points,
+                   damageType='Bludgeoning')
+    a6.Heal(10)
+    a6.meleeDefend(modifier=13, possibleDamage=(2 * a6.hit_points),
+                   damageType='Bludgeoning')
+

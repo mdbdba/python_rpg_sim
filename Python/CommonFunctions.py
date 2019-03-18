@@ -32,3 +32,18 @@ def inchesToFeet(inches):
     feet = inches // 12
     remainder = inches % 12
     return (f"{feet}'{remainder}\"")
+
+
+def dictToString(srcDict, linebreaks=False, leftJustify=0):
+    retStr = ""
+    if (linebreaks):
+        el = '\n'
+    else:
+        el = ", "
+    for key, value in srcDict.items():
+        retStr = (f"{retStr}{str(key).ljust(leftJustify)}: {value}{el}")
+
+    if (not linebreaks):
+        retStr = retStr[:-2]
+
+    return retStr
