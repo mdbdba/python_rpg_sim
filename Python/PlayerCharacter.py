@@ -5,7 +5,6 @@ from CommonFunctions import arrayToString
 from CommonFunctions import dictToString
 from CommonFunctions import stringToArray
 from CommonFunctions import inchesToFeet
-# from AbilityArray import AbilityArray
 from CharacterRace import CharacterRace
 from PlayerCharacterClass import getRandomClassName
 from BardPCClass import BardPCClass
@@ -21,11 +20,6 @@ from SorcererPCClass import SorcererPCClass
 from WarlockPCClass import WarlockPCClass
 from WizardPCClass import WizardPCClass
 from Weapon import Weapon
-# from Attack import Attack
-# from Die import Die
-
-# import random
-# import datetime
 
 
 class PlayerCharacter(Character):
@@ -104,8 +98,8 @@ class PlayerCharacter(Character):
         else:
             raceToUse = raceCandidate
 
-        # if (self.debugInd == 1):
-        #     self.classEval[-1]["RaceToUse"] = raceToUse
+        if (self.debugInd == 1):
+            self.classEval[-1]["RaceToUse"] = raceToUse
 
         return CharacterRace(self.db, raceToUse)
 

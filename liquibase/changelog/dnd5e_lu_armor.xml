@@ -190,5 +190,20 @@
 
 
     </changeSet>
+    <changeSet author="mdbdba" id="lu_armor_2">
+        <insert schemaName="dnd_5e" tableName="lu_armor">
+           <column name="name" value="Scraps"/>
+           <column name="category" value="Light"/>
+            <column name="cost" value="5"/>
+            <column name="cost_quantifier" value="gp"/>
+            <column name="ac_base" value="11"/>
+            <column name="ac_use_dex_mod" value="true"/>
+            <column name="ac_dex_mod_max" value="-1"/>
+            <column name="ac_modifier" value="-1"/>
+            <column name="strength_req" value="-1"/>
+            <column name="stealth_vantage" value="Disadvantage"/>
+            <column name="weight_lbs" value="10"/>
+        </insert>
+    </changeSet>
 
 </databaseChangeLog>
