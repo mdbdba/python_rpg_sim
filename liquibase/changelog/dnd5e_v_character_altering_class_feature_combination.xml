@@ -26,7 +26,10 @@ left join lu_character_altering_class_feature_option f on a.class = f.class
     and f.feature_order_by = 6
 where a.feature_order_by = 1
 order by class</createView>
-
+        <rollback>
+            drop view if exists dnd_5e.v_character_altering_class_feature_racial_combination cascade;
+            drop view if exists dnd_5e.v_character_altering_class_feature_combination cascade;
+        </rollback>
     </changeSet>
     <changeSet author="mdbdba" id="v_character_altering_class_feature_combination_2">
             <createView
@@ -42,7 +45,11 @@ select r1.race, r1.race_source_material, c.class, c.feature_1,  c.option_1, c.so
 from v_character_altering_class_feature_combination c
 cross join r1
 order by r1.race, c.class</createView>
+    <rollback>
+        drop view if exists dnd_5e.v_character_altering_class_feature_racial_combination cascade;
+        drop view if exists dnd_5e.v_character_altering_class_feature_combination cascade;
 
+    </rollback>
     </changeSet>
 
 

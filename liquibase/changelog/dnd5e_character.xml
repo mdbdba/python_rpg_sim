@@ -40,7 +40,15 @@
             constraintName="character_pk"
             schemaName="dnd_5e"
             tableName="character"/>
-
+        <rollback>
+            drop table dnd_5e.character cascade;
+        </rollback>
+    </changeSet>
+    <changeSet author="mdbdba" id="character_2">
+        <sql splitStatements="true"
+             stripComments="true">grant insert, update, delete on "character" to app;
+GRANT USAGE, SELECT ON SEQUENCE character_id_seq TO app;
+        </sql>
     </changeSet>
 
 </databaseChangeLog>
