@@ -44,6 +44,8 @@
     <changeSet author="mdbdba" id="lu_foe_trait_category_2">
         <insert schemaName="dnd_5e" tableName="lu_foe_trait_category">
            <column name="value" value="Armor Class"/></insert>
+        <insert schemaName="dnd_5e" tableName="lu_foe_trait_category">
+           <column name="value" value="Bonus Action"/></insert>
     </changeSet>
 </databaseChangeLog>
 

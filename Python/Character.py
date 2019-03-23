@@ -13,6 +13,8 @@ class Character(object):
                  db,
                  genderCandidate="Random",
                  abilityArrayStr="Common",
+                 damageGenerator="Random",
+                 hitpointGenerator="Max",
                  level=1,
                  debugInd=0):
 
@@ -23,6 +25,8 @@ class Character(object):
         else:
             self.level = level
 
+        self.damage_generator = damageGenerator
+        self.hit_point_generator = hitpointGenerator
         self.debugInd = debugInd
         self.debugStr = ''
 
@@ -283,8 +287,12 @@ class Character(object):
                               f'{level}, '
                               f'{hit_die}, '
                               f'{modifier})')
+        if (self.hit_point_generator == 'Max'):
+            retStr = ((level * hit_die) + (level * modifier))
+        else:
+            d = Die(hit_die)
+            retStr = ((d.roll(level)) + (level * modifier))
 
-        retStr = ((level * hit_die) + (level * modifier))
         if self.debugInd:
             self.classEval[-1]["hitPoints"] = retStr
 
@@ -492,6 +500,9 @@ class Character(object):
             self.logger.debug(msg)
 
         return res
+
+    def getDamageGenerator(self):
+        return self.damage_generator
 
     def Damage(self, amount, damageType="Unknown"):
         self.lastMethodLog = (f'Damage({amount}, '

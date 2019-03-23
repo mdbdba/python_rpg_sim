@@ -1,0 +1,4 @@
+truncate table dnd_5e.databasechangeloglock
+
+drop view if exists dnd_5e.v_character_altering_class_feature_racial_combination cascade;
+drop view if exists dnd_5e.v_character_altering_class_feature_combination cascade;

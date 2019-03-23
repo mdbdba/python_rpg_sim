@@ -30,11 +30,14 @@ class PlayerCharacter(Character):
                  classCandidate="Random",
                  genderCandidate="Random",
                  abilityArrayStr="Common",
+                 damageGenerator="Random",
+                 hitpointGenerator="Max",
                  level=1,
                  debugInd=0):
 
-        Character.__init__(self, db, genderCandidate, abilityArrayStr,
-                           level, debugInd)
+        Character.__init__(self, db, genderCandidate,
+                           abilityArrayStr, damageGenerator,
+                           hitpointGenerator, level, debugInd)
         if (characterId == -1):
             newCharacterInd = True
         else:
