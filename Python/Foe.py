@@ -118,5 +118,10 @@ class Foe(Character):
 
 if __name__ == '__main__':
     db = InvokePSQL()
-    a1 = Foe(db, foeCandidate="Skeleton")
+    a1 = Foe(db, foeCandidate="Skeleton", debugInd=1)
     print(a1)
+    a1.meleeDefend(modifier=13, possibleDamage=a1.hit_points,
+                   damageType='Bludgeoning')
+    a1.Heal(10)
+    a1.meleeDefend(modifier=13, possibleDamage=(2 * a1.hit_points),
+                   damageType='Bludgeoning')

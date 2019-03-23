@@ -20,6 +20,7 @@ from SorcererPCClass import SorcererPCClass
 from WarlockPCClass import WarlockPCClass
 from WizardPCClass import WizardPCClass
 from Weapon import Weapon
+from Die import Die
 
 
 class PlayerCharacter(Character):
@@ -202,7 +203,12 @@ class PlayerCharacter(Character):
         else:
             racialAdj = 0
 
-        return (self.hit_points + (hit_die + modifier + racialAdj))
+        if (self.hit_point_generator == 'Max'):
+            retval = (self.hit_points + (hit_die + modifier + racialAdj))
+        else:
+            d = Die(self.hit_die)
+            retval = (d.roll(1) + (modifier + racialAdj))
+        return retval
 
     def saveCharacter(self, db):
         self.lastMethodLog = (f'saveCharacter(db)')
