@@ -68,17 +68,19 @@ class Foe(Character):
                               f'{self.hit_point_modifier}, '
                               f'{self.hit_point_adjustment})')
         if (self.hit_point_generator == 'Max'):
-            retStr = ((self.hit_point_modifier * self.hit_point_die)
+            retVal = ((self.hit_point_modifier * self.hit_point_die)
                       + (self.hit_point_adjustment))
         elif (self.hit_point_generator == 'Standard'):
-            retStr = self.standard_hit_points
+            retVal = self.standard_hit_points
         else:
             d = Die(self.hit_point_die)
-            retStr = ((d.roll(self.hit_point_modifier))
+            retVal = ((d.roll(self.hit_point_modifier))
                       + (self.hit_point_adjustment))
 
         if self.debugInd:
-            self.classEval[-1]["hitPoints"] = retStr
+            self.classEval[-1]["hitPoints"] = retVal
+
+        return retVal
 
     def __str__(self):
         outstr = (f'{self.__class__.__name__}\n'
