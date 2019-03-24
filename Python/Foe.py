@@ -15,11 +15,25 @@ class Foe(Character):
                  debugInd=0):
         genderCandidate = 'U'
         abilityArrayStr = 'Common'
+        if (foeCandidate == "Random"):
+            foeCandidate = self.findRandom(db, challengeLevel)
         level = 1   # Player level will always be 1 for Foes
         Character.__init__(self, db, genderCandidate, abilityArrayStr,
                            damageGenerator, hitpointGenerator,
                            level, debugInd)
         self.getFoe(db, foeCandidate)
+
+    def findRandom(self, db, challengeLevel):
+        sql = (f"SELECT name FROM dnd_5e.foe "
+               f"where challenge_level='{challengeLevel}' "
+               f"ORDER BY RANDOM() LIMIT 1")
+        results = db.query(sql)
+        try:
+            retstr = results[0][0]
+        except(IndexError):
+            raise ValueError(f'Could not find foe for challenge level: '
+                             f'{challengeLevel}')
+        return retstr
 
     def getFoe(self, db, foeCandidate):
         sql = (f"SELECT id, name, foe_type, size, base_walking_speed, "
@@ -32,41 +46,47 @@ class Foe(Character):
                f"where name='{foeCandidate}'")
 
         results = db.query(sql)
-        # results[0][0]     # id,
-        self.name = results[0][1]     # name,
-        self.foe_type = results[0][2]     # foe_type,
-        self.size = results[0][3]     # size,
-        self.base_walking_speed = results[0][4]     # base_walking_speed,
-        self.challenge_level = results[0][5]     # challenge_level,
-        self.ability_array_str = results[0][6]     # ability_string,
-        # ability_modifier_string,
-        self.ability_modifier_array = stringToArray(results[0][7])
-        self.hit_point_die = results[0][8]     # hit_point_die,
-        self.hit_point_modifier = results[0][9]     # hit_point_modifier,
-        self.hit_point_adjustment = results[0][10]     # hit_point_adjustment,
-        self.standard_hit_points = results[0][11]     # standard_hit_points,
-        self.alignment = results[0][12]     # alignment,
-        self.ranged_weapon = results[0][13]     # ranged_weapon,
-        self.melee_weapon = results[0][14]     # melee_weapon,
-        self.ranged_ammunition_type = results[0][15]
-        self.ranged_ammunition_amt = results[0][16]
-        self.armor = results[0][17]     # armor,
-        self.shield = results[0][18]     # shield,
-        self.source_material = results[0][19]     # source_material,
-        self.source_credit_url = results[0][20]     # source_credit_url,
-        self.source_credit_comment = results[0][21]     # source_credit_comment
-
-        self.assignAbilityArray()
-        self.setArmorClass()
-        self.hit_points = self.assignHitPoints()
-        self.cur_hit_points = self.hit_points
-        self.temp_hit_points = 0
+        try:
+            # results[0][0]     # id,
+            self.name = results[0][1]     # name,
+            self.foe_type = results[0][2]     # foe_type,
+            self.size = results[0][3]     # size,
+            self.base_walking_speed = results[0][4]     # base_walking_speed,
+            self.cur_movement = results[0][4]
+            self.challenge_level = results[0][5]     # challenge_level,
+            self.ability_array_str = results[0][6]     # ability_string,
+            # ability_modifier_string,
+            self.ability_modifier_array = stringToArray(results[0][7])
+            self.hit_point_die = results[0][8]     # hit_point_die,
+            self.hit_point_modifier = results[0][9]     # hit_point_modifier,
+            self.hit_point_adjustment = results[0][10]
+            self.standard_hit_points = results[0][11]
+            self.alignment = results[0][12]     # alignment,
+            self.ranged_weapon = results[0][13]     # ranged_weapon,
+            self.melee_weapon = results[0][14]     # melee_weapon,
+            self.ranged_ammunition_type = results[0][15]
+            self.ranged_ammunition_amt = results[0][16]
+            self.armor = results[0][17]     # armor,
+            self.shield = results[0][18]     # shield,
+            self.source_material = results[0][19]     # source_material,
+            self.source_credit_url = results[0][20]     # source_credit_url,
+            self.source_credit_comment = results[0][21]
+            self.assignAbilityArray()
+            self.setArmorClass()
+            self.hit_points = self.assignHitPoints()
+            self.cur_hit_points = self.hit_points
+            self.temp_hit_points = 0
+        except(IndexError):
+            raise ValueError(f'Could not find foe: {foeCandidate}')
 
     def assignHitPoints(self):
         self.lastMethodLog = (f'assignHitPoints( '
                               f'{self.hit_point_die}, '
                               f'{self.hit_point_modifier}, '
                               f'{self.hit_point_adjustment})')
+        if (not self.hit_point_adjustment):
+            self.hit_point_adjustment = 0
+
         if (self.hit_point_generator == 'Max'):
             retVal = ((self.hit_point_modifier * self.hit_point_die)
                       + (self.hit_point_adjustment))
@@ -82,13 +102,30 @@ class Foe(Character):
 
         return retVal
 
+    def getRacialTraits(self):
+        return None
+
+    def getName(self):
+        return self.name
+
+    def getAlignmentStr(self):
+        return self.alignment
+
+    def getAlignmentAbbrev(self):
+        sql = (f"select abbreviation from lu_alignment where value = "
+               f"'{self.alignment}';")
+        results = self.db.query(sql)
+
+        return results[0][0]
+
     def __str__(self):
         outstr = (f'{self.__class__.__name__}\n'
                   f'gender: {self.gender}\n'
-                  f'name: {self.name}\n'
+                  f'name: {self.getName()}\n'
                   f'foe_type: {self.foe_type}\n'
                   f'size: {self.size}\n'
-                  f'alignment: {self.alignment }\n'
+                  f'alignment: {self.getAlignmentStr() }\n'
+                  f'alignment abbrev: {self.getAlignmentAbbrev() }\n'
                   f'base_walking_speed: {self.base_walking_speed }\n'
                   f'challenge_level: {self.challenge_level }\n'
                   f'ability_array_str: {self.ability_array_str }\n'

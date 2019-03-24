@@ -377,10 +377,12 @@ class Character(object):
         self.lastMethodLog = (f'checkProficiencySkill('
                               f'{ability})')
         retval = False
-        for b in self.raceObj.traitContainer.traits:
-                if b.category == "Proficiency Skill":
-                    if b.affected_name == ability:
-                        retval = True
+        t = self.getRacialTraits()
+        if (t):
+            for b in t:
+                    if b.category == "Proficiency Skill":
+                        if b.affected_name == ability:
+                            retval = True
         if (self.debugInd == 1):
             msg = (f"{self.getName()}: Proficiency for "
                    f"with {ability} returned {retval}")

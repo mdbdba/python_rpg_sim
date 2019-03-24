@@ -393,6 +393,9 @@ class PlayerCharacter(Character):
     def getBaseMovement(self):
         return self.raceObj.base_walking_speed
 
+    def getRacialTraits(self):
+        return self.raceObj.traitContainer.traits
+
     def assignClass(self, classCandidate):
         self.lastMethodLog = (f'assignClass(db, '
                               f'{classCandidate})')

@@ -221,6 +221,7 @@ def test_Character_Checks():
     res = a1.Check('Strength', 'Advantage', 15)
     assert(res is True or res is False)
     res = a1.Check('Strength', 'Disadvantage', 10)
+    assert(res is True or res is False)
 
     assert(res is True or res is False)
     res = a1.Check('Dexterity', 'Normal', 5)
@@ -228,6 +229,7 @@ def test_Character_Checks():
     res = a1.Check('Dexterity', 'Advantage', 15)
     assert(res is True or res is False)
     res = a1.Check('Dexterity', 'Disadvantage', 10)
+    assert(res is True or res is False)
 
     assert(res is True or res is False)
     res = a1.Check('Constitution', 'Normal', 5)
@@ -235,6 +237,7 @@ def test_Character_Checks():
     res = a1.Check('Constitution', 'Advantage', 15)
     assert(res is True or res is False)
     res = a1.Check('Constitution', 'Disadvantage', 10)
+    assert(res is True or res is False)
 
     assert(res is True or res is False)
     res = a1.Check('Intelligence', 'Normal', 5)
@@ -242,6 +245,7 @@ def test_Character_Checks():
     res = a1.Check('Intelligence', 'Advantage', 15)
     assert(res is True or res is False)
     res = a1.Check('Intelligence', 'Disadvantage', 10)
+    assert(res is True or res is False)
 
     assert(res is True or res is False)
     res = a1.Check('Wisdom', 'Normal', 5)
@@ -249,6 +253,7 @@ def test_Character_Checks():
     res = a1.Check('Wisdom', 'Advantage', 15)
     assert(res is True or res is False)
     res = a1.Check('Wisdom', 'Disadvantage', 10)
+    assert(res is True or res is False)
 
     assert(res is True or res is False)
     res = a1.Check('Charisma', 'Normal', 5)
@@ -256,6 +261,7 @@ def test_Character_Checks():
     res = a1.Check('Charisma', 'Advantage', 15)
     assert(res is True or res is False)
     res = a1.Check('Charisma', 'Disadvantage', 10)
+    assert(res is True or res is False)
 
     assert(res is True or res is False)
     res = a1.Check('Athletics', 'Normal', 5)
@@ -263,6 +269,8 @@ def test_Character_Checks():
     res = a1.Check('Athletics', 'Advantage', 15)
     assert(res is True or res is False)
     res = a1.Check('Athletics', 'Disadvantage', 10)
+    assert(res is True or res is False)
+
 
 def test_Character_Hilldwarf_Barbarian():
     db = InvokePSQL()
