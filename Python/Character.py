@@ -483,7 +483,7 @@ class Character(object):
             adjustedRoll = self.contestCheck(ability, vantage)
 
             if(self.checkProficiencySkill(skill)):
-                adjustedRoll = adjustedRoll + self.proficiency_bonus
+                adjustedRoll = adjustedRoll + int(self.proficiency_bonus)
                 tmpStr = (f'{tmpStr} + Prof({self.proficiency_bonus}) ')
 
         if (adjustedRoll >= dc):
