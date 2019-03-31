@@ -23,6 +23,19 @@ class Foe(Character):
                            level, debugInd)
         self.getFoe(db, foeCandidate)
 
+        self.classEval.append({
+                       "pythonClass": "Foe",
+                       "foeCandidate": foeCandidate,
+                       "challengeLevel": challengeLevel,
+                       "damageGenerator": damageGenerator,
+                       "hitpointGenerator": hitpointGenerator,
+                       "level": level,
+                       "debugInd": debugInd})
+
+        if (self.debugInd == 1):
+            for i in self.__str__().splitlines():
+                self.logger.debug(f"{self.getName()}: {i}")
+
     def findRandom(self, db, challengeLevel):
         sql = (f"SELECT name FROM dnd_5e.foe "
                f"where challenge_level='{challengeLevel}' "

@@ -50,6 +50,8 @@ class PlayerCharacter(Character):
                        "classCandidate": classCandidate,
                        "genderCandidate": genderCandidate,
                        "abilityArrayStr": abilityArrayStr,
+                       "damageGenerator": damageGenerator,
+                       "hitpointGenerator": hitpointGenerator,
                        "level": level,
                        "debugInd": debugInd})
 
