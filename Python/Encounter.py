@@ -1,14 +1,11 @@
 import math
-# import numpy
-# import os
-# import sys
+
 from operator import itemgetter
 from fieldSector import fieldSector
 from PlayerCharacter import PlayerCharacter
 from Foe import Foe
 
 from InvokePSQL import InvokePSQL
-
 
 
 class Encounter(object):
@@ -21,29 +18,30 @@ class Encounter(object):
         self.Opponents = Opponents
         self.active = True
         self.round = 0
+
         # initialize the field.
-        # row = [fieldSector()] * field_size
-        # self.field_map = [list(row) for i in range(field_size)]
-        # self.field_map = numpy.full((field_size, field_size), fieldSector())
         totObjs = field_size * field_size
+        self.field_size = field_size
         self.field_map = [fieldSector() for x in range((totObjs))]
 
-        # self.field_size = field_size - 1
-        self.field_size = field_size
         self.initiative = []   # list of lists to iterate over
-        sz = len(Heroes)
+        self.h_cnt = len(Heroes)
         for position, Hero in enumerate(Heroes):
-            self.addToInitiativeArray(Hero, 'Heroes', sz, position)
+            self.addToInitiativeArray(Hero, 'Heroes', self.h_cnt, position)
 
-        sz = len(Opponents)
+        self.o_cnt = len(Opponents)
         for position, Opponent in enumerate(Opponents):
-            self.addToInitiativeArray(Opponent, 'Opponents', sz,
+            self.addToInitiativeArray(Opponent, 'Opponents', self.o_cnt,
                                       position)
         self.initiative = sorted(self.initiative, reverse=True,
                                  key=itemgetter(3))
         self.masterLoop()
 
-#    def getDistanceBetween(self, srcLocX, srcLocY):
+    def getHeroCount(self):
+        return self.h_cnt
+
+    def getOpponentCount(self):
+        return self.o_cnt
 
     def getGridPosition(self, arrayIndex):
         return divmod(arrayIndex, (self.field_size))
@@ -55,11 +53,12 @@ class Encounter(object):
         distList = []
         for x in range(self.field_size * self.field_size):
             if ((self.field_map[x].occupied) and
-                self.field_map[x].occupiedBy == targetName):
+               self.field_map[x].occupiedBy == targetName):
                 a, b = self.getGridPosition(x)
                 dist = self.calculateDistance(myX, myY, a, b)
                 distList.append([dist, self.field_map[x].occupiedBy,
                                  self.field_map[x].occupiedByIndex])
+        distList = sorted(distList, reverse=False, key=itemgetter(0))
         return distList
 
     def calculateDistance(self, x1, y1, x2, y2):
@@ -86,9 +85,6 @@ class Encounter(object):
             MapLocY = (int(field_max/2) - int((sourceArrayPosition / 2)
                        + (sourceArrayPosition % 2 > 0)))
 
-        # print(f"{sourceArrayName}[{sourceArrayPosition}] "
-        #       f"Occupying [{MapLocX}][{MapLocY}]")
-
         pos = self.getArrayIndex(MapLocX, MapLocY)
         self.field_map[pos].occupySector(sourceArrayName,
                                          sourceArrayPosition)
@@ -109,14 +105,16 @@ class Encounter(object):
                     targetArrayName = "Heroes"
 
                 print(f'Round: {self.round} Turn: {i} '
-                      f'Name: {curActive.getName()}')
+                      f'Name: {curActive.getName()} '
+                      f'Grid Pos: [{self.initiative[i][4]}]'
+                      f'[{self.initiative[i][5]}]')
                 dl = (self.getTargetDistanceArray(self.initiative[i][4],
                                                   self.initiative[i][5],
                                                   targetArrayName))
                 for j in range(len(dl)):
                     print(f"dist: {dl[j][0]} {dl[j][1]} {dl[j][2]}")
 
-            if self.round == 10:
+            if self.round == 3:
                 self.active = False
             self.round += 1
 
