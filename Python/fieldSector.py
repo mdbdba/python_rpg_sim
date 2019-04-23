@@ -22,6 +22,9 @@ class fieldSector(object):
         if (lighting in self.lighting_options):
             self.lighting = lighting
 
+    def isOccupied(self):
+        return self.occupied
+
     def occupySector(self,
                      identifierName=None,
                      identifierIndex=None):

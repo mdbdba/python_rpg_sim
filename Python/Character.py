@@ -76,7 +76,7 @@ class Character(object):
         self.death_save_passed_cnt = 0
         self.death_save_failed_cnt = 0
         self.TTA = self.setTaliesinTempermentArchitype()
-        # self.name = None
+        self.combat_preference = 'Melee'  # 'Melee' or Ranged'
 
         self.lastMethodLog = ''
         if genderCandidate == "Random":
@@ -86,7 +86,7 @@ class Character(object):
 
         self.blinded_ind = False
         self.charmed_ind = False
-        self.deafend_ind = False
+        self.deafened_ind = False
         self.fatigued_ind = False
         self.frightened_ind = False
         self.grappled_ind = False
@@ -550,6 +550,20 @@ class Character(object):
         if (self.debugInd == 1):
             for i in tmpStr.splitlines():
                 self.logger.debug(f"{self.getName()}: {i}")
+
+    def getAction(self, distList):
+        retVal = "Done"
+        opDist = distList[0][0]
+        if (self.combat_preference == 'Melee'):
+            if (opDist > self.cur_movement):
+                retVal = "Movement"
+            elif (opDist <= self.cur_movement
+                  and opDist > 5):
+                retVal = "Wait on Melee"
+            elif (opDist == 5):
+                retVal = "Melee"
+
+        return retVal
 
     def rangedAttack(self, weaponObj, vantage='Normal'):
         # determine modifier
