@@ -554,13 +554,25 @@ class Character(object):
     def getAction(self, distList):
         retVal = "Done"
         opDist = distList[0][0]
-        if (self.combat_preference == 'Melee'):
+        if (not self.alive):
+            retVal = "None"
+        elif (not self.stabilized):
+            retVal = "Death Save"
+        elif (self.combat_preference == 'Melee'):
             if (opDist > self.cur_movement):
                 retVal = "Movement"
             elif (opDist <= self.cur_movement
                   and opDist > 5):
                 retVal = "Wait on Melee"
-            elif (opDist == 5):
+            elif (opDist <= 5):
+                retVal = "Melee"
+        else:
+            if (opDist > self.getRangedRange):
+                retVal = "Movement"
+            elif (opDist <= self.getRangedRange
+                  and opDist > 5):
+                retVal = "Ranged"
+            elif (opDist <= 5):
                 retVal = "Melee"
 
         return retVal
@@ -719,6 +731,18 @@ class Character(object):
         if (self.debugInd == 1):
             msg = (f"{self.getName()}: Has been Revived.")
             self.logger.debug(msg)
+
+    def getRangedRange(self):
+        if (self.ranged_weapon):
+            sql = (f"select range_1 from lu_weapon "
+                   f"and name = '{self.ranged_weapon}' "
+                   f"where category like '%Ranged'")
+            res = self.db.query(sql)
+            retVal = res[0][0]
+        else:
+            retVal = -1
+
+        return retVal
 
 
 if __name__ == '__main__':

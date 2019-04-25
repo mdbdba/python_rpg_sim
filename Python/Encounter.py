@@ -12,12 +12,13 @@ class Encounter(object):
     def __init__(self,
                  Heroes,
                  Opponents,
-                 field_size=100,
+                 field_size=100
                  ):
         self.Heroes = Heroes
         self.Opponents = Opponents
         self.active = True
         self.round = 0
+        self.WinningList = ""
 
         # initialize the field.
         totObjs = field_size * field_size
@@ -121,8 +122,38 @@ class Encounter(object):
             for i in range(len(self.initiative)):
                 if (self.active):
                     self.Turn(i, waitingFor)
+                    self.active = self.stillActive()
+            if self.active:
+                self.round += 1
+            else:
+                self.wrapUp()
 
-            self.round += 1
+    def wrapUp(self):
+        print(f"The winner is: {self.WinningList} in {self.round} rounds.")
+
+
+    def stillActive(self):
+        retVal = False
+        subVal1 = False
+        subVal2 = False
+        for i in range(len(self.Heroes)):
+            if (self.Heroes[i].alive):
+                subVal1 = True
+                break
+        for i in range(len(self.Opponents)):
+            if (self.Opponents[i].alive):
+                subVal2 = True
+                break
+
+        if (subVal1 and subVal2):
+            retVal = True
+        else:
+            if (subVal1):
+                self.WinningList = "Heroes"
+            else:
+                self.WinningList = "Opponents"
+
+        return retVal
 
     def Turn(self, initiativeInd, waitingFor):
                 if self.initiative[initiativeInd][0] == "Heroes":
@@ -200,7 +231,8 @@ class Encounter(object):
                     # If an enemy gets into melee range this round, ATTACK!
                     print(f"Using {curActive.getName()}'s Action waiting "
                           f"for an enemy to get into melee range.")
-                    print(f"adding to the waiting list: {dl[0][3]}[{dl[0][4]}]")
+                    print(f"adding to the waiting list: "
+                          f"{dl[0][3]}[{dl[0][4]}]")
                     waitingFor.append([self.initiative[initiativeInd][0],
                                        initiativeInd, dl[0][3], dl[0][4]])
                 elif (curAction == 'Melee'):
@@ -213,21 +245,22 @@ class Encounter(object):
                         print(f"{waitingAction[0]}[{waitingAction[1]}] "
                               f"has been waiting for this!")
                         if waitingAction[0] == "Heroes":
-                            winner = self.Heroes[waitingAction[1]]
+                            directedUser = self.Heroes[waitingAction[1]]
                         else:
-                            winner = (self.Opponents[waitingAction[1]])
+                            directedUser = (self.Opponents[waitingAction[1]])
 
-                        print(f"Winner is: {winner.getName()}")
-                        self.active = False
-                # Any interfering actions
-                # Action left
-                # Any interfering actions
-                # any Movement left
-                # Any interfering actions
-                # for now we just are racing to be in melee range:
-                if (dl[0][0] < 10 and self.active):
-                    self.active = False
-                    print(f"Winner is: {curActive.getName()}")
+                        if (directedUser.alive):
+                            curActive.alive = False
+                            curActive.cur_hit_points = 0
+
+                    if (curActive.cur_hit_points > 0):
+                        if (dl[0][3] == "Heroes"):
+                            target = self.Heroes[dl[0][4]]
+                        else:
+                            target = self.Opponents[dl[0][4]]
+
+                        target.alive = False
+                        target.cur_hit_points = 0
 
                 print(f"Closest To: {dl[0][0]} {dl[0][1]} {dl[0][2]}")
 
