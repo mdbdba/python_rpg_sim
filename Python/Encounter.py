@@ -18,7 +18,8 @@ class Encounter(object):
         self.Opponents = Opponents
         self.active = True
         self.round = 0
-        self.WinningList = ""
+        self.WinningList = []
+        self.WinningListName = ""
 
         # initialize the field.
         totObjs = field_size * field_size
@@ -129,8 +130,11 @@ class Encounter(object):
                 self.wrapUp()
 
     def wrapUp(self):
-        print(f"The winner is: {self.WinningList} in {self.round} rounds.")
-
+        print(f"The winner is: {self.WinningListName} in {self.round} rounds.")
+        print(f"Surviving {self.WinningListName}:")
+        for i in range(len(self.WinningList)):
+            if (self.WinningList[i].alive):
+                print(self.WinningList[i].getName())
 
     def stillActive(self):
         retVal = False
@@ -149,9 +153,11 @@ class Encounter(object):
             retVal = True
         else:
             if (subVal1):
-                self.WinningList = "Heroes"
+                self.WinningListName = "Heroes"
+                self.WinningList = self.Heroes
             else:
-                self.WinningList = "Opponents"
+                self.WinningListName = "Opponents"
+                self.WinningList = self.Opponents
 
         return retVal
 
@@ -234,7 +240,8 @@ class Encounter(object):
                     print(f"adding to the waiting list: "
                           f"{dl[0][3]}[{dl[0][4]}]")
                     waitingFor.append([self.initiative[initiativeInd][0],
-                                       initiativeInd, dl[0][3], dl[0][4]])
+                                       self.initiative[initiativeInd][1],
+                                       dl[0][3], dl[0][4]])
                 elif (curAction == 'Melee'):
                     print(f"{curActive.getName()} is in melee with "
                           f"{dl[0][3]}[{dl[0][4]}]")
