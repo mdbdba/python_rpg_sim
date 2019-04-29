@@ -23,7 +23,7 @@ for i in e1.initiative:
 print("Occupied field Sectors:")
 for x in range(e1.field_size * e1.field_size):
     if (e1.field_map[x].occupied):
-        a, b = e1.getGridPosition(x)
+        a, b = e1.get_grid_position(x)
         print(f"list position:[{x}] Grid location: [{a}][{b}] "
               f"Occupied by: {e1.field_map[x].occupiedBy}"
               f"[{e1.field_map[x].occupiedByIndex}]")
