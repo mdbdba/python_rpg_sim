@@ -30,7 +30,7 @@ class Foe(Character):
                        "damageGenerator": damageGenerator,
                        "hitpointGenerator": hitpointGenerator,
                        "level": level,
-                       "debugInd": debugInd})
+                       "debug_ind": debugInd})
 
         if (self.debugInd == 1):
             for i in self.__str__().splitlines():

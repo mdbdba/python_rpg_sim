@@ -53,7 +53,7 @@ class PlayerCharacter(Character):
                        "damageGenerator": damageGenerator,
                        "hitpointGenerator": hitpointGenerator,
                        "level": level,
-                       "debugInd": debugInd})
+                       "debug_ind": debugInd})
 
         if (characterId == -1):
             self.createCharacter(db,
@@ -128,8 +128,8 @@ class PlayerCharacter(Character):
         self.classObj = self.assignClass(classCandidate)
         self.raceObj.setRandoms(db=self.db, gender=self.gender)
 
-        self.ability_array_obj.setPreferenceArray(self.getAbilitySortArray())
-        self.ability_array_obj.setRacialArray(
+        self.ability_array_obj.set_preference_array(self.getAbilitySortArray())
+        self.ability_array_obj.set_racial_array(
             self.getRacialAbilityBonusArray())
 
         # Since ability array bonuses are figured when levels change we
@@ -158,8 +158,8 @@ class PlayerCharacter(Character):
                    f"and feature = 'Ability Score Improvement';")
             result = db.query(sql)
             if (int(result[0][0]) == 1):
-                # print("\n\n\nDoing abilityScoreImprovement\n\n\n")
-                self.ability_array_obj.abilityScoreImprovement()
+                # print("\n\n\nDoing ability_score_improvement\n\n\n")
+                self.ability_array_obj.ability_score_improvement()
 
             # since the constitution could change at each level
             # that would affect the hit point amount. So, have to
@@ -302,7 +302,7 @@ class PlayerCharacter(Character):
             self.classObj.shield = results[0][27]
 
             self.assignAbilityArray(self.classObj.getClassAbilitySortArray())
-            self.ability_array_obj.setRacialArray(self.raceObj.ability_bonuses)
+            self.ability_array_obj.set_racial_array(self.raceObj.ability_bonuses)
             self.hit_points = 0
             self.adjustForLevels(db)
             self.setArmorClass()
@@ -324,19 +324,19 @@ class PlayerCharacter(Character):
 
     def setPreferenceArray(self, prefArrayStr):
         tmp_array = stringToArray(prefArrayStr)
-        self.ability_array_obj.setPreferenceArray(prefArray=tmp_array)
+        self.ability_array_obj.set_preference_array(prefArray=tmp_array)
         self.setAbilityModifierArray(self.db)
 
     def setRacialArray(self, bonusArray):
         tmp_array = stringToArray(bonusArray)
-        self.ability_array_obj.setRacialArray(bonusArray=tmp_array)
+        self.ability_array_obj.set_racial_array(bonusArray=tmp_array)
         self.setAbilityModifierArray(self.db)
 
     def getRacialAbilityBonusArray(self):
         return self.raceObj.ability_bonuses
 
     def getAbilityImprovementArray(self):
-        return self.ability_array_obj.getImpArray()
+        return self.ability_array_obj.get_imp_array()
 
     def getName(self):
         return self.raceObj.name
@@ -526,7 +526,7 @@ class PlayerCharacter(Character):
                   f'Ordered Array:      '
                   f'{self.getNumericallySortedAbilityArray()}\n'
                   f'Sort Array:    {self.getAbilityPrefStrArray()}\n'
-                  f'Nbr Sort Array:     {self.ability_array_obj.getPrefArray()}\n'
+                  f'Nbr Sort Array:     {self.ability_array_obj.get_pref_array()}\n'
                   f'Sorted:             {self.getSortedAbilityArray()}\n')
 
         outstr = (f'{outstr}\nAbility         Mod  Total = (Base + '
@@ -589,11 +589,11 @@ if __name__ == '__main__':
     a2 = PlayerCharacter(db=db,
                          abilityArrayStr='10,11,12,13,14,15',
                          debugInd=1)
-    a2.ability_array_obj.setPreferenceArray(prefArray=stringToArray(
+    a2.ability_array_obj.set_preference_array(prefArray=stringToArray(
                                             '5,0,2,1,4,3'
                                             ))
     # print(a2)
-    # for key, value in a2.ability_array_obj.getClassEval()[-1].items():
+    # for key, value in a2.ability_array_obj.get_class_eval()[-1].items():
     #     print(f"{str(key).ljust(25)}: {value}")
     # a3 = PlayerCharacter(db, characterId=10)
     # print(a3)

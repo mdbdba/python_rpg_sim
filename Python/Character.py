@@ -36,7 +36,7 @@ class Character(object):
             logging.basicConfig(format=logFmt, level=logging.DEBUG)
             self.logger = logging.getLogger(__name__)
 
-        y = getattr(self, "classEval", None)
+        y = getattr(self, "class_eval", None)
         if (y is None):
             self.classEval = []
         self.classEval.append({
@@ -44,7 +44,7 @@ class Character(object):
                        "genderCandidate": genderCandidate,
                        "abilityArrayStr": abilityArrayStr,
                        "level": level,
-                       "debugInd": debugInd})
+                       "debug_ind": debugInd})
         self.ability_array_str = abilityArrayStr
         self.ability_modifier_array = [0, 0, 0, 0, 0, 0]
         self.damage_taken = dict(Acid=0, Bludgeoning=0, Cold=0,
@@ -146,11 +146,11 @@ class Character(object):
             self.ability_array_obj = AbilityArray(array_type="Predefined",
                                                   raw_array=tmp_array,
                                                   pref_array=sortArray,
-                                                  debugInd=self.debugInd)
+                                                  debug_ind=self.debugInd)
         else:
             self.ability_array_obj = AbilityArray(array_type=tmp,
                                                   pref_array=sortArray,
-                                                  debugInd=self.debugInd)
+                                                  debug_ind=self.debugInd)
 
     def getClassEval(self):
         """
@@ -159,25 +159,25 @@ class Character(object):
         return self.classEval
 
     def getRawAbilityArray(self):
-        return self.ability_array_obj.getRawArray()
+        return self.ability_array_obj.get_raw_array()
 
     def getAbilityPrefArray(self):
-        return self.ability_array_obj.getPrefArray()
+        return self.ability_array_obj.get_pref_array()
 
     def getNumericallySortedAbilityArray(self):
-        return self.ability_array_obj.getNumericalSortedArray()
+        return self.ability_array_obj.get_numerical_sorted_array()
 
     def getAbilityPrefStrArray(self):
-        return self.ability_array_obj.getPrefStrArray()
+        return self.ability_array_obj.get_pref_str_array()
 
     def getSortedAbilityArray(self):
-        return self.ability_array_obj.getSortedArray()
+        return self.ability_array_obj.get_sorted_array()
 
     def getAbilityArray(self):
-        return self.ability_array_obj.getArray()
+        return self.ability_array_obj.get_array()
 
     def getAbilityImprovementArray(self):
-        return self.ability_array_obj.getImpArray()
+        return self.ability_array_obj.get_imp_array()
 
     def setTaliesinTempermentArchitype(self):
         self.lastMethodLog = (f'assignTaliesinTempermentArchitype()')
@@ -758,7 +758,7 @@ if __name__ == '__main__':
     print(a2.getRawAbilityArray())
     print(a2.getAbilityPrefArray())
     print(a2.getSortedAbilityArray())
-    a2.ability_array_obj.setPreferenceArray(prefArray=stringToArray(
+    a2.ability_array_obj.set_preference_array(prefArray=stringToArray(
                                             '5,0,2,1,4,3'
                                             ))
     print(a2.getRawAbilityArray())

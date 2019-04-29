@@ -9,7 +9,7 @@ def test_2():
     d = Die(2)
     r = d.roll(1)
     assert(2 >= r >= 1)
-    assert(d.getClassEval()[0]['debugInd'] is False)
+    assert(d.getClassEval()[0]['debug_ind'] is False)
 
 
 def test_2_droplowest():
@@ -38,7 +38,7 @@ def test_d6():
     d = Die(6)
     r = d.roll(1)
     assert(6 >= r >= 1)
-    assert(d.getClassEval()[0]['debugInd'] is False)
+    assert(d.getClassEval()[0]['debug_ind'] is False)
 
 
 def test_d6_droplowest():

@@ -23,13 +23,13 @@ class AbilityArray(object):
                  pref_array=None,
                  racial_array=None,
                  ignore_racial_bonus=False,
-                 debugInd=False):
+                 debug_ind=False):
         """
         Generate a list of values to serve as Ability Scores
 
         :param array_type: Choose the way the Ability Scores are created.
         :param pref_array: Array that defines how the rolls should be ordered.
-        :param debugInd: log to classEval array? (default: False)
+        :param debug_ind: log to class_eval array? (default: False)
         """
         self.array_type = array_type
         self.pref_array = pref_array
@@ -52,35 +52,34 @@ class AbilityArray(object):
                             "Mental acuity, info recall, analytical skill",
                             'Wisdom': "Awareness, intuition, insight",
                             'Charisma': "Confidence, eloquence, leadership"}
-        self.classEval = []
-        self.debugInd = debugInd
-        if (self.pref_array):
+        self.class_eval = []
+        self.debug_ind = debug_ind
+        if self.pref_array:
             ignore_pref_array = False
         else:
             ignore_pref_array = True
-        self.classEval.append({"array_type": array_type,
-                               "pref_array": pref_array,
-                               "ignore_pref_array": ignore_pref_array,
-                               "debugInd": debugInd})
-
+        self.class_eval.append({"array_type": array_type,
+                                "pref_array": pref_array,
+                                "ignore_pref_array": ignore_pref_array,
+                                "debug_ind": debug_ind})
         self._populate()
 
     def _populate(self):
         """
         Populate a candidate array of Ability Scores
         """
-        Standard = [15, 14, 13, 12, 10, 8]
-        PointBuy_Even = [13, 13, 13, 12, 12, 12]
+        standard = [15, 14, 13, 12, 10, 8]
+        point_buy_even = [13, 13, 13, 12, 12, 12]
         PointBuy_OneMax = [15, 12, 12, 12, 11, 11]
         PointBuy_TwoMax = [15, 15, 11, 10, 10, 10]
         PointBuy_ThreeMax = [15, 15, 15, 8, 8, 8]
 
         if self.array_type == "Predefined":
             self.candidate_array = self.raw_array
-        elif self.array_type == "Standard":
-            self.candidate_array = Standard
-        elif self.array_type == "PointBuy_Even":
-            self.candidate_array = PointBuy_Even
+        elif self.array_type == "standard":
+            self.candidate_array = standard
+        elif self.array_type == "point_buy_even":
+            self.candidate_array = point_buy_even
         elif self.array_type == "PointBuy_OneMax":
             self.candidate_array = PointBuy_OneMax
         elif self.array_type == "PointBuy_TwoMax":
@@ -100,24 +99,24 @@ class AbilityArray(object):
         # set the raw_array to whatever we started with for candidate values
         self.raw_array = self.candidate_array[:]
 
-        if self.debugInd:
-            self.classEval[-1]["raw_array"] = self.raw_array[:]
+        if self.debug_ind:
+            self.class_eval[-1]["raw_array"] = self.raw_array[:]
 
-        self.setAbilityArray()
+        self.set_ability_array()
 
-    def setAbilityArray(self):
-        self.setAbilityPreferences()
+    def set_ability_array(self):
+        self.set_ability_preferences()
 
         if self.racial_array:
-            self.setRacialAdjustment()
+            self.set_racial_adjustment()
 
-    def setPreferenceArray(self, prefArray):
+    def set_preference_array(self, prefArray):
         self.pref_array = prefArray
-        self.setPrefStrArray()
+        self.set_pref_str_array()
         self.ignore_pref_array = False
-        self.setAbilityArray()
+        self.set_ability_array()
 
-    def setPrefStrArray(self):
+    def set_pref_str_array(self):
         for p in range(len(self.pref_array)):
             if self.pref_array[p] == 0:
                 self.pref_str_array[p] = 'Strength'
@@ -132,10 +131,10 @@ class AbilityArray(object):
             else:
                 self.pref_str_array[p] = 'Charisma'
 
-    def getPrefStrArray(self):
+    def get_pref_str_array(self):
         return self.pref_str_array
 
-    def setAbilityPreferences(self):
+    def set_ability_preferences(self):
         """
         Arrange the ability array by a defined order.
         """
@@ -157,78 +156,78 @@ class AbilityArray(object):
 
         self.pref_sorted_array = self.ability_array[:]
 
-        if self.debugInd and "ability_base_array" in self.classEval[-1]:
-            self.classEval.append({"call": "setAbilityPreferences"})
+        if self.debug_ind and "ability_base_array" in self.class_eval[-1]:
+            self.class_eval.append({"call": "set_ability_preferences"})
 
         self.numerical_sorted_array = self.candidate_array[:]
-        self.classEval[-1]["numerical_sorted_array"] = self.candidate_array[:]
+        self.class_eval[-1]["numerical_sorted_array"] = self.candidate_array[:]
         if (self.pref_array):
-            self.classEval[-1]["preference_array"] = self.pref_array[:]
-        self.classEval[-1]["ability_array"] = self.ability_array[:]
+            self.class_eval[-1]["preference_array"] = self.pref_array[:]
+        self.class_eval[-1]["ability_array"] = self.ability_array[:]
 
-    def getRawArray(self):
+    def get_raw_array(self):
         """
         Return the originally generated or received array
         """
         return self.raw_array
 
-    def getNumericalSortedArray(self):
+    def get_numerical_sorted_array(self):
         """
         Return the preference array
         """
         return self.numerical_sorted_array
 
-    def getPrefArray(self):
+    def get_pref_array(self):
         """
         Return the preference array
         """
         return self.pref_array
 
-    def getSortedArray(self):
+    def get_sorted_array(self):
         """
         Return the preference array
         """
         return self.pref_sorted_array
 
-    def getArray(self):
+    def get_array(self):
         """
         Return an array of Ability Scores
         """
         return self.ability_array
 
-    def getImpArray(self):
+    def get_imp_array(self):
         """
         Return the ability improvement array
         """
         return self.ability_imp_array
 
-    def getAbilityLabels(self):
+    def get_ability_labels(self):
         """
         Return the dictionary describing each of the Abilities
         """
         return self.ability_dsc
 
-    def getClassEval(self):
+    def get_class_eval(self):
         """
         Return an array of lists that can be used for debugging/testing
         """
-        return self.classEval
+        return self.class_eval
 
-    def setRacialArray(self, bonusArray):
+    def set_racial_array(self, bonusArray):
         self.racial_array = bonusArray
-        self.classEval[-1]["racial_array"] = self.racial_array[:]
-        self.setAbilityArray()
+        self.class_eval[-1]["racial_array"] = self.racial_array[:]
+        self.set_ability_array()
 
-    def setRacialAdjustment(self):
+    def set_racial_adjustment(self):
         if (self.ignore_racial_bonus):
-            self.classEval[-1]["racial_adjustment"] = "Ignored"
+            self.class_eval[-1]["racial_adjustment"] = "Ignored"
         else:
             for r in range(len(self.ability_array)):
                 self.ability_array[r] = (
                     self.ability_array[r] + self.racial_array[r])
-            self.classEval[-1]["racial_adjustment"] = self.ability_array[:]
+            self.class_eval[-1]["racial_adjustment"] = self.ability_array[:]
 
-    def abilityScoreImprovement(self):
+    def ability_score_improvement(self):
         points = 2
         while (points > 0):
             for r in range(len(self.ability_array)):
@@ -244,17 +243,17 @@ class AbilityArray(object):
                     self.ability_imp_array[self.pref_array[r]] = (
                         self.ability_imp_array[self.pref_array[r]] + 1)
                     points = (points - 1)
-        self.classEval[-1]["ability_level_changes"] = self.ability_imp_array[:]
-        self.classEval[-1]["ability_improvement"] = self.ability_array[:]
+        self.class_eval[-1]["ability_level_changes"] = self.ability_imp_array[:]
+        self.class_eval[-1]["ability_improvement"] = self.ability_array[:]
 
 
 if __name__ == '__main__':
     a1 = AbilityArray()
-    print(a1.getRawArray())
-    print(a1.getPrefArray())
-    print(a1.getArray())
-    print(a1.getClassEval())
-    x = a1.getClassEval()
+    print(a1.get_raw_array())
+    print(a1.get_pref_array())
+    print(a1.get_array())
+    print(a1.get_class_eval())
+    x = a1.get_class_eval()
     print("class eval:")
     for r in range(len(x)):
         for key, value in x[r].items():
@@ -264,25 +263,25 @@ if __name__ == '__main__':
     a = AbilityArray(array_type="Standard",
                      pref_array=stringToArray('5,0,2,1,4,3'),
                      racial_array=stringToArray('0,0,0,0,1,2'),
-                     debugInd=True)
-    print(a.getRawArray())
-    print(a.getPrefArray())
-    print(a.getArray())
-    print(a.getClassEval()[-1])
+                     debug_ind=True)
+    print(a.get_raw_array())
+    print(a.get_pref_array())
+    print(a.get_array())
+    print(a.get_class_eval()[-1])
     print("class eval:")
-    for key, value in a.getClassEval()[-1].items():
+    for key, value in a.get_class_eval()[-1].items():
         print(f"{str(key).ljust(25)}: {value}")
     print("end class eval")
     a2 = AbilityArray(array_type="Common",
                       pref_array=stringToArray('1,2,5,0,4,3'),
-                      debugInd=True)
-    a2.setRacialArray(stringToArray('0,2,1,0,0,0'))
-    print(a2.getRawArray())
-    print(a2.getPrefArray())
-    print(a2.getArray())
-    print(a2.getClassEval()[-1])
+                      debug_ind=True)
+    a2.set_racial_array(stringToArray('0,2,1,0,0,0'))
+    print(a2.get_raw_array())
+    print(a2.get_pref_array())
+    print(a2.get_array())
+    print(a2.get_class_eval()[-1])
     print("class eval:")
-    for key, value in a2.getClassEval()[-1].items():
+    for key, value in a2.get_class_eval()[-1].items():
         print(f"{str(key).ljust(25)}: {value}")
     print("end class eval")
 
@@ -290,12 +289,12 @@ if __name__ == '__main__':
                      pref_array=stringToArray('5,0,2,1,4,3'),
                      racial_array=stringToArray('0,0,0,0,1,2'),
                      ignore_racial_bonus=True,
-                     debugInd=True)
-    print(b.getRawArray())
-    print(b.getPrefArray())
-    print(b.getArray())
-    print(b.getClassEval()[-1])
+                     debug_ind=True)
+    print(b.get_raw_array())
+    print(b.get_pref_array())
+    print(b.get_array())
+    print(b.get_class_eval()[-1])
     print("class eval:")
-    for key, value in b.getClassEval()[-1].items():
+    for key, value in b.get_class_eval()[-1].items():
         print(f"{str(key).ljust(25)}: {value}")
     print("end class eval")

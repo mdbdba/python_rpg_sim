@@ -7,12 +7,12 @@ class Die(object):
         Randomization class
 
         :param sides: the number of sides this die will have (default: 20)
-        :param debugInd: log to classEval array? (default: False)
+        :param debugInd: log to class_eval array? (default: False)
         """
         self.sides = sides
         self.classEval = []
         self.debugInd = debugInd
-        self.classEval.append({"Die": sides, "debugInd": debugInd})
+        self.classEval.append({"Die": sides, "debug_ind": debugInd})
         self.callEval = {}
 
     def getClassEval(self):
