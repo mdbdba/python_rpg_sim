@@ -3,7 +3,7 @@ import os
 
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 from PlayerCharacterClass import PlayerCharacterClass    # NOQA
-#from Common.InvokePSQL import InvokePSQL    # NOQA
+# from Common.InvokePSQL import InvokePSQL    # NOQA
 from BardPCClass import BardPCClass    # NOQA
 from BarbarianPCClass import BarbarianPCClass    # NOQA
 from ClericPCClass import ClericPCClass    # NOQA
@@ -19,13 +19,13 @@ from WizardPCClass import WizardPCClass    # NOQA
 from InvokePSQL import InvokePSQL    # NOQA
 
 
-def test_Class_Default():
+def test_class_default():
     db = InvokePSQL()
     a = PlayerCharacterClass(db)
     assert(len(a.name) > 3)
 
 
-def test_Class_Barbarian():
+def test_class_barbarian():
     db = InvokePSQL()
     a = BarbarianPCClass(db)
     assert(a.name == 'Barbarian')
@@ -42,7 +42,7 @@ def test_Class_Barbarian():
     assert(a.background == "Outlander")
 
 
-def test_Class_Bard():
+def test_class_bard():
     db = InvokePSQL()
     a = BardPCClass(db)
     assert(a.name == 'Bard')
@@ -59,7 +59,7 @@ def test_Class_Bard():
     assert(a.background == "Entertainer")
 
 
-def test_Class_Cleric():
+def test_class_cleric():
     db = InvokePSQL()
     a = ClericPCClass(db)
     assert(a.name == 'Cleric')
@@ -76,7 +76,7 @@ def test_Class_Cleric():
     assert(a.background == "Acolyte")
 
 
-def test_Class_Druid():
+def test_class_druid():
     db = InvokePSQL()
     a = DruidPCClass(db)
     assert(a.name == 'Druid')
@@ -93,7 +93,7 @@ def test_Class_Druid():
     assert(a.background == "Hermit")
 
 
-def test_Class_Fighter():
+def test_class_fighter():
     db = InvokePSQL()
     a = FighterPCClass(db)
     assert(a.name == 'Fighter')
@@ -110,7 +110,7 @@ def test_Class_Fighter():
     assert(a.background == "Soldier")
 
 
-def test_Class_Monk():
+def test_class_monk():
     db = InvokePSQL()
     a = MonkPCClass(db)
     assert(a.name == 'Monk')
@@ -127,7 +127,7 @@ def test_Class_Monk():
     assert(a.background == "Hermit")
 
 
-def test_Class_Paladin():
+def test_class_paladin():
     db = InvokePSQL()
     a = PaladinPCClass(db)
     assert(a.name == 'Paladin')
@@ -144,7 +144,7 @@ def test_Class_Paladin():
     assert(a.background == "Noble")
 
 
-def test_Class_Ranger():
+def test_class_ranger():
     db = InvokePSQL()
     a = RangerPCClass(db)
     assert(a.name == 'Ranger')
@@ -162,7 +162,7 @@ def test_Class_Ranger():
     assert(a.background == "Outlander")
 
 
-def test_Class_Rogue():
+def test_class_rogue():
     db = InvokePSQL()
     a = RoguePCClass(db)
     assert(a.name == 'Rogue')
@@ -180,7 +180,7 @@ def test_Class_Rogue():
     assert(a.shield is None)
 
 
-def test_Class_Sorcerer():
+def test_class_sorcerer():
     db = InvokePSQL()
     a = SorcererPCClass(db)
     assert(a.name == 'Sorcerer')
@@ -198,7 +198,7 @@ def test_Class_Sorcerer():
     assert(a.background == "Hermit")
 
 
-def test_Class_Warlock():
+def test_class_warlock():
     db = InvokePSQL()
     a = WarlockPCClass(db)
     assert(a.name == 'Warlock')
@@ -216,7 +216,7 @@ def test_Class_Warlock():
     assert(a.background == "Charlatan")
 
 
-def test_Class_Wizard():
+def test_class_wizard():
     db = InvokePSQL()
     a = WizardPCClass(db)
     assert(a.name == 'Wizard')

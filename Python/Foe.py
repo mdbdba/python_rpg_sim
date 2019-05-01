@@ -8,47 +8,46 @@ from CommonFunctions import stringToArray
 class Foe(Character):
     def __init__(self,
                  db,
-                 foeCandidate="Random",
-                 challengeLevel=".25",
-                 damageGenerator="Random",
-                 hitpointGenerator="Max",
-                 debugInd=0):
-        genderCandidate = 'U'
-        abilityArrayStr = 'Common'
-        if (foeCandidate == "Random"):
-            foeCandidate = self.findRandom(db, challengeLevel)
+                 foe_candidate="Random",
+                 challenge_level=".25",
+                 damage_generator="Random",
+                 hit_point_generator="Max",
+                 debug_ind=0):
+        gender_candidate = 'U'
+        ability_array_str = 'Common'
+        if foe_candidate == "Random":
+            foe_candidate = self.find_random(db, challenge_level)
         level = 1   # Player level will always be 1 for Foes
-        Character.__init__(self, db, genderCandidate, abilityArrayStr,
-                           damageGenerator, hitpointGenerator,
-                           level, debugInd)
-        self.getFoe(db, foeCandidate)
+        Character.__init__(self, db, gender_candidate, ability_array_str,
+                           damage_generator, hit_point_generator,
+                           level, debug_ind)
+        self.get_foe(db, foe_candidate)
 
-        self.classEval.append({
+        self.class_eval.append({
                        "pythonClass": "Foe",
-                       "foeCandidate": foeCandidate,
-                       "challengeLevel": challengeLevel,
-                       "damageGenerator": damageGenerator,
-                       "hitpointGenerator": hitpointGenerator,
+                       "foe_candidate": foe_candidate,
+                       "challenge_level": challenge_level,
+                       "damage_generator": damage_generator,
+                       "hit_point_generator": hit_point_generator,
                        "level": level,
-                       "debug_ind": debugInd})
+                       "debug_ind": debug_ind})
 
-        if (self.debugInd == 1):
+        if self.debug_ind == 1:
             for i in self.__str__().splitlines():
-                self.logger.debug(f"{self.getName()}: {i}")
+                self.logger.debug(f"{self.get_name()}: {i}")
 
-    def findRandom(self, db, challengeLevel):
+    def find_random(self, db, challenge_level):
         sql = (f"SELECT name FROM dnd_5e.foe "
-               f"where challenge_level='{challengeLevel}' "
+               f"where challenge_level='{challenge_level}' "
                f"ORDER BY RANDOM() LIMIT 1")
         results = db.query(sql)
         try:
             retstr = results[0][0]
-        except(IndexError):
-            raise ValueError(f'Could not find foe for challenge level: '
-                             f'{challengeLevel}')
+        except IndexError:
+            raise ValueError(f'Could not find foe for challenge level: {challenge_level}')
         return retstr
 
-    def getFoe(self, db, foeCandidate):
+    def get_foe(self, db, foeCandidate):
         sql = (f"SELECT id, name, foe_type, size, base_walking_speed, "
                f"challenge_level, ability_string, ability_modifier_string, "
                f"hit_point_die, hit_point_modifier, hit_point_adjustment, "
@@ -84,23 +83,23 @@ class Foe(Character):
             self.source_material = results[0][19]     # source_material,
             self.source_credit_url = results[0][20]     # source_credit_url,
             self.source_credit_comment = results[0][21]
-            self.assignAbilityArray()
-            self.setArmorClass()
-            self.hit_points = self.assignHitPoints()
+            self.assign_ability_array()
+            self.set_armor_class()
+            self.hit_points = self.assign_hit_points()
             self.cur_hit_points = self.hit_points
             self.temp_hit_points = 0
         except(IndexError):
             raise ValueError(f'Could not find foe: {foeCandidate}')
 
-    def assignHitPoints(self):
-        self.lastMethodLog = (f'assignHitPoints( '
+    def assign_hit_points(self):
+        self.lastMethodLog = (f'assign_hit_points( '
                               f'{self.hit_point_die}, '
                               f'{self.hit_point_modifier}, '
                               f'{self.hit_point_adjustment})')
-        if (not self.hit_point_adjustment):
+        if not self.hit_point_adjustment:
             self.hit_point_adjustment = 0
 
-        if (self.hit_point_generator == 'Max'):
+        if self.hit_point_generator == 'Max':
             retVal = ((self.hit_point_modifier * self.hit_point_die)
                       + (self.hit_point_adjustment))
         elif (self.hit_point_generator == 'Standard'):
@@ -110,21 +109,21 @@ class Foe(Character):
             retVal = ((d.roll(self.hit_point_modifier))
                       + (self.hit_point_adjustment))
 
-        if self.debugInd:
-            self.classEval[-1]["hitPoints"] = retVal
+        if self.debug_ind:
+            self.class_eval[-1]["hitPoints"] = retVal
 
         return retVal
 
-    def getRacialTraits(self):
+    def get_racial_traits(self):
         return None
 
-    def getName(self):
+    def get_name(self):
         return self.name
 
-    def getAlignmentStr(self):
+    def get_alignment_str(self):
         return self.alignment
 
-    def getAlignmentAbbrev(self):
+    def get_alignment_abbrev(self):
         sql = (f"select abbreviation from lu_alignment where value = "
                f"'{self.alignment}';")
         results = self.db.query(sql)
@@ -134,15 +133,15 @@ class Foe(Character):
     def __str__(self):
         outstr = (f'{self.__class__.__name__}\n'
                   f'gender: {self.gender}\n'
-                  f'name: {self.getName()}\n'
+                  f'name: {self.get_name()}\n'
                   f'foe_type: {self.foe_type}\n'
                   f'size: {self.size}\n'
-                  f'alignment: {self.getAlignmentStr() }\n'
-                  f'alignment abbrev: {self.getAlignmentAbbrev() }\n'
+                  f'alignment: {self.get_alignment_str() }\n'
+                  f'alignment abbrev: {self.get_alignment_abbrev() }\n'
                   f'base_walking_speed: {self.base_walking_speed }\n'
                   f'challenge_level: {self.challenge_level }\n'
                   f'ability_array_str: {self.ability_array_str }\n'
-                  f'abilityArrayStr: {self.getAbilityArray()}\n'
+                  f'abilityArrayStr: {self.get_ability_array()}\n'
                   f'ability_modifier_array: {self.ability_modifier_array }\n'
                   f'hit_point_die: {self.hit_point_die }\n'
                   f'hit_point_modifier: {self.hit_point_modifier }\n'
@@ -168,10 +167,10 @@ class Foe(Character):
 
 if __name__ == '__main__':
     db = InvokePSQL()
-    a1 = Foe(db, foeCandidate="Skeleton", debugInd=1)
+    a1 = Foe(db, foe_candidate="Skeleton", debug_ind=1)
     print(a1)
-    a1.meleeDefend(modifier=13, possibleDamage=a1.hit_points,
-                   damageType='Bludgeoning')
-    a1.Heal(10)
-    a1.meleeDefend(modifier=13, possibleDamage=(2 * a1.hit_points),
-                   damageType='Bludgeoning')
+    a1.melee_defend(modifier=13, possible_damage=a1.hit_points,
+                    damage_type='Bludgeoning')
+    a1.heal(10)
+    a1.melee_defend(modifier=13, possible_damage=(2 * a1.hit_points),
+                    damage_type='Bludgeoning')

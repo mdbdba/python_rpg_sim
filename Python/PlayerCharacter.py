@@ -26,160 +26,159 @@ from Die import Die
 class PlayerCharacter(Character):
     def __init__(self,
                  db,
-                 characterId=-1,
-                 raceCandidate="Random",
-                 classCandidate="Random",
-                 genderCandidate="Random",
-                 abilityArrayStr="Common",
-                 damageGenerator="Random",
-                 hitpointGenerator="Max",
+                 character_id=-1,
+                 race_candidate="Random",
+                 class_candidate="Random",
+                 gender_candidate="Random",
+                 ability_array_str="Common",
+                 damage_generator="Random",
+                 hit_point_generator="Max",
                  level=1,
-                 debugInd=0):
+                 debug_ind=0):
 
-        Character.__init__(self, db, genderCandidate,
-                           abilityArrayStr, damageGenerator,
-                           hitpointGenerator, level, debugInd)
-        if (characterId == -1):
-            newCharacterInd = True
+        Character.__init__(self, db, gender_candidate,
+                           ability_array_str, damage_generator,
+                           hit_point_generator, level, debug_ind)
+        if character_id == -1:
+            new_character_ind = True
         else:
-            newCharacterInd = False
-        self.classEval.append({
+            new_character_ind = False
+        self.class_eval.append({
                        "pythonClass": "PlayerCharacter",
-                       "newCharacter": newCharacterInd,
-                       "raceCandidate": raceCandidate,
-                       "classCandidate": classCandidate,
-                       "genderCandidate": genderCandidate,
-                       "abilityArrayStr": abilityArrayStr,
-                       "damageGenerator": damageGenerator,
-                       "hitpointGenerator": hitpointGenerator,
+                       "newCharacter": new_character_ind,
+                       "race_candidate": race_candidate,
+                       "class_candidate": class_candidate,
+                       "gender_candidate": gender_candidate,
+                       "ability_array_str": ability_array_str,
+                       "damage_generator": damage_generator,
+                       "hit_point_generator": hit_point_generator,
                        "level": level,
-                       "debug_ind": debugInd})
+                       "debug_ind": debug_ind})
 
-        if (characterId == -1):
-            self.createCharacter(db,
-                                 raceCandidate,
-                                 classCandidate,
-                                 genderCandidate,
-                                 abilityArrayStr,
-                                 self.level)
+        if character_id == -1:
+            self.create_character(db,
+                                  race_candidate,
+                                  class_candidate,
+                                  gender_candidate,
+                                  ability_array_str,
+                                  self.level)
         else:
-            self.character_id = characterId
-            self.getCharacter(db, self.character_id)
+            self.character_id = character_id
+            self.get_character(db, self.character_id)
 
-        self.featureObj = self.classObj.getClassLevelFeature(self.level, db)
-        self.resetMovement()
-        self.setFinesseAbility()
-        self.setProficiencyBonus()
-        self.setDamageAdjs(db)
-        self.setArmorClass()
+        self.feature_obj = self.class_obj.getClassLevelFeature(self.level, db)
+        self.reset_movement()
+        self.set_finesse_ability()
+        self.set_proficiency_bonus()
+        self.set_damage_adjs(db)
+        self.set_armor_class()
 
-        if (characterId == -1):
-            self.saveCharacter(db)
+        if character_id == -1:
+            self.save_character(db)
 
-        self.classEval[-1]["characterId"] = self.character_id
-        self.classEval[-1]["race"] = self.getRace()
-        self.classEval[-1]["class"] = self.getClass()
-        self.classEval[-1]["gender"] = self.getGender()
-        self.classEval[-1]["rawAbilityArray"] = (
-            arrayToString(self.getRawAbilityArray()))
-        self.classEval[-1]["sortedAbilityArray"] = (
-            arrayToString(self.getSortedAbilityArray()))
-        self.classEval[-1]["racialAbilityArray"] = (
-            arrayToString(self.getRacialAbilityBonusArray()))
-        self.classEval[-1]["abilityImpArray"] = (
-            arrayToString(self.getAbilityImprovementArray()))
-        self.classEval[-1]["abilityArray"] = (
-            arrayToString(self.getAbilityArray()))
+        self.class_eval[-1]["character_id"] = self.character_id
+        self.class_eval[-1]["race"] = self.get_race()
+        self.class_eval[-1]["class"] = self.get_class()
+        self.class_eval[-1]["gender"] = self.get_gender()
+        self.class_eval[-1]["rawAbilityArray"] = (
+            arrayToString(self.get_raw_ability_array()))
+        self.class_eval[-1]["sortedAbilityArray"] = (
+            arrayToString(self.get_sorted_ability_array()))
+        self.class_eval[-1]["racialAbilityArray"] = (
+            arrayToString(self.get_racial_ability_bonus_array()))
+        self.class_eval[-1]["abilityImpArray"] = (
+            arrayToString(self.get_ability_improvement_array()))
+        self.class_eval[-1]["abilityArray"] = (
+            arrayToString(self.get_ability_array()))
 
-        if (self.debugInd == 1):
-            for i in self.__str__().splitlines():
-                self.logger.debug(f"{self.getName()}: {i}")
+        if self.debug_ind == 1:
+            for pi in self.__str__().splitlines():
+                self.logger.debug(f"{self.get_name()}: {pi}")
 
-    def assignRace(self, raceCandidate):
-        self.lastMethodLog = (f'assignRace('
-                              f'{raceCandidate})')
-        if (raceCandidate == "Random"):
-            randObj = CharacterRace(self.db, raceCandidate)
-            raceToUse = randObj.race
+    def assign_race(self, race_candidate):
+        self.last_method_log = f'assign_race({race_candidate})'
+        if race_candidate == "Random":
+            rand_obj = CharacterRace(self.db, race_candidate)
+            race_to_use = rand_obj.race
         else:
-            raceToUse = raceCandidate
+            race_to_use = race_candidate
 
-        if (self.debugInd == 1):
-            self.classEval[-1]["RaceToUse"] = raceToUse
+        if self.debug_ind == 1:
+            self.class_eval[-1]["RaceToUse"] = race_to_use
 
-        return CharacterRace(self.db, raceToUse)
+        return CharacterRace(self.db, race_to_use)
 
-    def createCharacter(self,
-                        db,
-                        raceCandidate,
-                        classCandidate,
-                        genderCandidate,
-                        abilityArrayType,
-                        level):
+    def create_character(self,
+                         db,
+                         race_candidate,
+                         class_candidate,
+                         gender_candidate,
+                         ability_array_type,
+                         level):
 
-        self.lastMethodLog = (f'createCharacter(db, '
-                              f'{raceCandidate}, '
-                              f'{classCandidate}, '
-                              f'{genderCandidate}, '
-                              f'{abilityArrayType}, '
-                              f'{level})')
-        self.assignAbilityArray()
-        self.raceObj = self.assignRace(raceCandidate)
-        self.classObj = self.assignClass(classCandidate)
-        self.raceObj.setRandoms(db=self.db, gender=self.gender)
+        self.last_method_log = (f'create_character(db, ' 
+                                f'{race_candidate}, '
+                                f'{class_candidate}, '
+                                f'{gender_candidate}, '
+                                f'{ability_array_type}, '
+                                f'{level})')
+        self.assign_ability_array()
+        self.race_obj = self.assign_race(race_candidate)
+        self.class_obj = self.assign_class(class_candidate)
+        self.race_obj.setRandoms(db=self.db, gender=self.gender)
 
-        self.ability_array_obj.set_preference_array(self.getAbilitySortArray())
+        self.ability_array_obj.set_preference_array(self.get_ability_sort_array())
         self.ability_array_obj.set_racial_array(
-            self.getRacialAbilityBonusArray())
+            self.get_racial_ability_bonus_array())
 
         # Since ability array bonuses are figured when levels change we
         # will figure hit points the same way.  That way of the constitution
         # mod changes from level to level the hit points will reflect that.
-        if (self.classObj.melee_weapon is not None):
-            self.melee_weapon_obj = Weapon(db, self.getMeleeWeapon())
+        if self.class_obj.melee_weapon is not None:
+            self.melee_weapon_obj = Weapon(db, self.get_melee_weapon())
             self.melee_weapon_obj.setWeaponProficient()
-        if (self.classObj.ranged_weapon is not None):
-            self.ranged_weapon_obj = Weapon(db, self.getRangedWeapon())
+        if self.class_obj.ranged_weapon is not None:
+            self.ranged_weapon_obj = Weapon(db, self.get_ranged_weapon())
 
         self.hit_points = 0
-        self.adjustForLevels(db)
-        self.setArmorClass()
+        self.adjust_for_levels(db)
+        self.set_armor_class()
         self.cur_hit_points = self.hit_points
         self.temp_hit_points = 0
 
-    def adjustForLevels(self, db):
-        for l in range((self.level)):
+    def adjust_for_levels(self, db):
+        for l in range(self.level):
             level = l + 1  # range indexes start at 0.
             # if there's ability change for this level make that change
             sql = (f"select count(level) "
                    f"from dnd_5e.lu_class_level_feature "
                    f"where level = {level} "
-                   f"and class = '{self.getClass()}' "
+                   f"and class = '{self.get_class()}' "
                    f"and feature = 'Ability Score Improvement';")
             result = db.query(sql)
-            if (int(result[0][0]) == 1):
+            if int(result[0][0]) == 1:
                 # print("\n\n\nDoing ability_score_improvement\n\n\n")
                 self.ability_array_obj.ability_score_improvement()
 
             # since the constitution could change at each level
             # that would affect the hit point amount. So, have to
             # do it for each level.
-            self.setAbilityModifierArray(db)
+            self.set_ability_modifier_array(db)
             # Add new hit points
-            self.hit_points = self.addHitPoints(self.db, self.getHitDie(),
-                                                self.ability_modifier_array[2])
-            if (self.debugInd == 1):
-                hpStr = (f"hitPoints_level_{level}")
-                self.classEval[-1][hpStr] = self.hit_points
-                if (level > 1):
+            self.hit_points = self.add_hit_points(self.db, self.get_hit_die(),
+                                                  self.ability_modifier_array[2])
+            if self.debug_ind == 1:
+                hp_str = f"hitPoints_level_{level}"
+                self.class_eval[-1][hp_str] = self.hit_points
+                if level > 1:
                     tl = level - 1
-                    tlstr = (f"hitPoints_level_{tl}")
-                    tlhp = self.classEval[-1][tlstr]
-                    dfstr = (f"hpdiff_level_{level}")
-                    self.classEval[-1][dfstr] = (self.hit_points - tlhp)
+                    tlstr = f"hitPoints_level_{tl}"
+                    tlhp = self.class_eval[-1][tlstr]
+                    dfstr = f"hpdiff_level_{level}"
+                    self.class_eval[-1][dfstr] = (self.hit_points - tlhp)
 
-    def setAbilityModifierArray(self, db):
-        q = self.getAbilityArray()
+    def set_ability_modifier_array(self, db):
+        q = self.get_ability_array()
         for r in range(len(q)):
             sql = (f"select modifier "
                    f"from dnd_5e.lu_ability_score_modifier "
@@ -188,37 +187,37 @@ class PlayerCharacter(Character):
             result = db.query(sql)
             self.ability_modifier_array[r] = int(result[0][0])
 
-    def addHitPoints(self, db, hit_die, modifier):
-        self.lastMethodLog = (f'assignHitPoints( '
-                              f'{hit_die}, '
-                              f'{modifier})')
+    def add_hit_points(self, db, hit_die, modifier):
+        self.last_method_log = (f'assign_hit_points( '
+                                f'{hit_die}, '
+                                f'{modifier})')
 
         sql = (f"select affected_adj "
                f"from lu_racial_trait "
                f"where category = 'Hit Point Adj' "
                f"and recharge_on = 'Level' "
-               f"and race = '{self.getRace()}'")
+               f"and race = '{self.get_race()}'")
 
         result = db.query(sql)
-        if (result):
-            racialAdj = int(result[0][0])
+        if result:
+            racial_adj = int(result[0][0])
         else:
-            racialAdj = 0
+            racial_adj = 0
 
-        if (self.hit_point_generator == 'Max'):
-            retval = (self.hit_points + (hit_die + modifier + racialAdj))
+        if self.hit_point_generator == 'Max':
+            ret_val = (self.hit_points + (hit_die + modifier + racial_adj))
         else:
             d = Die(self.hit_die)
-            retval = (d.roll(1) + (modifier + racialAdj))
-        return retval
+            ret_val = d.roll(1) + (modifier + racial_adj)
+        return ret_val
 
-    def saveCharacter(self, db):
-        self.lastMethodLog = (f'saveCharacter(db)')
-        raw_ability_string = arrayToString(self.getRawAbilityArray())
-        ability_base_string = arrayToString(self.getRawAbilityArray())
-        ability_string = arrayToString(self.getAbilityArray())
+    def save_character(self, db):
+        self.last_method_log = f'save_character(db)'
+        raw_ability_string = arrayToString(self.get_raw_ability_array())
+        ability_base_string = arrayToString(self.get_raw_ability_array())
+        ability_string = arrayToString(self.get_ability_array())
         ability_racial_mod_string = (
-            arrayToString(self.getRacialAbilityBonusArray()))
+            arrayToString(self.get_racial_ability_bonus_array()))
 
         ability_modifier_string = arrayToString(self.ability_modifier_array)
         sql = (f"insert into dnd_5e.character(name, gender, race, class, "
@@ -229,41 +228,41 @@ class PlayerCharacter(Character):
                f"weight, alignment, alignment_abbrev, skin_tone, hair_color, "
                f"hair_type, eye_color, melee_weapon, ranged_weapon, "
                f"ranged_ammunition_type, ranged_ammunition_amt, armor, shield"
-               f") values ('{self.getName()}', "
-               f"'{self.getGender()}', '{self.getRace()}', "
-               f"'{self.getClass()}',{self.level}, '{self.TTA}', "
+               f") values ('{self.get_name()}', "
+               f"'{self.get_gender()}', '{self.get_race()}', "
+               f"'{self.get_class()}',{self.level}, '{self.tta}', "
                f"'{raw_ability_string}', "
                f"'{ability_base_string}', '{ability_string}', "
                f"'{ability_racial_mod_string}', "
                f"'{ability_modifier_string}', {self.hit_points}, "
                f"{self.temp_hit_points}, {self.cur_hit_points}, "
-               f"{self.getHeight()}, {self.getWeight()}, "
-               f"'{self.getAlignmentStr()}', '{self.getAlignmentAbbrev()}', "
-               f"'{self.getSkinTone()}', '{self.getHairColor()}', "
-               f"'{self.getHairType()}', '{self.getEyeColor()}', "
-               f"'{self.getMeleeWeapon()}', '{self.getRangedWeapon()}', "
-               f"'{self.getRangedAmmunitionType()}', "
-               f"{self.getRangedAmmunitionAmt()}, '{self.getArmor()}', "
-               f"'{self.getShield()}')")
+               f"{self.get_height()}, {self.get_weight()}, "
+               f"'{self.get_alignment_str()}', '{self.get_alignment_abbrev()}', "
+               f"'{self.get_skin_tone()}', '{self.get_hair_color()}', "
+               f"'{self.get_hair_type()}', '{self.get_eye_color()}', "
+               f"'{self.get_melee_weapon()}', '{self.get_ranged_weapon()}', "
+               f"'{self.get_ranged_ammunition_type()}', "
+               f"{self.get_ranged_ammunition_amt()}, '{self.get_armor()}', "
+               f"'{self.get_shield()}')")
 
         self.character_id = db.insertAndReturnId(sql)
 
-    def validCharacterId(self, db, character_id):
-        self.lastMethodLog = (f'validCharacterId(db, '
+    def valid_character_id(self, db, character_id):
+        self.last_method_log = (f'valid_character_id(db, '
                               f'{character_id})')
         sql = (f"select count(id) from dnd_5e.character where "
                f"id = {character_id};")
         results = db.query(sql)
-        idCnt = results[0][0]
-        if idCnt == 1:
+        id_cnt = results[0][0]
+        if id_cnt == 1:
             return True
         else:
             return False
 
-    def getCharacter(self, db, character_id):
-        self.lastMethodLog = (f'getCharacter(db, '
+    def get_character(self, db, character_id):
+        self.last_method_log = (f'get_character(db, '
                               f'{character_id})')
-        if self.validCharacterId(db, character_id):
+        if self.valid_character_id(db, character_id):
             sql = (f"select name, gender, race, class, "
                    f"level, TTA, raw_ability_string, "
                    f"ability_base_string, ability_string, "
@@ -277,8 +276,8 @@ class PlayerCharacter(Character):
             results = db.query(sql)
 
             self.gender = results[0][1]
-            self.raceObj = self.assignRace(results[0][2])
-            self.raceObj.setRandoms(
+            self.race_obj = self.assign_race(results[0][2])
+            self.race_obj.setRandoms(
                    name=results[0][0],
                    alignment={"alignment": results[0][16],
                               "abbreviation": results[0][17]},
@@ -286,131 +285,130 @@ class PlayerCharacter(Character):
                    hairColor=results[0][19],
                    hairType=results[0][20],
                    eyeColor=results[0][21])
-            self.raceObj.height = results[0][14]
-            self.raceObj.weight = results[0][15]
-            self.classObj = self.assignClass(results[0][3])
+            self.race_obj.height = results[0][14]
+            self.race_obj.weight = results[0][15]
+            self.class_obj = self.assign_class(results[0][3])
             self.level = results[0][4]
-            self.TTA = results[0][5]
+            self.tta = results[0][5]
             self.ability_array_str = results[0][6]
             ability_racial_mod_string = results[0][9]
             self.ability_modifier_array = stringToArray(results[0][10])
-            self.classObj.melee_weapon = results[0][22]
-            self.classObj.ranged_weapon = results[0][23]
-            self.classObj.ranged_ammunition_type = results[0][24]
-            self.classObj.ranged_ammunition_amt = results[0][25]
-            self.classObj.armor = results[0][26]
-            self.classObj.shield = results[0][27]
+            self.class_obj.melee_weapon = results[0][22]
+            self.class_obj.ranged_weapon = results[0][23]
+            self.class_obj.ranged_ammunition_type = results[0][24]
+            self.class_obj.ranged_ammunition_amt = results[0][25]
+            self.class_obj.armor = results[0][26]
+            self.class_obj.shield = results[0][27]
 
-            self.assignAbilityArray(self.classObj.getClassAbilitySortArray())
-            self.ability_array_obj.set_racial_array(self.raceObj.ability_bonuses)
+            self.assign_ability_array(self.class_obj.getClassAbilitySortArray())
+            self.ability_array_obj.set_racial_array(self.race_obj.ability_bonuses)
             self.hit_points = 0
-            self.adjustForLevels(db)
-            self.setArmorClass()
+            self.adjust_for_levels(db)
+            self.set_armor_class()
             self.cur_hit_points = self.hit_points
             self.temp_hit_points = 0
 
-            tmp_rab_str = arrayToString(self.raceObj.ability_bonuses)
+            tmp_rab_str = arrayToString(self.race_obj.ability_bonuses)
 
-            if (ability_racial_mod_string != tmp_rab_str):
-                tmpStr = (f"\n**WARNING: "
-                          f"Racial Ability Array Mismatches: "
-                          f"{ability_racial_mod_string} "
-                          f"{tmp_rab_str}**\n")
-                print(tmpStr)
-            self.setArmorClass()
+            if ability_racial_mod_string != tmp_rab_str:
+                tmp_str = (f"\n**WARNING: "
+                           f"Racial Ability Array Mismatches: "
+                           f"{ability_racial_mod_string} "
+                           f"{tmp_rab_str}**\n")
+                print(tmp_str)
+            self.set_armor_class()
 
-    def getAbilitySortArray(self):
-        return self.classObj.ability_sort_array
+    def get_ability_sort_array(self):
+        return self.class_obj.ability_sort_array
 
-    def setPreferenceArray(self, prefArrayStr):
-        tmp_array = stringToArray(prefArrayStr)
-        self.ability_array_obj.set_preference_array(prefArray=tmp_array)
-        self.setAbilityModifierArray(self.db)
+    def set_preference_array(self, pref_array_str):
+        tmp_array = stringToArray(pref_array_str)
+        self.ability_array_obj.set_preference_array(pref_array=tmp_array)
+        self.set_ability_modifier_array(self.db)
 
-    def setRacialArray(self, bonusArray):
-        tmp_array = stringToArray(bonusArray)
-        self.ability_array_obj.set_racial_array(bonusArray=tmp_array)
-        self.setAbilityModifierArray(self.db)
+    def set_racial_array(self, bonus_array):
+        tmp_array = stringToArray(bonus_array)
+        self.ability_array_obj.set_racial_array(bonus_array=tmp_array)
+        self.set_ability_modifier_array(self.db)
 
-    def getRacialAbilityBonusArray(self):
-        return self.raceObj.ability_bonuses
+    def get_racial_ability_bonus_array(self):
+        return self.race_obj.ability_bonuses
 
-    def getAbilityImprovementArray(self):
+    def get_ability_improvement_array(self):
         return self.ability_array_obj.get_imp_array()
 
-    def getName(self):
-        return self.raceObj.name
+    def get_name(self):
+        return self.race_obj.name
 
-    def getAlignmentStr(self):
-        return self.raceObj.alignment.get('alignment')
+    def get_alignment_str(self):
+        return self.race_obj.alignment.get('alignment')
 
-    def getAlignmentAbbrev(self):
-        return self.raceObj.alignment.get('abbreviation')
+    def get_alignment_abbrev(self):
+        return self.race_obj.alignment.get('abbreviation')
 
-    def getSkinTone(self):
-        return self.raceObj.skinTone
+    def get_skin_tone(self):
+        return self.race_obj.skinTone
 
-    def getHairColor(self):
-        return self.raceObj.hairColor
+    def get_hair_color(self):
+        return self.race_obj.hairColor
 
-    def getHairType(self):
-        return self.raceObj.hairType
+    def get_hair_type(self):
+        return self.race_obj.hairType
 
-    def getEyeColor(self):
-        return self.raceObj.eyeColor
+    def get_eye_color(self):
+        return self.race_obj.eyeColor
 
-    def getHeight(self):
-        return self.raceObj.height
+    def get_height(self):
+        return self.race_obj.height
 
-    def getWeight(self):
-        return self.raceObj.weight
+    def get_weight(self):
+        return self.race_obj.weight
 
-    def getRace(self):
-        return self.raceObj.race
+    def get_race(self):
+        return self.race_obj.race
 
-    def getClass(self):
-        return self.classObj.name
+    def get_class(self):
+        return self.class_obj.name
 
-    def getHitDie(self):
-        return self.classObj.hit_die
+    def get_hit_die(self):
+        return self.class_obj.hit_die
 
-    def getRangedWeapon(self):
-        return self.classObj.ranged_weapon
+    def get_ranged_weapon(self):
+        return self.class_obj.ranged_weapon
 
-    def getMeleeWeapon(self):
-        return self.classObj.melee_weapon
+    def get_melee_weapon(self):
+        return self.class_obj.melee_weapon
 
-    def getRangedAmmunitionType(self):
-        return self.classObj.ranged_ammunition_type
+    def get_ranged_ammunition_type(self):
+        return self.class_obj.ranged_ammunition_type
 
-    def getRangedAmmunitionAmt(self):
-        return self.classObj.ranged_ammunition_amt
+    def get_ranged_ammunition_amt(self):
+        return self.class_obj.ranged_ammunition_amt
 
-    def getArmor(self):
-        return self.classObj.armor
+    def get_armor(self):
+        return self.class_obj.armor
 
-    def getShield(self):
-        return self.classObj.shield
+    def get_shield(self):
+        return self.class_obj.shield
 
-    def getBaseMovement(self):
-        return self.raceObj.base_walking_speed
+    def get_base_movement(self):
+        return self.race_obj.base_walking_speed
 
-    def getRacialTraits(self):
-        return self.raceObj.traitContainer.traits
+    def get_racial_traits(self):
+        return self.race_obj.traitContainer.traits
 
-    def assignClass(self, classCandidate):
-        self.lastMethodLog = (f'assignClass(db, '
-                              f'{classCandidate})')
+    def assign_class(self, class_candidate):
+        self.last_method_log = f'assign_class(db, {class_candidate})'
 
-        if classCandidate == "Random":
-            tmpClass = getRandomClassName(self.db)
+        if class_candidate == "Random":
+            tmp_class = getRandomClassName(self.db)
         else:
-            tmpClass = classCandidate
-        obj = self.ClassSubclassSwitch(tmpClass)
+            tmp_class = class_candidate
+        obj = self.class_subclass_switch(tmp_class)
 
         return obj
 
-    def ClassSubclassSwitch(self, classCandidate):
+    def class_subclass_switch(self, class_candidate):
         switcher = {
             'Barbarian': BarbarianPCClass(self.db),
             'Bard': BardPCClass(self.db),
@@ -425,61 +423,61 @@ class PlayerCharacter(Character):
             'Warlock': WarlockPCClass(self.db),
             'Wizard': WizardPCClass(self.db)
         }
-        return switcher.get(classCandidate, "Unknown Class")
+        return switcher.get(class_candidate, "Unknown Class")
 
-    def setFinesseAbility(self):
-        s = self.getAbilityModifier('Strength')
-        d = self.getAbilityModifier('Dexterity')
+    def set_finesse_ability(self):
+        s = self.get_ability_modifier('Strength')
+        d = self.get_ability_modifier('Dexterity')
         if s > d:
             self.finesse_ability_mod = 'Strength'
         else:
             self.finesse_ability_mod = 'Dexterity'
 
-    def setDamageAdjs(self, db):
-        self.lastMethodLog = (f'setDamagedAdjs(db)')
+    def set_damage_adjs(self, db):
+        self.last_method_log = (f'setDamagedAdjs(db)')
         sql = (f"select rt.affected_name, rt.affect "
                f"from lu_racial_trait as rt "
                f"join lu_race as r on (rt.race = r.race "
                f"or rt.race = r.subrace_of)"
-               f"where rt.category = 'Damage Received' "
+               f"where rt.category = 'Damage' "
                f"and rt.affect is not null "
                f"and rt.affected_name in ('Acid', 'Bludgeoning', "
                f"'Cold', 'Fire', 'Force', 'Ligtning', 'Necrotic',"
                f"'Piercing', 'Poison', 'Psychic', 'Radiant',"
                f"'Slashing', 'Thunder')"
-               f"and (r.race = '{self.getRace()}' "
-               f"or r.subrace_of = '{self.getRace()}')")
+               f"and (r.race = '{self.get_race()}' "
+               f"or r.subrace_of = '{self.get_race()}')")
 
         rows = db.query(sql)
         for row in rows:
             self.damage_adj[row[0]] = row[1]
 
-        if (self.debugInd == 1):
-            self.classEval[-1]["Damage Adjust"] = (
+        if self.debug_ind == 1:
+            self.class_eval[-1]["damage Adjust"] = (
                 dictToString(self.damage_adj))
 
-    def setProficiencyBonus(self):
-        for a in range(len(self.featureObj)):
-            if self.featureObj[a][2] == 'proficiency_bonus':
-                self.proficiency_bonus = self.featureObj[a][4]
+    def set_proficiency_bonus(self):
+        for a in range(len(self.feature_obj)):
+            if self.feature_obj[a][2] == 'proficiency_bonus':
+                self.proficiency_bonus = self.feature_obj[a][4]
 
-        if (self.debugInd == 1):
-            self.classEval[-1]["Proficiency Bonus"] = self.proficiency_bonus
+        if self.debug_ind == 1:
+            self.class_eval[-1]["Proficiency Bonus"] = self.proficiency_bonus
 
     def __str__(self):
         outstr = (f'{self.__class__.__name__}\n'
-                  f'Name:         {self.getName()}\n'
+                  f'Name:         {self.get_name()}\n'
                   f'Id            {self.character_id}\n'
-                  f'TTA:          {self.getTTA()}\n'
-                  f'Gender:       {self.getGender()}\n'
-                  f'Race:         {self.getRace()} ('
-                  f'{self.raceObj.source_material})\n'
+                  f'TTA:          {self.get_tta()}\n'
+                  f'Gender:       {self.get_gender()}\n'
+                  f'Race:         {self.get_race()} ('
+                  f'{self.race_obj.source_material})\n'
                   f'Movement:     {self.cur_movement}\n'
-                  f'Class:        {self.getClass()} ('
-                  f'{self.classObj.source_material})\n'
+                  f'Class:        {self.get_class()} ('
+                  f'{self.class_obj.source_material})\n'
                   f'Armor Class:  {self.armor_class}\n'
                   f'Level:        {self.level}\n'
-                  f'Hit Die:      {self.getHitDie()}\n')
+                  f'Hit Die:      {self.get_hit_die()}\n')
         if self.cur_hit_points:
             outstr = (f'{outstr}'
                       f'Hit Points:   {self.cur_hit_points} / '
@@ -489,24 +487,24 @@ class PlayerCharacter(Character):
                       f'Prof Bonus:   {self.proficiency_bonus}\n')
 
         outstr = (f'{outstr}'
-                  f'Height:       {inchesToFeet(self.getHeight())}\n'
-                  f'Weight:       {self.getWeight()} pounds\n'
-                  f'Alignment:    {self.getAlignmentStr()}\n'
-                  f'AlignAbbrev:  {self.getAlignmentAbbrev()}\n'
-                  f'Skin Tone:    {self.getSkinTone()}\n')
+                  f'Height:       {inchesToFeet(self.get_height())}\n'
+                  f'Weight:       {self.get_weight()} pounds\n'
+                  f'Alignment:    {self.get_alignment_str()}\n'
+                  f'AlignAbbrev:  {self.get_alignment_abbrev()}\n'
+                  f'Skin Tone:    {self.get_skin_tone()}\n')
 
-        if (self.getHairColor()):
-            outstr = (f'{outstr}Hair Color:   {self.getHairColor()}\n'
-                      f'Hair Type:    {self.getHairType()}\n')
+        if self.get_hair_color():
+            outstr = (f'{outstr}Hair Color:   {self.get_hair_color()}\n'
+                      f'Hair Type:    {self.get_hair_type()}\n')
 
-        outstr = (f'{outstr}Eye Color:    {self.getEyeColor()}\n'
-                  f'Size:         {self.raceObj.size}\n')
-        if self.raceObj.source_credit_url:
+        outstr = (f'{outstr}Eye Color:    {self.get_eye_color()}\n'
+                  f'Size:         {self.race_obj.size}\n')
+        if self.race_obj.source_credit_url:
             outstr = (f'{outstr}Race URL:          '
-                      f'{self.raceObj.source_credit_url}\n')
-        if self.raceObj.source_credit_comment:
+                      f'{self.race_obj.source_credit_url}\n')
+        if self.race_obj.source_credit_comment:
             outstr = (f'{outstr}Race Comment:      '
-                      f'{self.raceObj.source_credit_comment}\n')
+                      f'{self.race_obj.source_credit_comment}\n')
 
         if self.finesse_ability_mod is not None:
             outstr = (f'{outstr}\nFinesse Ability: '
@@ -522,74 +520,73 @@ class PlayerCharacter(Character):
                       f'{self.ranged_ammunition_amt}')
 
         outstr = (f'{outstr}\n\nRaw Ability Array:  '
-                  f'{self.getRawAbilityArray()}\n'
+                  f'{self.get_raw_ability_array()}\n'
                   f'Ordered Array:      '
-                  f'{self.getNumericallySortedAbilityArray()}\n'
-                  f'Sort Array:    {self.getAbilityPrefStrArray()}\n'
+                  f'{self.get_numerically_sorted_ability_array()}\n'
+                  f'Sort Array:    {self.get_ability_pref_str_array()}\n'
                   f'Nbr Sort Array:     {self.ability_array_obj.get_pref_array()}\n'
-                  f'Sorted:             {self.getSortedAbilityArray()}\n')
+                  f'Sorted:             {self.get_sorted_ability_array()}\n')
 
         outstr = (f'{outstr}\nAbility         Mod  Total = (Base + '
                   f'Racial + Level Improvements)\n')
 
-        sorted_array = self.getSortedAbilityArray()
-        ability_array = self.getAbilityArray()
-        ability_imp_array = self.getAbilityImprovementArray()
-        labelArray = self.ability_array_obj.ability_label_array
-        for c in range(len(labelArray)):
-            outstr = (f'{outstr}\n{labelArray[c].ljust(16)}'
+        sorted_array = self.get_sorted_ability_array()
+        ability_array = self.get_ability_array()
+        ability_imp_array = self.get_ability_improvement_array()
+        label_array = self.ability_array_obj.ability_label_array
+        for c in range(len(label_array)):
+            outstr = (f'{outstr}\n{label_array[c].ljust(16)}'
                       f'{str(self.ability_modifier_array[c]).rjust(3)}   '
                       f'{str(ability_array[c]).rjust(2)}   = ('
                       f'{str(sorted_array[c]).rjust(2)}  +   '
-                      f'{str(self.raceObj.ability_bonuses[c]).rjust(2)}'
+                      f'{str(self.race_obj.ability_bonuses[c]).rjust(2)}'
                       f'   +   {str(ability_imp_array[c]).rjust(2)})\n')
 
-        if self.raceObj.languages:
-            outstr = (f'{outstr}\n\nLanguages:')
-            for l in self.raceObj.languages:
-                outstr = (f'{outstr}\n   {l}')
+        if self.race_obj.languages:
+            outstr = f'{outstr}\n\nLanguages:'
+            for l in self.race_obj.languages:
+                outstr = f'{outstr}\n   {l}'
 
-        if self.raceObj.traitContainer.proficient:
-            outstr = (f'{outstr}\n\nProficiencies:')
+        if self.race_obj.traitContainer.proficient:
+            outstr = f'{outstr}\n\nProficiencies:'
 
-            tmpVar = (self.raceObj.traitContainer.proficient)
-            for p in range(len(tmpVar)):
-                tmpprofstr = tmpVar[p].ljust(23)
-                tmpsrcstr = self.raceObj.traitContainer.proficient_source[p]
-                outstr = (f'{outstr}\n   {tmpprofstr}'
-                          f' ({tmpsrcstr})')
+            tmp_var = self.race_obj.traitContainer.proficient
+            for p in range(len(tmp_var)):
+                tmpprofstr = tmp_var[p].ljust(23)
+                tmpsrcstr = self.race_obj.traitContainer.proficient_source[p]
+                outstr = f'{outstr}\n   {tmpprofstr} ({tmpsrcstr})'
 
-        for b in self.raceObj.traitContainer.traits:
-                if b.category != "Proficiency Skill":
-                    outstr = (f'{outstr}\n{b}')
+        for b in self.race_obj.traitContainer.traits:
+            if b.category != "Proficiency Skill":
+                outstr = f'{outstr}\n{b}'
 
-        if self.featureObj:
-            outstr = (f'{outstr}\n\nClass Features:\n')
-            for b in range(len(self.featureObj)):
-                for c in range(len(self.featureObj[b])):
-                    if self.featureObj[b][c] is not None:
-                        outstr = (f'{outstr} {self.featureObj[b][c]}')
-                outstr = (f'{outstr}\n')
-        outstr = (f'{outstr}\nDamage ADJ:')
+        if self.feature_obj:
+            outstr = f'{outstr}\n\nClass Features:\n'
+            for b in range(len(self.feature_obj)):
+                for c in range(len(self.feature_obj[b])):
+                    if self.feature_obj[b][c] is not None:
+                        outstr = f'{outstr} {self.feature_obj[b][c]}'
+                outstr = f'{outstr}\n'
+        outstr = f'{outstr}\ndamage ADJ:'
 
-        for key, value in sorted(self.damage_adj.items()):
-            if len(value) > 2:
-                outstr = (f'{outstr}\n{key}: {value}')
+        for pkey, pvalue in sorted(self.damage_adj.items()):
+            if len(pvalue) > 2:
+                outstr = f'{outstr}\n{pkey}: {pvalue}'
 
         # outstr = (f'{outstr}\n\nJournal Output:\n{self.debugStr}\n\n')
 
-        outstr = (f'\n{outstr}\n')
+        outstr = f'\n{outstr}\n'
         return outstr
 
 
 if __name__ == '__main__':
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, raceCandidate='Hill dwarf', level=10, debugInd=1)
+    a1 = PlayerCharacter(db, race_candidate='Hill dwarf', level=10, debug_ind=1)
 
     a2 = PlayerCharacter(db=db,
-                         abilityArrayStr='10,11,12,13,14,15',
-                         debugInd=1)
-    a2.ability_array_obj.set_preference_array(prefArray=stringToArray(
+                         ability_array_str='10,11,12,13,14,15',
+                         debug_ind=1)
+    a2.ability_array_obj.set_preference_array(pref_array=stringToArray(
                                             '5,0,2,1,4,3'
                                             ))
     # print(a2)
@@ -599,20 +596,20 @@ if __name__ == '__main__':
     # print(a3)
     # a4 = PlayerCharacter(db, characterId=138)
     # print(a4)
-    a5 = PlayerCharacter(db, raceCandidate='Hill dwarf', level=10, debugInd=1)
-    for i in range(len(a5.getClassEval())):
-        for key, value in a5.getClassEval()[i].items():
+    a5 = PlayerCharacter(db, race_candidate='Hill dwarf', level=10, debug_ind=1)
+    for i in range(len(a5.get_class_eval())):
+        for key, value in a5.get_class_eval()[i].items():
             print(f"{i} -- {str(key).ljust(25)}: {value}")
 
     a6 = PlayerCharacter(db,
-                         abilityArrayStr="18,12,12,10,10,8",
-                         raceCandidate="Mountain Dwarf",
-                         classCandidate="Barbarian",
-                         debugInd=1)
+                         ability_array_str="18,12,12,10,10,8",
+                         race_candidate="Mountain Dwarf",
+                         class_candidate="Barbarian",
+                         debug_ind=1)
 
-    a6.meleeDefend(modifier=13, possibleDamage=a6.hit_points,
-                   damageType='Bludgeoning')
-    a6.Heal(10)
-    a6.meleeDefend(modifier=13, possibleDamage=(2 * a6.hit_points),
-                   damageType='Bludgeoning')
+    a6.melee_defend(modifier=13, possible_damage=a6.hit_points,
+                    damage_type='Bludgeoning')
+    a6.heal(10)
+    a6.melee_defend(modifier=13, possible_damage=(2 * a6.hit_points),
+                    damage_type='Bludgeoning')
 

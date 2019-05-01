@@ -11,9 +11,9 @@ db = InvokePSQL()
 Heroes = []
 Opponents = []
 for i in range(3):
-    Heroes.append(PlayerCharacter(db, debugInd=0))
+    Heroes.append(PlayerCharacter(db, debug_ind=0))
 for i in range(2):
-    Opponents.append(Foe(db, foeCandidate='Skeleton', debugInd=0))
+    Opponents.append(Foe(db, foe_candidate='Skeleton', debug_ind=0))
 e1 = Encounter(Heroes, Opponents)
 # print(e1.initiative)
 print("Initiative List:")

@@ -3,9 +3,9 @@ from PlayerCharacterClass import PlayerCharacterClass
 
 class BardPCClass(PlayerCharacterClass):
     def __init__(self, db,
-                 characterAlteringClassOptions=None):
+                 character_altering_class_options=None):
         PlayerCharacterClass.__init__(self, db, "Bard",
-                                      characterAlteringClassOptions)
+                                      character_altering_class_options)
         self.archetype_label = "Bard College"
         self.ranged_weapon = "Dagger"
         self.melee_weapon = "Rapier"

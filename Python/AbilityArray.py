@@ -1,5 +1,6 @@
 from Die import Die
-from CommonFunctions import arrayToString, stringToArray
+# from CommonFunctions import arrayToString, stringToArray
+from CommonFunctions import stringToArray
 
 
 """
@@ -9,11 +10,11 @@ Parameters:
     choices are:
         Common  (Default) -- roll 4d6 and drop the lowest.
         Strict            -- roll 3d6. Keep the numbers as is.
-        Standard          -- [15, 14, 13, 12, 10, 8]
-        PointBuy_Even        [13, 13, 13, 12, 12 ,12]
-        PointBuy_OneMax   -- [15, 12, 12, 12, 11, 11]
-        PointBuy_TwoMax   -- [15, 15, 11, 10, 10, 10]
-        PointBuy_ThreeMax -- [15, 15, 15, 8, 8, 8]
+        standard          -- [15, 14, 13, 12, 10, 8]
+        point_buy_even        [13, 13, 13, 12, 12 ,12]
+        point_buy_one_max   -- [15, 12, 12, 12, 11, 11]
+        point_buy_two_max   -- [15, 15, 11, 10, 10, 10]
+        point_buy_three_max -- [15, 15, 15, 8, 8, 8]
 """
 
 
@@ -29,6 +30,8 @@ class AbilityArray(object):
 
         :param array_type: Choose the way the Ability Scores are created.
         :param pref_array: Array that defines how the rolls should be ordered.
+        :param racial_array:
+        :param ignore_racial_bonus: Ignore ability bonuses for races.
         :param debug_ind: log to class_eval array? (default: False)
         """
         self.array_type = array_type
@@ -70,9 +73,9 @@ class AbilityArray(object):
         """
         standard = [15, 14, 13, 12, 10, 8]
         point_buy_even = [13, 13, 13, 12, 12, 12]
-        PointBuy_OneMax = [15, 12, 12, 12, 11, 11]
-        PointBuy_TwoMax = [15, 15, 11, 10, 10, 10]
-        PointBuy_ThreeMax = [15, 15, 15, 8, 8, 8]
+        point_buy_one_max = [15, 12, 12, 12, 11, 11]
+        point_buy_two_max = [15, 15, 11, 10, 10, 10]
+        point_buy_three_max = [15, 15, 15, 8, 8, 8]
 
         if self.array_type == "Predefined":
             self.candidate_array = self.raw_array
@@ -80,21 +83,21 @@ class AbilityArray(object):
             self.candidate_array = standard
         elif self.array_type == "point_buy_even":
             self.candidate_array = point_buy_even
-        elif self.array_type == "PointBuy_OneMax":
-            self.candidate_array = PointBuy_OneMax
-        elif self.array_type == "PointBuy_TwoMax":
-            self.candidate_array = PointBuy_TwoMax
-        elif self.array_type == "PointBuy_ThreeMax":
-            self.candidate_array = PointBuy_ThreeMax
+        elif self.array_type == "point_buy_one_max":
+            self.candidate_array = point_buy_one_max
+        elif self.array_type == "point_buy_two_max":
+            self.candidate_array = point_buy_two_max
+        elif self.array_type == "point_buy_three_max":
+            self.candidate_array = point_buy_three_max
         else:
             d = Die(6)
             for i in range(0, 6):
                 if self.array_type == "Strict":
-                    r = d.roll(3, False)
+                    pr = d.roll(3, False)
                 else:
-                    r = d.roll(4, True)
+                    pr = d.roll(4, True)
 
-                self.candidate_array.append(r)
+                self.candidate_array.append(pr)
 
         # set the raw_array to whatever we started with for candidate values
         self.raw_array = self.candidate_array[:]
@@ -110,8 +113,8 @@ class AbilityArray(object):
         if self.racial_array:
             self.set_racial_adjustment()
 
-    def set_preference_array(self, prefArray):
-        self.pref_array = prefArray
+    def set_preference_array(self, pref_array):
+        self.pref_array = pref_array
         self.set_pref_str_array()
         self.ignore_pref_array = False
         self.set_ability_array()
@@ -140,7 +143,7 @@ class AbilityArray(object):
         """
 
         # if self.ignore_pref_array:
-        if (self.pref_array is None):
+        if self.pref_array is None:
             self.ability_array = self.candidate_array[:]
         else:
             self.ability_array = [0, 0, 0, 0, 0, 0]
@@ -150,9 +153,9 @@ class AbilityArray(object):
             self.candidate_array.sort(reverse=True)
             # loop through the prefArray putting the rolled scores
             # in the appropriate order.
-            for r in range(len(self.pref_array)):
-                t = self.pref_array[r]
-                self.ability_array[t] = self.candidate_array[r]
+            for pr in range(len(self.pref_array)):
+                t = self.pref_array[pr]
+                self.ability_array[t] = self.candidate_array[pr]
 
         self.pref_sorted_array = self.ability_array[:]
 
@@ -161,7 +164,7 @@ class AbilityArray(object):
 
         self.numerical_sorted_array = self.candidate_array[:]
         self.class_eval[-1]["numerical_sorted_array"] = self.candidate_array[:]
-        if (self.pref_array):
+        if self.pref_array:
             self.class_eval[-1]["preference_array"] = self.pref_array[:]
         self.class_eval[-1]["ability_array"] = self.ability_array[:]
 
@@ -213,35 +216,35 @@ class AbilityArray(object):
         """
         return self.class_eval
 
-    def set_racial_array(self, bonusArray):
-        self.racial_array = bonusArray
+    def set_racial_array(self, bonus_array):
+        self.racial_array = bonus_array
         self.class_eval[-1]["racial_array"] = self.racial_array[:]
         self.set_ability_array()
 
     def set_racial_adjustment(self):
-        if (self.ignore_racial_bonus):
+        if self.ignore_racial_bonus:
             self.class_eval[-1]["racial_adjustment"] = "Ignored"
         else:
-            for r in range(len(self.ability_array)):
-                self.ability_array[r] = (
-                    self.ability_array[r] + self.racial_array[r])
+            for pr in range(len(self.ability_array)):
+                self.ability_array[pr] = (
+                    self.ability_array[pr] + self.racial_array[pr])
             self.class_eval[-1]["racial_adjustment"] = self.ability_array[:]
 
     def ability_score_improvement(self):
         points = 2
-        while (points > 0):
-            for r in range(len(self.ability_array)):
-                if (self.ability_array[self.pref_array[r]] < 19):
-                    self.ability_array[self.pref_array[r]] = (
-                        self.ability_array[self.pref_array[r]] + points)
-                    self.ability_imp_array[self.pref_array[r]] = (
-                        self.ability_imp_array[self.pref_array[r]] + points)
+        while points > 0:
+            for pr in range(len(self.ability_array)):
+                if self.ability_array[self.pref_array[pr]] < 19:
+                    self.ability_array[self.pref_array[pr]] = (
+                        self.ability_array[self.pref_array[pr]] + points)
+                    self.ability_imp_array[self.pref_array[pr]] = (
+                        self.ability_imp_array[self.pref_array[pr]] + points)
                     points = 0
-                elif (self.ability_array[self.pref_array[r]] == 19):
-                    self.ability_array[self.pref_array[r]] = (
-                        self.ability_array[self.pref_array[r]] + 1)
-                    self.ability_imp_array[self.pref_array[r]] = (
-                        self.ability_imp_array[self.pref_array[r]] + 1)
+                elif self.ability_array[self.pref_array[pr]] == 19:
+                    self.ability_array[self.pref_array[pr]] = (
+                        self.ability_array[self.pref_array[pr]] + 1)
+                    self.ability_imp_array[self.pref_array[pr]] = (
+                        self.ability_imp_array[self.pref_array[pr]] + 1)
                     points = (points - 1)
         self.class_eval[-1]["ability_level_changes"] = self.ability_imp_array[:]
         self.class_eval[-1]["ability_improvement"] = self.ability_array[:]

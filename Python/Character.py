@@ -11,12 +11,12 @@ import logging
 class Character(object):
     def __init__(self,
                  db,
-                 genderCandidate="Random",
-                 abilityArrayStr="Common",
-                 damageGenerator="Random",
-                 hitpointGenerator="Max",
+                 gender_candidate="Random",
+                 ability_array_str="Common",
+                 damage_generator="Random",
+                 hit_point_generator="Max",
                  level=1,
-                 debugInd=0):
+                 debug_ind=0):
 
         self.db = db
         level = int(level)
@@ -25,27 +25,27 @@ class Character(object):
         else:
             self.level = level
 
-        self.damage_generator = damageGenerator
-        self.hit_point_generator = hitpointGenerator
-        self.debugInd = debugInd
+        self.damage_generator = damage_generator
+        self.hit_point_generator = hit_point_generator
+        self.debug_ind = debug_ind
         self.debugStr = ''
 
-        if ((self.debugInd == 1) and
+        if ((self.debug_ind == 1) and
            ((getattr(self, "logger", None)) is None)):
-            logFmt = '%(asctime)s - %(levelname)s - %(message)s'
-            logging.basicConfig(format=logFmt, level=logging.DEBUG)
+            log_fmt = '%(asctime)s - %(levelname)s - %(message)s'
+            logging.basicConfig(format=log_fmt, level=logging.DEBUG)
             self.logger = logging.getLogger(__name__)
 
         y = getattr(self, "class_eval", None)
-        if (y is None):
-            self.classEval = []
-        self.classEval.append({
+        if y is None:
+            self.class_eval = []
+        self.class_eval.append({
                        "pythonClass": "Character",
-                       "genderCandidate": genderCandidate,
-                       "abilityArrayStr": abilityArrayStr,
+                       "gender_candidate": gender_candidate,
+                       "ability_array_str": ability_array_str,
                        "level": level,
-                       "debug_ind": debugInd})
-        self.ability_array_str = abilityArrayStr
+                       "debug_ind": debug_ind})
+        self.ability_array_str = ability_array_str
         self.ability_modifier_array = [0, 0, 0, 0, 0, 0]
         self.damage_taken = dict(Acid=0, Bludgeoning=0, Cold=0,
                                  Fire=0, Force=0, Ligtning=0,
@@ -75,14 +75,14 @@ class Character(object):
         self.armor_class = 0
         self.death_save_passed_cnt = 0
         self.death_save_failed_cnt = 0
-        self.TTA = self.setTaliesinTempermentArchitype()
+        self.tta = self.set_taliesin_temperament_archetype()
         self.combat_preference = 'Melee'  # 'Melee' or Ranged'
 
-        self.lastMethodLog = ''
-        if genderCandidate == "Random":
-            self.gender = self.assignGender(db)
+        self.last_method_log = ''
+        if gender_candidate == "Random":
+            self.gender = self.assign_gender()
         else:
-            self.gender = genderCandidate
+            self.gender = gender_candidate
 
         self.blinded_ind = False
         self.charmed_ind = False
@@ -113,126 +113,125 @@ class Character(object):
         # 5   Speed reduced to 0
         # 6   Death
 
-    def getName(self):
+    def get_name(self):
         return "Unknown"
 
-    def assignGender(self, db):
-        self.lastMethodLog = (f'assignGender(db)')
+    def assign_gender(self):
+        self.last_method_log = f"assign_gender(db)"
         d = Die(100)
         a = d.roll()
         if a <= 40:
             result = "M"
-        elif a > 40 and a <= 90:
+        elif 40 < a <= 90:
             result = "F"
         else:
             result = "U"
 
-        if (self.debugInd == 1):
-            self.classEval[-1]["Gender"] = result
+        if self.debug_ind == 1:
+            self.class_eval[-1]["Gender"] = result
 
         return result
 
-    def getGender(self):
+    def get_gender(self):
         return self.gender
 
-    def assignAbilityArray(self, sortArray=None):
-        self.lastMethodLog = (f'assignAbilityArray('
-                              f'{self.ability_array_str})')
+    def assign_ability_array(self, sort_array=None):
+        self.last_method_log = (f'assign_ability_array('
+                                f'{self.ability_array_str})')
         # if the string doesn't begin and end with a number, then it must
         # be a type that the ability array wants
         tmp = self.ability_array_str
-        if (tmp[1].isdigit() and tmp[-1].isdigit()):
+        if tmp[1].isdigit() and tmp[-1].isdigit():
             tmp_array = stringToArray(tmp)
             self.ability_array_obj = AbilityArray(array_type="Predefined",
                                                   raw_array=tmp_array,
-                                                  pref_array=sortArray,
-                                                  debug_ind=self.debugInd)
+                                                  pref_array=sort_array,
+                                                  debug_ind=self.debug_ind)
         else:
             self.ability_array_obj = AbilityArray(array_type=tmp,
-                                                  pref_array=sortArray,
-                                                  debug_ind=self.debugInd)
+                                                  pref_array=sort_array,
+                                                  debug_ind=self.debug_ind)
 
-    def getClassEval(self):
+    def get_class_eval(self):
         """
         Return an array of lists that can be used for debugging/testing
         """
-        return self.classEval
+        return self.class_eval
 
-    def getRawAbilityArray(self):
+    def get_raw_ability_array(self):
         return self.ability_array_obj.get_raw_array()
 
-    def getAbilityPrefArray(self):
+    def get_ability_pref_array(self):
         return self.ability_array_obj.get_pref_array()
 
-    def getNumericallySortedAbilityArray(self):
+    def get_numerically_sorted_ability_array(self):
         return self.ability_array_obj.get_numerical_sorted_array()
 
-    def getAbilityPrefStrArray(self):
+    def get_ability_pref_str_array(self):
         return self.ability_array_obj.get_pref_str_array()
 
-    def getSortedAbilityArray(self):
+    def get_sorted_ability_array(self):
         return self.ability_array_obj.get_sorted_array()
 
-    def getAbilityArray(self):
+    def get_ability_array(self):
         return self.ability_array_obj.get_array()
 
-    def getAbilityImprovementArray(self):
+    def get_ability_improvement_array(self):
         return self.ability_array_obj.get_imp_array()
 
-    def setTaliesinTempermentArchitype(self):
-        self.lastMethodLog = (f'assignTaliesinTempermentArchitype()')
-        alignArray = ['Bashful', 'Doc', 'Grumpy', 'Happy', 'Sneezy',
-                      'Sleepy', 'Dopey']
-        alignType = alignArray[(random.randint(0, 6))]
-        perArray = ['High', 'Mid', 'Low']
-        perType = perArray[(random.randint(0, 2))]
+    def set_taliesin_temperament_archetype(self):
+        self.last_method_log = f'assignTaliesinTemperamentArchetype()'
+        align_array = ['Bashful', 'Doc', 'Grumpy', 'Happy', 'Sneezy', 'Sleepy', 'Dopey']
+        align_type = align_array[(random.randint(0, 6))]
+        per_array = ['High', 'Mid', 'Low']
+        per_type = per_array[(random.randint(0, 2))]
 
-        retStr = (f"{alignType}/{perType}")
-        if self.debugInd:
-            self.classEval[-1]["TTA"] = retStr
+        ret_str = f"{align_type}/{per_type}"
+        if self.debug_ind:
+            self.class_eval[-1]["tta"] = ret_str
 
-        return retStr
+        return ret_str
 
-    def getTTA(self):
-        return self.TTA
+    def get_tta(self):
+        return self.tta
 
-    def getBaseMovement(self):
+    def get_base_movement(self):
         return 15
 
-    def zeroMovement(self):
-        self.lastMethodLog = (f'zeroMovement()')
+    def zero_movement(self):
+        self.last_method_log = f'zero_movement()'
         self.cur_movement = 0
-        if (self.debugInd == 1):
-            msg = (f"{self.getName()}: zero movement to "
+        if self.debug_ind == 1:
+            msg = (f"{self.get_name()}: zero movement to "
                    f"{self.cur_movement}")
             self.logger.debug(msg)
 
-    def halfMovement(self):
-        self.lastMethodLog = (f'halfMovement()')
+    def half_movement(self):
+        self.last_method_log = f'half_movement()'
         self.cur_movement = self.cur_movement // 2
-        if (self.debugInd == 1):
-            msg = (f"{self.getName()}: half movement to "
+        if self.debug_ind == 1:
+            msg = (f"{self.get_name()}: half movement to "
                    f"{self.cur_movement}")
             self.logger.debug(msg)
 
-    def doubleMovement(self):
-        self.lastMethodLog = (f'doubleMovement()')
-        self.cur_movement = self.getBaseMovement() * 2
-        if (self.debugInd == 1):
-            msg = (f"{self.getName()}: double movement to "
+    def double_movement(self):
+        self.last_method_log = f'double_movement()'
+        self.cur_movement = self.get_base_movement() * 2
+        if self.debug_ind == 1:
+            msg = (f"{self.get_name()}: double movement to "
                    f"{self.cur_movement}")
             self.logger.debug(msg)
 
-    def resetMovement(self):
-        self.lastMethodLog = (f'resetMovement()')
-        self.cur_movement = self.getBaseMovement()
-        if (self.debugInd == 1):
-            msg = (f"{self.getName()}: reset movement to "
+    def reset_movement(self):
+        self.last_method_log = f'reset_movement()'
+        self.cur_movement = self.get_base_movement()
+        if self.debug_ind == 1:
+            msg = (f"{self.get_name()}: reset movement to "
                    f"{self.cur_movement}")
             self.logger.debug(msg)
 
-    def changeExhaustionLevel(self, amount):
-        self.lastMethodLog = (f'changeExhaustionLevel({amount})')
+    def change_exhaustion_level(self, amount):
+        self.last_method_log = f'change_exhaustion_level({amount})'
         orig_level = self.exhaustion_level
         self.exhaustion_level += amount
 
@@ -244,211 +243,206 @@ class Character(object):
         # 6   Death
 
         if self.exhaustion_level >= 2:
-            self.halfMovement()
+            self.half_movement()
         elif (orig_level > self.exhaustion_level
               and self.exhaustion_level < 2):  # recovery
-            self.resetMovement()
+            self.reset_movement()
 
         if self.exhaustion_level >= 5:
-            self.zeroMovement()
+            self.zero_movement()
         elif (orig_level > self.exhaustion_level
               and self.exhaustion_level < 5):  # recovery
-            self.halfMovement()
+            self.half_movement()
 
-        if self.exhaustion_leve >= 6:
+        if self.exhaustion_level >= 6:
             self.alive = False
 
-        if (self.debugInd == 1):
-            msg = (f"{self.getName()}: exhaustion level change to "
+        if self.debug_ind == 1:
+            msg = (f"{self.get_name()}: exhaustion level change to "
                    f"{self.exhaustion_level}")
             self.logger.debug(msg)
 
-    def getAbilityModifier(self, ability):
-        self.lastMethodLog = (f'getAbilityModifier('
-                              f'{ability})')
+    def get_ability_modifier(self, ability):
+        self.last_method_log = f'get_ability_modifier({ability})'
         res = 0
-        if (ability == 'Strength'):
+        if ability == 'Strength':
             res = self.ability_modifier_array[0]
-        if (ability == 'Dexterity'):
+        if ability == 'Dexterity':
             res = self.ability_modifier_array[1]
-        if (ability == 'Constitution'):
+        if ability == 'Constitution':
             res = self.ability_modifier_array[2]
-        if (ability == 'Intelligence'):
+        if ability == 'Intelligence':
             res = self.ability_modifier_array[3]
-        if (ability == 'Wisdom'):
+        if ability == 'Wisdom':
             res = self.ability_modifier_array[4]
-        if (ability == 'Charisma'):
+        if ability == 'Charisma':
             res = self.ability_modifier_array[5]
 
         return res
 
-    def assignHitPoints(self, level, hit_die, modifier):
-        self.lastMethodLog = (f'assignHitPoints( '
-                              f'{level}, '
-                              f'{hit_die}, '
-                              f'{modifier})')
-        if (self.hit_point_generator == 'Max'):
-            retStr = ((level * hit_die) + (level * modifier))
+    def assign_hit_points(self, level, hit_die, modifier):
+        self.last_method_log = (f'assign_hit_points( ' 
+                                f'{level}, ' 
+                                f'{hit_die}, ' 
+                                f'{modifier})')
+        if self.hit_point_generator == 'Max':
+            ret_str = ((level * hit_die) + (level * modifier))
         else:
             d = Die(hit_die)
-            retStr = ((d.roll(level)) + (level * modifier))
+            ret_str = ((d.roll(level)) + (level * modifier))
 
-        if self.debugInd:
-            self.classEval[-1]["hitPoints"] = retStr
+        if self.debug_ind:
+            self.class_eval[-1]["hitPoints"] = ret_str
 
-        return retStr
+        return ret_str
 
-    def setArmorClass(self):
-        self.lastMethodLog = (f'setArmorClass()')
-        dexMod = -99
-        baseAC = 10
+    def set_armor_class(self):
+        self.last_method_log = f'set_armor_class()'
+        dex_mod = -99
+        base_ac = 10
         if self.armor is not None and self.armor != 'None':
             sql = (f"select ac_base from dnd_5e.lu_armor "
                    f"where name = '{self.armor}';")
 
             res = self.db.query(sql)
-            baseAC = res[0][0]
+            base_ac = res[0][0]
 
             sql = (f"select ac_use_dex_mod, ac_dex_mod_max "
                    f"from dnd_5e.lu_armor "
                    f"where name = '{self.armor}';")
 
             res = self.db.query(sql)
-            if (res[0][0] is False):
-                dexMod = 0
-            elif (res[0][1] != -1):
-                dexMod = res[0][1]
+            if res[0][0] is False:
+                dex_mod = 0
+            elif res[0][1] != -1:
+                dex_mod = res[0][1]
             else:
-                dexMod = -99
+                dex_mod = -99
 
-        if (dexMod == -99):
-            dexMod = self.getAbilityModifier('Dexterity')
+        if dex_mod == -99:
+            dex_mod = self.get_ability_modifier('Dexterity')
 
         if self.shield is not None and self.shield != 'None':
             sql = (f"select ac_base from dnd_5e.lu_armor "
                    f"where name = '{self.shield}';")
 
             res = self.db.query(sql)
-            shieldBonus = res[0][0]
+            shield_bonus = res[0][0]
         else:
-            shieldBonus = 0
+            shield_bonus = 0
 
-        self.armor_class = baseAC + shieldBonus + dexMod
+        self.armor_class = base_ac + shield_bonus + dex_mod
 
-        if self.debugInd:
-            self.classEval[-1]["armorClass"] = self.armor_class
+        if self.debug_ind:
+            self.class_eval[-1]["armorClass"] = self.armor_class
 
-        if (self.debugInd == 1):
-            msg = (f"{self.getName()}: armorClass set to "
+        if self.debug_ind == 1:
+            msg = (f"{self.get_name()}: armorClass set to "
                    f"{self.armor_class}")
             self.logger.debug(msg)
 
-    def contestCheck(self, ability, vantage='Normal'):
-        self.lastMethodLog = (f'contestCheck('
-                              f'{ability}, {vantage})')
+    def contest_check(self, ability, vantage='Normal'):
+        self.last_method_log = f'contest_check({ability}, {vantage})'
         d = Die(20)
-        if (vantage == 'Normal'):
+        if vantage == 'Normal':
             r = d.roll()
-        elif (vantage == 'Advantage'):
+        elif vantage == 'Advantage':
             r = d.rollWithAdvantage()
-        elif (vantage == 'Disadvantage'):
+        else:
             r = d.rollWithDisadvantage()
 
-        mod = self.getAbilityModifier(ability)
+        mod = self.get_ability_modifier(ability)
 
-        retval = (r + mod)
+        ret_val = r + mod
 
-        if (self.debugInd == 1):
-            msg = (f"{self.getName()}: contestCheck "
-                   f"{ability} with {vantage} vantage returned {retval}")
+        if self.debug_ind == 1:
+            msg = (f"{self.get_name()}: contest_check "
+                   f"{ability} with {vantage} vantage returned {ret_val}")
             self.logger.debug(msg)
 
-        return retval
+        return ret_val
 
-    def rollForInitiative(self, vantage='Normal'):
-        retval = self.contestCheck('Dexterity', vantage)
-        if (self.debugInd == 1):
-            msg = (f"{self.getName()}: rollForInitiative "
-                   f"with {vantage} vantage returned {retval}")
+    def roll_for_initiative(self, vantage='Normal'):
+        ret_val = self.contest_check('Dexterity', vantage)
+        if self.debug_ind == 1:
+            msg = (f"{self.get_name()}: roll_for_initiative "
+                   f"with {vantage} vantage returned {ret_val}")
             self.logger.debug(msg)
-        return retval
+        return ret_val
 
-    def checkProficiencySkill(self, ability):
-        self.lastMethodLog = (f'checkProficiencySkill('
-                              f'{ability})')
-        retval = False
-        t = self.getRacialTraits()
-        if (t):
+    def check_proficiency_skill(self, ability):
+        self.last_method_log = f'check_proficiency_skill({ability})'
+        ret_val = False
+        t = self.get_racial_traits()
+        if t:
             for b in t:
-                    if b.category == "Proficiency Skill":
-                        if b.affected_name == ability:
-                            retval = True
-        if (self.debugInd == 1):
-            msg = (f"{self.getName()}: Proficiency for "
-                   f"with {ability} returned {retval}")
+                if b.category == "Proficiency Skill":
+                    if b.affected_name == ability:
+                        ret_val = True
+        if self.debug_ind == 1:
+            msg = (f"{self.get_name()}: Proficiency for "
+                   f"with {ability} returned {ret_val}")
             self.logger.debug(msg)
 
-        return retval
+        return ret_val
 
-    def deathSave(self, vantage='Normal'):
-        self.lastMethodLog = (f'deathSave('
-                              f'{vantage})')
-        tmpStr = 'Performs death save.'
-        res = self.contestCheck('Death', vantage)
-        if (res == 20):  # character is stablized
+    def death_save(self, vantage='Normal'):
+        self.last_method_log = f'death_save({vantage})'
+        tmp_str = 'Performs death save.'
+        res = self.contest_check('Death', vantage)
+        if res == 20:  # character is stablized
             self.cur_hit_points = 1
             self.death_save_passed_cnt = 3
             self.stabilized = 1
-            tmpStr = (f'{tmpStr}\nResult: Nat 20. Character Stabilized')
-        elif (res >= 10):  # normal pass
+            tmp_str = f'{tmp_str}\nResult: Nat 20. Character Stabilized'
+        elif res >= 10:  # normal pass
             self.death_save_passed_cnt += 1
-            tmpStr = (f'{tmpStr}\nPassed. Current counts: (P/F) '
-                      f'{self.death_save_passed_cnt}/'
-                      f'{self.death_save_failed_cnt}')
-        elif (res == 1):   # crit fail
+            tmp_str = (f'{tmp_str}\nPassed. Current counts: (P/F) ' 
+                       f'{self.death_save_passed_cnt}/' 
+                       f'{self.death_save_failed_cnt}')
+        elif res == 1:   # crit fail
             self.death_save_failed_cnt += 2
-            tmpStr = (f'{tmpStr}\nCrit fail. Current counts: (P/F) '
-                      f'{self.death_save_passed_cnt}/'
-                      f'{self.death_save_failed_cnt}')
+            tmp_str = (f'{tmp_str}\nCrit fail. Current counts: (P/F) ' 
+                       f'{self.death_save_passed_cnt}/' 
+                       f'{self.death_save_failed_cnt}')
         else:   # res < 10 -- normal fail
             self.death_save_failed_cnt += 1
-            tmpStr = (f'{tmpStr}\nFailed. Current counts: (P/F) '
-                      f'{self.death_save_passed_cnt}/'
-                      f'{self.death_save_failed_cnt}')
+            tmp_str = (f'{tmp_str}\nFailed. Current counts: (P/F) ' 
+                       f'{self.death_save_passed_cnt}/' 
+                       f'{self.death_save_failed_cnt}')
 
-        if (self.death_save_passed_cnt >= 3):
+        if self.death_save_passed_cnt >= 3:
             self.death_save_passed_cnt = 0
             self.death_save_failed_cnt = 0
             self.stabilized = True
-            tmpStr = (f'{tmpStr}\nThree passed death saves. '
-                      f'Character Stabilized')
-        elif (self.death_save_failed_cnt >= 3):
+            tmp_str = (f'{tmp_str}\nThree passed death saves. ' 
+                       f'Character Stabilized')
+        elif self.death_save_failed_cnt >= 3:
             self.alive = False
-            tmpStr = (f'{tmpStr}\nThree failed death saves. '
-                      f'Character has died.')
+            tmp_str = (f'{tmp_str}\nThree failed death saves. ' 
+                       f'Character has died.')
 
-        if (self.debugInd == 1):
-            msg = (f"{self.getName()}: {tmpStr}")
+        if self.debug_ind == 1:
+            msg = f"{self.get_name()}: {tmp_str}"
             self.logger.debug(msg)
 
-    def Check(self, skill, vantage='Normal', dc=10):
-        self.lastMethodLog = (f'Check({skill}, '
-                              f'{vantage}, {dc})')
-        tmpStr = ''
+    def check(self, skill, vantage='Normal', dc=10):
+        self.last_method_log = f'check({skill}, {vantage}, {dc})'
+        tmp_str = ''
         # Saving throw
         if (skill == 'Strength' or skill == 'Dexterity'
-            or skill == 'Constitution' or skill == 'Intelligence'
+                or skill == 'Constitution' or skill == 'Intelligence'
                 or skill == 'Wisdom' or skill == 'Charisma'):
-                ability = skill
-                # at exhaustion level 3 saving throws are affected
-                if (self.exhaustion_level >= 3):
-                    if (vantage == 'Advantage'):
-                        vantage = 'Normal'
-                    else:
-                        vantage = 'Disadvantage'
-                adjustedRoll = self.contestCheck(ability, vantage)
+            ability = skill
+            # at exhaustion level 3 saving throws are affected
+            if self.exhaustion_level >= 3:
+                if vantage == 'Advantage':
+                    vantage = 'Normal'
+                else:
+                    vantage = 'Disadvantage'
+            adjusted_roll = self.contest_check(ability, vantage)
         else:
-            # Skill Check
+            # Skill check
             if skill == 'Athletics':
                 ability = 'Strength'
             elif (skill == 'Acrobatics'
@@ -472,68 +466,65 @@ class Character(object):
                   or skill == 'Performance'
                   or skill == 'Persuasion'):
                 ability = 'Charisma'
-            if (self.debugInd):
-                tmpStr = (f'{tmpStr}{skill} ')
+            if self.debug_ind:
+                tmp_str = f'{tmp_str}{skill} '
             # at exhaustion level 1 skills checks are affected
-            if (self.exhaustion_level >= 1):
-                if (vantage == 'Advantage'):
+            if self.exhaustion_level >= 1:
+                if vantage == 'Advantage':
                     vantage = 'Normal'
                 else:
                     vantage = 'Disadvantage'
-            adjustedRoll = self.contestCheck(ability, vantage)
+            adjusted_roll = self.contest_check(ability, vantage)
 
-            if(self.checkProficiencySkill(skill)):
-                adjustedRoll = adjustedRoll + int(self.proficiency_bonus)
-                tmpStr = (f'{tmpStr} + Prof({self.proficiency_bonus}) ')
+            if self.check_proficiency_skill(skill):
+                adjusted_roll = adjusted_roll + int(self.proficiency_bonus)
+                tmp_str = f'{tmp_str} + Prof({self.proficiency_bonus}) '
 
-        if (adjustedRoll >= dc):
+        if adjusted_roll >= dc:
             res = True
         else:
             res = False
 
-        if (self.debugInd == 1):
-            tmpStr = (f'{tmpStr}{adjustedRoll} >= {dc} ')
-            if (res):
-                tmpStr = (f'{tmpStr} (true)\n')
+        if self.debug_ind == 1:
+            tmp_str = f'{tmp_str}{adjusted_roll} >= {dc} '
+            if res:
+                tmp_str = f'{tmp_str} (true)\n'
             else:
-                tmpStr = (f'{tmpStr} (false)\n')
+                tmp_str = f'{tmp_str} (false)\n'
 
-            msg = (f"{self.getName()}: {tmpStr}")
+            msg = f"{self.get_name()}: {tmp_str}"
             self.logger.debug(msg)
 
         return res
 
-    def getDamageGenerator(self):
+    def get_damage_generator(self):
         return self.damage_generator
 
-    def Damage(self, amount, damageType="Unknown"):
-        self.lastMethodLog = (f'Damage({amount}, '
-                              f'{damageType})')
+    def damage(self, amount, damage_type="Unknown"):
+        self.last_method_log = f'damage({amount}, {damage_type})'
 
-        tmpType = self.damage_adj[damageType]
+        tmp_type = self.damage_adj[damage_type]
 
-        if (tmpType and tmpType == 'resistant'):
-            tmpStr = (f'Originally, {amount} points of {damageType} damage.\n')
-            amount = (amount // 2)
-            tmpStr = (f'Reduced to {amount} points due to '
-                      f'{damageType} resistance.')
-        elif (tmpType and tmpType == 'vulnerable'):
-            tmpStr = (f'Originally, {amount} points of {damageType} damage.')
-            amount = (amount * 2)
-            tmpStr = (f'Increased to {amount} points due to '
-                      f'{damageType} vulnerability.')
+        if tmp_type and tmp_type == 'resistant':
+            tmp_str = f'Originally, {amount} points of {damage_type} damage.\n'
+            amount = amount // 2
+            tmp_str = f'Reduced to {amount} points due to {damage_type} resistance.'
+        elif tmp_type and tmp_type == 'vulnerable':
+            tmp_str = f'Originally, {amount} points of {damage_type} damage.'
+            amount = amount * 2
+            tmp_str = f'Increased to {amount} points due to {damage_type} vulnerability.'
         else:
-            tmpStr = (f'Suffers {amount} points of {damageType} damage.')
+            tmp_str = f'Suffers {amount} points of {damage_type} damage.'
 
-        if (amount >= self.cur_hit_points):
-            tmpStr = (f'{tmpStr}\n{amount} exceeds current hit points'
-                      f'({self.cur_hit_points}): knocked unconsious')
+        if amount >= self.cur_hit_points:
+            tmp_str = (f'{tmp_str}\n{amount} exceeds current hit points' 
+                       f'({self.cur_hit_points}): knocked unconsious')
             self.stabilized = False
             # Instant Death?
-            if ((amount - self.cur_hit_points) >= self.hit_points):
-                tmpStr = (f'{tmpStr}\n{(amount - self.cur_hit_points)}'
-                          f' exceeds hit points'
-                          f'({self.hit_points}): Instant Death')
+            if (amount - self.cur_hit_points) >= self.hit_points:
+                tmp_str = (f'{tmp_str}\n{(amount - self.cur_hit_points)}' 
+                           f' exceeds hit points' 
+                           f'({self.hit_points}): Instant Death')
                 self.death_save_failed_cnt = 3
                 self.alive = False
 
@@ -541,108 +532,100 @@ class Character(object):
         else:
             thp = self.cur_hit_points
             self.cur_hit_points -= amount
-            tmpStr = (f'{tmpStr}\nResulting in ({thp} - {amount}) '
-                      f'{self.cur_hit_points} points')
+            tmp_str = (f'{tmp_str}\nResulting in ({thp} - {amount}) ' 
+                       f'{self.cur_hit_points} points')
 
         self.damage_taken['Total'] += amount
-        self.damage_taken[damageType] += amount
+        self.damage_taken[damage_type] += amount
 
-        if (self.debugInd == 1):
-            for i in tmpStr.splitlines():
-                self.logger.debug(f"{self.getName()}: {i}")
+        if self.debug_ind == 1:
+            for i in tmp_str.splitlines():
+                self.logger.debug(f"{self.get_name()}: {i}")
 
-    def getAction(self, distList):
-        retVal = "Done"
-        opDist = distList[0][0]
-        if (not self.alive):
-            retVal = "None"
-        elif (not self.stabilized):
-            retVal = "Death Save"
-        elif (self.combat_preference == 'Melee'):
-            if (opDist > self.cur_movement):
-                retVal = "Movement"
-            elif (opDist <= self.cur_movement
-                  and opDist > 5):
-                retVal = "Wait on Melee"
-            elif (opDist <= 5):
-                retVal = "Melee"
+    def get_action(self, dist_list):
+        ret_val = "Done"
+        op_dist = dist_list[0][0]
+        if not self.alive:
+            ret_val = "None"
+        elif not self.stabilized:
+            ret_val = "Death Save"
+        elif self.combat_preference == 'Melee':
+            if op_dist > self.cur_movement:
+                ret_val = "Movement"
+            elif self.cur_movement >= op_dist > 5:
+                ret_val = "Wait on Melee"
+            elif op_dist <= 5:
+                ret_val = "Melee"
         else:
-            if (opDist > self.getRangedRange):
-                retVal = "Movement"
-            elif (opDist <= self.getRangedRange
-                  and opDist > 5):
-                retVal = "Ranged"
-            elif (opDist <= 5):
-                retVal = "Melee"
+            if op_dist > self.get_ranged_range:
+                ret_val = "Movement"
+            elif self.get_ranged_range >= op_dist > 5:
+                ret_val = "Ranged"
+            elif op_dist <= 5:
+                ret_val = "Melee"
 
-        return retVal
+        return ret_val
 
-    def rangedAttack(self, weaponObj, vantage='Normal'):
+    def ranged_attack(self, weapon_obj, vantage='Normal'):
         # determine modifier
         # 1)  is this a martial weapon that needs specific proficiency
         #     if it is and the character has that, or the weapon is a standard
         #     one, add the character's proficiency bonus.
-        if     (weaponObj.martial_weapon_ind is False  # NOQA
-                or (weaponObj.martial_weapon_ind is True
-                and weaponObj.proficient_ind is True)):
+        if (weapon_obj.martial_weapon_ind is False
+                or (weapon_obj.martial_weapon_ind is True
+                    and weapon_obj.proficient_ind is True)):
             modifier = int(self.proficiency_bonus)
         else:
             modifier = 0
 
-        modifier += self.getAbilityModifier('Dexterity')
+        modifier += self.get_ability_modifier('Dexterity')
 
-        attempt = Attack(weaponObj=weaponObj, attackModifier=modifier,
+        attempt = Attack(weapon_obj=weapon_obj, attack_modifier=modifier,
                          versatile_use_2handed=False, vantage=vantage)
 
-        # print(f'Attack Value: {attempt.attack_value}')
-        # print(f'Poss. Damage: {attempt.possible_damage}')
-
-        if (self.debugInd == 1):
-            self.logger.debug(f"{self.getName()}: Ranged Attack Value: "
+        if self.debug_ind == 1:
+            self.logger.debug(f"{self.get_name()}: Ranged Attack Value: "
                               f"{attempt.attack_value}")
-            self.logger.debug(f"{self.getName()}: Ranged Poss. Damage: "
+            self.logger.debug(f"{self.get_name()}: Ranged Poss. damage: "
                               f"{attempt.possible_damage}")
 
-    def meleeAttack(self, weaponObj, vantage='Normal'):
+    def melee_attack(self, weapon_obj, vantage='Normal'):
         # determine modifier
         # 1)  is this a martial weapon that needs specific proficiency
         #     if it is and the character has that, or the weapon is a standard
         #     one, add the character's proficiency bonus.
-        if     (weaponObj.martial_weapon_ind is False  # NOQA
-                or (weaponObj.martial_weapon_ind is True
-                and weaponObj.proficient_ind is True)):
+        if (weapon_obj.martial_weapon_ind is False
+                or (weapon_obj.martial_weapon_ind is True
+                    and weapon_obj.proficient_ind is True)):
             modifier = int(self.proficiency_bonus)
         else:
             modifier = 0
         # 2)  Add the users Ability bonus, Strength for standard weapons
         #     or self.finesse_ability_mod for Finesse wepons
-        if     (weaponObj.finesse_ind is True):  # NOQA
-            modifier += self.getAbilityModifier(self.self.finesse_ability_mod)
+        if weapon_obj.finesse_ind is True:
+            modifier += self.get_ability_modifier(self.finesse_ability_mod)
         else:
-            modifier += self.getAbilityModifier('Strength')
+            modifier += self.get_ability_modifier('Strength')
 
-        if     (self.classObj.shield is None  # NoQA
-                and weaponObj.versatile_ind is True):
+        if self.classObj.shield is None and weapon_obj.versatile_ind is True:
             v2h = True
         else:
             v2h = False
 
-        attempt = Attack(weaponObj=weaponObj, attackModifier=modifier,
+        attempt = Attack(weapon_obj=weapon_obj, attack_modifier=modifier,
                          versatile_use_2handed=v2h, vantage=vantage)
 
-        # print(f'Attack Value: {attempt.attack_value}')
-        # print(f'Poss. Damage: {attempt.possible_damage}')
-        if (self.debugInd == 1):
-            self.logger.debug(f"{self.getName()}: Melee Attack Value: "
+        if self.debug_ind == 1:
+            self.logger.debug(f"{self.get_name()}: Melee Attack Value: "
                               f"{attempt.attack_value}")
-            self.logger.debug(f"{self.getName()}: Melee Poss. Damage: "
+            self.logger.debug(f"{self.get_name()}: Melee Poss. damage: "
                               f"{attempt.possible_damage}")
 
-    def meleeDefend(self, modifier=0, vantage='Normal',
-                    possibleDamage=0, damageType='Unknown'):
-        self.lastMethodLog = (f'meleeDefend({modifier}, '
-                              f'{vantage}, {possibleDamage}, '
-                              f'{damageType})')
+    def melee_defend(self, modifier=0, vantage='Normal',
+                     possible_damage=0, damage_type='Unknown'):
+        self.last_method_log = (f'melee_defend({modifier}, ' 
+                                f'{vantage}, {possible_damage}, ' 
+                                f'{damage_type})')
         d = Die(20)
         if self.prone_ind:
             if vantage == 'Disadvantage':
@@ -652,27 +635,27 @@ class Character(object):
         value = d.roll() + modifier
 
         if value >= self.armor_class:
-            tmpStr = (f'Fails against a melee attack roll: '
-                      f'{value} >= {self.armor_class}')
+            tmp_str = (f'Fails against a melee attack roll: ' 
+                       f'{value} >= {self.armor_class}')
             ret = False
-            if possibleDamage > 0:
-                self.Damage(possibleDamage, damageType)
+            if possible_damage > 0:
+                self.damage(possible_damage, damage_type)
         else:
-            tmpStr = (f'Succeeds against a melee attack roll: '
-                      f'{value} < {self.armor_class}')
+            tmp_str = (f'Succeeds against a melee attack roll: ' 
+                       f'{value} < {self.armor_class}')
             ret = True
 
-        if (self.debugInd == 1):
-            for i in tmpStr.splitlines():
-                self.logger.debug(f"{self.getName()}: {i}")
+        if self.debug_ind == 1:
+            for i in tmp_str.splitlines():
+                self.logger.debug(f"{self.get_name()}: {i}")
 
         return ret
 
-    def rangedDefend(self, modifier=0, vantage='Normal',
-                     possibleDamage=0, damageType='Unknown'):
-        self.lastMethodLog = (f'rangedDefend({modifier}, '
-                              f'{vantage}, {possibleDamage}'
-                              f'{damageType})')
+    def ranged_defend(self, modifier=0, vantage='Normal',
+                      possible_damage=0, damage_type='Unknown'):
+        self.last_method_log = (f'ranged_defend({modifier}, ' 
+                                f'{vantage}, {possible_damage}' 
+                                f'{damage_type})')
         d = Die(20)
         if self.prone_ind:
             if vantage == 'Advantage':
@@ -682,90 +665,89 @@ class Character(object):
         value = d.roll() + modifier
 
         if value >= self.armor_class:
-            tmpStr = (f'Fails against a ranged attack roll: '
-                      f'{value} >= {self.armor_class}')
+            tmp_str = (f'Fails against a ranged attack roll: ' 
+                       f'{value} >= {self.armor_class}')
             ret = False
-            if possibleDamage > 0:
-                self.Damage(possibleDamage, damageType)
+            if possible_damage > 0:
+                self.damage(possible_damage, damage_type)
         else:
-            tmpStr = (f'Succeeds against a ranged attack roll: '
-                      f'{value} < {self.armor_class}')
+            tmp_str = (f'Succeeds against a ranged attack roll: ' 
+                       f'{value} < {self.armor_class}')
             ret = True
 
-        if (self.debugInd == 1):
-            msg = (f"{self.getName()}: {tmpStr}")
+        if self.debug_ind == 1:
+            msg = f"{self.get_name()}: {tmp_str}"
             self.logger.debug(msg)
 
         return ret
 
-    def Heal(self, amount):
-        self.lastMethodLog = (f'Heal({amount})')
-        tmpStr = (f'Heals {amount} hit points.')
-        if (self.cur_hit_points == 0 and self.alive):
+    def heal(self, amount):
+        self.last_method_log = f'heal({amount})'
+        tmp_str = f'Heals {amount} hit points.'
+        if self.cur_hit_points == 0 and self.alive:
             self.death_save_failed_cnt = 0
             self.death_save_passed_cnt = 0
             self.stabilized = True
-            # tmpStr = (f'{tmpStr}\nResulting in {self.cur_hit_points} points')
+            # tmp_str = (f'{tmp_str}\nResulting in {self.cur_hit_points} points')
 
-        if ((self.cur_hit_points + amount) > self.hit_points):
+        if (self.cur_hit_points + amount) > self.hit_points:
             self.cur_hit_points = self.hit_points
-            tmpStr = (f'{tmpStr}\nReturned to max {self.hit_points} points')
+            tmp_str = f'{tmp_str}\nReturned to max {self.hit_points} points'
         else:
             thp = self.cur_hit_points
             self.cur_hit_points += amount
-            tmpStr = (f'{tmpStr}\nResulting in ({thp} + {amount}) '
-                      f'{self.cur_hit_points} points')
+            tmp_str = (f'{tmp_str}\nResulting in ({thp} + {amount}) ' 
+                       f'{self.cur_hit_points} points')
 
-        if (self.debugInd == 1):
-            for i in tmpStr.splitlines():
-                self.logger.debug(f"{self.getName()}: {i}")
+        if self.debug_ind == 1:
+            for i in tmp_str.splitlines():
+                self.logger.debug(f"{self.get_name()}: {i}")
 
-    def Revive(self):
-        self.lastMethodLog = (f'Revive()')
+    def revive(self):
+        self.last_method_log = f'revive()'
         self.death_save_failed_cnt = 0
         self.death_save_passed_cnt = 0
         self.stabilized = True
         self.alive = True
         self.cur_hit_points = self.hit_points
 
-        if (self.debugInd == 1):
-            msg = (f"{self.getName()}: Has been Revived.")
+        if self.debug_ind == 1:
+            msg = f"{self.get_name()}: Has been Revived."
             self.logger.debug(msg)
 
-    def getRangedRange(self):
-        if (self.ranged_weapon):
+    def get_ranged_range(self):
+        if self.ranged_weapon:
             sql = (f"select range_1 from lu_weapon "
                    f"and name = '{self.ranged_weapon}' "
                    f"where category like '%Ranged'")
             res = self.db.query(sql)
-            retVal = res[0][0]
+            ret_val = res[0][0]
         else:
-            retVal = -1
+            ret_val = -1
 
-        return retVal
+        return ret_val
 
 
 if __name__ == '__main__':
     db = InvokePSQL()
     a1 = Character(db)
-    a1.assignAbilityArray()
-    a1.setArmorClass()
-    print(a1.getGender())
-    print(a1.rawAbilityArray)
-    a2 = Character(db=db, abilityArrayStr='10,11,12,13,14,15')
-    a2.assignAbilityArray()
-    a2.setArmorClass()
-    print(a2.getRawAbilityArray())
-    print(a2.getAbilityPrefArray())
-    print(a2.getSortedAbilityArray())
-    a2.ability_array_obj.set_preference_array(prefArray=stringToArray(
+    a1.assign_ability_array()
+    a1.set_armor_class()
+    print(a1.get_gender())
+    a2 = Character(db=db, ability_array_str='10,11,12,13,14,15')
+    a2.assign_ability_array()
+    a2.set_armor_class()
+    print(a2.get_raw_ability_array())
+    print(a2.get_ability_pref_array())
+    print(a2.get_sorted_ability_array())
+    a2.ability_array_obj.set_preference_array(pref_array=stringToArray(
                                             '5,0,2,1,4,3'
                                             ))
-    print(a2.getRawAbilityArray())
-    print(a2.getAbilityPrefArray())
-    print(a2.getSortedAbilityArray())
+    print(a2.get_raw_ability_array())
+    print(a2.get_ability_pref_array())
+    print(a2.get_sorted_ability_array())
     print(a2.armor_class)
-    print(a2.getGender())
+    print(a2.get_gender())
 
     # a3 = Character(db, level=43)
 

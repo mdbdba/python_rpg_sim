@@ -113,8 +113,8 @@ class Encounter(object):
 
     def add_to_initiative_list(self, src_single: object, source_list_name: str,
                                source_list_position: int):
-        pc = src_single.Check('Perception', 'Normal', 10)
-        ini = src_single.rollForInitiative('Normal')
+        pc = src_single.check('Perception', 'Normal', 10)
+        ini = src_single.roll_for_initiative('Normal')
         field_max = self.field_size - 1
 
         if source_list_name == 'Heroes':
@@ -157,7 +157,7 @@ class Encounter(object):
         print(f"Surviving {self.winning_list_name}:")
         for i in range(len(self.winning_list)):
             if self.winning_list[i].alive:
-                print(self.winning_list[i].getName())
+                print(self.winning_list[i].get_name())
 
     def still_active(self):
         ret_val = False
@@ -197,7 +197,7 @@ class Encounter(object):
         # bonusaction_used = False
 
         print(f'\nRound: {self.round} turn: {initiative_ind} '
-              f'Name: {cur_active.getName()} '
+              f'Name: {cur_active.get_name()} '
               f'Grid Pos: [{self.initiative[initiative_ind][4]}]'
               f'[{self.initiative[initiative_ind][5]}]')
 
@@ -214,7 +214,7 @@ class Encounter(object):
         # Do they know why they are there?
         if not self.initiative[initiative_ind][2]:
             # bonusaction_used = True
-            self.initiative[initiative_ind][2] = cur_active.Check('Perception', 'Normal', 10)
+            self.initiative[initiative_ind][2] = cur_active.check('Perception', 'Normal', 10)
         # Move
         # Define an obj for the current active combatant
         #    0 - How many sectors can they move
@@ -242,9 +242,9 @@ class Encounter(object):
         # If they don't have a ranged weapon or spell attack
         # they must be a melee fighter.  When not in melee range
         # use action for movement.
-        cur_action = cur_active.getAction(dl)
+        cur_action = cur_active.get_action(dl)
         if cur_action == 'Movement':
-            print(f"Using {cur_active.getName()}'s Action for "
+            print(f"Using {cur_active.get_name()}'s Action for "
                   f"movement.")
             avail_mvmt = cur_active.cur_movement / 5
             avail_mvmt = self.movement(avail_mvmt,
@@ -257,7 +257,7 @@ class Encounter(object):
                       f"{dl[j][2]}")
         elif cur_action == 'Wait on Melee':
             # If an enemy gets into melee range this round, ATTACK!
-            print(f"Using {cur_active.getName()}'s Action waiting "
+            print(f"Using {cur_active.get_name()}'s Action waiting "
                   f"for an enemy to get into melee range.")
             print(f"adding to the waiting list: "
                   f"{dl[0][3]}[{dl[0][4]}]")
@@ -265,7 +265,7 @@ class Encounter(object):
                                 self.initiative[initiative_ind][1],
                                 dl[0][3], dl[0][4]])
         elif cur_action == 'Melee':
-            print(f"{cur_active.getName()} is in melee with "
+            print(f"{cur_active.get_name()} is in melee with "
                   f"{dl[0][3]}[{dl[0][4]}]")
             # do any superceding actions
             s1 = self.get_waiting_for(initiative_ind, waiting_for)
@@ -422,8 +422,8 @@ if __name__ == '__main__':
     db = InvokePSQL()
     Heroes = []
     Opponents = []
-    Heroes.append(PlayerCharacter(db, debugInd=1))
-    Opponents.append(Foe(db, foeCandidate='Skeleton', debugInd=1))
+    Heroes.append(PlayerCharacter(db, debug_ind=1))
+    Opponents.append(Foe(db, foe_candidate='Skeleton', debug_ind=1))
     e1 = Encounter(Heroes, Opponents)
     print(e1.initiative)
     for x in range(e1.field_size * e1.field_size):

@@ -3,9 +3,9 @@ from PlayerCharacterClass import PlayerCharacterClass
 
 class BarbarianPCClass(PlayerCharacterClass):
     def __init__(self, db,
-                 characterAlteringClassOptions=None):
+                 character_altering_class_options=None):
         PlayerCharacterClass.__init__(self, db, "Barbarian",
-                                      characterAlteringClassOptions)
+                                      character_altering_class_options)
         self.archetype_label = "Primal Path"
         self.ranged_weapon = "Javelin"
         self.melee_weapon = "Greataxe"
