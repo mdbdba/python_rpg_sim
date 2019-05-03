@@ -19,7 +19,7 @@ def test_Foe_Default():
     assert(a1.get_alignment_abbrev())
     assert(a1.blinded_ind is False)
     assert(a1.charmed_ind is False)
-    assert(a1.deafend_ind is False)
+    assert(a1.deafened_ind is False)
     assert(a1.fatigued_ind is False)
     assert(a1.frightened_ind is False)
     assert(a1.grappled_ind is False)

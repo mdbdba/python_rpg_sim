@@ -659,7 +659,7 @@
            <column name="race" value="Koala bearkin"/>       
            <column name="name" value="Iron Tummy 1"/> 
            <column name="category" value="Saving Throw"/> 
-           <column name="affected_name" value="poison"/>
+           <column name="affected_name" value="Poison"/>
            <column name="affect" value="immune"/>
            <column name="description" value="onAction:eaten"/>
         </insert>
@@ -874,7 +874,7 @@
            <column name="race" value="Boggart goblin"/>       
            <column name="name" value="Swamp Immunity 1"/> 
            <column name="category" value="Saving Throw"/> 
-           <column name="affected_name" value="poison"/>
+           <column name="affected_name" value="Poison"/>
            <column name="affect" value="advantage"/>
         </insert>
         <insert schemaName="dnd_5e" tableName="lu_racial_trait">

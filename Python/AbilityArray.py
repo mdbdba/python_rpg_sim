@@ -92,7 +92,7 @@ class AbilityArray(object):
         else:
             d = Die(6)
             for i in range(0, 6):
-                if self.array_type == "Strict":
+                if self.array_type == "strict":
                     pr = d.roll(3, False)
                 else:
                     pr = d.roll(4, True)

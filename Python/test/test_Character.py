@@ -25,7 +25,7 @@ def test_Character_Default():
     assert(a1.get_eye_color())
     assert(a1.blinded_ind is False)
     assert(a1.charmed_ind is False)
-    assert(a1.deafend_ind is False)
+    assert(a1.deafened_ind is False)
     assert(a1.fatigued_ind is False)
     assert(a1.frightened_ind is False)
     assert(a1.grappled_ind is False)
@@ -43,7 +43,7 @@ def test_Character_Default():
 
 def test_Character_Strict():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, ability_array_str="Strict")
+    a1 = PlayerCharacter(db, ability_array_str="strict")
     assert(a1)
     assert(a1.get_raw_ability_array())
     assert(a1.get_ability_array())
@@ -59,7 +59,7 @@ def test_Race_Standard_Array():
     found10 = False
     found8 = False
 
-    a1 = PlayerCharacter(db, ability_array_str="Standard")
+    a1 = PlayerCharacter(db, ability_array_str="standard")
     assert(a1)
     tmp_array = a1.get_raw_ability_array()
     for i in range(0, 6):
@@ -144,7 +144,7 @@ def test_RandomGen_Retrieve():
     assert(a1.get_race() == b1.get_race())
     assert(a1.get_class() == b1.get_class())
     assert(a1.get_gender() == b1.get_gender())
-    assert(a1.TTA == b1.TTA)
+    assert(a1.tta == b1.tta)
     assert(a1.get_name() == b1.get_name())
     assert(a1.armor_class == b1.armor_class)
 

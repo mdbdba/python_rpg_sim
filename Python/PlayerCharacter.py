@@ -439,7 +439,7 @@ class PlayerCharacter(Character):
                f"from lu_racial_trait as rt "
                f"join lu_race as r on (rt.race = r.race "
                f"or rt.race = r.subrace_of)"
-               f"where rt.category = 'Damage' "
+               f"where rt.category = 'Damage Received' "
                f"and rt.affect is not null "
                f"and rt.affected_name in ('Acid', 'Bludgeoning', "
                f"'Cold', 'Fire', 'Force', 'Ligtning', 'Necrotic',"
