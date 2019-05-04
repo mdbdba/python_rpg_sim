@@ -1,8 +1,8 @@
 
 import math
+import logging
 
 from operator import itemgetter
-# from typing import List, Any
 
 from Fieldsector import Fieldsector
 from PlayerCharacter import PlayerCharacter
@@ -16,6 +16,7 @@ class Encounter(object):
     Opponents: list
     winning_list: list
     winning_list_name: str
+    debug_ind: int
     field_size: int
     field_map: list
     h_cnt: int
@@ -24,20 +25,29 @@ class Encounter(object):
     def __init__(self,
                  heroes,
                  opponents,
-                 field_size=100
+                 field_size=100,
+                 debug_ind=0
                  ):
         """
 
         :type heroes: list
         :type opponents: list
         :type field_size: int
+        :type debug_ind: int
         """
+        self.debug_ind = debug_ind
         self.Heroes = heroes
         self.Opponents = opponents
         self.active = True
         self.round = 0
         self.winning_list = []
         self.winning_list_name = ""
+
+        if ((self.debug_ind == 1) and
+           ((getattr(self, "logger", None)) is None)):
+            log_fmt = '%(asctime)s - %(levelname)s - %(message)s'
+            logging.basicConfig(format=log_fmt, level=logging.DEBUG)
+            self.logger = logging.getLogger(__name__)
 
         # initialize the field.
         tot_objs: int = field_size * field_size
@@ -63,6 +73,18 @@ class Encounter(object):
     def get_opponent_count(self):
         return self.o_cnt
 
+    def get_party_list(self, list_name: str):
+        if list_name == "Heroes":
+            ret_val = self.Heroes
+        else:
+            ret_val = self.Opponents
+
+        return ret_val
+
+    def get_player(self, list_name: str, list_index: int ):
+        t = self.get_party_list(list_name)
+        return t[list_index]
+
     def get_grid_position(self, array_index: int) -> tuple:
         ret_val: tuple = divmod(array_index, self.field_size)
         return ret_val
@@ -77,10 +99,14 @@ class Encounter(object):
     def sector_is_unoccupied(self, px: int, py: int) -> bool:
         list_index: int = self.get_array_index(px, py)
         ret_val: bool = not self.field_map[list_index].occupied
-        print(f"Is [{px}][{py}] field_map[{list_index}] available: {ret_val}")
-        if not ret_val:
-            print(f"Occupied by: {self.field_map[list_index].occupied_by}"
-                  f"[{self.field_map[list_index].occupied_by_index}]")
+
+        if self.debug_ind == 1:
+            msg = f"Is [{px}][{py}] field_map[{list_index}] available: {ret_val}"
+            self.logger.debug(msg)
+            if not ret_val:
+                msg = ( f"Occupied by: {self.field_map[list_index].occupied_by}" 
+                        f"[{self.field_map[list_index].occupied_by_index}]")
+                self.logger.debug(msg)
         return ret_val
 
     def move(self, identifier_name, identifier_index,
@@ -88,9 +114,11 @@ class Encounter(object):
              occupy_x, occupy_y):
         leave_list_ind = self.get_array_index(leave_x, leave_y)
         occupy_list_ind = self.get_array_index(occupy_x, occupy_y)
-        print(f"moving {identifier_name}[{identifier_index}] from "
-              f"[{leave_x}][{leave_y}] ({leave_list_ind}) to "
-              f"[{occupy_x}][{occupy_y}] ({occupy_list_ind})")
+        if self.debug_ind == 1:
+            msg = (f"moving {identifier_name}[{identifier_index}] from " 
+                   f"[{leave_x}][{leave_y}] ({leave_list_ind}) to " 
+                   f"[{occupy_x}][{occupy_y}] ({occupy_list_ind})")
+            self.logger.debug(msg)
         self.field_map[leave_list_ind].leave_sector()
         self.field_map[occupy_list_ind].occupy_sector(identifier_name,
                                                       identifier_index)
@@ -99,10 +127,13 @@ class Encounter(object):
         dist_list = []
         for fx in range(self.field_size * self.field_size):
             if self.field_map[fx].occupied and self.field_map[fx].occupied_by == target_name:
-                fa, fb = self.get_grid_position(fx)
-                dist = self.calculate_distance(my_x, my_y, fa, fb)
-                dist_list.append([dist, fa, fb, self.field_map[fx].occupied_by,
-                                 self.field_map[fx].occupied_by_index])
+                tmp_player = self.get_player( self.field_map[fx].occupied_by,
+                                              self.field_map[fx].occupied_by_index)
+                if tmp_player.alive:
+                    fa, fb = self.get_grid_position(fx)
+                    dist = self.calculate_distance(my_x, my_y, fa, fb)
+                    dist_list.append([dist, fa, fb, self.field_map[fx].occupied_by,
+                                      self.field_map[fx].occupied_by_index])
         dist_list = sorted(dist_list, reverse=False, key=itemgetter(0))
         return dist_list
 
@@ -153,11 +184,15 @@ class Encounter(object):
                 self.wrap_up()
 
     def wrap_up(self):
-        print(f"The winner is: {self.winning_list_name} in {self.round} rounds.")
-        print(f"Surviving {self.winning_list_name}:")
-        for i in range(len(self.winning_list)):
-            if self.winning_list[i].alive:
-                print(self.winning_list[i].get_name())
+        if self.debug_ind == 1:
+            msg = f"The winner is: {self.winning_list_name} in {self.round} rounds."
+            self.logger.debug(msg)
+            msg = f"Surviving {self.winning_list_name}:"
+            self.logger.debug(msg)
+            for i in range(len(self.winning_list)):
+                if self.winning_list[i].alive:
+                    msg = self.winning_list[i].get_name()
+                    self.logger.debug(msg)
 
     def still_active(self):
         ret_val = False
@@ -185,21 +220,22 @@ class Encounter(object):
         return ret_val
 
     def turn(self, initiative_ind, waiting_for):
+        cur_active = self.get_player(self.initiative[initiative_ind][0],
+                                     self.initiative[initiative_ind][1])
         if self.initiative[initiative_ind][0] == "Heroes":
-            cur_active = self.Heroes[self.initiative[initiative_ind][1]]
             target_array_name = "Opponents"
         else:
-            cur_active = (self.Opponents[
-                            self.initiative[initiative_ind][1]])
             target_array_name = "Heroes"
 
         # action_used = False
         # bonusaction_used = False
 
-        print(f'\nRound: {self.round} turn: {initiative_ind} '
-              f'Name: {cur_active.get_name()} '
-              f'Grid Pos: [{self.initiative[initiative_ind][4]}]'
-              f'[{self.initiative[initiative_ind][5]}]')
+        if self.debug_ind == 1:
+            msg = (f'\nRound: {self.round} turn: {initiative_ind} ' 
+                   f'Name: {cur_active.get_name()} ' 
+                   f'Grid Pos: [{self.initiative[initiative_ind][4]}]' 
+                   f'[{self.initiative[initiative_ind][5]}]')
+            self.logger.debug(msg)
 
         self.remove_waiting_for(initiative_ind, waiting_for)
 
@@ -208,8 +244,9 @@ class Encounter(object):
                 self.initiative[initiative_ind][5],
                 target_array_name))
 
-        for j in range(len(dl)):
-            print(f"dist: {dl[j][0]} {dl[j][1]} {dl[j][2]}")
+        if self.debug_ind == 1:
+            for j in range(len(dl)):
+                self.logger.debug(f"dist: {dl[j][0]} {dl[j][1]} {dl[j][2]}")
 
         # Do they know why they are there?
         if not self.initiative[initiative_ind][2]:
@@ -222,21 +259,28 @@ class Encounter(object):
         #    2 - X axis location
         #    3 - Y axis location
         avail_mvmt = cur_active.cur_movement / 5
-        print(f"starting mvmt: {avail_mvmt} "
+
+        if self.debug_ind == 1:
+            msg = (f"starting mvmt: {avail_mvmt} "
               f"combat pref:   {cur_active.combat_preference} "
               f"x loc:         {self.initiative[initiative_ind][4]} "
               f"y loc:         {self.initiative[initiative_ind][5]}")
+            self.logger.debug(msg)
+
         avail_mvmt = self.movement(avail_mvmt,
                                    cur_active,
                                    self.initiative[initiative_ind],
                                    dl)
-        print(f"movement left: {avail_mvmt} "
-              f"combat pref:   {cur_active.combat_preference} "
-              f"x loc:         {self.initiative[initiative_ind][4]} "
-              f"y loc:         {self.initiative[initiative_ind][5]}")
 
-        for j in range(len(dl)):
-            print(f"dist AFTER: {dl[j][0]} {dl[j][1]} {dl[j][2]}")
+        if self.debug_ind == 1:
+            msg = (f"movement left: {avail_mvmt} " 
+                   f"combat pref:   {cur_active.combat_preference} " 
+                   f"x loc:         {self.initiative[initiative_ind][4]} " 
+                   f"y loc:         {self.initiative[initiative_ind][5]}")
+            self.logger.debug(msg)
+
+            for j in range(len(dl)):
+                self.logger.debug(f"dist AFTER: {dl[j][0]} {dl[j][1]} {dl[j][2]}")
 
         # Action (Bonus or standard)
         # If they don't have a ranged weapon or spell attack
@@ -244,73 +288,90 @@ class Encounter(object):
         # use action for movement.
         cur_action = cur_active.get_action(dl)
         if cur_action == 'Movement':
-            print(f"Using {cur_active.get_name()}'s Action for "
-                  f"movement.")
+            if self.debug_ind == 1:
+                msg = (f"Using {cur_active.get_name()}'s Action for movement.")
+                self.logger.debug(msg)
+
             avail_mvmt = cur_active.cur_movement / 5
             avail_mvmt = self.movement(avail_mvmt,
                                        cur_active,
                                        self.initiative[
                                           initiative_ind],
                                        dl)
-            for j in range(len(dl)):
-                print(f"dist AFTER Action: {dl[j][0]} {dl[j][1]} "
-                      f"{dl[j][2]}")
+            if self.debug_ind == 1:
+                for j in range(len(dl)):
+                    self.logger.debug(f"dist AFTER Action: "
+                                      f"{dl[j][0]} {dl[j][1]} {dl[j][2]}")
         elif cur_action == 'Wait on Melee':
             # If an enemy gets into melee range this round, ATTACK!
-            print(f"Using {cur_active.get_name()}'s Action waiting "
-                  f"for an enemy to get into melee range.")
-            print(f"adding to the waiting list: "
-                  f"{dl[0][3]}[{dl[0][4]}]")
+            if self.debug_ind == 1:
+                self.logger.debug(f"Using {cur_active.get_name()}'s Action waiting " 
+                                  f"for an enemy to get into melee range.")
+                self.logger.debug(f"Adding to the waiting list: " 
+                                  f"{dl[0][3]}[{dl[0][4]}]")
+
             waiting_for.append([self.initiative[initiative_ind][0],
                                 self.initiative[initiative_ind][1],
                                 dl[0][3], dl[0][4]])
         elif cur_action == 'Melee':
-            print(f"{cur_active.get_name()} is in melee with "
-                  f"{dl[0][3]}[{dl[0][4]}]")
+            if self.debug_ind == 1:
+                self.logger.debug(f"{cur_active.get_name()} is in melee with " 
+                                  f"{dl[0][3]}[{dl[0][4]}]")
             # do any superceding actions
             s1 = self.get_waiting_for(initiative_ind, waiting_for)
             for waiting_action in s1:
                 # Melee action happens here.
-                print(f"{waiting_action[0]}[{waiting_action[1]}] "
-                      f"has been waiting for this!")
-                if waiting_action[0] == "Heroes":
-                    directed_user = self.Heroes[waiting_action[1]]
-                else:
-                    directed_user = (self.Opponents[waiting_action[1]])
+                if self.debug_ind == 1:
+                    self.logger.debug(f"{waiting_action[0]}[{waiting_action[1]}] " 
+                                      f"has been waiting for this!")
+                directed_user = self.get_player(waiting_action[0],waiting_action[1])
 
                 if directed_user.alive:
-                    cur_active.alive = False
-                    cur_active.cur_hit_points = 0
+                    # this is where the attack would be put.
+                    nuke_em = self.get_party_list(self.initiative[initiative_ind][0])
+                    for q in range(len(nuke_em)):
+                        nuke_em[q].melee_defend(modifier=20,
+                                                possible_damage=(3 * nuke_em[q].hit_points),
+                                                damage_type='Bludgeoning')
+                        # nuke_em[q].alive = False
+                        # nuke_em[q].cur_hit_points = 0
 
             if cur_active.cur_hit_points > 0:
-                if dl[0][3] == "Heroes":
-                    target = self.Heroes[dl[0][4]]
-                else:
-                    target = self.Opponents[dl[0][4]]
+                # this is where the attack would be put.
+                #target = self.get_player(dl[0][3],dl[0][4])
+                nuke_em = self.get_party_list(dl[0][3])
+                for q in range(len(nuke_em)):
+                    nuke_em[q].melee_defend(modifier=20,
+                                            possible_damage=(3 * nuke_em[q].hit_points),
+                                            damage_type='Bludgeoning')
+                    # nuke_em[q].alive = False
+                    # nuke_em[q].cur_hit_points = 0
 
-                target.alive = False
-                target.cur_hit_points = 0
-
-        print(f"Closest To: {dl[0][0]} {dl[0][1]} {dl[0][2]}")
+        if self.debug_ind == 1:
+            self.logger.debug(f"Closest To: {dl[0][0]} {dl[0][1]} {dl[0][2]} {dl[0][3]} {dl[0][4]}")
 
     def remove_waiting_for(self, initiative_ind, waiting_for):
-        print(f"Clear any waits for {self.initiative[initiative_ind][0]}"
-              f"[{self.initiative[initiative_ind][1]}]")
+        if self.debug_ind == 1:
+            self.logger.debug(f"Clear any waits for {self.initiative[initiative_ind][0]}" 
+                              f"[{self.initiative[initiative_ind][1]}]")
         for sublist in waiting_for:
             if (sublist[0] == self.initiative[initiative_ind][0]
                     and sublist[1] == self.initiative[initiative_ind][1]):
-                print(f"removing: {sublist[0]}[{sublist[1]}]")
+                if self.debug_ind == 1:
+                    self.logger.debug(f"removing: {sublist[0]}[{sublist[1]}]")
                 waiting_for.remove(sublist)
 
     def get_waiting_for(self, initiative_ind, waiting_for):
-        print(f"Anyone waiting on {self.initiative[initiative_ind][0]}"
-              f"[{self.initiative[initiative_ind][1]}]?")
+        if self.debug_ind == 1:
+            self.logger.debug(f"Anyone waiting on {self.initiative[initiative_ind][0]}" 
+                              f"[{self.initiative[initiative_ind][1]}]?")
         ret_val = []
         for sublist in waiting_for:
             if (sublist[2] == self.initiative[initiative_ind][0]
                     and sublist[3] == self.initiative[initiative_ind][1]):
                 ret_val.append([sublist[0], sublist[1]])
-                print(f"Yes: {sublist[0]}[{sublist[1]}]")
+                if self.debug_ind == 1:
+                    self.logger.debug(f"Yes: {sublist[0]}[{sublist[1]}]")
                 waiting_for.remove(sublist)
 
         return ret_val
@@ -325,7 +386,8 @@ class Encounter(object):
                 cur_x = int(cur_init[4])
                 cur_y = int(cur_init[5])
 
-                print(f"Tracking: {dest_list[0][3]}[{dest_list[0][4]}]")
+                if self.debug_ind == 1:
+                    self.logger.debug(f"Tracking: {dest_list[0][3]}[{dest_list[0][4]}]")
 
                 if avail_movement > 0 and dest_list[0][0] > 5:
                     mvmt = True
@@ -345,11 +407,13 @@ class Encounter(object):
                     pref_ang_dist = 0
 
                     if dist_x == 0 and dist_y == 0:
-                        print(f"dist_x and dist_y = 0. Somethings wrong.")
+                        if self.debug_ind == 1:
+                            self.logger.debug(f"dist_x and dist_y = 0. Somethings wrong.")
                         mvmt = False
-                    elif abs_dist_x == 1 or abs_dist_y == 1:
-                        print(f"*** Is in melee with "
-                              f"{dest_list[0][3]}[{dest_list[0][4]}].")
+                    elif abs_dist_x <= 1 and abs_dist_y <= 1:
+                        if self.debug_ind == 1:
+                            self.logger.debug(f"*** Is in melee with " 
+                                              f"{dest_list[0][3]}[{dest_list[0][4]}].")
                         mvmt = False
                     elif abs_dist_x > abs_dist_y:
                         pref_ang_axis = 'Y'
@@ -424,7 +488,13 @@ if __name__ == '__main__':
     Opponents = []
     Heroes.append(PlayerCharacter(db, debug_ind=1))
     Opponents.append(Foe(db, foe_candidate='Skeleton', debug_ind=1))
-    e1 = Encounter(Heroes, Opponents)
+    e1 = Encounter(Heroes, Opponents, debug_ind=1)
+    print(f"The winning party was: {e1.winning_list_name}")
+    print(f"The surviving party members are: {e1.winning_list_name}")
+    for i in range(len(e1.winning_list)):
+        if e1.winning_list[i].alive:
+            print(f'{e1.winning_list[i].get_name()}')
+
     print(e1.initiative)
     for x in range(e1.field_size * e1.field_size):
         if e1.field_map[x].occupied:
@@ -432,5 +502,3 @@ if __name__ == '__main__':
             print(f"[{x}] [{a}][{b}] {e1.field_map[x].occupied_by}"
                   f"[{e1.field_map[x].occupied_by_index}]")
 
-#     print(f'[0,10],[0,11] {e1.calculate_distance(0,10, 0,11)} feet')
-#     print(f'[0,10],[99,11] {e1.calculate_distance(0,10, 99,11)} feet')

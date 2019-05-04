@@ -635,13 +635,13 @@ class Character(object):
         value = d.roll() + modifier
 
         if value >= self.armor_class:
-            tmp_str = (f'Fails against a melee attack roll: ' 
+            tmp_str = (f'Fails to defend against melee attack roll: ' 
                        f'{value} >= {self.armor_class}')
             ret = False
             if possible_damage > 0:
                 self.damage(possible_damage, damage_type)
         else:
-            tmp_str = (f'Succeeds against a melee attack roll: ' 
+            tmp_str = (f'Successful defence against a melee attack roll: ' 
                        f'{value} < {self.armor_class}')
             ret = True
 
@@ -665,13 +665,13 @@ class Character(object):
         value = d.roll() + modifier
 
         if value >= self.armor_class:
-            tmp_str = (f'Fails against a ranged attack roll: ' 
+            tmp_str = (f'Fails to defend against a ranged attack roll: ' 
                        f'{value} >= {self.armor_class}')
             ret = False
             if possible_damage > 0:
                 self.damage(possible_damage, damage_type)
         else:
-            tmp_str = (f'Succeeds against a ranged attack roll: ' 
+            tmp_str = (f'Successful defence against a ranged attack roll: ' 
                        f'{value} < {self.armor_class}')
             ret = True
 
