@@ -60,11 +60,16 @@ class Encounter(object):
         for position, Hero in enumerate(heroes):
             self.add_to_initiative_list(Hero, 'Heroes', position)
 
+
         self.o_cnt = len(opponents)
         for position, Opponent in enumerate(opponents):
             self.add_to_initiative_list(Opponent, 'Opponents', position)
         self.initiative = sorted(self.initiative, reverse=True,
                                  key=itemgetter(3))
+
+        if self.debug_ind == 1:
+            self.logger.debug(f"Initiative Array: {self.initiative}")
+
         self.master_loop()
 
     def get_hero_count(self):
@@ -125,7 +130,7 @@ class Encounter(object):
 
     def get_target_distance_array(self, my_x, my_y, target_name):
         dist_list = []
-        for fx in range(self.field_size * self.field_size):
+        for fx in range(len(self.field_map)):
             if self.field_map[fx].occupied and self.field_map[fx].occupied_by == target_name:
                 tmp_player = self.get_player( self.field_map[fx].occupied_by,
                                               self.field_map[fx].occupied_by_index)
@@ -193,17 +198,26 @@ class Encounter(object):
                 if self.winning_list[i].alive:
                     msg = self.winning_list[i].get_name()
                     self.logger.debug(msg)
+            self.logger.debug("Final field map")
+            for x in range(len(self.field_map)):
+                if self.field_map[x].occupied:
+                    a, b = self.get_grid_position(x)
+                    msg = (f"[{x}] [{a}][{b}] {self.field_map[x].occupied_by}"
+                           f"[{self.field_map[x].occupied_by_index}]")
+                    self.logger.debug(msg)
+
+
 
     def still_active(self):
         ret_val = False
         sub_val1 = False
         sub_val2 = False
-        for i in range(len(self.Heroes)):
-            if self.Heroes[i].alive:
+        for txi in range(len(self.Heroes)):
+            if self.Heroes[txi].alive:
                 sub_val1 = True
                 break
-        for i in range(len(self.Opponents)):
-            if self.Opponents[i].alive:
+        for txi in range(len(self.Opponents)):
+            if self.Opponents[txi].alive:
                 sub_val2 = True
                 break
 
@@ -261,10 +275,10 @@ class Encounter(object):
         avail_mvmt = cur_active.cur_movement / 5
 
         if self.debug_ind == 1:
-            msg = (f"starting mvmt: {avail_mvmt} "
-              f"combat pref:   {cur_active.combat_preference} "
-              f"x loc:         {self.initiative[initiative_ind][4]} "
-              f"y loc:         {self.initiative[initiative_ind][5]}")
+            msg = (f"starting mvmt: {avail_mvmt} " 
+                   f"combat pref:   {cur_active.combat_preference} "
+                   f"x loc:         {self.initiative[initiative_ind][4]} "
+                   f"y loc:         {self.initiative[initiative_ind][5]}")
             self.logger.debug(msg)
 
         avail_mvmt = self.movement(avail_mvmt,
@@ -324,7 +338,7 @@ class Encounter(object):
                 if self.debug_ind == 1:
                     self.logger.debug(f"{waiting_action[0]}[{waiting_action[1]}] " 
                                       f"has been waiting for this!")
-                directed_user = self.get_player(waiting_action[0],waiting_action[1])
+                directed_user = self.get_player(waiting_action[0], waiting_action[1])
 
                 if directed_user.alive:
                     # this is where the attack would be put.
@@ -338,7 +352,7 @@ class Encounter(object):
 
             if cur_active.cur_hit_points > 0:
                 # this is where the attack would be put.
-                #target = self.get_player(dl[0][3],dl[0][4])
+                # target = self.get_player(dl[0][3],dl[0][4])
                 nuke_em = self.get_party_list(dl[0][3])
                 for q in range(len(nuke_em)):
                     nuke_em[q].melee_defend(modifier=20,
@@ -459,13 +473,13 @@ class Encounter(object):
                                 tl_y[2] = tmp_y
 
                         move_success = False
-                        for i in range(3):
-                            if self.sector_is_unoccupied(tl_x[i], tl_y[i]):
+                        for pi in range(3):
+                            if self.sector_is_unoccupied(tl_x[pi], tl_y[pi]):
                                 self.move(cur_init[0], cur_init[1],
                                           cur_x, cur_y,
-                                          tl_x[i], tl_y[i])
-                                cur_x = tl_x[i]
-                                cur_y = tl_y[i]
+                                          tl_x[pi], tl_y[pi])
+                                cur_x = tl_x[pi]
+                                cur_y = tl_y[pi]
                                 avail_movement -= 1
                                 mvmt = False if (avail_movement == 0) else True
                                 dest_list[0][0] = self.calculate_distance(
@@ -489,16 +503,8 @@ if __name__ == '__main__':
     Heroes.append(PlayerCharacter(db, debug_ind=1))
     Opponents.append(Foe(db, foe_candidate='Skeleton', debug_ind=1))
     e1 = Encounter(Heroes, Opponents, debug_ind=1)
-    print(f"The winning party was: {e1.winning_list_name}")
-    print(f"The surviving party members are: {e1.winning_list_name}")
+    print(f"The winning party was: {e1.winning_list_name} in {e1.round} rounds.")
+    print(f"The surviving {e1.winning_list_name} members:")
     for i in range(len(e1.winning_list)):
         if e1.winning_list[i].alive:
             print(f'{e1.winning_list[i].get_name()}')
-
-    print(e1.initiative)
-    for x in range(e1.field_size * e1.field_size):
-        if e1.field_map[x].occupied:
-            a, b = e1.get_grid_position(x)
-            print(f"[{x}] [{a}][{b}] {e1.field_map[x].occupied_by}"
-                  f"[{e1.field_map[x].occupied_by_index}]")
-
