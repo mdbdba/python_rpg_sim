@@ -212,14 +212,10 @@ class Encounter(object):
         ret_val = False
         sub_val1 = False
         sub_val2 = False
-        for txi in range(len(self.Heroes)):
-            if self.Heroes[txi].alive:
-                sub_val1 = True
-                break
-        for txi in range(len(self.Opponents)):
-            if self.Opponents[txi].alive:
-                sub_val2 = True
-                break
+        if any(Hero.alive for Hero in self.Heroes):
+            sub_val1 = True
+        if any(Opponent.alive for Opponent in self.Opponents):
+            sub_val2 = True
 
         if sub_val1 and sub_val2:
             ret_val = True
