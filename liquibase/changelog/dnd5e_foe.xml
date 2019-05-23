@@ -75,6 +75,7 @@
            <column name="ranged_ammunition_type" value="Arrow"/>
            <column name="ranged_ammunition_amt" value="20"/>
            <column name="armor" value="Scraps"/>
+           <column name="shield" value="None"/>
            <column name="source_material" value="SRD5"/> 
         </insert>
     </changeSet>

@@ -130,6 +130,14 @@ class Foe(Character):
 
         return results[0][0]
 
+    def is_not_using_shield(self):
+        if self.shield == 'None':
+            ret_val = True
+        else:
+            ret_val = False
+        return ret_val
+
+
     def __str__(self):
         outstr = (f'{self.__class__.__name__}\n'
                   f'gender: {self.gender}\n'

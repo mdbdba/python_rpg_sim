@@ -104,6 +104,8 @@ class Character(object):
         self.ranged_ammunition_amt = None
         self.armor = None
         self.shield = None
+        self.finesse_ability_mod = self.set_finesse_ability()
+
 
         self.exhaustion_level = 0
         # 1   Disadvantage on Ability Checks
@@ -114,7 +116,7 @@ class Character(object):
         # 6   Death
 
     def get_name(self):
-        return "Unknown"
+        return "Generic Character"
 
     def assign_gender(self):
         self.last_method_log = f"assign_gender(db)"
@@ -566,7 +568,15 @@ class Character(object):
 
         return ret_val
 
-    def ranged_attack(self, weapon_obj, vantage='Normal'):
+    def set_finesse_ability(self):
+        s = self.get_ability_modifier('Strength')
+        d = self.get_ability_modifier('Dexterity')
+        if s > d:
+            self.finesse_ability_mod = 'Strength'
+        else:
+            self.finesse_ability_mod = 'Dexterity'
+
+    def add_proficiency_bonus_for_attack(self, weapon_obj):
         # determine modifier
         # 1)  is this a martial weapon that needs specific proficiency
         #     if it is and the character has that, or the weapon is a standard
@@ -574,9 +584,24 @@ class Character(object):
         if (weapon_obj.martial_weapon_ind is False
                 or (weapon_obj.martial_weapon_ind is True
                     and weapon_obj.proficient_ind is True)):
-            modifier = int(self.proficiency_bonus)
+            ret_val = int(self.proficiency_bonus)
         else:
-            modifier = 0
+            ret_val = 0
+
+        return ret_val
+
+
+    def ranged_attack(self, weapon_obj, vantage='Normal'):
+        # determine modifier
+        # 1)  is this a martial weapon that needs specific proficiency
+        #     if it is and the character has that, or the weapon is a standard
+        #     one, add the character's proficiency bonus.
+        # if (weapon_obj.martial_weapon_ind is False
+        #         or (weapon_obj.martial_weapon_ind is True
+        #             and weapon_obj.proficient_ind is True)):
+        #     modifier = int(self.proficiency_bonus)
+        # else:
+        modifier = self.add_proficiency_bonus_for_attack(weapon_obj)
 
         modifier += self.get_ability_modifier('Dexterity')
 
@@ -589,17 +614,21 @@ class Character(object):
             self.logger.debug(f"{self.get_name()}: Ranged Poss. damage: "
                               f"{attempt.possible_damage}")
 
+    def is_not_using_shield(self):
+        return False
+
     def melee_attack(self, weapon_obj, vantage='Normal'):
         # determine modifier
         # 1)  is this a martial weapon that needs specific proficiency
         #     if it is and the character has that, or the weapon is a standard
         #     one, add the character's proficiency bonus.
-        if (weapon_obj.martial_weapon_ind is False
-                or (weapon_obj.martial_weapon_ind is True
-                    and weapon_obj.proficient_ind is True)):
-            modifier = int(self.proficiency_bonus)
-        else:
-            modifier = 0
+        # if (weapon_obj.martial_weapon_ind is False
+        #         or (weapon_obj.martial_weapon_ind is True
+        #             and weapon_obj.proficient_ind is True)):
+        #     modifier = int(self.proficiency_bonus)
+        # else:
+        #     modifier = 0
+        modifier = self.add_proficiency_bonus_for_attack(weapon_obj)
         # 2)  Add the users Ability bonus, Strength for standard weapons
         #     or self.finesse_ability_mod for Finesse wepons
         if weapon_obj.finesse_ind is True:
@@ -607,7 +636,8 @@ class Character(object):
         else:
             modifier += self.get_ability_modifier('Strength')
 
-        if self.classObj.shield is None and weapon_obj.versatile_ind is True:
+        # if self.classObj.shield is None and weapon_obj.versatile_ind is True:
+        if self.is_not_using_shield() and weapon_obj.versatile_ind is True:
             v2h = True
         else:
             v2h = False
@@ -734,7 +764,7 @@ if __name__ == '__main__':
     a1.assign_ability_array()
     a1.set_armor_class()
     print(a1.get_gender())
-    a2 = Character(db=db, ability_array_str='10,11,12,13,14,15')
+    a2 = Character(db=db, ability_array_str='10,11,12,13,14,15', debug_ind=1)
     a2.assign_ability_array()
     a2.set_armor_class()
     print(a2.get_raw_ability_array())

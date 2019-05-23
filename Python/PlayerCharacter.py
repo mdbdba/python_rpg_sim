@@ -334,8 +334,8 @@ class PlayerCharacter(Character):
     def get_racial_ability_bonus_array(self):
         return self.race_obj.ability_bonuses
 
-    def get_ability_improvement_array(self):
-        return self.ability_array_obj.get_imp_array()
+#    def get_ability_improvement_array(self):
+#          return self.ability_array_obj.get_imp_array()
 
     def get_name(self):
         return self.race_obj.name
@@ -425,13 +425,13 @@ class PlayerCharacter(Character):
         }
         return switcher.get(class_candidate, "Unknown Class")
 
-    def set_finesse_ability(self):
-        s = self.get_ability_modifier('Strength')
-        d = self.get_ability_modifier('Dexterity')
-        if s > d:
-            self.finesse_ability_mod = 'Strength'
-        else:
-            self.finesse_ability_mod = 'Dexterity'
+    # def set_finesse_ability(self):
+    #     s = self.get_ability_modifier('Strength')
+    #     d = self.get_ability_modifier('Dexterity')
+    #     if s > d:
+    #         self.finesse_ability_mod = 'Strength'
+    #     else:
+    #         self.finesse_ability_mod = 'Dexterity'
 
     def set_damage_adjs(self, db):
         self.last_method_log = (f'setDamagedAdjs(db)')
@@ -463,6 +463,13 @@ class PlayerCharacter(Character):
 
         if self.debug_ind == 1:
             self.class_eval[-1]["Proficiency Bonus"] = self.proficiency_bonus
+
+    def is_not_using_shield(self):
+        if self.class_obj.shield == 'None':
+            ret_val = True
+        else:
+            ret_val = False
+        return ret_val
 
     def __str__(self):
         outstr = (f'{self.__class__.__name__}\n'
