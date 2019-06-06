@@ -1,0 +1,6 @@
+[DEFAULT]
+host = localhost
+dbname = rpg
+user = app
+password = putYourPassHere!
+port = 5433

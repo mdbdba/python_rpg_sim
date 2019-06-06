@@ -1,3 +1,4 @@
+import configparser
 import psycopg2 as pg
 
 
@@ -6,10 +7,17 @@ class InvokePSQL(object):
     """docstring for InvokePSQLClient"""
 
     def __init__(self):
+        config = configparser.ConfigParser()
+        config.read('db.ini')
+        db_config = (f"host='{config['DEFAULT']['host']}' "
+                       f"dbname='{config['DEFAULT']['dbname']}' "
+                       f"user='{config['DEFAULT']['user']}' "
+                       f"password='{config['DEFAULT']['password']}' "
+                       f"port='{config['DEFAULT']['port']}'")
 
-        db_config = "dbname=rpg host=localhost"
-        db_config = " ".join([db_config, "password=1wm4iMSfX9hzehT port=5433"])
-        db_config = " ".join([db_config, "user=app"])
+        # db_config = "dbname=rpg host=localhost"
+        # db_config = " ".join([db_config, "password=1wm4iMSfX9hzehT port=5433"])
+        # db_config = " ".join([db_config, "user=app"])
 
         try:
             # print('connecting to PostgreSQL database...')
