@@ -1,5 +1,6 @@
 import configparser
 import psycopg2 as pg
+from CommonFunctions import find_file
 
 
 class InvokePSQL(object):
@@ -8,7 +9,8 @@ class InvokePSQL(object):
 
     def __init__(self):
         config = configparser.ConfigParser()
-        config.read('db.ini')
+        dbini = find_file('db.ini')
+        config.read(dbini)
         db_config = (f"host='{config['DEFAULT']['host']}' "
                        f"dbname='{config['DEFAULT']['dbname']}' "
                        f"user='{config['DEFAULT']['user']}' "

@@ -1,3 +1,5 @@
+import math
+import os, fnmatch
 
 def arrayToString(srcArray):
     outstr = ""
@@ -47,3 +49,21 @@ def dictToString(srcDict, linebreaks=False, leftJustify=0):
         retStr = retStr[:-2]
 
     return retStr
+
+def calculate_distance(x1: int, y1: int, x2: int, y2: int) -> float:
+    dist: float = (math.sqrt((x2 - x1)**2 + (y2 - y1)**2)) * 5
+    return dist
+
+def find_file(file_name: str) -> str:
+    curpath = os.path.abspath(".")
+    for root, dirs, files in os.walk(curpath):
+        for name in files:
+            if fnmatch.fnmatch(name, file_name):
+                return os.path.join(root, name)
+
+    curpath = os.path.abspath("..")
+    print(curpath)
+    for file in os.listdir(curpath):
+        if fnmatch.fnmatch(file, file_name):
+            return os.path.join(curpath, file)
+

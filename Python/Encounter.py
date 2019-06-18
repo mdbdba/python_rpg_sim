@@ -1,5 +1,4 @@
 
-import math
 import logging
 
 from operator import itemgetter
@@ -7,11 +6,10 @@ from operator import itemgetter
 from Fieldsector import Fieldsector
 from PlayerCharacter import PlayerCharacter
 from Foe import Foe
+from CommonFunctions import calculate_distance
 
 from InvokePSQL import InvokePSQL
 from Trace_it import Trace_it
-
-
 
 
 class Encounter(object):
@@ -150,16 +148,11 @@ class Encounter(object):
                                               self.field_map[fx].occupied_by_index)
                 if tmp_player.alive:
                     fa, fb = self.get_grid_position(fx)
-                    dist = self.calculate_distance(my_x, my_y, fa, fb)
+                    dist = calculate_distance(my_x, my_y, fa, fb)
                     dist_list.append([dist, fa, fb, self.field_map[fx].occupied_by,
                                       self.field_map[fx].occupied_by_index])
         dist_list = sorted(dist_list, reverse=False, key=itemgetter(0))
         return dist_list
-
-    @staticmethod
-    def calculate_distance(x1: int, y1: int, x2: int, y2: int) -> float:
-        dist: float = (math.sqrt((x2 - x1)**2 + (y2 - y1)**2)) * 5
-        return dist
 
     def add_to_initiative_list(self, src_single: object, source_list_name: str,
                                source_list_position: int):
@@ -500,7 +493,7 @@ class Encounter(object):
                                 cur_y = tl_y[pi]
                                 avail_movement -= 1
                                 mvmt = False if (avail_movement == 0) else True
-                                dest_list[0][0] = self.calculate_distance(
+                                dest_list[0][0] = calculate_distance(
                                                     cur_x, cur_y, dest_x, dest_y)
                                 move_success = True
                                 break
