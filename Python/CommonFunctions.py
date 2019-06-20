@@ -55,13 +55,13 @@ def calculate_distance(x1: int, y1: int, x2: int, y2: int) -> float:
     return dist
 
 def find_file(file_name: str) -> str:
-    curpath = os.path.abspath(".")
+    curpath = os.path.abspath(os.path.dirname(__file__))
     for root, dirs, files in os.walk(curpath):
         for name in files:
             if fnmatch.fnmatch(name, file_name):
                 return os.path.join(root, name)
 
-    curpath = os.path.abspath("..")
+    curpath = sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
     print(curpath)
     for file in os.listdir(curpath):
         if fnmatch.fnmatch(file, file_name):

@@ -64,6 +64,7 @@ class Encounter(object):
             self.field_map = [Fieldsector() for bogus_val in range(tot_objs)]
 
             self.initiative = []   # list of lists to iterate over
+            self.melee_with = {}
             self.h_cnt = len(heroes)
 
             with self.tracer.span(name='build_initiative_list'):
@@ -400,8 +401,19 @@ class Encounter(object):
 
             return ret_val
 
+    def in_melee(self,player):
+        if player.get_name() not in self.melee_with.keys():
+            ret_val = True
+        else:
+            ret_val = False
+        return ret_val
+
+    def add_to_melee(self,player, the_target_player):
+        self.melee_with[player.get_name()] = the_target_player.get_name()
+
     def movement(self, avail_movement, cur_active, cur_init, dest_list):
         # with self.tracer.span(name='movement'):
+        # self.in_melee_with(cur_active)
         if cur_init[2]:     # if they've figured out what's going on.
             if cur_active.combat_preference == 'Melee':
                 # run straight towards closest enemy
@@ -436,6 +448,7 @@ class Encounter(object):
                             self.logger.debug(f"dist_x and dist_y = 0. Somethings wrong.")
                         mvmt = False
                     elif abs_dist_x <= 1 and abs_dist_y <= 1:
+                        self.add_to_melee(cur_active, self.get_player(dest_list[0][3],dest_list[0][4]))
                         if self.debug_ind == 1:
                             self.logger.debug(f"*** Is in melee with " 
                                               f"{dest_list[0][3]}[{dest_list[0][4]}].")
