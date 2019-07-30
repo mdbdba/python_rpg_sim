@@ -554,16 +554,16 @@ class Character(object):
         elif self.combat_preference == 'Melee':
             if op_dist > self.cur_movement:
                 ret_val = "Movement"
-            elif self.cur_movement >= op_dist > 5:
+            elif self.cur_movement >= op_dist > 8:
                 ret_val = "Wait on Melee"
-            elif op_dist <= 5:
+            elif op_dist <= 8:
                 ret_val = "Melee"
         else:
             if op_dist > self.get_ranged_range:
                 ret_val = "Movement"
-            elif self.get_ranged_range >= op_dist > 5:
+            elif self.get_ranged_range >= op_dist > 8:
                 ret_val = "Ranged"
-            elif op_dist <= 5:
+            elif op_dist <= 8:
                 ret_val = "Melee"
 
         return ret_val

@@ -184,6 +184,20 @@ class Encounter(object):
                                     pc, ini,
                                     map_loc_x, map_loc_y])
 
+    def get_player_location(self, list_name: str, list_index: int) -> tuple:
+        ret_val: tuple = ()
+        for initiative_rec in self.initiative:
+            if (initiative_rec[0] == list_name and
+                initiative_rec[1] == list_index):
+                ret_val = (initiative_rec[4], initiative_rec[5])
+                #pos = self.get_array_index(initiative_rec[4], initiative_rec[5])
+        return ret_val
+
+    def remove_player_from_field(self, list_name: str, list_index: int):
+        xy_loc = self.get_player_location(list_name, list_index)
+        loc = self.get_array_index(xy_loc[0], xy_loc[1])
+        self.field_map[loc].leave_sector()
+
     def master_loop(self):
         self.round = 1
         waiting_for = []
@@ -193,10 +207,22 @@ class Encounter(object):
                     if self.active:
                         self.turn(i, waiting_for)
                         self.active = self.still_active()
+
                 if self.active:
                     self.round += 1
                 else:
                     self.wrap_up()
+
+                if self.round > 14:
+                    self.active = False
+                    self.logger.debug("Round Limit Reached.")
+                    for x in range(len(self.field_map)):
+                        if self.field_map[x].occupied:
+                            a, b = self.get_grid_position(x)
+                            msg = (f"[{x}] [{a}][{b}] {self.field_map[x].occupied_by}"
+                                   f"[{self.field_map[x].occupied_by_index}]")
+                            self.logger.debug(msg)
+
 
     def wrap_up(self):
         with self.tracer.span(name='wrap_up'):
@@ -228,6 +254,7 @@ class Encounter(object):
                 sub_val1 = True
             if any(Opponent.alive for Opponent in self.Opponents):
                 sub_val2 = True
+
 
             if sub_val1 and sub_val2:
                 ret_val = True
@@ -271,6 +298,9 @@ class Encounter(object):
                 for j in range(len(dl)):
                     self.logger.debug(f"dist: {dl[j][0]} {dl[j][1]} {dl[j][2]}")
 
+            if self.debug_ind == 1:
+                self.logger.debug(f"Closest To: {dl[0][0]} {dl[0][1]} {dl[0][2]} {dl[0][3]} {dl[0][4]}")
+
             # Do they know why they are there?
             if not self.initiative[initiative_ind][2]:
                 # bonusaction_used = True
@@ -310,6 +340,7 @@ class Encounter(object):
             # they must be a melee fighter.  When not in melee range
             # use action for movement.
             cur_action = cur_active.get_action(dl)
+
             if cur_action == 'Movement':
                 if self.debug_ind == 1:
                     msg = (f"Using {cur_active.get_name()}'s Action for movement.")
@@ -349,29 +380,46 @@ class Encounter(object):
                                           f"has been waiting for this!")
                     directed_user = self.get_player(waiting_action[0], waiting_action[1])
 
-                    if directed_user.alive:
+                    if directed_user.cur_hit_points > 0:
                         # this is where the attack would be put.
-                        nuke_em = self.get_party_list(self.initiative[initiative_ind][0])
-                        for q in range(len(nuke_em)):
-                            nuke_em[q].melee_defend(modifier=20,
-                                                    possible_damage=(3 * nuke_em[q].hit_points),
-                                                    damage_type='Bludgeoning')
-                            # nuke_em[q].alive = False
-                            # nuke_em[q].cur_hit_points = 0
+                        # Now trying to nuke a single member of the party at a time
+                        cur_active.melee_defend(modifier=20,
+                            possible_damage=(3 * cur_active.hit_points),
+                            damage_type='Bludgeoning')
+                        if not cur_active.alive:
+                            if self.debug_ind == 1:
+                                self.logger.debug(f"{cur_active.get_name()} is dead. Removing them from melee list. ")
+                            self.remove_all_from_melee_with(cur_active)
+                            self.remove_player_from_field(self.initiative[initiative_ind][0],
+                                         self.initiative[initiative_ind][1])
+#                        nuke_em = self.get_party_list(self.initiative[initiative_ind][0])
+#                        for q in range(len(nuke_em)):
+#                            nuke_em[q].melee_defend(modifier=20,
+#                                                    possible_damage=(3 * nuke_em[q].hit_points),
+#                                                    damage_type='Bludgeoning')
 
                 if cur_active.cur_hit_points > 0:
+                    target = self.get_player(dl[0][3],dl[0][4])
+                    if self.debug_ind == 1:
+                        self.logger.debug(f"{cur_active.get_name()} is attacking {target.get_name()} ({dl[0][3]}[{dl[0][4]}]). ")
                     # this is where the attack would be put.
-                    # target = self.get_player(dl[0][3],dl[0][4])
-                    nuke_em = self.get_party_list(dl[0][3])
-                    for q in range(len(nuke_em)):
-                        nuke_em[q].melee_defend(modifier=20,
-                                                possible_damage=(3 * nuke_em[q].hit_points),
-                                                damage_type='Bludgeoning')
-                        # nuke_em[q].alive = False
-                        # nuke_em[q].cur_hit_points = 0
+                    target.melee_defend(modifier=20,
+                        possible_damage=(3 * target.hit_points ),
+                        damage_type='Bludgeoning' )
 
-            if self.debug_ind == 1:
-                self.logger.debug(f"Closest To: {dl[0][0]} {dl[0][1]} {dl[0][2]} {dl[0][3]} {dl[0][4]}")
+                    if not target.alive:
+                        if self.debug_ind == 1:
+                            self.logger.debug(f"{target.get_name()} is dead. Removing them from melee list. ")
+
+                        self.remove_all_from_melee_with(target)
+                        self.remove_player_from_field(dl[0][3],dl[0][4])
+                    # nuke_em = self.get_party_list(dl[0][3])
+                    # for q in range(len(nuke_em)):
+                    #     nuke_em[q].melee_defend(modifier=20,
+                    #                             possible_damage=(3 * nuke_em[q].hit_points),
+                    #                             damage_type='Bludgeoning')
+
+
 
     def remove_waiting_for(self, initiative_ind, waiting_for):
         # with self.tracer.span(name='remove_waiting_for'):
@@ -401,21 +449,59 @@ class Encounter(object):
 
             return ret_val
 
-    def in_melee(self,player):
-        if player.get_name() not in self.melee_with.keys():
-            ret_val = True
+    def is_in_melee(self,player):
+        if player.get_name() in self.melee_with.keys():
+            if len(self.melee_with[player.get_name()]) > 0:
+                ret_val = True
+            else:
+                ret_val = False
         else:
             ret_val = False
         return ret_val
 
-    def add_to_melee(self,player, the_target_player):
-        self.melee_with[player.get_name()] = the_target_player.get_name()
+    def get_melee_with(self, player):
+        return self.melee_with[player.get_name()]
+
+    def add_to_melee_with(self, player, the_target_player):
+        if player.get_name() in self.melee_with.keys():
+            if ( any( the_target_player.get_name() in sublist
+               for sublist in self.melee_with[player.get_name()])):
+                   self.melee_with[player.get_name()].append(the_target_player.get_name())
+        else:
+            self.melee_with[player.get_name()] = [the_target_player.get_name()]
+
+        if the_target_player.get_name() in self.melee_with.keys():
+            if ( any( player.get_name() in sublist
+               for sublist in self.melee_with[the_target_player.get_name()])):
+                   self.melee_with[the_target_player.get_name()].append(player.get_name())
+        else:
+            self.melee_with[the_target_player.get_name()] = [player.get_name()]
+
+    def remove_all_from_melee_with(self, player):
+        # remove all references for this player from melee_with.  Whether key or value
+        self.melee_with[player.get_name()] = []
+        for subname in self.melee_with.keys():
+            if any(player.get_name() in sublist for sublist in self.melee_with[subname]):
+                self.melee_with[subname].remove(player.get_name())
+
+    def remove_from_melee_with(self, player, the_target_player):
+        if player.get_name() in self.melee_with.keys():
+            if ( any( the_target_player.get_name() in sublist
+                for sublist in self.melee_with[player.get_name()])):
+                    self.melee_with[player.get_name()].remove(the_target_player.get_name())
+
+        if the_target_player.get_name() in self.melee_with.keys():
+            if ( any( player.get_name() in sublist
+                for sublist in self.melee_with[the_target_player.get_name()])):
+                    self.melee_with[the_target_player.get_name()].remove(player.get_name())
+
 
     def movement(self, avail_movement, cur_active, cur_init, dest_list):
         # with self.tracer.span(name='movement'):
-        # self.in_melee_with(cur_active)
         if cur_init[2]:     # if they've figured out what's going on.
-            if cur_active.combat_preference == 'Melee':
+            if self.is_in_melee(cur_active):
+              pass
+            elif cur_active.combat_preference == 'Melee':
                 # run straight towards closest enemy
                 # set destination x and y
                 dest_x = int(dest_list[0][1])
@@ -448,7 +534,7 @@ class Encounter(object):
                             self.logger.debug(f"dist_x and dist_y = 0. Somethings wrong.")
                         mvmt = False
                     elif abs_dist_x <= 1 and abs_dist_y <= 1:
-                        self.add_to_melee(cur_active, self.get_player(dest_list[0][3],dest_list[0][4]))
+                        self.add_to_melee_with(cur_active, self.get_player(dest_list[0][3],dest_list[0][4]))
                         if self.debug_ind == 1:
                             self.logger.debug(f"*** Is in melee with " 
                                               f"{dest_list[0][3]}[{dest_list[0][4]}].")
@@ -525,6 +611,9 @@ if __name__ == '__main__':
     Heroes = []
     Opponents = []
     Heroes.append(PlayerCharacter(db, debug_ind=1))
+    Heroes.append(PlayerCharacter(db, debug_ind=1))
+    Opponents.append(Foe(db, foe_candidate='Skeleton', debug_ind=1))
+    Opponents.append(Foe(db, foe_candidate='Skeleton', debug_ind=1))
     Opponents.append(Foe(db, foe_candidate='Skeleton', debug_ind=1))
     e1 = Encounter(Heroes, Opponents, debug_ind=1)
     print(f"The winning party was: {e1.winning_list_name} in {e1.round} rounds.")
