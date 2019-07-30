@@ -277,149 +277,164 @@ class Encounter(object):
             else:
                 target_array_name = "Heroes"
 
-            # action_used = False
-            # bonusaction_used = False
-
             if self.debug_ind == 1:
                 msg = (f'\nRound: {self.round} turn: {initiative_ind} ' 
-                       f'Name: {cur_active.get_name()} ' 
-                       f'Grid Pos: [{self.initiative[initiative_ind][4]}]' 
+                       f'Name: {cur_active.get_name()} ' )
+                if len(self.initiative[initiative_ind]) == 6:
+                    msg = (f'{msg}Grid Pos: [{self.initiative[initiative_ind][4]}]' 
                        f'[{self.initiative[initiative_ind][5]}]')
                 self.logger.debug(msg)
 
             self.remove_waiting_for(initiative_ind, waiting_for)
 
-            dl = (self.get_target_distance_array(
-                    self.initiative[initiative_ind][4],
-                    self.initiative[initiative_ind][5],
-                    target_array_name))
+            if cur_active.alive and cur_active.cur_hit_points > 0:
 
-            if self.debug_ind == 1:
-                for j in range(len(dl)):
-                    self.logger.debug(f"dist: {dl[j][0]} {dl[j][1]} {dl[j][2]}")
+                dl = (self.get_target_distance_array(
+                        self.initiative[initiative_ind][4],
+                        self.initiative[initiative_ind][5],
+                        target_array_name))
 
-            if self.debug_ind == 1:
-                self.logger.debug(f"Closest To: {dl[0][0]} {dl[0][1]} {dl[0][2]} {dl[0][3]} {dl[0][4]}")
-
-            # Do they know why they are there?
-            if not self.initiative[initiative_ind][2]:
-                # bonusaction_used = True
-                self.initiative[initiative_ind][2] = cur_active.check('Perception', 'Normal', 10)
-            # Move
-            # Define an obj for the current active combatant
-            #    0 - How many sectors can they move
-            #    1 - Combat preference: 'Ranged' or 'Melee'
-            #    2 - X axis location
-            #    3 - Y axis location
-            avail_mvmt = cur_active.cur_movement / 5
-
-            if self.debug_ind == 1:
-                msg = (f"starting mvmt: {avail_mvmt} " 
-                       f"combat pref:   {cur_active.combat_preference} "
-                       f"x loc:         {self.initiative[initiative_ind][4]} "
-                       f"y loc:         {self.initiative[initiative_ind][5]}")
-                self.logger.debug(msg)
-
-            avail_mvmt = self.movement(avail_mvmt,
-                                       cur_active,
-                                       self.initiative[initiative_ind],
-                                       dl)
-
-            if self.debug_ind == 1:
-                msg = (f"movement left: {avail_mvmt} " 
-                       f"combat pref:   {cur_active.combat_preference} " 
-                       f"x loc:         {self.initiative[initiative_ind][4]} " 
-                       f"y loc:         {self.initiative[initiative_ind][5]}")
-                self.logger.debug(msg)
-
-                for j in range(len(dl)):
-                    self.logger.debug(f"dist AFTER: {dl[j][0]} {dl[j][1]} {dl[j][2]}")
-
-            # Action (Bonus or standard)
-            # If they don't have a ranged weapon or spell attack
-            # they must be a melee fighter.  When not in melee range
-            # use action for movement.
-            cur_action = cur_active.get_action(dl)
-
-            if cur_action == 'Movement':
-                if self.debug_ind == 1:
-                    msg = (f"Using {cur_active.get_name()}'s Action for movement.")
-                    self.logger.debug(msg)
-
-                avail_mvmt = cur_active.cur_movement / 5
-                avail_mvmt = self.movement(avail_mvmt,
-                                           cur_active,
-                                           self.initiative[
-                                              initiative_ind],
-                                           dl)
                 if self.debug_ind == 1:
                     for j in range(len(dl)):
-                        self.logger.debug(f"dist AFTER Action: "
-                                          f"{dl[j][0]} {dl[j][1]} {dl[j][2]}")
-            elif cur_action == 'Wait on Melee':
-                # If an enemy gets into melee range this round, ATTACK!
+                        self.logger.debug(f"dist: {dl[j][0]} {dl[j][1]} {dl[j][2]}")
+
                 if self.debug_ind == 1:
-                    self.logger.debug(f"Using {cur_active.get_name()}'s Action waiting " 
-                                      f"for an enemy to get into melee range.")
-                    self.logger.debug(f"Adding to the waiting list: " 
-                                      f"{dl[0][3]}[{dl[0][4]}]")
+                    self.logger.debug(f"Closest To: {dl[0][0]} {dl[0][1]} {dl[0][2]} {dl[0][3]} {dl[0][4]}")
 
-                waiting_for.append([self.initiative[initiative_ind][0],
-                                    self.initiative[initiative_ind][1],
-                                    dl[0][3], dl[0][4]])
-            elif cur_action == 'Melee':
+                # Do they know why they are there?
+                if not self.initiative[initiative_ind][2]:
+                    # bonusaction_used = True
+                    self.initiative[initiative_ind][2] = cur_active.check('Perception', 'Normal', 10)
+                # Move
+                # Define an obj for the current active combatant
+                #    0 - How many sectors can they move
+                #    1 - Combat preference: 'Ranged' or 'Melee'
+                #    2 - X axis location
+                #    3 - Y axis location
+                avail_mvmt = cur_active.cur_movement / 5
+
                 if self.debug_ind == 1:
-                    self.logger.debug(f"{cur_active.get_name()} is in melee with " 
-                                      f"{dl[0][3]}[{dl[0][4]}]")
-                # do any superceding actions
-                s1 = self.get_waiting_for(initiative_ind, waiting_for)
-                for waiting_action in s1:
-                    # Melee action happens here.
+                    msg = (f"starting mvmt: {avail_mvmt} " 
+                           f"combat pref:   {cur_active.combat_preference} "
+                           f"x loc:         {self.initiative[initiative_ind][4]} "
+                           f"y loc:         {self.initiative[initiative_ind][5]}")
+                    self.logger.debug(msg)
+
+                avail_mvmt = self.movement(avail_mvmt,
+                                           cur_active,
+                                           self.initiative[initiative_ind],
+                                           dl)
+
+                if self.debug_ind == 1:
+                    msg = (f"movement left: {avail_mvmt} " 
+                           f"combat pref:   {cur_active.combat_preference} " 
+                           f"x loc:         {self.initiative[initiative_ind][4]} " 
+                           f"y loc:         {self.initiative[initiative_ind][5]}")
+                    self.logger.debug(msg)
+
+                    for j in range(len(dl)):
+                        self.logger.debug(f"dist AFTER: {dl[j][0]} {dl[j][1]} {dl[j][2]}")
+
+                # Action (Bonus or standard)
+                # If they don't have a ranged weapon or spell attack
+                # they must be a melee fighter.  When not in melee range
+                # use action for movement.
+                cur_action = cur_active.get_action(dl)
+
+                if cur_action == 'Movement':
                     if self.debug_ind == 1:
-                        self.logger.debug(f"{waiting_action[0]}[{waiting_action[1]}] " 
-                                          f"has been waiting for this!")
-                    directed_user = self.get_player(waiting_action[0], waiting_action[1])
+                        msg = (f"Using {cur_active.get_name()}'s Action for movement.")
+                        self.logger.debug(msg)
 
-                    if directed_user.cur_hit_points > 0:
-                        # this is where the attack would be put.
-                        # Now trying to nuke a single member of the party at a time
-                        cur_active.melee_defend(modifier=20,
-                            possible_damage=(3 * cur_active.hit_points),
-                            damage_type='Bludgeoning')
-                        if not cur_active.alive:
-                            if self.debug_ind == 1:
-                                self.logger.debug(f"{cur_active.get_name()} is dead. Removing them from melee list. ")
-                            self.remove_all_from_melee_with(cur_active)
-                            self.remove_player_from_field(self.initiative[initiative_ind][0],
-                                         self.initiative[initiative_ind][1])
-#                        nuke_em = self.get_party_list(self.initiative[initiative_ind][0])
-#                        for q in range(len(nuke_em)):
-#                            nuke_em[q].melee_defend(modifier=20,
-#                                                    possible_damage=(3 * nuke_em[q].hit_points),
-#                                                    damage_type='Bludgeoning')
-
-                if cur_active.cur_hit_points > 0:
-                    target = self.get_player(dl[0][3],dl[0][4])
+                    avail_mvmt = cur_active.cur_movement / 5
+                    avail_mvmt = self.movement(avail_mvmt,
+                                               cur_active,
+                                               self.initiative[
+                                                  initiative_ind],
+                                               dl)
                     if self.debug_ind == 1:
-                        self.logger.debug(f"{cur_active.get_name()} is attacking {target.get_name()} ({dl[0][3]}[{dl[0][4]}]). ")
-                    # this is where the attack would be put.
-                    target.melee_defend(modifier=20,
-                        possible_damage=(3 * target.hit_points ),
-                        damage_type='Bludgeoning' )
+                        for j in range(len(dl)):
+                            self.logger.debug(f"dist AFTER Action: "
+                                              f"{dl[j][0]} {dl[j][1]} {dl[j][2]}")
+                elif cur_action == 'Wait on Melee':
+                    # If an enemy gets into melee range this round, ATTACK!
+                    if self.debug_ind == 1:
+                        self.logger.debug(f"Using {cur_active.get_name()}'s Action waiting " 
+                                          f"for an enemy to get into melee range.")
+                        self.logger.debug(f"Adding to the waiting list: " 
+                                          f"{dl[0][3]}[{dl[0][4]}]")
 
-                    if not target.alive:
+                    waiting_for.append([self.initiative[initiative_ind][0],
+                                        self.initiative[initiative_ind][1],
+                                        dl[0][3], dl[0][4]])
+                elif cur_action == 'Melee':
+                    if self.debug_ind == 1:
+                        self.logger.debug(f"{cur_active.get_name()} is in melee with " 
+                                          f"{dl[0][3]}[{dl[0][4]}]")
+                    # do any superceding actions
+                    s1 = self.get_waiting_for(initiative_ind, waiting_for)
+                    for waiting_action in s1:
+                        # Melee action happens here.
                         if self.debug_ind == 1:
-                            self.logger.debug(f"{target.get_name()} is dead. Removing them from melee list. ")
+                            self.logger.debug(f"{waiting_action[0]}[{waiting_action[1]}] " 
+                                              f"has been waiting for this!")
+                        directed_user = self.get_player(waiting_action[0], waiting_action[1])
 
-                        self.remove_all_from_melee_with(target)
-                        self.remove_player_from_field(dl[0][3],dl[0][4])
-                    # nuke_em = self.get_party_list(dl[0][3])
-                    # for q in range(len(nuke_em)):
-                    #     nuke_em[q].melee_defend(modifier=20,
-                    #                             possible_damage=(3 * nuke_em[q].hit_points),
-                    #                             damage_type='Bludgeoning')
+                        if directed_user.cur_hit_points > 0:
+                            # this is where the attack would be put.
+                            # Now trying to nuke a single member of the party at a time
+                            cur_active.melee_defend(modifier=20,
+                                possible_damage=(3 * cur_active.hit_points),
+                                damage_type='Bludgeoning')
+                            if not cur_active.alive:
+                                if self.debug_ind == 1:
+                                    self.logger.debug(f"{cur_active.get_name()} is dead. Removing them from melee list. ")
+                                self.remove_all_from_melee_with(cur_active)
+                                self.remove_player_from_field(self.initiative[initiative_ind][0],
+                                             self.initiative[initiative_ind][1])
+                                if (len(self.initiative[initiative_ind] ) > 5):
+                                    del self.initiative[initiative_ind][5]
+                                if (len(self.initiative[initiative_ind]) > 3):
+                                    del self.initiative[initiative_ind][4]
+    #                        nuke_em = self.get_party_list(self.initiative[initiative_ind][0])
+    #                        for q in range(len(nuke_em)):
+    #                            nuke_em[q].melee_defend(modifier=20,
+    #                                                    possible_damage=(3 * nuke_em[q].hit_points),
+    #                                                    damage_type='Bludgeoning')
 
+                    if cur_active.cur_hit_points > 0:
+                        target = self.get_player(dl[0][3],dl[0][4])
+                        if self.debug_ind == 1:
+                            self.logger.debug(f"{cur_active.get_name()} is attacking {target.get_name()} ({dl[0][3]}[{dl[0][4]}]). ")
+                        # this is where the attack would be put.
+                        target.melee_defend(modifier=20,
+                            possible_damage=(3 * target.hit_points ),
+                            damage_type='Bludgeoning' )
 
+                        if not target.alive:
+                            if self.debug_ind == 1:
+                                self.logger.debug(f"{target.get_name()} is dead. Removing them from melee list. ")
+
+                            self.remove_all_from_melee_with(target)
+                            self.remove_player_from_field(dl[0][3],dl[0][4])
+                            for initiative_rec in self.initiative:
+                                if (initiative_rec[0] == dl[0][3] and
+                                        initiative_rec[1] == dl[0][4]):
+                                    if len(initiative_rec) >4:
+                                        del initiative_rec[5]
+                                    if len(initiative_rec) > 3:
+                                        del initiative_rec[4]
+                        # nuke_em = self.get_party_list(dl[0][3])
+                        # for q in range(len(nuke_em)):
+                        #     nuke_em[q].melee_defend(modifier=20,
+                        #                             possible_damage=(3 * nuke_em[q].hit_points),
+                        #                             damage_type='Bludgeoning')
+            elif cur_active.alive:  ## currently alive but less than 1 hit point
+                if self.debug_ind == 1:
+                    self.logger.debug(f"{cur_active.get_name()} is unconscious. Add death saves. ")
+            else:
+                if self.debug_ind == 1:
+                    self.logger.debug(f"{cur_active.get_name()} is dead. Their turn is skipped. ")
 
     def remove_waiting_for(self, initiative_ind, waiting_for):
         # with self.tracer.span(name='remove_waiting_for'):
