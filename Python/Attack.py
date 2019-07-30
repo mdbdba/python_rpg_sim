@@ -7,6 +7,7 @@ class Attack(object):
                  versatile_use_2handed=True,
                  vantage='Normal'):
         self.weapon_obj = weapon_obj
+        self.damage_type = weapon_obj.default_damage_type
         self.attack_modifier = attack_modifier
         self.vantage = vantage
         if (self.weapon_obj.versatile_ind is True

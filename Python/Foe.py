@@ -1,5 +1,6 @@
 from InvokePSQL import InvokePSQL
 from Character import Character
+from Weapon import Weapon
 from Die import Die
 
 from CommonFunctions import stringToArray
@@ -23,6 +24,12 @@ class Foe(Character):
                            level, debug_ind)
         self.get_foe(db, foe_candidate)
 
+        if self.melee_weapon is not None:
+            self.melee_weapon_obj = Weapon(db, self.get_melee_weapon())
+            self.melee_weapon_obj.setWeaponProficient()
+        if self.ranged_weapon is not None:
+            self.ranged_weapon_obj = Weapon(db, self.get_ranged_weapon())
+
         self.class_eval.append({
                        "pythonClass": "Foe",
                        "foe_candidate": foe_candidate,
@@ -35,6 +42,15 @@ class Foe(Character):
         if self.debug_ind == 1:
             for i in self.__str__().splitlines():
                 self.logger.debug(f"{self.get_name()}: {i}")
+
+    def get_melee_weapon(self):
+        return self.melee_weapon
+
+    def get_ranged_weapon(self):
+        return self.ranged_weapon
+
+    def default_melee_attack(self, vantage='Normal'):
+        return self.melee_attack(self.melee_weapon_obj,vantage)
 
     def find_random(self, db, challenge_level):
         sql = (f"SELECT name FROM dnd_5e.foe "

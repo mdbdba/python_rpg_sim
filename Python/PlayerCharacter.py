@@ -471,6 +471,9 @@ class PlayerCharacter(Character):
             ret_val = False
         return ret_val
 
+    def default_melee_attack(self, vantage='Normal'):
+        return self.melee_attack(self.melee_weapon_obj,vantage)
+
     def __str__(self):
         outstr = (f'{self.__class__.__name__}\n'
                   f'Name:         {self.get_name()}\n'
@@ -619,4 +622,7 @@ if __name__ == '__main__':
     a6.heal(10)
     a6.melee_defend(modifier=13, possible_damage=(2 * a6.hit_points),
                     damage_type='Bludgeoning')
-
+    a6.heal(30)
+    t_a1 = a5.default_melee_attack()
+    print(f'{t_a1[0]}, {t_a1[1]}')
+    a6.melee_defend(attack_value=t_a1[0], possible_damage=t_a1[1], damage_type=t_a1[2])

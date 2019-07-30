@@ -77,6 +77,7 @@ class Character(object):
         self.death_save_failed_cnt = 0
         self.tta = self.set_taliesin_temperament_archetype()
         self.combat_preference = 'Melee'  # 'Melee' or Ranged'
+        self.proficiency_bonus = 0
 
         self.last_method_log = ''
         if gender_candidate == "Random":
@@ -97,7 +98,7 @@ class Character(object):
         self.poisoned_ind = False
         self.prone_ind = False
         self.stunned_ind = False
-        self.unconcious_ind = False
+        self.unconscious_ind = False
         self.ranged_weapon = None
         self.melee_weapon = None
         self.ranged_ammunition_type = None
@@ -617,7 +618,7 @@ class Character(object):
     def is_not_using_shield(self):
         return False
 
-    def melee_attack(self, weapon_obj, vantage='Normal'):
+    def melee_attack(self, weapon_obj, vantage='Normal') -> tuple:
         # determine modifier
         # 1)  is this a martial weapon that needs specific proficiency
         #     if it is and the character has that, or the weapon is a standard
@@ -644,15 +645,17 @@ class Character(object):
 
         attempt = Attack(weapon_obj=weapon_obj, attack_modifier=modifier,
                          versatile_use_2handed=v2h, vantage=vantage)
+        ret_val: tuple = (attempt.attack_value, attempt.possible_damage, attempt.damage_type)
 
         if self.debug_ind == 1:
             self.logger.debug(f"{self.get_name()}: Melee Attack Value: "
                               f"{attempt.attack_value}")
             self.logger.debug(f"{self.get_name()}: Melee Poss. damage: "
                               f"{attempt.possible_damage}")
+        return ret_val
 
     def melee_defend(self, modifier=0, vantage='Normal',
-                     possible_damage=0, damage_type='Unknown'):
+                     possible_damage=0, damage_type='Unknown', attack_value=None):
         self.last_method_log = (f'melee_defend({modifier}, ' 
                                 f'{vantage}, {possible_damage}, ' 
                                 f'{damage_type})')
@@ -662,12 +665,20 @@ class Character(object):
                 vantage = 'Normal'
             else:
                 vantage = 'Advantage'
-        value = d.roll() + modifier
+        if attack_value:
+            value = attack_value
+        else:
+            value = d.roll() + modifier
 
         if value >= self.armor_class:
             tmp_str = (f'Fails to defend against melee attack roll: ' 
                        f'{value} >= {self.armor_class}')
             ret = False
+            if self.cur_hit_points < 1:
+                self.death_save_failed_cnt += 2
+                if self.debug_ind == 1:
+                    self.logger.debug(f"{self.get_name()}: attacked while unconscious. Incurs two failed Death Saves.")
+
             if possible_damage > 0:
                 self.damage(possible_damage, damage_type)
         else:

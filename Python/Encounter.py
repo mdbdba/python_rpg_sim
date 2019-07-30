@@ -213,7 +213,7 @@ class Encounter(object):
                 else:
                     self.wrap_up()
 
-                if self.round > 14:
+                if self.round > 29:
                     self.active = False
                     self.logger.debug("Round Limit Reached.")
                     for x in range(len(self.field_map)):
@@ -267,6 +267,20 @@ class Encounter(object):
                     self.winning_list = self.Opponents
 
             return ret_val
+
+    def cleanup_dead_player(self, player, x_loc, y_loc):
+        if self.debug_ind == 1:
+            self.logger.debug(f"{player.get_name()} is dead. Removing them from melee and field list. ")
+
+        self.remove_all_from_melee_with(player)
+        self.remove_player_from_field(x_loc, y_loc)
+        for initiative_rec in self.initiative:
+            if (initiative_rec[0] == x_loc and
+                    initiative_rec[1] == y_loc):
+                if len(initiative_rec) > 4:
+                    del initiative_rec[5]
+                if len(initiative_rec) > 3:
+                    del initiative_rec[4]
 
     def turn(self, initiative_ind, waiting_for):
         with self.tracer.span(name='turn'):
@@ -381,21 +395,34 @@ class Encounter(object):
                         directed_user = self.get_player(waiting_action[0], waiting_action[1])
 
                         if directed_user.cur_hit_points > 0:
-                            # this is where the attack would be put.
+                            # if the cur_active user is unconscious then the attack is at advantage and auto-crits on hit.
+                            if cur_active.alive and cur_active.cur_hit_points < 1:
+                                if vantage == 'Disadvantage':
+                                    vantage = 'Normal'
+                                else:
+                                    vantage = 'Advantage'
+                            else:
+                                vantage = 'Normal'
+                            directed_attack_tup = directed_user.default_melee_attack(vantage=vantage)
+                            cur_active.melee_defend(attack_value=directed_attack_tup[0],
+                                                    possible_damage=directed_attack_tup[1],
+                                                    damage_type=directed_attack_tup[2])
                             # Now trying to nuke a single member of the party at a time
-                            cur_active.melee_defend(modifier=20,
-                                possible_damage=(3 * cur_active.hit_points),
-                                damage_type='Bludgeoning')
+                            # cur_active.melee_defend(modifier=20,
+                            #     possible_damage=(3 * cur_active.hit_points),
+                            #     damage_type='Bludgeoning')
                             if not cur_active.alive:
-                                if self.debug_ind == 1:
-                                    self.logger.debug(f"{cur_active.get_name()} is dead. Removing them from melee list. ")
-                                self.remove_all_from_melee_with(cur_active)
-                                self.remove_player_from_field(self.initiative[initiative_ind][0],
-                                             self.initiative[initiative_ind][1])
-                                if (len(self.initiative[initiative_ind] ) > 5):
-                                    del self.initiative[initiative_ind][5]
-                                if (len(self.initiative[initiative_ind]) > 3):
-                                    del self.initiative[initiative_ind][4]
+                                self.cleanup_dead_player(cur_active,self.initiative[initiative_ind][0],
+                                                         self.initiative[initiative_ind][1])
+                                # if self.debug_ind == 1:
+                                #     self.logger.debug(f"{cur_active.get_name()} is dead. Removing them from melee list. ")
+                                # self.remove_all_from_melee_with(cur_active)
+                                # self.remove_player_from_field(self.initiative[initiative_ind][0],
+                                #              self.initiative[initiative_ind][1])
+                                # if (len(self.initiative[initiative_ind] ) > 5):
+                                #     del self.initiative[initiative_ind][5]
+                                # if (len(self.initiative[initiative_ind]) > 3):
+                                #     del self.initiative[initiative_ind][4]
     #                        nuke_em = self.get_party_list(self.initiative[initiative_ind][0])
     #                        for q in range(len(nuke_em)):
     #                            nuke_em[q].melee_defend(modifier=20,
@@ -407,23 +434,28 @@ class Encounter(object):
                         if self.debug_ind == 1:
                             self.logger.debug(f"{cur_active.get_name()} is attacking {target.get_name()} ({dl[0][3]}[{dl[0][4]}]). ")
                         # this is where the attack would be put.
-                        target.melee_defend(modifier=20,
-                            possible_damage=(3 * target.hit_points ),
-                            damage_type='Bludgeoning' )
+                        active_attack_tup = cur_active.default_melee_attack()
+                        target.melee_defend(attack_value=active_attack_tup[0],
+                                            possible_damage=active_attack_tup[1], damage_type=active_attack_tup[2])
+
+                        # target.melee_defend(modifier=20,
+                        #    possible_damage=(3 * target.hit_points ),
+                        #    damage_type='Bludgeoning' )
 
                         if not target.alive:
-                            if self.debug_ind == 1:
-                                self.logger.debug(f"{target.get_name()} is dead. Removing them from melee list. ")
+                            self.cleanup_dead_player(target, dl[0][3], dl[0][4])
+                            # if self.debug_ind == 1:
+                            #     self.logger.debug(f"{target.get_name()} is dead. Removing them from melee list. ")
 
-                            self.remove_all_from_melee_with(target)
-                            self.remove_player_from_field(dl[0][3],dl[0][4])
-                            for initiative_rec in self.initiative:
-                                if (initiative_rec[0] == dl[0][3] and
-                                        initiative_rec[1] == dl[0][4]):
-                                    if len(initiative_rec) >4:
-                                        del initiative_rec[5]
-                                    if len(initiative_rec) > 3:
-                                        del initiative_rec[4]
+                            # self.remove_all_from_melee_with(target)
+                            # self.remove_player_from_field(dl[0][3],dl[0][4])
+                            # for initiative_rec in self.initiative:
+                            #     if (initiative_rec[0] == dl[0][3] and
+                            #             initiative_rec[1] == dl[0][4]):
+                            #         if len(initiative_rec) >4:
+                            #             del initiative_rec[5]
+                            #         if len(initiative_rec) > 3:
+                            #             del initiative_rec[4]
                         # nuke_em = self.get_party_list(dl[0][3])
                         # for q in range(len(nuke_em)):
                         #     nuke_em[q].melee_defend(modifier=20,
@@ -431,7 +463,11 @@ class Encounter(object):
                         #                             damage_type='Bludgeoning')
             elif cur_active.alive:  ## currently alive but less than 1 hit point
                 if self.debug_ind == 1:
-                    self.logger.debug(f"{cur_active.get_name()} is unconscious. Add death saves. ")
+                    self.logger.debug(f"{cur_active.get_name()} is unconscious. ")
+                cur_active.death_save()
+                if not cur_active.alive:
+                    self.cleanup_dead_player(cur_active, self.initiative[initiative_ind][0],
+                                             self.initiative[initiative_ind][1])
             else:
                 if self.debug_ind == 1:
                     self.logger.debug(f"{cur_active.get_name()} is dead. Their turn is skipped. ")
