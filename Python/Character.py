@@ -389,14 +389,27 @@ class Character(object):
 
         return ret_val
 
+    def incr_death_save_failed_cnt(self, amount: int = 1):
+        self.death_save_failed_cnt += amount
+        if self.death_save_failed_cnt >= 3:
+            self.alive = False
+            self.logger.debug(f'{self.get_name()}: Three failed death saves. '
+                              f'Character has died.')
+
+    def stabilize(self):
+        if self.cur_hit_points < 1:
+            self.cur_hit_points = 1
+        self.death_save_passed_cnt = 0
+        self.death_save_failed_cnt = 0
+        self.stabilized = True
+        self.unconscious_ind = 0
+
     def death_save(self, vantage='Normal'):
         self.last_method_log = f'death_save({vantage})'
         tmp_str = 'Performs death save.'
         res = self.contest_check('Death', vantage)
         if res == 20:  # character is stablized
-            self.cur_hit_points = 1
-            self.death_save_passed_cnt = 3
-            self.stabilized = 1
+            self.stabilize()
             tmp_str = f'{tmp_str}\nResult: Nat 20. Character Stabilized'
         elif res >= 10:  # normal pass
             self.death_save_passed_cnt += 1
@@ -404,26 +417,24 @@ class Character(object):
                        f'{self.death_save_passed_cnt}/' 
                        f'{self.death_save_failed_cnt}')
         elif res == 1:   # crit fail
-            self.death_save_failed_cnt += 2
+            self.incr_death_save_failed_cnt(2)
             tmp_str = (f'{tmp_str}\nCrit fail. Current counts: (P/F) ' 
                        f'{self.death_save_passed_cnt}/' 
                        f'{self.death_save_failed_cnt}')
         else:   # res < 10 -- normal fail
-            self.death_save_failed_cnt += 1
+            self.incr_death_save_failed_cnt(1)
             tmp_str = (f'{tmp_str}\nFailed. Current counts: (P/F) ' 
                        f'{self.death_save_passed_cnt}/' 
                        f'{self.death_save_failed_cnt}')
 
         if self.death_save_passed_cnt >= 3:
-            self.death_save_passed_cnt = 0
-            self.death_save_failed_cnt = 0
-            self.stabilized = True
+            self.stabilize()
             tmp_str = (f'{tmp_str}\nThree passed death saves. ' 
                        f'Character Stabilized')
-        elif self.death_save_failed_cnt >= 3:
-            self.alive = False
-            tmp_str = (f'{tmp_str}\nThree failed death saves. ' 
-                       f'Character has died.')
+        # elif self.death_save_failed_cnt >= 3:
+        #      self.alive = False
+        #     tmp_str = (f'{tmp_str}\nThree failed death saves. '
+        #                f'Character has died.')
 
         if self.debug_ind == 1:
             msg = f"{self.get_name()}: {tmp_str}"
@@ -520,16 +531,21 @@ class Character(object):
             tmp_str = f'Suffers {amount} points of {damage_type} damage.'
 
         if amount >= self.cur_hit_points:
-            tmp_str = (f'{tmp_str}\n{amount} exceeds current hit points' 
-                       f'({self.cur_hit_points}): knocked unconsious')
+            if self.unconscious_ind == 0:
+                tmp_str = (f'{tmp_str}\n{amount} exceeds current hit points' 
+                           f'({self.cur_hit_points}): knocked unconsious')
+            else:
+                tmp_str = (f'{tmp_str}\n{amount} damage against unconscious target '
+                           f'({self.cur_hit_points})')
+            self.unconscious_ind = 1
             self.stabilized = False
+
             # Instant Death?
             if (amount - self.cur_hit_points) >= self.hit_points:
                 tmp_str = (f'{tmp_str}\n{(amount - self.cur_hit_points)}' 
                            f' exceeds hit points' 
                            f'({self.hit_points}): Instant Death')
-                self.death_save_failed_cnt = 3
-                self.alive = False
+                self.incr_death_save_failed_cnt(3)
 
             self.cur_hit_points = 0
         else:
@@ -675,7 +691,7 @@ class Character(object):
                        f'{value} >= {self.armor_class}')
             ret = False
             if self.cur_hit_points < 1:
-                self.death_save_failed_cnt += 2
+                self.incr_death_save_failed_cnt(2)
                 if self.debug_ind == 1:
                     self.logger.debug(f"{self.get_name()}: attacked while unconscious. Incurs two failed Death Saves.")
 
