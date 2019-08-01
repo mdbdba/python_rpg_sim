@@ -402,7 +402,9 @@ class Character(object):
         self.death_save_passed_cnt = 0
         self.death_save_failed_cnt = 0
         self.stabilized = True
+        self.alive = True
         self.unconscious_ind = 0
+        self.logger.debug(f'{self.get_name()}: Has stabilized.')
 
     def death_save(self, vantage='Normal'):
         self.last_method_log = f'death_save({vantage})'
@@ -742,10 +744,7 @@ class Character(object):
         self.last_method_log = f'heal({amount})'
         tmp_str = f'Heals {amount} hit points.'
         if self.cur_hit_points == 0 and self.alive:
-            self.death_save_failed_cnt = 0
-            self.death_save_passed_cnt = 0
-            self.stabilized = True
-            # tmp_str = (f'{tmp_str}\nResulting in {self.cur_hit_points} points')
+            self.stabilize()
 
         if (self.cur_hit_points + amount) > self.hit_points:
             self.cur_hit_points = self.hit_points
@@ -762,10 +761,7 @@ class Character(object):
 
     def revive(self):
         self.last_method_log = f'revive()'
-        self.death_save_failed_cnt = 0
-        self.death_save_passed_cnt = 0
-        self.stabilized = True
-        self.alive = True
+        self.stabilize()
         self.cur_hit_points = self.hit_points
 
         if self.debug_ind == 1:
