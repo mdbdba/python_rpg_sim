@@ -665,7 +665,6 @@ if __name__ == '__main__':
     Heroes.append(PlayerCharacter(db, debug_ind=1))
     Opponents.append(Foe(db, foe_candidate='Skeleton', debug_ind=1))
     Opponents.append(Foe(db, foe_candidate='Skeleton', debug_ind=1))
-    Opponents.append(Foe(db, foe_candidate='Skeleton', debug_ind=1))
     e1 = Encounter(Heroes, Opponents, debug_ind=1)
     print(f"The winning party was: {e1.winning_list_name} in {e1.round} rounds.")
     print(f"The surviving {e1.winning_list_name} members:")

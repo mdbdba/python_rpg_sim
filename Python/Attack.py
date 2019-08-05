@@ -20,9 +20,20 @@ class Attack(object):
         self.rolls_used = None
         self.die_used = None
         self.possible_damage = self.set_possible_damage()
-        self.attack_value = self.roll_attack() + self.attack_modifier
+        self.natural_value = self.roll_attack()
+        if self.check_natural_value(20):
+           self.possible_damage = self.possible_damage * 2
+        self.attack_value = self.natural_value + self.attack_modifier
 
         # print(self.possible_damage)
+    def get_natural_value(self):
+        return self.natural_value
+
+    def check_natural_value(self, check_value):
+        if self.natural_value == check_value:
+            return True
+        else:
+            return False
 
     def roll_attack(self):
         d = Die(20)
