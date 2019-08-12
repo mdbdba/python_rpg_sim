@@ -2,7 +2,6 @@ version: '3'
 
 services:
   pgs:
-    restart: always
     build: ./pgs
     image: mdbdba/postgres:11
     container_name: pgs
@@ -29,14 +28,13 @@ services:
       - "14268:14268"
       - "9411:9411"
 
-
-  simrest:
-    build: ./simrest
-    container_name: simrest
+  sim_graphql:
+    build: ./sim_graphql
+    container_name: sim_graphql
     volumes:
-      - ./simrest:/usr/src/app 
+      - ./sim_graphql:/usr/src/app
     ports:
-      - 6080:80
+      - 7080:80
     networks:
       - rpg
     depends_on:
