@@ -407,27 +407,9 @@ class Encounter(object):
                             cur_active.melee_defend(attack_value=directed_attack_tup[0],
                                                     possible_damage=directed_attack_tup[1],
                                                     damage_type=directed_attack_tup[2])
-                            # Now trying to nuke a single member of the party at a time
-                            # cur_active.melee_defend(modifier=20,
-                            #     possible_damage=(3 * cur_active.hit_points),
-                            #     damage_type='Bludgeoning')
                             if not cur_active.alive:
                                 self.cleanup_dead_player(cur_active,self.initiative[initiative_ind][0],
                                                          self.initiative[initiative_ind][1])
-                                # if self.debug_ind == 1:
-                                #     self.logger.debug(f"{cur_active.get_name()} is dead. Removing them from melee list. ")
-                                # self.remove_all_from_melee_with(cur_active)
-                                # self.remove_player_from_field(self.initiative[initiative_ind][0],
-                                #              self.initiative[initiative_ind][1])
-                                # if (len(self.initiative[initiative_ind] ) > 5):
-                                #     del self.initiative[initiative_ind][5]
-                                # if (len(self.initiative[initiative_ind]) > 3):
-                                #     del self.initiative[initiative_ind][4]
-    #                        nuke_em = self.get_party_list(self.initiative[initiative_ind][0])
-    #                        for q in range(len(nuke_em)):
-    #                            nuke_em[q].melee_defend(modifier=20,
-    #                                                    possible_damage=(3 * nuke_em[q].hit_points),
-    #                                                    damage_type='Bludgeoning')
 
                     if cur_active.cur_hit_points > 0:
                         target = self.get_player(dl[0][3],dl[0][4])
@@ -438,29 +420,8 @@ class Encounter(object):
                         target.melee_defend(attack_value=active_attack_tup[0],
                                             possible_damage=active_attack_tup[1], damage_type=active_attack_tup[2])
 
-                        # target.melee_defend(modifier=20,
-                        #    possible_damage=(3 * target.hit_points ),
-                        #    damage_type='Bludgeoning' )
-
                         if not target.alive:
                             self.cleanup_dead_player(target, dl[0][3], dl[0][4])
-                            # if self.debug_ind == 1:
-                            #     self.logger.debug(f"{target.get_name()} is dead. Removing them from melee list. ")
-
-                            # self.remove_all_from_melee_with(target)
-                            # self.remove_player_from_field(dl[0][3],dl[0][4])
-                            # for initiative_rec in self.initiative:
-                            #     if (initiative_rec[0] == dl[0][3] and
-                            #             initiative_rec[1] == dl[0][4]):
-                            #         if len(initiative_rec) >4:
-                            #             del initiative_rec[5]
-                            #         if len(initiative_rec) > 3:
-                            #             del initiative_rec[4]
-                        # nuke_em = self.get_party_list(dl[0][3])
-                        # for q in range(len(nuke_em)):
-                        #     nuke_em[q].melee_defend(modifier=20,
-                        #                             possible_damage=(3 * nuke_em[q].hit_points),
-                        #                             damage_type='Bludgeoning')
             elif cur_active.alive:  ## currently alive but less than 1 hit point
                 if self.debug_ind == 1:
                     self.logger.debug(f"{cur_active.get_name()} is unconscious. ")
