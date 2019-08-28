@@ -12,7 +12,7 @@ with t.tracer.span(name='root'):
     db = InvokePSQL()
     Heroes = []
     Opponents = []
-    debug_ind = 1
+    debug_ind = 0
     with t.tracer.span(name='heroes_setup'):
         with t.tracer.span(name='hero_1_setup'):
             Heroes.append(PlayerCharacter(db, debug_ind=debug_ind))
@@ -31,7 +31,7 @@ with t.tracer.span(name='root'):
     print(f"Against:")
     for Opponent in Opponents:
         print(f"  {Opponent.get_name()}")
-    e1 = Encounter(Heroes, Opponents, debug_ind=1, tracer=t.tracer)
+    e1 = Encounter(Heroes, Opponents, debug_ind=debug_ind, tracer=t.tracer)
     print(f"The winning party was: {e1.winning_list_name} in {e1.round} rounds.")
     print(f"The surviving {e1.winning_list_name} members:")
     for i in range(len(e1.winning_list)):

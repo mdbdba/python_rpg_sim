@@ -393,8 +393,9 @@ class Character(object):
         self.death_save_failed_cnt += amount
         if self.death_save_failed_cnt >= 3:
             self.alive = False
-            self.logger.debug(f'{self.get_name()}: Three failed death saves. '
-                              f'Character has died.')
+            if self.debug_ind == 1:
+                self.logger.debug(f'{self.get_name()}: Three failed death saves. ',
+                                  f'Character has died.')
 
     def stabilize(self):
         if self.cur_hit_points < 1:
@@ -404,7 +405,8 @@ class Character(object):
         self.stabilized = True
         self.alive = True
         self.unconscious_ind = 0
-        self.logger.debug(f'{self.get_name()}: Has stabilized.')
+        if self.debug_ind == 1:
+            self.logger.debug(f'{self.get_name()}: Has stabilized.')
 
     def death_save(self, vantage='Normal'):
         self.last_method_log = f'death_save({vantage})'

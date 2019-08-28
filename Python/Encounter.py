@@ -213,9 +213,10 @@ class Encounter(object):
                 else:
                     self.wrap_up()
 
-                if self.round > 29:
+                if self.round > 59:
                     self.active = False
-                    self.logger.debug("Round Limit Reached.")
+                    if self.debug_ind == 1:
+                        self.logger.debug("Round Limit Reached.")
                     for x in range(len(self.field_map)):
                         if self.field_map[x].occupied:
                             a, b = self.get_grid_position(x)
