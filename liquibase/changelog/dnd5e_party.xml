@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+<changeSet author="mdbdba" id="party_1">
+
+    <createTable 
+                schemaName="dnd_5e"
+                tableName="party">
+            <column name="name" type="varchar(132)"/>
+            <column name="character_id" type="bigint"/>
+        </createTable>
+        <addPrimaryKey 
+            columnNames="name, character_id"
+            constraintName="party_pk"
+            schemaName="dnd_5e"
+            tableName="party"/>
+
+        <addForeignKeyConstraint baseColumnNames="character_id"
+            baseTableName="party"
+            constraintName="party_character_fk"
+            deferrable="true"
+            initiallyDeferred="true"
+            onDelete="CASCADE"
+            onUpdate="RESTRICT"
+            referencedColumnNames="id"
+            referencedTableName="character"/>
+
+    </changeSet>
+</databaseChangeLog>

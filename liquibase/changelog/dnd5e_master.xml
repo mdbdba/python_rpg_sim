@@ -42,6 +42,7 @@
     <include file="dnd5e_foe.xml"/>
     <include file="dnd5e_lu_foe_trait_category.xml"/>
     <include file="dnd5e_lu_foe_trait.xml"/>
+    <include file="dnd5e_party.xml"/>
     <includeAll path="licensedContent/"/>
     <includeAll path="myContent/"/>
 </databaseChangeLog>
