@@ -251,9 +251,11 @@ class AbilityArray(object):
 
 
 if __name__ == '__main__':
-    a1 = AbilityArray()
+
+    pref_array=[0,5,2,4,1,3]
+    a1 = AbilityArray(pref_array=pref_array)
     print(a1.get_raw_array())
-    print(a1.get_pref_array())
+    print(a1.get_numerical_sorted_array())
     print(a1.get_array())
     print(a1.get_class_eval())
     x = a1.get_class_eval()
