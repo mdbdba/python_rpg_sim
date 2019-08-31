@@ -43,6 +43,7 @@
     <include file="dnd5e_lu_foe_trait_category.xml"/>
     <include file="dnd5e_lu_foe_trait.xml"/>
     <include file="dnd5e_party.xml"/>
+    <include file="dnd5e_character_to_persist.xml"/>
     <includeAll path="licensedContent/"/>
     <includeAll path="myContent/"/>
 </databaseChangeLog>
