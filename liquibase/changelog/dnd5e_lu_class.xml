@@ -105,5 +105,78 @@
         </insert>
 
     </changeSet>
+    <changeSet author="mdbdba" id="lu_class_6">
+       <addColumn schemaName="dnd_5e" tableName="lu_class">
+           <column name="primary_race_candidate" type="varchar(32)"/>
+       </addColumn>
+       <addColumn schemaName="dnd_5e" tableName="lu_class">
+           <column name="secondary_race_candidate" type="varchar(32)"/>
+       </addColumn>
+
+    </changeSet>
+    <changeSet author="mdbdba" id="lu_class_7">
+
+        <update schemaName="dnd_5e" tableName="lu_class">
+            <column name="primary_race_candidate" value="Mountain dwarf"/>
+            <column name="secondary_race_candidate" value="Half-Orc"/>
+            <where> class = 'Barbarian'</where>
+        </update>
+        <update schemaName="dnd_5e" tableName="lu_class">
+            <column name="primary_race_candidate" value="Half-Elf"/>
+            <column name="secondary_race_candidate" value="Tiefling"/>
+            <where> class = 'Bard'</where>
+        </update>
+        <update schemaName="dnd_5e" tableName="lu_class">
+            <column name="primary_race_candidate" value="Hill dwarf"/>
+            <column name="secondary_race_candidate" value="Human"/>
+            <where> class = 'Cleric'</where>
+        </update>
+        <update schemaName="dnd_5e" tableName="lu_class">
+            <column name="primary_race_candidate" value="Hill dwarf"/>
+            <column name="secondary_race_candidate" value="Human"/>
+            <where> class = 'Druid'</where>
+        </update>
+        <update schemaName="dnd_5e" tableName="lu_class">
+            <column name="primary_race_candidate" value="Mountain dwarf"/>
+            <column name="secondary_race_candidate" value="Stout halfling"/>
+            <where> class = 'Fighter'</where>
+        </update>
+        <update schemaName="dnd_5e" tableName="lu_class">
+            <column name="primary_race_candidate" value="Wood elf"/>
+            <column name="secondary_race_candidate" value="Human"/>
+            <where> class = 'Monk'</where>
+        </update>
+        <update schemaName="dnd_5e" tableName="lu_class">
+            <column name="primary_race_candidate" value="Half-Elf"/>
+            <column name="secondary_race_candidate" value="Lightfoot halfling"/>
+            <where> class = 'Paladin'</where>
+        </update>
+        <update schemaName="dnd_5e" tableName="lu_class">
+            <column name="primary_race_candidate" value="Wood elf"/>
+            <column name="secondary_race_candidate" value="Human"/>
+            <where> class = 'Ranger'</where>
+        </update>
+        <update schemaName="dnd_5e" tableName="lu_class">
+            <column name="primary_race_candidate" value="Drow elf"/>
+            <column name="secondary_race_candidate" value="Lightfoot halfling"/>
+            <where> class = 'Rogue'</where>
+        </update>
+        <update schemaName="dnd_5e" tableName="lu_class">
+            <column name="primary_race_candidate" value="Half-Elf"/>
+            <column name="secondary_race_candidate" value="Human"/>
+            <where> class = 'Sorcerer'</where>
+        </update>
+        <update schemaName="dnd_5e" tableName="lu_class">
+            <column name="primary_race_candidate" value="Half-Elf"/>
+            <column name="secondary_race_candidate" value="Human"/>
+            <where> class = 'Warlock'</where>
+        </update>
+        <update schemaName="dnd_5e" tableName="lu_class">
+            <column name="primary_race_candidate" value="Forest gnome"/>
+            <column name="secondary_race_candidate" value="Rock gnome"/>
+            <where> class = 'Wizard'</where>
+        </update>
+
+    </changeSet>
 
 </databaseChangeLog>

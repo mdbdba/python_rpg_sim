@@ -25,4 +25,9 @@
             referencedTableName="character"/>
 
     </changeSet>
+        <changeSet author="mdbdba" id="party_2">
+        <sql splitStatements="true"
+             stripComments="true">grant insert, update, delete on "party" to app;
+        </sql>
+    </changeSet>
 </databaseChangeLog>

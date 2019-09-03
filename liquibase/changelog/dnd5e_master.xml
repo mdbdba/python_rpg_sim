@@ -44,6 +44,7 @@
     <include file="dnd5e_lu_foe_trait.xml"/>
     <include file="dnd5e_party.xml"/>
     <include file="dnd5e_character_to_persist.xml"/>
+    <include file="dnd5e_party_composition.xml"/>
     <includeAll path="licensedContent/"/>
     <includeAll path="myContent/"/>
 </databaseChangeLog>
