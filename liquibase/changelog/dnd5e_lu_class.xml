@@ -178,5 +178,11 @@
         </update>
 
     </changeSet>
-
+    <changeSet author="mdbdba" id="lu_class_8">
+        <update schemaName="dnd_5e" tableName="lu_class">
+            <column name="primary_race_candidate" value="Wood elf"/>
+            <column name="secondary_race_candidate" value="Lightfoot halfling"/>
+            <where> class = 'Rogue'</where>
+        </update>
+    </changeSet>
 </databaseChangeLog>

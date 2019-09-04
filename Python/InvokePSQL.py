@@ -67,8 +67,10 @@ class InvokePSQL(object):
             return results
 
     def __del__(self):
-        self.connection.close()
-        self.cursor.close()
+        if self.connection is not None:
+            self.connection.close()
+        if self.cursor is not None:
+            self.cursor.close()
 
 
 if __name__ == '__main__':
