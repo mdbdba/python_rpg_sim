@@ -45,6 +45,7 @@
     <include file="dnd5e_party.xml"/>
     <include file="dnd5e_character_to_persist.xml"/>
     <include file="dnd5e_party_composition.xml"/>
+    <include file="dnd5e_reset_parties_and_characters.xml"/>
     <includeAll path="licensedContent/"/>
     <includeAll path="myContent/"/>
 </databaseChangeLog>
