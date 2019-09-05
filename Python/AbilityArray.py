@@ -303,3 +303,18 @@ if __name__ == '__main__':
     for key, value in b.get_class_eval()[-1].items():
         print(f"{str(key).ljust(25)}: {value}")
     print("end class eval")
+
+    b2 = AbilityArray(array_type="Predefined",
+                      raw_array=stringToArray('6,6,6,6,6,6'),
+                      pref_array=stringToArray('5,0,2,1,4,3'),
+                      racial_array=stringToArray('0,0,0,0,1,2'),
+                      ignore_racial_bonus=True,
+                      debug_ind=True)
+    print(b2.get_raw_array())
+    print(b2.get_pref_array())
+    print(b2.get_array())
+    print(b2.get_class_eval()[-1])
+    print("class eval:")
+    for key, value in b2.get_class_eval()[-1].items():
+        print(f"{str(key).ljust(25)}: {value}")
+    print("end class eval")

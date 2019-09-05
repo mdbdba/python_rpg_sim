@@ -144,7 +144,7 @@ class Character(object):
         # if the string doesn't begin and end with a number, then it must
         # be a type that the ability array wants
         tmp = self.ability_array_str
-        if tmp[1].isdigit() and tmp[-1].isdigit():
+        if tmp[0].isdigit() and tmp[-1].isdigit():
             tmp_array = stringToArray(tmp)
             self.ability_array_obj = AbilityArray(array_type="Predefined",
                                                   raw_array=tmp_array,
@@ -805,5 +805,10 @@ if __name__ == '__main__':
     print(a2.get_gender())
 
     # a3 = Character(db, level=43)
-
+    a2 = Character(db=db, ability_array_str='6,6,6,6,6,6', debug_ind=1)
+    a2.assign_ability_array()
+    a2.set_armor_class()
+    print(a2.get_raw_ability_array())
+    print(a2.get_ability_pref_array())
+    print(a2.get_sorted_ability_array())
 

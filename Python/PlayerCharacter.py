@@ -591,38 +591,37 @@ class PlayerCharacter(Character):
 
 if __name__ == '__main__':
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate='Hill dwarf', level=10, debug_ind=1)
+    # a1 = PlayerCharacter(db, race_candidate='Hill dwarf', level=10, debug_ind=1)
 
-    a2 = PlayerCharacter(db=db,
-                         ability_array_str='10,11,12,13,14,15',
-                         debug_ind=1)
-    a2.ability_array_obj.set_preference_array(pref_array=stringToArray(
-                                            '5,0,2,1,4,3'
-                                            ))
-    # print(a2)
-    # for key, value in a2.ability_array_obj.get_class_eval()[-1].items():
-    #     print(f"{str(key).ljust(25)}: {value}")
-    # a3 = PlayerCharacter(db, characterId=10)
-    # print(a3)
-    # a4 = PlayerCharacter(db, characterId=138)
-    # print(a4)
-    a5 = PlayerCharacter(db, race_candidate='Hill dwarf', level=10, debug_ind=1)
-    for i in range(len(a5.get_class_eval())):
-        for key, value in a5.get_class_eval()[i].items():
-            print(f"{i} -- {str(key).ljust(25)}: {value}")
+    # a2 = PlayerCharacter(db=db,
+    #                      ability_array_str='10,11,12,13,14,15',
+    #                      debug_ind=1)
+    # a2.ability_array_obj.set_preference_array(pref_array=stringToArray(
+    #                                         '5,0,2,1,4,3'
+    #                                         ))
+    # a5 = PlayerCharacter(db, race_candidate='Hill dwarf', level=10, debug_ind=1)
+    # for i in range(len(a5.get_class_eval())):
+    #     for key, value in a5.get_class_eval()[i].items():
+    #         print(f"{i} -- {str(key).ljust(25)}: {value}")
+#
+    # a6 = PlayerCharacter(db,
+    #                      ability_array_str="18,12,12,10,10,8",
+    #                      race_candidate="Mountain Dwarf",
+    #                      class_candidate="Barbarian",
+    #                      debug_ind=1)
 
-    a6 = PlayerCharacter(db,
-                         ability_array_str="18,12,12,10,10,8",
-                         race_candidate="Mountain Dwarf",
+    # a6.melee_defend(modifier=13, possible_damage=a6.hit_points,
+    #                 damage_type='Bludgeoning')
+    # a6.heal(10)
+    # a6.melee_defend(modifier=13, possible_damage=(2 * a6.hit_points),
+    #                 damage_type='Bludgeoning')
+    # a6.heal(30)
+    # t_a1 = a5.default_melee_attack()
+    # print(f'{t_a1[0]}, {t_a1[1]}')
+    # a6.melee_defend(attack_value=t_a1[0], possible_damage=t_a1[1], damage_type=t_a1[2])
+
+    a7 = PlayerCharacter(db,
+                         ability_array_str="6,6,6,6,6,6",
+                         race_candidate="Half-Orc",
                          class_candidate="Barbarian",
                          debug_ind=1)
-
-    a6.melee_defend(modifier=13, possible_damage=a6.hit_points,
-                    damage_type='Bludgeoning')
-    a6.heal(10)
-    a6.melee_defend(modifier=13, possible_damage=(2 * a6.hit_points),
-                    damage_type='Bludgeoning')
-    a6.heal(30)
-    t_a1 = a5.default_melee_attack()
-    print(f'{t_a1[0]}, {t_a1[1]}')
-    a6.melee_defend(attack_value=t_a1[0], possible_damage=t_a1[1], damage_type=t_a1[2])
