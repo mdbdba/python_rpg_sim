@@ -394,7 +394,7 @@ class Character(object):
         if self.death_save_failed_cnt >= 3:
             self.alive = False
             if self.debug_ind == 1:
-                self.logger.debug(f'{self.get_name()}: Three failed death saves. ',
+                self.logger.debug(f'{self.get_name()}: Three failed death saves. '
                                   f'Character has died.')
 
     def stabilize(self):

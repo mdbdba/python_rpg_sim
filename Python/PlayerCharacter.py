@@ -308,6 +308,15 @@ class PlayerCharacter(Character):
             self.cur_hit_points = self.hit_points
             self.temp_hit_points = 0
 
+            # Since ability array bonuses are figured when levels change we
+            # will figure hit points the same way.  That way of the constitution
+            # mod changes from level to level the hit points will reflect that.
+            if self.class_obj.melee_weapon is not None:
+                self.melee_weapon_obj = Weapon(db, self.get_melee_weapon())
+                self.melee_weapon_obj.setWeaponProficient()
+            if self.class_obj.ranged_weapon is not None:
+                self.ranged_weapon_obj = Weapon(db, self.get_ranged_weapon())
+
             tmp_rab_str = arrayToString(self.race_obj.ability_bonuses)
 
             if ability_racial_mod_string != tmp_rab_str:
@@ -591,34 +600,33 @@ class PlayerCharacter(Character):
 
 if __name__ == '__main__':
     db = InvokePSQL()
-    # a1 = PlayerCharacter(db, race_candidate='Hill dwarf', level=10, debug_ind=1)
+    a1 = PlayerCharacter(db, race_candidate='Hill dwarf', level=10, debug_ind=1)
 
-    # a2 = PlayerCharacter(db=db,
-    #                      ability_array_str='10,11,12,13,14,15',
-    #                      debug_ind=1)
-    # a2.ability_array_obj.set_preference_array(pref_array=stringToArray(
-    #                                         '5,0,2,1,4,3'
-    #                                         ))
-    # a5 = PlayerCharacter(db, race_candidate='Hill dwarf', level=10, debug_ind=1)
-    # for i in range(len(a5.get_class_eval())):
-    #     for key, value in a5.get_class_eval()[i].items():
-    #         print(f"{i} -- {str(key).ljust(25)}: {value}")
+    a2 = PlayerCharacter(db=db,
+                         ability_array_str='10,11,12,13,14,15',
+                         debug_ind=1)
+    a2.ability_array_obj.set_preference_array(pref_array=stringToArray(
+                                            '5,0,2,1,4,3'
+                                            ))
+    a5 = PlayerCharacter(db, race_candidate='Hill dwarf', level=10, debug_ind=1)
+    for i in range(len(a5.get_class_eval())):
+        for key, value in a5.get_class_eval()[i].items():
+            print(f"{i} -- {str(key).ljust(25)}: {value}")
 #
-    # a6 = PlayerCharacter(db,
-    #                      ability_array_str="18,12,12,10,10,8",
-    #                      race_candidate="Mountain Dwarf",
-    #                      class_candidate="Barbarian",
-    #                      debug_ind=1)
+    a6 = PlayerCharacter(db,
+                         ability_array_str="18,12,12,10,10,8",
+                         race_candidate="Mountain Dwarf",
+                         class_candidate="Barbarian",
+                         debug_ind=1)
 
-    # a6.melee_defend(modifier=13, possible_damage=a6.hit_points,
-    #                 damage_type='Bludgeoning')
-    # a6.heal(10)
-    # a6.melee_defend(modifier=13, possible_damage=(2 * a6.hit_points),
-    #                 damage_type='Bludgeoning')
-    # a6.heal(30)
-    # t_a1 = a5.default_melee_attack()
-    # print(f'{t_a1[0]}, {t_a1[1]}')
-    # a6.melee_defend(attack_value=t_a1[0], possible_damage=t_a1[1], damage_type=t_a1[2])
+    a6.melee_defend(modifier=13, possible_damage=a6.hit_points,
+                    damage_type='Bludgeoning')
+    a6.heal(10)
+    a6.melee_defend(modifier=13, possible_damage=(2 * a6.hit_points),
+                    damage_type='Bludgeoning')
+    a6.heal(30)
+    t_a1 = a5.default_melee_attack()
+    a6.melee_defend(attack_value=t_a1[0], possible_damage=t_a1[1], damage_type=t_a1[2])
 
     a7 = PlayerCharacter(db,
                          ability_array_str="6,6,6,6,6,6",
