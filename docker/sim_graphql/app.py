@@ -1,10 +1,26 @@
+import pathlib
+import configparser
+import beeline
+from beeline.middleware.flask import HoneyMiddleware
+
 from flask import Flask
 from flask_graphql import GraphQLView
 
 from models import db_session
 from schema import schema, Race, racialFirstName, racialLastName, pcClass
 
+path = pathlib.Path('o11y.ini')
+if path.exists():
+    config = configparser.ConfigParser()
+    config.read('o11y.ini')
+    beeline.init(writekey=config['DEFAULT']['honeycomb_key'], dataset='RPG Simulation', service_name='graghql_backend')
+
 app = Flask(__name__)
+
+if path.exists():
+    # db_events defaults to True, set to False if not using our db middleware with Flask-SQLAlchemy
+    HoneyMiddleware(app, db_events=True)
+
 app.debug = True
 
 app.add_url_rule(
