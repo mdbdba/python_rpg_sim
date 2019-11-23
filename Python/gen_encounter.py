@@ -11,13 +11,13 @@ from Trace_it import Trace_it
 @click.option('-p','--party_name', default=None, help='Identifier from the party table')
 @click.option('-h','--hero_party_size', default=None, help='If party name is not provided, Gen randoms to this size.')
 @click.option('-o','--opponent_party_size', required=True, help='Gen random foes to this size.')
+@click.option('-d','--debug_ind', default=0, help='Show all the gory details.')
 
-def gen_encounter(party_name, hero_party_size, opponent_party_size):
+def gen_encounter(party_name, hero_party_size, opponent_party_size, debug_ind):
     t = Trace_it("encounter")
     db = InvokePSQL()
     Heroes = []
     Opponents = []
-    debug_ind = 0
 
     with t.tracer.span(name='root'):
 
@@ -26,7 +26,7 @@ def gen_encounter(party_name, hero_party_size, opponent_party_size):
                 sql=f"select count(name) from dnd_5e.party where name = '{party_name}'"
                 res = db.query(sql)
                 hero_party_size = int(res[0][0])
-                full_party = Party(db,name=party_name)
+                full_party = Party(db,name=party_name, debug_ind=debug_ind)
                 for tmp_char in full_party.get_party():
                     Heroes.append(tmp_char)
             else:
@@ -53,6 +53,17 @@ def gen_encounter(party_name, hero_party_size, opponent_party_size):
         for i in range(len(e1.winning_list)):
             if e1.winning_list[i].alive:
                 print(f'{e1.winning_list[i].get_name()}')
+        print(f"Character damage info:")
+        for Hero in Heroes:
+            t_dict = Hero.get_damage_dealt()
+            print(f"  {Hero.get_name()} damage dealt ({t_dict['Total']}): {Hero.get_damage_dealt()}")
+            t_dict = Hero.get_damage_taken()
+            print(f"  {Hero.get_name()} damage taken ({t_dict['Total']}): {Hero.get_damage_taken()}")
+        for Opponent in Opponents:
+            t_dict = Opponent.get_damage_dealt()
+            print(f"  {Opponent.get_name()} damage dealt ({t_dict['Total']}): {Opponent.get_damage_dealt()}")
+            t_dict = Opponent.get_damage_taken()
+            print(f"  {Opponent.get_name()} damage taken ({t_dict['Total']}): {Opponent.get_damage_taken()}")
 
 if __name__ == '__main__':
     gen_encounter()

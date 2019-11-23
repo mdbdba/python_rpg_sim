@@ -11,7 +11,8 @@ class Party(object):
              ability_array_str="10,10,10,10,10,10",
              level=1,
              gender_candidate="Random",
-             overwrite_party=False):
+             overwrite_party=False,
+             debug_ind=0):
 
         self.character_id_str = character_id_str
         self.party_composition_id = party_composition_id
@@ -19,6 +20,7 @@ class Party(object):
         self.ability_array_str = ability_array_str
         self.level = level
         self.gender_candidate = gender_candidate
+        self.debug_ind = debug_ind
         self.character_ids = []
         self.character_list = []
 
@@ -38,7 +40,8 @@ class Party(object):
                     print(f'create {primary_race} {party_class[0]}')
                     tmppc = PlayerCharacter(db, class_candidate=party_class[0], race_candidate=primary_race,
                                     gender_candidate=self.gender_candidate,
-                                    ability_array_str=self.ability_array_str)
+                                    ability_array_str=self.ability_array_str,
+                                    debug_ind=self.debug_ind)
                     self.character_ids.append(tmppc.character_id)
 
                 print(self.character_ids )
@@ -62,7 +65,7 @@ class Party(object):
         sql=f"select character_id from dnd_5e.party where name = '{self.name}'"
         res = db.query(sql)
         for character_id in res:
-            tmppc = PlayerCharacter(db, character_id=character_id[0])
+            tmppc = PlayerCharacter(db, character_id=character_id[0], debug_ind=self.debug_ind)
             self.character_ids.append(tmppc.character_id)
             self.character_list.append(tmppc)
 
@@ -71,7 +74,7 @@ class Party(object):
     def build_character_list(self,db):
         tmp_list = []
         for id in self.character_ids:
-            tmp_list.append(PlayerCharacter(db, character_id=id))
+            tmp_list.append(PlayerCharacter(db, character_id=id), debug_ind=self.debug_ind)
         return tmp_list
 
     def get_primary_race(self,db, pclass):

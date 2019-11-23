@@ -3,6 +3,7 @@ from graphene import relay
 from graphene_sqlalchemy import SQLAlchemyObjectType, SQLAlchemyConnectionField
 from models import db_session, Race as RaceModel, racialFirstName as racialFirstNameModel
 from models import racialLastName as racialLastNameModel, pcClass as pcClassModel
+# from models import party as partyModel
 
 
 class Race(SQLAlchemyObjectType):
@@ -41,10 +42,18 @@ class pcClass(SQLAlchemyObjectType):
         model = pcClassModel
         interfaces = (relay.Node, )
 
-
 class pcClassConnection(relay.Connection):
     class Meta:
         node = pcClass
+
+# class party(SQLAlchemyObjectType):
+#     class Meta:
+#         model = partyModel
+#         interfaces = (relay.Node,)
+
+# class partyConnection(relay.Connection):
+#     class Meta:
+#         node = party
 
 class Query(graphene.ObjectType):
     node = relay.Node.Field()
@@ -53,5 +62,6 @@ class Query(graphene.ObjectType):
     all_racialFirstNames = SQLAlchemyConnectionField(racialFirstNameConnection)
     all_racialLastNames = SQLAlchemyConnectionField(racialLastNameConnection)
     all_pcClasses = SQLAlchemyConnectionField(pcClassConnection)
+#     all_party = SQLAlchemyConnectionField(partyConnection)
 
 schema = graphene.Schema(query=Query)

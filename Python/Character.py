@@ -119,6 +119,12 @@ class Character(object):
     def get_name(self):
         return "Generic Character"
 
+    def get_damage_taken(self):
+        return self.damage_taken
+
+    def get_damage_dealt(self):
+        return self.damage_dealt
+
     def assign_gender(self):
         self.last_method_log = f"assign_gender(db)"
         d = Die(100)
@@ -404,7 +410,7 @@ class Character(object):
         self.death_save_failed_cnt = 0
         self.stabilized = True
         self.alive = True
-        self.unconscious_ind = 0
+        self.unconscious_ind = False
         if self.debug_ind == 1:
             self.logger.debug(f'{self.get_name()}: Has stabilized.')
 
@@ -535,13 +541,13 @@ class Character(object):
             tmp_str = f'Suffers {amount} points of {damage_type} damage.'
 
         if amount >= self.cur_hit_points:
-            if self.unconscious_ind == 0:
+            if self.unconscious_ind == False:
                 tmp_str = (f'{tmp_str}\n{amount} exceeds current hit points' 
                            f'({self.cur_hit_points}): knocked unconsious')
             else:
                 tmp_str = (f'{tmp_str}\n{amount} damage against unconscious target '
                            f'({self.cur_hit_points})')
-            self.unconscious_ind = 1
+            self.unconscious_ind = True
             self.stabilized = False
 
             # Instant Death?
@@ -679,6 +685,10 @@ class Character(object):
         self.last_method_log = (f'melee_defend({modifier}, ' 
                                 f'{vantage}, {possible_damage}, ' 
                                 f'{damage_type})')
+
+        if self.debug_ind == 1:
+            self.logger.debug(f"{self.get_name()} attempts to defend against melee.")
+
         d = Die(20)
         if self.prone_ind:
             if vantage == 'Disadvantage':

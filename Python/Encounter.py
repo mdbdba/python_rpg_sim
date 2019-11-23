@@ -293,11 +293,14 @@ class Encounter(object):
                 target_array_name = "Heroes"
 
             if self.debug_ind == 1:
-                msg = (f'\nRound: {self.round} turn: {initiative_ind} ' 
-                       f'Name: {cur_active.get_name()} ' )
+                msg = (f"\nRound: {self.round} turn: {initiative_ind} " 
+                       f"Name: {cur_active.get_name()} ({cur_active.cur_hit_points}) " 
+                       f"Unconscious: {cur_active.unconscious_ind} " 
+                       f"Alive: {cur_active.alive} ")
+
                 if len(self.initiative[initiative_ind]) == 6:
-                    msg = (f'{msg}Grid Pos: [{self.initiative[initiative_ind][4]}]' 
-                       f'[{self.initiative[initiative_ind][5]}]')
+                    msg = (f'{msg}Grid Pos: [{self.initiative[initiative_ind][4]}]'
+                           f'[{self.initiative[initiative_ind][5]}]')
                 self.logger.debug(msg)
 
             self.remove_waiting_for(initiative_ind, waiting_for)
@@ -405,9 +408,22 @@ class Encounter(object):
                             else:
                                 vantage = 'Normal'
                             directed_attack_tup = directed_user.default_melee_attack(vantage=vantage)
-                            cur_active.melee_defend(attack_value=directed_attack_tup[0],
-                                                    possible_damage=directed_attack_tup[1],
-                                                    damage_type=directed_attack_tup[2])
+                            successful_defend = cur_active.melee_defend(attack_value=directed_attack_tup[0],
+                                                                        possible_damage=directed_attack_tup[1],
+                                                                        damage_type=directed_attack_tup[2])
+                            if self.debug_ind == 1:
+                                msg = (f'{directed_user.get_name()}')
+                                if successful_defend :
+                                    msg = (f'{msg} unsuccessfully')
+                                else:
+                                    msg = (f'{msg} successfully')
+                                msg = (f'{msg} attacked {cur_active.get_name()}')
+                                self.logger.debug(msg)
+
+                            if not successful_defend:
+                                directed_user.damage_dealt[directed_attack_tup[2]] += directed_attack_tup[1]
+                                directed_user.damage_dealt['Total'] += directed_attack_tup[1]
+
                             if not cur_active.alive:
                                 self.cleanup_dead_player(cur_active,self.initiative[initiative_ind][0],
                                                          self.initiative[initiative_ind][1])
@@ -418,8 +434,21 @@ class Encounter(object):
                             self.logger.debug(f"{cur_active.get_name()} is attacking {target.get_name()} ({dl[0][3]}[{dl[0][4]}]). ")
                         # this is where the attack would be put.
                         active_attack_tup = cur_active.default_melee_attack()
-                        target.melee_defend(attack_value=active_attack_tup[0],
+                        successful_defend = target.melee_defend(attack_value=active_attack_tup[0],
                                             possible_damage=active_attack_tup[1], damage_type=active_attack_tup[2])
+
+                        if self.debug_ind == 1:
+                            msg = (f'{cur_active.get_name()}')
+                            if successful_defend:
+                                msg = (f'{msg} unsuccessfully')
+                            else:
+                                msg = (f'{msg} successfully')
+                            msg = (f'{msg} attacked {target.get_name()}')
+                            self.logger.debug(msg)
+
+                        if not successful_defend:
+                            cur_active.damage_dealt[active_attack_tup[2]] += active_attack_tup[1]
+                            cur_active.damage_dealt['Total'] += active_attack_tup[1]
 
                         if not target.alive:
                             self.cleanup_dead_player(target, dl[0][3], dl[0][4])
