@@ -3,12 +3,14 @@ from Die import Die
 
 class Attack(object):
     def __init__(self, weapon_obj,
-                 attack_modifier,  # bonus to the toHit and damage amt
+                 attack_modifier,  # bonus to the toHit
+                 damage_modifier,
                  versatile_use_2handed=True,
                  vantage='Normal'):
         self.weapon_obj = weapon_obj
         self.damage_type = weapon_obj.default_damage_type
         self.attack_modifier = attack_modifier
+        self.damage_modifier = damage_modifier
         self.vantage = vantage
         if (self.weapon_obj.versatile_ind is True
                 and self.weapon_obj.versatile_2hnd_mod
@@ -23,7 +25,7 @@ class Attack(object):
         self.natural_value = self.roll_attack()
         if self.check_natural_value(20):
            self.possible_damage = self.possible_damage * 2
-        self.possible_damage += self.attack_modifier
+        self.possible_damage += self.damage_modifier
         self.attack_value = self.natural_value + self.attack_modifier
 
         # print(self.possible_damage)

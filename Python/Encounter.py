@@ -285,6 +285,12 @@ class Encounter(object):
 
     def turn(self, initiative_ind, waiting_for):
         with self.tracer.span(name='turn'):
+
+            try:
+                vantage
+            except NameError:
+                vantage = None
+
             cur_active = self.get_player(self.initiative[initiative_ind][0],
                                          self.initiative[initiative_ind][1])
             if self.initiative[initiative_ind][0] == "Heroes":
@@ -399,6 +405,10 @@ class Encounter(object):
                         directed_user = self.get_player(waiting_action[0], waiting_action[1])
 
                         if directed_user.cur_hit_points > 0:
+                            if vantage is None:
+                                vantage = 'Normal'
+                            #save off vantage to reset it.
+                            t_vantage = vantage
                             # if the cur_active user is unconscious then the attack is at advantage and auto-crits on hit.
                             if cur_active.alive and cur_active.cur_hit_points < 1:
                                 if vantage == 'Disadvantage':
@@ -423,16 +433,31 @@ class Encounter(object):
                             if not successful_defend:
                                 directed_user.damage_dealt[directed_attack_tup[2]] += directed_attack_tup[1]
                                 directed_user.damage_dealt['Total'] += directed_attack_tup[1]
+                                directed_user.attack_success_count+=1
 
                             if not cur_active.alive:
                                 self.cleanup_dead_player(cur_active,self.initiative[initiative_ind][0],
                                                          self.initiative[initiative_ind][1])
 
+                            vantage = t_vantage
+
                     if cur_active.cur_hit_points > 0:
                         target = self.get_player(dl[0][3],dl[0][4])
                         if self.debug_ind == 1:
                             self.logger.debug(f"{cur_active.get_name()} is attacking {target.get_name()} ({dl[0][3]}[{dl[0][4]}]). ")
-                        # this is where the attack would be put.
+
+                        if vantage is None:
+                            vantage = 'Normal'
+                        t_vantage = vantage
+                        # if the cur_active user is unconscious then the attack is at advantage and auto-crits on hit.
+                        if target.alive and target.unconscious_ind:
+                            if vantage == 'Disadvantage':
+                                vantage = 'Normal'
+                            else:
+                                vantage = 'Advantage'
+                        else:
+                            vantage = 'Normal'
+
                         active_attack_tup = cur_active.default_melee_attack()
                         successful_defend = target.melee_defend(attack_value=active_attack_tup[0],
                                             possible_damage=active_attack_tup[1], damage_type=active_attack_tup[2])
@@ -449,9 +474,13 @@ class Encounter(object):
                         if not successful_defend:
                             cur_active.damage_dealt[active_attack_tup[2]] += active_attack_tup[1]
                             cur_active.damage_dealt['Total'] += active_attack_tup[1]
+                            cur_active.attack_success_count+=1
 
                         if not target.alive:
                             self.cleanup_dead_player(target, dl[0][3], dl[0][4])
+
+                        vantage = t_vantage
+
             elif cur_active.alive:  ## currently alive but less than 1 hit point
                 if self.debug_ind == 1:
                     self.logger.debug(f"{cur_active.get_name()} is unconscious. ")

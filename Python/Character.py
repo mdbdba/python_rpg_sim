@@ -116,6 +116,12 @@ class Character(object):
         # 5   Speed reduced to 0
         # 6   Death
 
+        self.attack_rolls = []
+        self.attack_roll_count = 0
+        self.attack_roll_nat20_count = 0
+        self.attack_roll_nat1_count = 0
+        self.attack_success_count = 0
+
     def get_name(self):
         return "Generic Character"
 
@@ -656,12 +662,15 @@ class Character(object):
         # else:
         #     modifier = 0
         modifier = self.add_proficiency_bonus_for_attack(weapon_obj)
+        damage_modifier = 0
         # 2)  Add the users Ability bonus, Strength for standard weapons
         #     or self.finesse_ability_mod for Finesse wepons
         if weapon_obj.finesse_ind is True:
             modifier += self.get_ability_modifier(self.finesse_ability_mod)
+            damage_modifier = self.get_ability_modifier(self.finesse_ability_mod)
         else:
             modifier += self.get_ability_modifier('Strength')
+            damage_modifier = self.get_ability_modifier('Strength')
 
         # if self.classObj.shield is None and weapon_obj.versatile_ind is True:
         if self.is_not_using_shield() and weapon_obj.versatile_ind is True:
@@ -669,9 +678,17 @@ class Character(object):
         else:
             v2h = False
 
-        attempt = Attack(weapon_obj=weapon_obj, attack_modifier=modifier,
+        attempt = Attack(weapon_obj=weapon_obj, attack_modifier=modifier, damage_modifier=damage_modifier,
                          versatile_use_2handed=v2h, vantage=vantage)
         ret_val: tuple = (attempt.attack_value, attempt.possible_damage, attempt.damage_type)
+
+        self.attack_roll_count+=1
+        if attempt.natural_value == 20:
+            self.attack_roll_nat20_count+=1
+        if attempt.natural_value == 1:
+            self.attack_roll_nat1_count+=1
+        attack_roll: tuple = (attempt.natural_value, attempt.attack_value)
+        self.attack_rolls.append(attack_roll)
 
         if self.debug_ind == 1:
             self.logger.debug(f"{self.get_name()}: Melee Attack Value: "

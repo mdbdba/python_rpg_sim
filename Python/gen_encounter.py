@@ -56,11 +56,17 @@ def gen_encounter(party_name, hero_party_size, opponent_party_size, debug_ind):
         print(f"Character damage info:")
         for Hero in Heroes:
             t_dict = Hero.get_damage_dealt()
+            print(f"  {Hero.get_name()} attacks: {Hero.attack_success_count}/{Hero.attack_roll_count}"
+                  f" nat20s:{Hero.attack_roll_nat20_count} nat1s: {Hero.attack_roll_nat1_count}")
+            print(Hero.attack_rolls)
             print(f"  {Hero.get_name()} damage dealt ({t_dict['Total']}): {Hero.get_damage_dealt()}")
             t_dict = Hero.get_damage_taken()
             print(f"  {Hero.get_name()} damage taken ({t_dict['Total']}): {Hero.get_damage_taken()}")
         for Opponent in Opponents:
             t_dict = Opponent.get_damage_dealt()
+            print(f"  {Opponent.get_name()} attacks: {Opponent.attack_success_count}/{Opponent.attack_roll_count}"
+                  f" nat20s: {Opponent.attack_roll_nat20_count} nat1s: {Opponent.attack_roll_nat1_count}")
+            print(Opponent.attack_rolls)
             print(f"  {Opponent.get_name()} damage dealt ({t_dict['Total']}): {Opponent.get_damage_dealt()}")
             t_dict = Opponent.get_damage_taken()
             print(f"  {Opponent.get_name()} damage taken ({t_dict['Total']}): {Opponent.get_damage_taken()}")

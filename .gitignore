@@ -1,5 +1,7 @@
 Python/db.ini
 docker/sim_graphql/o11y.ini
+venv/
+venv38/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
