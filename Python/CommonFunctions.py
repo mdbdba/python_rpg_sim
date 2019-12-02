@@ -9,6 +9,9 @@ def arrayToString(srcArray):
 
     return outstr
 
+def stringTostringArray(srcStr, delimiter=","):
+    strArray = srcStr.split(delimiter)
+    return strArray
 
 def stringToArray(srcStr, delimiter=","):
     strArray = srcStr.split(delimiter)
