@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    
+    <changeSet author="mdbdba" id="lu_study_1">
+      <createTable
+                schemaName="dnd_5e"
+                tableName="lu_study">
+        <column name="name" type="varchar(16)"/>
+        <column name="description" type="text"/>
+        <column name="size" type="varchar(16)"/>
+        <column name="definition" type="jsonb"/>
+        </createTable>
+        <addPrimaryKey 
+            columnNames="name"
+            constraintName="pk_lu_study"
+            schemaName="dnd_5e"
+            tableName="lu_study"/>
+        <addForeignKeyConstraint
+            baseColumnNames="size"
+            baseTableName="lu_study"
+            constraintName="fk_lu_study_size"
+            onDelete="CASCADE"
+            onUpdate="RESTRICT"
+            referencedColumnNames="name"
+            referencedTableName="lu_study_size"/>
+      <createTable
+        schemaName="dnd_5e"
+        tableName="lu_study_instance">
+        <column autoIncrement="true" startWith="1" name="id" type="int"/>
+        <column name="study_name" type="varchar(16)"/>
+        <column name="stats" type="jsonb"/>
+      </createTable>
+      <addPrimaryKey
+        columnNames="id"
+        constraintName="pk_lu_study_instance"
+        schemaName="dnd_5e"
+        tableName="lu_study_instance"/>
+      </changeSet>
+</databaseChangeLog>
+
+
+
+
+

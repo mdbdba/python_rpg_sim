@@ -47,6 +47,7 @@
     <include file="dnd5e_party_composition.xml"/>
     <include file="dnd5e_reset_parties_and_characters.xml"/>
     <include file="dnd5e_lu_study_size.xml"/>
+    <include file="dnd5e_study.xml"/>
     <includeAll path="licensedContent/"/>
     <includeAll path="myContent/"/>
 </databaseChangeLog>
