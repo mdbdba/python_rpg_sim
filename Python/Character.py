@@ -106,8 +106,7 @@ class Character(object):
         self.ranged_ammunition_amt = None
         self.armor = None
         self.shield = None
-        self.finesse_ability_mod = self.set_finesse_ability()
-
+        self.set_finesse_ability()
 
         self.exhaustion_level = 0
         # 1   Disadvantage on Ability Checks
@@ -386,6 +385,9 @@ class Character(object):
             self.logger.debug(msg)
         return ret_val
 
+    def get_racial_traits(self):
+        return iter([])
+
     def check_proficiency_skill(self, ability):
         self.last_method_log = f'check_proficiency_skill({ability})'
         ret_val = False
@@ -492,10 +494,11 @@ class Character(object):
                   or skill == 'Perception'
                   or skill == 'Survival'):
                 ability = 'Wisdom'
-            elif (skill == 'Deception'
-                  or skill == 'Intimidation'
-                  or skill == 'Performance'
-                  or skill == 'Persuasion'):
+            # elif (skill == 'Deception'
+            #       or skill == 'Intimidation'
+            #       or skill == 'Performance'
+            #       or skill == 'Persuasion'):
+            else:
                 ability = 'Charisma'
             if self.debug_ind:
                 tmp_str = f'{tmp_str}{skill} '
@@ -539,16 +542,16 @@ class Character(object):
         if tmp_type and tmp_type == 'resistant':
             tmp_str = f'Originally, {amount} points of {damage_type} damage.\n'
             amount = amount // 2
-            tmp_str = f'Reduced to {amount} points due to {damage_type} resistance.'
+            tmp_str = f'{tmp_str}Reduced to {amount} points due to {damage_type} resistance.'
         elif tmp_type and tmp_type == 'vulnerable':
             tmp_str = f'Originally, {amount} points of {damage_type} damage.'
             amount = amount * 2
-            tmp_str = f'Increased to {amount} points due to {damage_type} vulnerability.'
+            tmp_str = f'{tmp_str}Increased to {amount} points due to {damage_type} vulnerability.'
         else:
             tmp_str = f'Suffers {amount} points of {damage_type} damage.'
 
         if amount >= self.cur_hit_points:
-            if self.unconscious_ind == False:
+            if self.unconscious_ind is False:
                 tmp_str = (f'{tmp_str}\n{amount} exceeds current hit points' 
                            f'({self.cur_hit_points}): knocked unconsious')
             else:
@@ -624,7 +627,6 @@ class Character(object):
 
         return ret_val
 
-
     def ranged_attack(self, weapon_obj, vantage='Normal'):
         # determine modifier
         # 1)  is this a martial weapon that needs specific proficiency
@@ -638,8 +640,10 @@ class Character(object):
         modifier = self.add_proficiency_bonus_for_attack(weapon_obj)
 
         modifier += self.get_ability_modifier('Dexterity')
+        damage_modifier = self.get_ability_modifier('Dexterity')
 
         attempt = Attack(weapon_obj=weapon_obj, attack_modifier=modifier,
+                         damage_modifier=damage_modifier,
                          versatile_use_2handed=False, vantage=vantage)
 
         if self.debug_ind == 1:
@@ -663,7 +667,7 @@ class Character(object):
         # else:
         #     modifier = 0
         modifier = self.add_proficiency_bonus_for_attack(weapon_obj)
-        damage_modifier = 0
+        # damage_modifier = 0
         # 2)  Add the users Ability bonus, Strength for standard weapons
         #     or self.finesse_ability_mod for Finesse wepons
         if weapon_obj.finesse_ind is True:
@@ -683,11 +687,11 @@ class Character(object):
                          versatile_use_2handed=v2h, vantage=vantage)
         ret_val: tuple = (attempt.attack_value, attempt.possible_damage, attempt.damage_type)
 
-        self.attack_roll_count+=1
+        self.attack_roll_count += 1
         if attempt.natural_value == 20:
-            self.attack_roll_nat20_count+=1
+            self.attack_roll_nat20_count += 1
         if attempt.natural_value == 1:
-            self.attack_roll_nat1_count+=1
+            self.attack_roll_nat1_count += 1
         attack_roll: tuple = (attempt.natural_value, attempt.attack_value)
         self.attack_rolls.append(attack_roll)
 
@@ -716,7 +720,14 @@ class Character(object):
         if attack_value:
             value = attack_value
         else:
-            value = d.roll() + modifier
+            if vantage == 'Disadvantage':
+                t_val = d.rollWithDisadvantage()
+            elif vantage == 'Advantage':
+                t_val = d.rollWithAdvantage()
+            else:
+                t_val = d.roll()
+
+            value = t_val + modifier
 
         if value >= self.armor_class:
             tmp_str = (f'Fails to defend against melee attack roll: ' 
@@ -751,7 +762,15 @@ class Character(object):
                 vantage = 'Normal'
             else:
                 vantage = 'Disadvantage'
-        value = d.roll() + modifier
+
+        if vantage == 'Disadvantage':
+            t_val = d.rollWithDisadvantage()
+        elif vantage == 'Advantage':
+            t_val = d.rollWithAdvantage()
+        else:
+            t_val = d.roll()
+
+        value = t_val + modifier
 
         if value >= self.armor_class:
             tmp_str = (f'Fails to defend against a ranged attack roll: ' 
@@ -839,4 +858,3 @@ if __name__ == '__main__':
     print(a2.get_raw_ability_array())
     print(a2.get_ability_pref_array())
     print(a2.get_sorted_ability_array())
-

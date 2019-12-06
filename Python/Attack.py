@@ -24,7 +24,7 @@ class Attack(object):
         self.possible_damage = self.set_possible_damage()
         self.natural_value = self.roll_attack()
         if self.check_natural_value(20):
-           self.possible_damage = self.possible_damage * 2
+            self.possible_damage = self.possible_damage * 2
         self.possible_damage += self.damage_modifier
         self.attack_value = self.natural_value + self.attack_modifier
 
