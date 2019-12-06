@@ -3,7 +3,7 @@ from Character import Character
 from Weapon import Weapon
 from Die import Die
 
-from CommonFunctions import stringToArray
+from CommonFunctions import string_to_array
 
 
 class Foe(Character):
@@ -84,7 +84,7 @@ class Foe(Character):
             self.challenge_level = results[0][5]     # challenge_level,
             self.ability_array_str = results[0][6]     # ability_string,
             # ability_modifier_string,
-            self.ability_modifier_array = stringToArray(results[0][7])
+            self.ability_modifier_array = string_to_array(results[0][7])
             self.hit_point_die = results[0][8]     # hit_point_die,
             self.hit_point_modifier = results[0][9]     # hit_point_modifier,
             self.hit_point_adjustment = results[0][10]

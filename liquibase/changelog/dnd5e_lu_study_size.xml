@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    
+    <changeSet author="mdbdba" id="lu_study_size_1">
+       <createTable 
+                schemaName="dnd_5e"
+                tableName="lu_study_size">
+        <column name="name" type="varchar(16)"/>
+        <column name="description" type="text"/>
+        <column name="value" type="int"/>
+        </createTable>
+        <addPrimaryKey 
+            columnNames="name"
+            constraintName="pk_lu_study_size"
+            schemaName="dnd_5e"
+            tableName="lu_study_size"/>
+        <insert schemaName="dnd_5e" tableName="lu_study_size">
+            <column name="name" value="Mini"/>
+            <column name="description" value="Single test run"/>
+            <column name="value" value="1"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_study_size">
+            <column name="name" value="Small"/>
+            <column name="description" value="Ten executions test run"/>
+            <column name="value" value="10"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_study_size">
+            <column name="name" value="Medium"/>
+            <column name="description" value="Fifty executions test run"/>
+            <column name="value" value="50"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_study_size">
+            <column name="name" value="Large"/>
+            <column name="description" value="One Hundred executions test run"/>
+            <column name="value" value="100"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_study_size">
+            <column name="name" value="X-Large"/>
+            <column name="description" value="Three Hundred executions test run"/>
+            <column name="value" value="300"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_study_size">
+            <column name="name" value="XX-Large"/>
+            <column name="description" value="Three Hundred executions test run"/>
+            <column name="value" value="600"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>
+
+
+
+
+

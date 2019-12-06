@@ -1,6 +1,6 @@
 from Die import Die
-# from CommonFunctions import arrayToString, stringToArray
-from CommonFunctions import stringToArray
+# from CommonFunctions import array_to_string, string_to_array
+from CommonFunctions import string_to_array
 
 
 """
@@ -266,8 +266,8 @@ if __name__ == '__main__':
     print("end class eval")
 
     a = AbilityArray(array_type="Standard",
-                     pref_array=stringToArray('5,0,2,1,4,3'),
-                     racial_array=stringToArray('0,0,0,0,1,2'),
+                     pref_array=string_to_array('5,0,2,1,4,3'),
+                     racial_array=string_to_array('0,0,0,0,1,2'),
                      debug_ind=True)
     print(a.get_raw_array())
     print(a.get_pref_array())
@@ -278,9 +278,9 @@ if __name__ == '__main__':
         print(f"{str(key).ljust(25)}: {value}")
     print("end class eval")
     a2 = AbilityArray(array_type="Common",
-                      pref_array=stringToArray('1,2,5,0,4,3'),
+                      pref_array=string_to_array('1,2,5,0,4,3'),
                       debug_ind=True)
-    a2.set_racial_array(stringToArray('0,2,1,0,0,0'))
+    a2.set_racial_array(string_to_array('0,2,1,0,0,0'))
     print(a2.get_raw_array())
     print(a2.get_pref_array())
     print(a2.get_array())
@@ -291,8 +291,8 @@ if __name__ == '__main__':
     print("end class eval")
 
     b = AbilityArray(array_type="Strict",
-                     pref_array=stringToArray('5,0,2,1,4,3'),
-                     racial_array=stringToArray('0,0,0,0,1,2'),
+                     pref_array=string_to_array('5,0,2,1,4,3'),
+                     racial_array=string_to_array('0,0,0,0,1,2'),
                      ignore_racial_bonus=True,
                      debug_ind=True)
     print(b.get_raw_array())
@@ -305,9 +305,9 @@ if __name__ == '__main__':
     print("end class eval")
 
     b2 = AbilityArray(array_type="Predefined",
-                      raw_array=stringToArray('6,6,6,6,6,6'),
-                      pref_array=stringToArray('5,0,2,1,4,3'),
-                      racial_array=stringToArray('0,0,0,0,1,2'),
+                      raw_array=string_to_array('6,6,6,6,6,6'),
+                      pref_array=string_to_array('5,0,2,1,4,3'),
+                      racial_array=string_to_array('0,0,0,0,1,2'),
                       ignore_racial_bonus=True,
                       debug_ind=True)
     print(b2.get_raw_array())

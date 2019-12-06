@@ -9,7 +9,7 @@ from Foe import Foe
 from CommonFunctions import calculate_distance
 
 from InvokePSQL import InvokePSQL
-from Trace_it import Trace_it
+from TraceIt import TraceIt
 
 
 class Encounter(object):
@@ -38,7 +38,7 @@ class Encounter(object):
         :type debug_ind: int
         """
         if not tracer:
-            t = Trace_it("encounter")
+            t = TraceIt("encounter")
             self.tracer = t.tracer
         else:
             self.tracer = tracer

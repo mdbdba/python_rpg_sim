@@ -3,8 +3,8 @@ import os
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 from PlayerCharacter import PlayerCharacter    # NOQA
 from InvokePSQL import InvokePSQL    # NOQA
-from CommonFunctions import arrayToString, stringToArray    # NOQA
-from CommonFunctions import compareArrays    # NOQA
+from CommonFunctions import array_to_string, string_to_array    # NOQA
+from CommonFunctions import compare_arrays    # NOQA
 
 
 def test_Character_Default():
@@ -148,11 +148,11 @@ def test_RandomGen_Retrieve():
     assert(a1.get_name() == b1.get_name())
     assert(a1.armor_class == b1.armor_class)
 
-    assert(compareArrays(a1.get_raw_ability_array(), b1.get_raw_ability_array()))
-    assert(compareArrays(a1.get_ability_array(), b1.get_ability_array()))
-    assert(compareArrays(a1.ability_modifier_array, b1.ability_modifier_array))
-    assert(compareArrays(a1.ability_array_obj.ability_label_array,
-                         b1.ability_array_obj.ability_label_array))
+    assert(compare_arrays(a1.get_raw_ability_array(), b1.get_raw_ability_array()))
+    assert(compare_arrays(a1.get_ability_array(), b1.get_ability_array()))
+    assert(compare_arrays(a1.ability_modifier_array, b1.ability_modifier_array))
+    assert(compare_arrays(a1.ability_array_obj.ability_label_array,
+                          b1.ability_array_obj.ability_label_array))
 
     assert(a1.hit_points == b1.hit_points)
     assert(a1.temp_hit_points == b1.temp_hit_points)

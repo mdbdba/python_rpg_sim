@@ -1,6 +1,6 @@
 from InvokePSQL import InvokePSQL
 from PlayerCharacter import PlayerCharacter
-from CommonFunctions import stringToArray
+from CommonFunctions import string_to_array
 
 class Party(object):
     def __init__(self,
@@ -49,7 +49,7 @@ class Party(object):
             else:
                 print( f'Creating {name}: a party consisting of '
                        f'character ids: {character_id_str}')
-                self.character_ids = stringToArray(self.character_id_str)
+                self.character_ids = string_to_array(self.character_id_str)
 
             self.verify_character_id_list(db)
             self.create_party_in_db(db)

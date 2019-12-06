@@ -1,26 +1,27 @@
 from dataclasses import dataclass, field
 from typing import Dict, List   # Others: Set, Tuple, Optional
-from CommonFunctions import stringTostringArray
+from CommonFunctions import string_to_string_array
 from datetime import datetime
 
 import wrapt
 import logging
 import structlog
 
+
 def ctx_decorator(ctx):
+
     @wrapt.decorator
     def wrapper(wrapped, instance, args, kwds):
         ctx.fullyqualified = wrapped.__qualname__
-        t = []
         if '.' in ctx.fullyqualified:
-            t = stringTostringArray(ctx.fullyqualified, '.')
+            t = string_to_string_array(ctx.fullyqualified, '.')
             t_class = t[0]
             t_method = t[1]
 
-            print(f'SRC: class: {t_class} function: {t_method} params: {args} {kwds}')
-            ctx.add_crumb(t_class,t_method, kwds)
+            # print(f'SRC: class: {t_class} function: {t_method} params: {args} {kwds}')
+            ctx.add_crumb(t_class, t_method, kwds)
             ret = wrapped(*args, **kwds)
-            print("print attempt")
+            # print("print attempt")
             ctx.print_crumbs()
             ctx.pop_crumb()
             return ret
@@ -28,7 +29,8 @@ def ctx_decorator(ctx):
             return wrapped(*args, **kwds)
     return wrapper
 
-class rpg_logging:
+
+class RpgLogging:
     def __init__(self, logger_name='rpg_logging', level_threshold='warning'):
         switcher = {
             'notset': logging.NOTSET,
@@ -44,7 +46,6 @@ class rpg_logging:
                 structlog.stdlib.filter_by_level,
                 structlog.stdlib.add_logger_name,
                 structlog.stdlib.add_log_level,
-                # structlog.processors.KeyValueRenderer(sort_keys=True)
                 structlog.stdlib.PositionalArgumentsFormatter(),
                 structlog.processors.TimeStamper(fmt="iso"),
                 structlog.processors.StackInfoRenderer(),
@@ -52,7 +53,6 @@ class rpg_logging:
                 structlog.processors.UnicodeDecoder(),
                 structlog.stdlib.render_to_log_kwargs,
                 structlog.processors.ExceptionPrettyPrinter(),
-                #structlog.processors.JSONRenderer(indent=1, sort_keys=True),
                 structlog.processors.JSONRenderer(indent=2),
             ],
             context_class=dict,
@@ -72,27 +72,30 @@ class rpg_logging:
 
     def get_logger(self):
         return self.logger
+
     def get_log_rec(self, msg, ctx, return_crumbs='None'):
         crumb = []
         crumbs = []
-        if (return_crumbs == 'One' or return_crumbs == 'All'):
+        if return_crumbs == 'One' or return_crumbs == 'All':
             crumb = ctx.get_last_crumb()
         if return_crumbs == 'All':
             crumbs = ctx.get_crumbs()
 
-
         return {'_text': msg,
                 'app_username': ctx.app_username,
+                'study_name': ctx.study_name,
                 'study_instance_id': ctx.study_instance_id,
                 'series_id': ctx.series_id,
                 'encounter_id': ctx.encounter_id,
+                'trace_id': ctx.trace_id,
+                'request_type':  ctx.request_type,
                 'round': ctx.round,
                 'turn': ctx.turn,
                 'crumb': crumb,
                 'crumbs': crumbs}
 
     def notset(self, msg, ctx):
-        self.logger.notset(self.get_log_rec(msg,ctx))
+        self.logger.notset(self.get_log_rec(msg, ctx))
 
     def debug(self, msg, ctx):
         self.logger.debug(self.get_log_rec(msg, ctx, 'All'))
@@ -117,6 +120,7 @@ class Crumb:
     methodParams: Dict
     timestamp: datetime = datetime.now()
 
+
 def init_crumbs():
     return []
 
@@ -125,7 +129,10 @@ def init_crumbs():
 class Ctx:
     app_username: str = "Unknown"
     fullyqualified: str = ""
+    trace_id: str = ""
+    request_type = "Standard"   # or "Trace"
     study_instance_id: int = -1
+    study_name: str = ""
     series_id: int = -1
     encounter_id: int = -1
     round: int = 0
@@ -150,7 +157,6 @@ class Ctx:
             return_value = []
         return return_value
 
-
     def get_crumbs(self):
         if len(self.crumbs) > 0:
             return_value = self.crumbs
@@ -168,7 +174,7 @@ if __name__ == '__main__':
     print(ctx.get_last_crumb())
     ctx.pop_crumb()
     print(ctx.get_last_crumb())
-    l = rpg_logging('ctx_main_test', 'debug')
+    l = RpgLogging('ctx_main_test', 'debug')
     l.debug("debug message", ctx)
     l.info("info message", ctx)
     l.warning("warning message", ctx)

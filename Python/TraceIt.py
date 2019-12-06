@@ -2,8 +2,9 @@ from opencensus.trace import samplers
 from opencensus.trace.tracer import Tracer
 from opencensus.ext.jaeger.trace_exporter import JaegerExporter
 
-class Trace_it(object):
-    def __init__(self, trace_name ):
+
+class TraceIt(object):
+    def __init__(self, trace_name):
         sampler = samplers.AlwaysOnSampler()
 
         je = JaegerExporter(

@@ -1,5 +1,5 @@
 from InvokePSQL import InvokePSQL
-from CommonFunctions import stringToArray
+from CommonFunctions import string_to_array
 from AbilityArray import AbilityArray
 from Attack import Attack
 from Die import Die
@@ -158,7 +158,7 @@ class Character(object):
         # be a type that the ability array wants
         tmp = self.ability_array_str
         if tmp[0].isdigit() and tmp[-1].isdigit():
-            tmp_array = stringToArray(tmp)
+            tmp_array = string_to_array(tmp)
             self.ability_array_obj = AbilityArray(array_type="Predefined",
                                                   raw_array=tmp_array,
                                                   pref_array=sort_array,
@@ -823,7 +823,7 @@ if __name__ == '__main__':
     print(a2.get_raw_ability_array())
     print(a2.get_ability_pref_array())
     print(a2.get_sorted_ability_array())
-    a2.ability_array_obj.set_preference_array(pref_array=stringToArray(
+    a2.ability_array_obj.set_preference_array(pref_array=string_to_array(
                                             '5,0,2,1,4,3'
                                             ))
     print(a2.get_raw_ability_array())

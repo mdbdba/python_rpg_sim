@@ -1,10 +1,10 @@
 
 from InvokePSQL import InvokePSQL
 from Character import Character
-from CommonFunctions import arrayToString
-from CommonFunctions import dictToString
-from CommonFunctions import stringToArray
-from CommonFunctions import inchesToFeet
+from CommonFunctions import array_to_string
+from CommonFunctions import dict_to_string
+from CommonFunctions import string_to_array
+from CommonFunctions import inches_to_feet
 from CharacterRace import CharacterRace
 from PlayerCharacterClass import getRandomClassName
 from BardPCClass import BardPCClass
@@ -81,15 +81,15 @@ class PlayerCharacter(Character):
         self.class_eval[-1]["class"] = self.get_class()
         self.class_eval[-1]["gender"] = self.get_gender()
         self.class_eval[-1]["rawAbilityArray"] = (
-            arrayToString(self.get_raw_ability_array()))
+            array_to_string(self.get_raw_ability_array()))
         self.class_eval[-1]["sortedAbilityArray"] = (
-            arrayToString(self.get_sorted_ability_array()))
+            array_to_string(self.get_sorted_ability_array()))
         self.class_eval[-1]["racialAbilityArray"] = (
-            arrayToString(self.get_racial_ability_bonus_array()))
+            array_to_string(self.get_racial_ability_bonus_array()))
         self.class_eval[-1]["abilityImpArray"] = (
-            arrayToString(self.get_ability_improvement_array()))
+            array_to_string(self.get_ability_improvement_array()))
         self.class_eval[-1]["abilityArray"] = (
-            arrayToString(self.get_ability_array()))
+            array_to_string(self.get_ability_array()))
 
         if self.debug_ind == 1:
             for pi in self.__str__().splitlines():
@@ -213,13 +213,13 @@ class PlayerCharacter(Character):
 
     def save_character(self, db):
         self.last_method_log = f'save_character(db)'
-        raw_ability_string = arrayToString(self.get_raw_ability_array())
-        ability_base_string = arrayToString(self.get_raw_ability_array())
-        ability_string = arrayToString(self.get_ability_array())
+        raw_ability_string = array_to_string(self.get_raw_ability_array())
+        ability_base_string = array_to_string(self.get_raw_ability_array())
+        ability_string = array_to_string(self.get_ability_array())
         ability_racial_mod_string = (
-            arrayToString(self.get_racial_ability_bonus_array()))
+            array_to_string(self.get_racial_ability_bonus_array()))
 
-        ability_modifier_string = arrayToString(self.ability_modifier_array)
+        ability_modifier_string = array_to_string(self.ability_modifier_array)
         sql = (f"insert into dnd_5e.character(name, gender, race, class, "
                f"level, TTA, raw_ability_string, "
                f"ability_base_string,ability_string, "
@@ -292,7 +292,7 @@ class PlayerCharacter(Character):
             self.tta = results[0][5]
             self.ability_array_str = results[0][6]
             ability_racial_mod_string = results[0][9]
-            self.ability_modifier_array = stringToArray(results[0][10])
+            self.ability_modifier_array = string_to_array(results[0][10])
             self.class_obj.melee_weapon = results[0][22]
             self.class_obj.ranged_weapon = results[0][23]
             self.class_obj.ranged_ammunition_type = results[0][24]
@@ -317,7 +317,7 @@ class PlayerCharacter(Character):
             if self.class_obj.ranged_weapon is not None:
                 self.ranged_weapon_obj = Weapon(db, self.get_ranged_weapon())
 
-            tmp_rab_str = arrayToString(self.race_obj.ability_bonuses)
+            tmp_rab_str = array_to_string(self.race_obj.ability_bonuses)
 
             if ability_racial_mod_string != tmp_rab_str:
                 tmp_str = (f"\n**WARNING: "
@@ -331,12 +331,12 @@ class PlayerCharacter(Character):
         return self.class_obj.ability_sort_array
 
     def set_preference_array(self, pref_array_str):
-        tmp_array = stringToArray(pref_array_str)
+        tmp_array = string_to_array(pref_array_str)
         self.ability_array_obj.set_preference_array(pref_array=tmp_array)
         self.set_ability_modifier_array(self.db)
 
     def set_racial_array(self, bonus_array):
-        tmp_array = stringToArray(bonus_array)
+        tmp_array = string_to_array(bonus_array)
         self.ability_array_obj.set_racial_array(bonus_array=tmp_array)
         self.set_ability_modifier_array(self.db)
 
@@ -463,7 +463,7 @@ class PlayerCharacter(Character):
 
         if self.debug_ind == 1:
             self.class_eval[-1]["damage Adjust"] = (
-                dictToString(self.damage_adj))
+                dict_to_string(self.damage_adj))
 
     def set_proficiency_bonus(self):
         for a in range(len(self.feature_obj)):
@@ -506,7 +506,7 @@ class PlayerCharacter(Character):
                       f'Prof Bonus:   {self.proficiency_bonus}\n')
 
         outstr = (f'{outstr}'
-                  f'Height:       {inchesToFeet(self.get_height())}\n'
+                  f'Height:       {inches_to_feet(self.get_height())}\n'
                   f'Weight:       {self.get_weight()} pounds\n'
                   f'Alignment:    {self.get_alignment_str()}\n'
                   f'AlignAbbrev:  {self.get_alignment_abbrev()}\n'
@@ -605,7 +605,7 @@ if __name__ == '__main__':
     a2 = PlayerCharacter(db=db,
                          ability_array_str='10,11,12,13,14,15',
                          debug_ind=1)
-    a2.ability_array_obj.set_preference_array(pref_array=stringToArray(
+    a2.ability_array_obj.set_preference_array(pref_array=string_to_array(
                                             '5,0,2,1,4,3'
                                             ))
     a5 = PlayerCharacter(db, race_candidate='Hill dwarf', level=10, debug_ind=1)

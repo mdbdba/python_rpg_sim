@@ -1,61 +1,68 @@
 import math
-import os, fnmatch
+import os
+import fnmatch
+import sys
 
-def arrayToString(srcArray):
+
+def array_to_string(src_array):
     outstr = ""
-    for a in range(len(srcArray)):
-        outstr = (f"{outstr}{srcArray[a]},")
+    for a in range(len(src_array)):
+        outstr = f"{outstr}{src_array[a]},"
     outstr = outstr[:-1]
 
     return outstr
 
-def stringTostringArray(srcStr, delimiter=","):
-    strArray = srcStr.split(delimiter)
-    return strArray
 
-def stringToArray(srcStr, delimiter=","):
-    strArray = srcStr.split(delimiter)
-    outArray = []
-    for a in range(len(strArray)):
-        outArray.append(int(strArray[a].strip()))
-
-    return outArray
+def string_to_string_array(src_str, delimiter=","):
+    str_array = src_str.split(delimiter)
+    return str_array
 
 
-def compareArrays(array1, array2):
-    retval = True
-    if (len(array1) != len(array2)):
-        retval = False
+def string_to_array(src_str, delimiter=","):
+    str_array = src_str.split(delimiter)
+    out_array = []
+    for a in range(len(str_array)):
+        out_array.append(int(str_array[a].strip()))
+
+    return out_array
+
+
+def compare_arrays(array1, array2):
+    return_value = True
+    if len(array1) != len(array2):
+        return_value = False
     for a in range(len(array1)):
-        if (array1[a] != array2[a]):
-            retval = False
+        if array1[a] != array2[a]:
+            return_value = False
 
-    return retval
+    return return_value
 
 
-def inchesToFeet(inches):
+def inches_to_feet(inches):
     feet = inches // 12
     remainder = inches % 12
-    return (f"{feet}'{remainder}\"")
+    return f"{feet}'{remainder}\""
 
 
-def dictToString(srcDict, linebreaks=False, leftJustify=0):
-    retStr = ""
-    if (linebreaks):
+def dict_to_string(src_dict, linebreaks=False, left_justify=0):
+    return_string = ""
+    if linebreaks:
         el = '\n'
     else:
         el = ", "
-    for key, value in srcDict.items():
-        retStr = (f"{retStr}{str(key).ljust(leftJustify)}: {value}{el}")
+    for key, value in src_dict.items():
+        return_string = f"{return_string}{str(key).ljust(left_justify)}: {value}{el}"
 
-    if (not linebreaks):
-        retStr = retStr[:-2]
+    if not linebreaks:
+        return_string = return_string[:-2]
 
-    return retStr
+    return return_string
+
 
 def calculate_distance(x1: int, y1: int, x2: int, y2: int) -> float:
     dist: float = (math.sqrt((x2 - x1)**2 + (y2 - y1)**2)) * 5
     return dist
+
 
 def find_file(file_name: str) -> str:
     curpath = os.path.abspath(os.path.dirname(__file__))
@@ -69,4 +76,3 @@ def find_file(file_name: str) -> str:
     for file in os.listdir(curpath):
         if fnmatch.fnmatch(file, file_name):
             return os.path.join(curpath, file)
-

@@ -3,8 +3,8 @@ import os
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 from Foe import Foe    # NOQA
 from InvokePSQL import InvokePSQL    # NOQA
-from CommonFunctions import arrayToString, stringToArray    # NOQA
-from CommonFunctions import compareArrays    # NOQA
+from CommonFunctions import array_to_string, string_to_array    # NOQA
+from CommonFunctions import compare_arrays    # NOQA
 
 
 def test_Foe_Default():
@@ -43,8 +43,8 @@ def test_Foe_Skeleton():
     assert(a1)
     assert(a1.get_name() == 'Skeleton')
     assert(a1.foe_type == "Undead")
-    assert(arrayToString(a1.get_raw_ability_array()) == "10,14,15,6,8,5")
-    assert(arrayToString(a1.get_ability_array()) == "10,14,15,6,8,5")
+    assert(array_to_string(a1.get_raw_ability_array()) == "10,14,15,6,8,5")
+    assert(array_to_string(a1.get_ability_array()) == "10,14,15,6,8,5")
     assert(a1.level == 1)
     assert(a1.challenge_level == .25)
     assert(a1.get_alignment_str() == 'Lawful evil')
@@ -65,8 +65,8 @@ def test_Foe_Gnoll():
     assert(a1)
     assert(a1.get_name() == 'Gnoll')
     assert(a1.foe_type == "Humanoid")
-    assert(arrayToString(a1.get_raw_ability_array()) == "14,12,11,6,10,7")
-    assert(arrayToString(a1.get_ability_array()) == "14,12,11,6,10,7")
+    assert(array_to_string(a1.get_raw_ability_array()) == "14,12,11,6,10,7")
+    assert(array_to_string(a1.get_ability_array()) == "14,12,11,6,10,7")
     assert(a1.level == 1)
     assert(a1.challenge_level == .50)
     assert(a1.get_alignment_str() == 'Chaotic evil')
