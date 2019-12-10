@@ -362,9 +362,9 @@ class Character(object):
         if vantage == 'Normal':
             r = d.roll()
         elif vantage == 'Advantage':
-            r = d.rollWithAdvantage()
+            r = d.roll_with_advantage()
         else:
-            r = d.rollWithDisadvantage()
+            r = d.roll_with_disadvantage()
 
         mod = self.get_ability_modifier(ability)
 
@@ -605,6 +605,9 @@ class Character(object):
 
         return ret_val
 
+    def get_vantage(self):
+        return 'Normal'
+
     def set_finesse_ability(self):
         s = self.get_ability_modifier('Strength')
         d = self.get_ability_modifier('Dexterity')
@@ -721,9 +724,9 @@ class Character(object):
             value = attack_value
         else:
             if vantage == 'Disadvantage':
-                t_val = d.rollWithDisadvantage()
+                t_val = d.roll_with_disadvantage()
             elif vantage == 'Advantage':
-                t_val = d.rollWithAdvantage()
+                t_val = d.roll_with_advantage()
             else:
                 t_val = d.roll()
 
@@ -764,9 +767,9 @@ class Character(object):
                 vantage = 'Disadvantage'
 
         if vantage == 'Disadvantage':
-            t_val = d.rollWithDisadvantage()
+            t_val = d.roll_with_disadvantage()
         elif vantage == 'Advantage':
-            t_val = d.rollWithAdvantage()
+            t_val = d.roll_with_advantage()
         else:
             t_val = d.roll()
 

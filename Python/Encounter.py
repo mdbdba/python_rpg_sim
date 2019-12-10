@@ -96,7 +96,7 @@ class Encounter(object):
 
         return ret_val
 
-    def get_player(self, list_name: str, list_index: int ):
+    def get_player(self, list_name: str, list_index: int):
         t = self.get_party_list(list_name)
         return t[list_index]
 
@@ -120,8 +120,8 @@ class Encounter(object):
             msg = f"Is [{px}][{py}] field_map[{list_index}] available: {ret_val}"
             self.logger.debug(msg)
             if not ret_val:
-                msg = ( f"Occupied by: {self.field_map[list_index].occupied_by}" 
-                        f"[{self.field_map[list_index].occupied_by_index}]")
+                msg = (f"Occupied by: {self.field_map[list_index].occupied_by}" 
+                       f"[{self.field_map[list_index].occupied_by_index}]")
                 self.logger.debug(msg)
         return ret_val
 
@@ -145,8 +145,8 @@ class Encounter(object):
         dist_list = []
         for fx in range(len(self.field_map)):
             if self.field_map[fx].occupied and self.field_map[fx].occupied_by == target_name:
-                tmp_player = self.get_player( self.field_map[fx].occupied_by,
-                                              self.field_map[fx].occupied_by_index)
+                tmp_player = self.get_player(self.field_map[fx].occupied_by,
+                                             self.field_map[fx].occupied_by_index)
                 if tmp_player.alive:
                     fa, fb = self.get_grid_position(fx)
                     dist = calculate_distance(my_x, my_y, fa, fb)
@@ -187,10 +187,9 @@ class Encounter(object):
     def get_player_location(self, list_name: str, list_index: int) -> tuple:
         ret_val: tuple = ()
         for initiative_rec in self.initiative:
-            if (initiative_rec[0] == list_name and
-                initiative_rec[1] == list_index):
+            if initiative_rec[0] == list_name and initiative_rec[1] == list_index:
                 ret_val = (initiative_rec[4], initiative_rec[5])
-                #pos = self.get_array_index(initiative_rec[4], initiative_rec[5])
+                # pos = self.get_array_index(initiative_rec[4], initiative_rec[5])
         return ret_val
 
     def remove_player_from_field(self, list_name: str, list_index: int):
@@ -224,7 +223,6 @@ class Encounter(object):
                                    f"[{self.field_map[x].occupied_by_index}]")
                             self.logger.debug(msg)
 
-
     def wrap_up(self):
         with self.tracer.span(name='wrap_up'):
             if self.debug_ind == 1:
@@ -244,8 +242,6 @@ class Encounter(object):
                                f"[{self.field_map[x].occupied_by_index}]")
                         self.logger.debug(msg)
 
-
-
     def still_active(self):
         with self.tracer.span(name='still_active'):
             ret_val = False
@@ -255,7 +251,6 @@ class Encounter(object):
                 sub_val1 = True
             if any(Opponent.alive for Opponent in self.Opponents):
                 sub_val2 = True
-
 
             if sub_val1 and sub_val2:
                 ret_val = True
@@ -286,10 +281,10 @@ class Encounter(object):
     def turn(self, initiative_ind, waiting_for):
         with self.tracer.span(name='turn'):
 
-            try:
-                vantage
-            except NameError:
-                vantage = None
+            # try:
+            #     vantage
+            # except NameError:
+            #     vantage = None
 
             cur_active = self.get_player(self.initiative[initiative_ind][0],
                                          self.initiative[initiative_ind][1])
@@ -367,7 +362,7 @@ class Encounter(object):
 
                 if cur_action == 'Movement':
                     if self.debug_ind == 1:
-                        msg = (f"Using {cur_active.get_name()}'s Action for movement.")
+                        msg = f"Using {cur_active.get_name()}'s Action for movement."
                         self.logger.debug(msg)
 
                     avail_mvmt = cur_active.cur_movement / 5
@@ -405,83 +400,81 @@ class Encounter(object):
                         directed_user = self.get_player(waiting_action[0], waiting_action[1])
 
                         if directed_user.cur_hit_points > 0:
-                            if vantage is None:
-                                vantage = 'Normal'
-                            #save off vantage to reset it.
-                            t_vantage = vantage
-                            # if the cur_active user is unconscious then the attack is at advantage and auto-crits on hit.
+                            # save off vantage to reset it.
+                            t_vantage = directed_user.get_vantage()
+                            # if the cur_active user is unconscious then the attack
+                            # is at advantage and auto-crits on hit.
                             if cur_active.alive and cur_active.cur_hit_points < 1:
-                                if vantage == 'Disadvantage':
-                                    vantage = 'Normal'
+                                if t_vantage == 'Disadvantage':
+                                    t_vantage = 'Normal'
                                 else:
-                                    vantage = 'Advantage'
+                                    t_vantage = 'Advantage'
                             else:
-                                vantage = 'Normal'
-                            directed_attack_tup = directed_user.default_melee_attack(vantage=vantage)
+                                t_vantage = 'Normal'
+                            directed_attack_tup = directed_user.default_melee_attack(vantage=t_vantage)
                             successful_defend = cur_active.melee_defend(attack_value=directed_attack_tup[0],
                                                                         possible_damage=directed_attack_tup[1],
                                                                         damage_type=directed_attack_tup[2])
                             if self.debug_ind == 1:
-                                msg = (f'{directed_user.get_name()}')
-                                if successful_defend :
-                                    msg = (f'{msg} unsuccessfully')
+                                msg = f'{directed_user.get_name()}'
+                                if successful_defend:
+                                    msg = f'{msg} unsuccessfully'
                                 else:
-                                    msg = (f'{msg} successfully')
-                                msg = (f'{msg} attacked {cur_active.get_name()}')
+                                    msg = f'{msg} successfully'
+                                msg = f'{msg} attacked {cur_active.get_name()}'
                                 self.logger.debug(msg)
 
                             if not successful_defend:
                                 directed_user.damage_dealt[directed_attack_tup[2]] += directed_attack_tup[1]
                                 directed_user.damage_dealt['Total'] += directed_attack_tup[1]
-                                directed_user.attack_success_count+=1
+                                directed_user.attack_success_count += 1
 
                             if not cur_active.alive:
-                                self.cleanup_dead_player(cur_active,self.initiative[initiative_ind][0],
+                                self.cleanup_dead_player(cur_active,
+                                                         self.initiative[initiative_ind][0],
                                                          self.initiative[initiative_ind][1])
 
-                            vantage = t_vantage
-
                     if cur_active.cur_hit_points > 0:
-                        target = self.get_player(dl[0][3],dl[0][4])
+                        target = self.get_player(dl[0][3], dl[0][4])
                         if self.debug_ind == 1:
-                            self.logger.debug(f"{cur_active.get_name()} is attacking {target.get_name()} ({dl[0][3]}[{dl[0][4]}]). ")
+                            t_msg = (f"{cur_active.get_name()} is attacking {target.get_name()}"
+                                     f" ({dl[0][3]}[{dl[0][4]}]). ")
+                            self.logger.debug(t_msg)
 
-                        if vantage is None:
-                            vantage = 'Normal'
-                        t_vantage = vantage
-                        # if the cur_active user is unconscious then the attack is at advantage and auto-crits on hit.
+                        t_vantage = cur_active.get_vantage()
+                        # if the cur_active user is unconscious then the attack is at advantage
+                        # and auto-crits on hit.
                         if target.alive and target.unconscious_ind:
-                            if vantage == 'Disadvantage':
-                                vantage = 'Normal'
+                            if t_vantage == 'Disadvantage':
+                                t_vantage = 'Normal'
                             else:
-                                vantage = 'Advantage'
+                                t_vantage = 'Advantage'
                         else:
-                            vantage = 'Normal'
+                            t_vantage = 'Normal'
 
-                        active_attack_tup = cur_active.default_melee_attack()
+                        active_attack_tup = cur_active.default_melee_attack(vantage=t_vantage)
                         successful_defend = target.melee_defend(attack_value=active_attack_tup[0],
-                                            possible_damage=active_attack_tup[1], damage_type=active_attack_tup[2])
+                                                                possible_damage=active_attack_tup[1],
+                                                                damage_type=active_attack_tup[2])
 
                         if self.debug_ind == 1:
-                            msg = (f'{cur_active.get_name()}')
+                            msg = f'{cur_active.get_name()}'
                             if successful_defend:
-                                msg = (f'{msg} unsuccessfully')
+                                msg = f'{msg} unsuccessfully'
                             else:
-                                msg = (f'{msg} successfully')
-                            msg = (f'{msg} attacked {target.get_name()}')
+                                msg = f'{msg} successfully'
+                            msg = f'{msg} attacked {target.get_name()}'
                             self.logger.debug(msg)
 
                         if not successful_defend:
                             cur_active.damage_dealt[active_attack_tup[2]] += active_attack_tup[1]
                             cur_active.damage_dealt['Total'] += active_attack_tup[1]
-                            cur_active.attack_success_count+=1
+                            cur_active.attack_success_count += 1
 
                         if not target.alive:
                             self.cleanup_dead_player(target, dl[0][3], dl[0][4])
 
-                        vantage = t_vantage
-
-            elif cur_active.alive:  ## currently alive but less than 1 hit point
+            elif cur_active.alive:  # currently alive but less than 1 hit point
                 if self.debug_ind == 1:
                     self.logger.debug(f"{cur_active.get_name()} is unconscious. ")
                 cur_active.death_save()
@@ -520,7 +513,7 @@ class Encounter(object):
 
             return ret_val
 
-    def is_in_melee(self,player):
+    def is_in_melee(self, player):
         if player.get_name() in self.melee_with.keys():
             if len(self.melee_with[player.get_name()]) > 0:
                 ret_val = True
@@ -535,16 +528,16 @@ class Encounter(object):
 
     def add_to_melee_with(self, player, the_target_player):
         if player.get_name() in self.melee_with.keys():
-            if ( any( the_target_player.get_name() in sublist
-               for sublist in self.melee_with[player.get_name()])):
-                   self.melee_with[player.get_name()].append(the_target_player.get_name())
+            if (any(the_target_player.get_name() in sublist
+                    for sublist in self.melee_with[player.get_name()])):
+                self.melee_with[player.get_name()].append(the_target_player.get_name())
         else:
             self.melee_with[player.get_name()] = [the_target_player.get_name()]
 
         if the_target_player.get_name() in self.melee_with.keys():
-            if ( any( player.get_name() in sublist
-               for sublist in self.melee_with[the_target_player.get_name()])):
-                   self.melee_with[the_target_player.get_name()].append(player.get_name())
+            if (any(player.get_name() in sublist
+                    for sublist in self.melee_with[the_target_player.get_name()])):
+                self.melee_with[the_target_player.get_name()].append(player.get_name())
         else:
             self.melee_with[the_target_player.get_name()] = [player.get_name()]
 
@@ -557,21 +550,20 @@ class Encounter(object):
 
     def remove_from_melee_with(self, player, the_target_player):
         if player.get_name() in self.melee_with.keys():
-            if ( any( the_target_player.get_name() in sublist
-                for sublist in self.melee_with[player.get_name()])):
-                    self.melee_with[player.get_name()].remove(the_target_player.get_name())
+            if (any(the_target_player.get_name() in sublist
+                    for sublist in self.melee_with[player.get_name()])):
+                self.melee_with[player.get_name()].remove(the_target_player.get_name())
 
         if the_target_player.get_name() in self.melee_with.keys():
-            if ( any( player.get_name() in sublist
-                for sublist in self.melee_with[the_target_player.get_name()])):
-                    self.melee_with[the_target_player.get_name()].remove(player.get_name())
-
+            if (any(player.get_name() in sublist
+                    for sublist in self.melee_with[the_target_player.get_name()])):
+                self.melee_with[the_target_player.get_name()].remove(player.get_name())
 
     def movement(self, avail_movement, cur_active, cur_init, dest_list):
         # with self.tracer.span(name='movement'):
         if cur_init[2]:     # if they've figured out what's going on.
             if self.is_in_melee(cur_active):
-              pass
+                pass
             elif cur_active.combat_preference == 'Melee':
                 # run straight towards closest enemy
                 # set destination x and y
@@ -605,7 +597,7 @@ class Encounter(object):
                             self.logger.debug(f"dist_x and dist_y = 0. Somethings wrong.")
                         mvmt = False
                     elif abs_dist_x <= 1 and abs_dist_y <= 1:
-                        self.add_to_melee_with(cur_active, self.get_player(dest_list[0][3],dest_list[0][4]))
+                        self.add_to_melee_with(cur_active, self.get_player(dest_list[0][3], dest_list[0][4]))
                         if self.debug_ind == 1:
                             self.logger.debug(f"*** Is in melee with " 
                                               f"{dest_list[0][3]}[{dest_list[0][4]}].")

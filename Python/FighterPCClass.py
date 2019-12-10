@@ -3,9 +3,9 @@ from PlayerCharacterClass import PlayerCharacterClass
 
 class FighterPCClass(PlayerCharacterClass):
     def __init__(self, db,
-                 characterAlteringClassOptions=None):
+                 character_altering_class_options=None):
         PlayerCharacterClass.__init__(self, db, "Fighter",
-                                      characterAlteringClassOptions)
+                                      character_altering_class_options)
         self.archetype_label = "Martial Archetype"
         self.melee_weapon = "Glaive"
         self.ranged_weapon = "Crossbow, light"

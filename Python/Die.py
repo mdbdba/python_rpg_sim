@@ -2,32 +2,32 @@ import random
 
 
 class Die(object):
-    def __init__(self, sides=20, debugInd=False):
+    def __init__(self, sides=20, debug_ind=False):
         """
         Randomization class
 
         :param sides: the number of sides this die will have (default: 20)
-        :param debugInd: log to class_eval array? (default: False)
+        :param debug_ind: log to class_eval array? (default: False)
         """
         self.sides = sides
         self.classEval = []
-        self.debugInd = debugInd
-        self.classEval.append({"Die": sides, "debug_ind": debugInd})
+        self.debug_ind = debug_ind
+        self.classEval.append({"Die": sides, "debug_ind": debug_ind})
         self.callEval = {}
 
-    def getClassEval(self):
+    def get_class_eval(self):
         """
         Return an array of lists that can be used for debugging/testing
         """
         return self.classEval
 
-    # _performRoll should only be used by the other methods. The "_" at
+    # _perform_roll should only be used by the other methods. The "_" at
     # the beginning of the name is a convention Python uses for
     # that sort of thing (more info: Python private method convention)
     # This simplifies the calls being done from the other methods
 
-    def _performRoll(self, rolls, dropvalue=False,
-                     dropfrom="Low", halved=False):
+    def _perform_roll(self, rolls, dropvalue=False,
+                      dropfrom="Low", halved=False):
         """
         Handles the calculations for the class.
 
@@ -37,44 +37,44 @@ class Die(object):
         :param halved:    Cut sum in half? (default: False)
 
         """
-        if self.debugInd:
+        if self.debug_ind:
             self.callEval["rolls"] = rolls
             self.callEval["dropvalue"] = dropvalue
             if dropvalue:
                 self.callEval["dropfrom"] = dropfrom
             self.callEval["halved"] = halved
 
-        tmpHold = []  # list to hold all rolled values
+        tmp_hold = []  # list to hold all rolled values
         tot = 0       # variable to hold the total sum value
 
         for x in range(0, rolls):  # place the roll results in the tmpHold list
             raw_roll = random.randint(1, self.sides)
-            tmpHold.append(raw_roll)
+            tmp_hold.append(raw_roll)
 
         # If dropping from either side, sort the array accordingly
         if dropvalue:
             if dropfrom == "High":
-                tmpHold.sort(reverse=True)
+                tmp_hold.sort(reverse=True)
             else:
-                tmpHold.sort()
+                tmp_hold.sort()
 
-            if self.debugInd:
-                self.callEval["array_sorted"] = tmpHold[:]
+            if self.debug_ind:
+                self.callEval["array_sorted"] = tmp_hold[:]
 
-            del tmpHold[0]  # then remove the first value
+            del tmp_hold[0]  # then remove the first value
 
-        if self.debugInd:
-            self.callEval["array"] = tmpHold[:]
+        if self.debug_ind:
+            self.callEval["array"] = tmp_hold[:]
 
-        for y in tmpHold:  # compute the sum of all values left
+        for y in tmp_hold:  # compute the sum of all values left
             tot = tot + y
 
-        if self.debugInd:
+        if self.debug_ind:
             self.callEval["total"] = tot
 
         if halved:  # halve value rounding down (floor)
             tot = tot // 2
-            if self.debugInd:
+            if self.debug_ind:
                 self.callEval["total_halved"] = tot
 
         return tot
@@ -87,67 +87,67 @@ class Die(object):
         :param droplowest: Drop the lowest value? (Default: False)
 
         """
-        if self.debugInd:
+        if self.debug_ind:
             self.callEval["called"] = "roll"
         if droplowest:
-            result = self._performRoll(rolls, dropvalue=True, dropfrom="Low")
+            result = self._perform_roll(rolls, dropvalue=True, dropfrom="Low")
         else:
-            result = self._performRoll(rolls, dropvalue=False)
+            result = self._perform_roll(rolls, dropvalue=False)
 
-        if self.debugInd:
+        if self.debug_ind:
             self.classEval.append(self.callEval)
             self.callEval = {}
 
         return result
 
-    def rollWithAdvantage(self):
+    def roll_with_advantage(self):
         """
         Perform a single roll with advantage
 
         """
-        if self.debugInd:
-            self.callEval["called"] = "rollWithAdvantage"
-        retval = self._performRoll(2, dropvalue=True, dropfrom="Low")
-        if self.debugInd:
+        if self.debug_ind:
+            self.callEval["called"] = "roll_with_advantage"
+        retval = self._perform_roll(2, dropvalue=True, dropfrom="Low")
+        if self.debug_ind:
             self.classEval.append(self.callEval)
             self.callEval = {}
 
         return retval
 
-    def rollWithDisadvantage(self):
+    def roll_with_disadvantage(self):
         """
         Perform a single roll with disadvantage
 
         """
-        if self.debugInd:
-            self.callEval["called"] = "rollWithDisadvantage"
-        retval = self._performRoll(2, dropvalue=True, dropfrom="High")
-        if self.debugInd:
+        if self.debug_ind:
+            self.callEval["called"] = "roll_with_disadvantage"
+        retval = self._perform_roll(2, dropvalue=True, dropfrom="High")
+        if self.debug_ind:
             self.classEval.append(self.callEval)
             self.callEval = {}
 
         return retval
 
-    def rollWithResistance(self, rolls):
+    def roll_with_resistance(self, rolls):
         """
         Perform rolls and return half the total sum
 
         """
-        if self.debugInd:
-            self.callEval["called"] = "rollWithResistance"
-        retval = self._performRoll(rolls, dropvalue=False, halved=True)
-        if self.debugInd:
+        if self.debug_ind:
+            self.callEval["called"] = "roll_with_resistance"
+        retval = self._perform_roll(rolls, dropvalue=False, halved=True)
+        if self.debug_ind:
             self.classEval.append(self.callEval)
             self.callEval = {}
         return retval
 
-    def getSum(self, startingval, multiplier):
-        if self.debugInd:
-            self.callEval["called"] = "getSum"
-        if self.debugInd:
+    def get_sum(self, startingval, multiplier):
+        if self.debug_ind:
+            self.callEval["called"] = "get_sum"
+        if self.debug_ind:
             self.classEval.append(self.callEval)
             self.callEval = {}
-        return (startingval + self.roll(multiplier))
+        return startingval + self.roll(multiplier)
 
 
 # Define a basic test case that'll just make sure the class works.
@@ -155,8 +155,8 @@ if __name__ == '__main__':
     d6 = Die(6)
     print(f'Roll d6 3 times: {d6.roll(3, droplowest=False)}')
     print(f'Roll d6 4 times, drop lowest: {d6.roll(4, droplowest=True)}')
-    print(f'Roll with advantage: {d6.rollWithAdvantage()}')
-    print(f'Roll with disadvantage: {d6.rollWithDisadvantage()}')
-    print(f'Roll for damage with resistance: {d6.rollWithResistance(6)}')
-    print(f'getSum: {d6.getSum(3,1)}')
-    print(d6.getClassEval()[-1])
+    print(f'Roll with advantage: {d6.roll_with_advantage()}')
+    print(f'Roll with disadvantage: {d6.roll_with_disadvantage()}')
+    print(f'Roll for damage with resistance: {d6.roll_with_resistance(6)}')
+    print(f'get_sum: {d6.get_sum(3, 1)}')
+    print(d6.get_class_eval()[-1])

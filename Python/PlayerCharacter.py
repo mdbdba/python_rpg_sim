@@ -125,7 +125,7 @@ class PlayerCharacter(Character):
         self.assign_ability_array()
         self.race_obj = self.assign_race(race_candidate)
         self.class_obj = self.assign_class(class_candidate)
-        self.race_obj.setRandoms(db=self.db, gender=self.gender)
+        self.race_obj.set_randoms(db=self.db, gender=self.gender)
 
         self.ability_array_obj.set_preference_array(self.get_ability_sort_array())
         self.ability_array_obj.set_racial_array(
@@ -245,7 +245,7 @@ class PlayerCharacter(Character):
                f"{self.get_ranged_ammunition_amt()}, '{self.get_armor()}', "
                f"'{self.get_shield()}')")
 
-        self.character_id = db.insertAndReturnId(sql)
+        self.character_id = db.insert_and_return_id(sql)
 
     def valid_character_id(self, db, character_id):
         self.last_method_log = (f'valid_character_id(db, '
@@ -277,14 +277,14 @@ class PlayerCharacter(Character):
 
             self.gender = results[0][1]
             self.race_obj = self.assign_race(results[0][2])
-            self.race_obj.setRandoms(
+            self.race_obj.set_randoms(
                    name=results[0][0],
                    alignment={"alignment": results[0][16],
                               "abbreviation": results[0][17]},
-                   skinTone=results[0][18],
-                   hairColor=results[0][19],
-                   hairType=results[0][20],
-                   eyeColor=results[0][21])
+                   skin_tone=results[0][18],
+                   hair_color=results[0][19],
+                   hair_type=results[0][20],
+                   eye_color=results[0][21])
             self.race_obj.height = results[0][14]
             self.race_obj.weight = results[0][15]
             self.class_obj = self.assign_class(results[0][3])

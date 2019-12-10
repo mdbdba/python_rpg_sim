@@ -11,15 +11,11 @@ class InvokePSQL(object):
         config = configparser.ConfigParser()
         dbini = find_file('db.ini')
         config.read(dbini)
-        db_config = (f"host='{config['DEFAULT']['host']}' "
-                       f"dbname='{config['DEFAULT']['dbname']}' "
-                       f"user='{config['DEFAULT']['user']}' "
-                       f"password='{config['DEFAULT']['password']}' "
-                       f"port='{config['DEFAULT']['port']}'")
-
-        # db_config = "dbname=rpg host=localhost"
-        # db_config = " ".join([db_config, "password=1wm4iMSfX9hzehT port=5433"])
-        # db_config = " ".join([db_config, "user=app"])
+        db_config = (f"host='{config['DEFAULT']['host']}' " 
+                     f"dbname='{config['DEFAULT']['dbname']}' " 
+                     f"user='{config['DEFAULT']['user']}' " 
+                     f"password='{config['DEFAULT']['password']}' " 
+                     f"port='{config['DEFAULT']['port']}'")
 
         try:
             # print('connecting to PostgreSQL database...')
@@ -31,18 +27,18 @@ class InvokePSQL(object):
         except Exception as error:
             print('Error: connection not established {}'.format(error))
 
-    def insertAndReturnId(self, stmt):
+    def insert_and_return_id(self, stmt):
         try:
-            stmt = (f"{stmt} returning id")
+            stmt = f"{stmt} returning id"
             self.cursor.execute(stmt)
-            newId = self.cursor.fetchone()[0]
+            new_id = self.cursor.fetchone()[0]
             self.connection.commit()
 
         except Exception as error:
             print('error execting "{}", error: {}'.format(stmt, error))
             return -1
         else:
-            return newId
+            return new_id
 
     def insert(self, stmt):
         try:

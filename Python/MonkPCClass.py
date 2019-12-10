@@ -3,9 +3,9 @@ from PlayerCharacterClass import PlayerCharacterClass
 
 class MonkPCClass(PlayerCharacterClass):
     def __init__(self, db,
-                 characterAlteringClassOptions=None):
+                 character_altering_class_options=None):
         PlayerCharacterClass.__init__(self, db, "Monk",
-                                      characterAlteringClassOptions)
+                                      character_altering_class_options)
         self.archetype_label = "Monastic Tradition"
         self.melee_weapon = "Shortsword"
         self.ranged_weapon = "Dart"

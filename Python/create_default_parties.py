@@ -2,26 +2,28 @@
 from InvokePSQL import InvokePSQL
 from Party import Party
 
+
 def gen_party(character_id_str, party_composition_id, name, ability_array_str, level, gender_candidate):
     db = InvokePSQL()
-    a1 = Party(db=db,
-               character_id_str=character_id_str,
-               party_composition_id=party_composition_id,
-               name=name,
-               ability_array_str=ability_array_str,
-               level=level,
-               gender_candidate=gender_candidate)
+    Party(db=db,
+          character_id_str=character_id_str,
+          party_composition_id=party_composition_id,
+          name=name,
+          ability_array_str=ability_array_str,
+          level=level,
+          gender_candidate=gender_candidate)
+
 
 if __name__ == '__main__':
-    gen_party(None, 1, 'AllStars_3', '18,18,18,18,18,18',1,'Random')
-    gen_party(None, 11, 'AllStars_4', '18,18,18,18,18,18',1,'Random')
-    gen_party(None, 21, 'AllStars_5', '18,18,18,18,18,18',1,'Random')
-    gen_party(None, 31, 'AllStars_6', '18,18,18,18,18,18',1,'Random')
+    gen_party(None, 1, 'AllStars_3', '18,18,18,18,18,18', 1, 'Random')
+    gen_party(None, 11, 'AllStars_4', '18,18,18,18,18,18', 1, 'Random')
+    gen_party(None, 21, 'AllStars_5', '18,18,18,18,18,18', 1, 'Random')
+    gen_party(None, 31, 'AllStars_6', '18,18,18,18,18,18', 1, 'Random')
 
-    gen_party(None, 1, 'AvgJoes_3', '10,10,10,10,10,10',1,'Random')
-    gen_party(None, 11, 'AvgJoes_4', '10,10,10,10,10,10',1,'Random')
-    gen_party(None, 21, 'AvgJoes_5', '10,10,10,10,10,10',1,'Random')
-    gen_party(None, 31, 'AvgJoes_6', '10,10,10,10,10,10',1,'Random')
+    gen_party(None, 1, 'AvgJoes_3', '10,10,10,10,10,10', 1, 'Random')
+    gen_party(None, 11, 'AvgJoes_4', '10,10,10,10,10,10', 1, 'Random')
+    gen_party(None, 21, 'AvgJoes_5', '10,10,10,10,10,10', 1, 'Random')
+    gen_party(None, 31, 'AvgJoes_6', '10,10,10,10,10,10', 1, 'Random')
 
     gen_party(None, 1, 'Low_3', '6,6,6,6,6,6', 1, 'Random')
     gen_party(None, 11, 'Low_4', '6,6,6,6,6,6', 1, 'Random')
@@ -62,4 +64,3 @@ if __name__ == '__main__':
     gen_party(None, 11, 'point_buy_three_max_4', 'point_buy_three_max', 1, 'Random')
     gen_party(None, 21, 'point_buy_three_max_5', 'point_buy_three_max', 1, 'Random')
     gen_party(None, 31, 'point_buy_three_max_6', 'point_buy_three_max', 1, 'Random')
-

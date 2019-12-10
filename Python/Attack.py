@@ -41,9 +41,9 @@ class Attack(object):
     def roll_attack(self):
         d = Die(20)
         if self.vantage == 'Advantage':
-            r = d.rollWithAdvantage()
+            r = d.roll_with_advantage()
         elif self.vantage == 'Disadvantage':
-            r = d.rollWithDisadvantage()
+            r = d.roll_with_disadvantage()
         else:
             r = d.roll()
         return r

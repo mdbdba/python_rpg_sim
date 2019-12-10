@@ -3,9 +3,9 @@ from PlayerCharacterClass import PlayerCharacterClass
 
 class RoguePCClass(PlayerCharacterClass):
     def __init__(self, db,
-                 characterAlteringClassOptions=None):
+                 character_altering_class_options=None):
         PlayerCharacterClass.__init__(self, db, "Rogue",
-                                      characterAlteringClassOptions)
+                                      character_altering_class_options)
         self.archetype_label = "Roguish Archetype"
         self.melee_weapon = "Rapier"
         self.melee_weapon_offhand = "Dagger"

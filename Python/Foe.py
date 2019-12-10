@@ -50,7 +50,7 @@ class Foe(Character):
         return self.ranged_weapon
 
     def default_melee_attack(self, vantage='Normal'):
-        return self.melee_attack(self.melee_weapon_obj,vantage)
+        return self.melee_attack(self.melee_weapon_obj, vantage)
 
     def find_random(self, db, challenge_level):
         sql = (f"SELECT name FROM dnd_5e.foe "
@@ -63,7 +63,7 @@ class Foe(Character):
             raise ValueError(f'Could not find foe for challenge level: {challenge_level}')
         return retstr
 
-    def get_foe(self, db, foeCandidate):
+    def get_foe(self, db, foe_candidate):
         sql = (f"SELECT id, name, foe_type, size, base_walking_speed, "
                f"challenge_level, ability_string, ability_modifier_string, "
                f"hit_point_die, hit_point_modifier, hit_point_adjustment, "
@@ -71,7 +71,7 @@ class Foe(Character):
                f"ranged_ammunition_type, ranged_ammunition_amt, armor, "
                f"shield, source_material, source_credit_url, "
                f"source_credit_comment FROM dnd_5e.foe "
-               f"where name='{foeCandidate}'")
+               f"where name='{foe_candidate}'")
 
         results = db.query(sql)
         try:
@@ -104,8 +104,8 @@ class Foe(Character):
             self.hit_points = self.assign_hit_points()
             self.cur_hit_points = self.hit_points
             self.temp_hit_points = 0
-        except(IndexError):
-            raise ValueError(f'Could not find foe: {foeCandidate}')
+        except IndexError:
+            raise ValueError(f'Could not find foe: {foe_candidate}')
 
     def assign_hit_points(self):
         self.lastMethodLog = (f'assign_hit_points( '
@@ -116,19 +116,19 @@ class Foe(Character):
             self.hit_point_adjustment = 0
 
         if self.hit_point_generator == 'Max':
-            retVal = ((self.hit_point_modifier * self.hit_point_die)
-                      + (self.hit_point_adjustment))
-        elif (self.hit_point_generator == 'Standard'):
-            retVal = self.standard_hit_points
+            ret_val = ((self.hit_point_modifier * self.hit_point_die)
+                       + self.hit_point_adjustment)
+        elif self.hit_point_generator == 'Standard':
+            ret_val = self.standard_hit_points
         else:
             d = Die(self.hit_point_die)
-            retVal = ((d.roll(self.hit_point_modifier))
-                      + (self.hit_point_adjustment))
+            ret_val = (d.roll(self.hit_point_modifier)
+                       + self.hit_point_adjustment)
 
         if self.debug_ind:
-            self.class_eval[-1]["hitPoints"] = retVal
+            self.class_eval[-1]["hitPoints"] = ret_val
 
-        return retVal
+        return ret_val
 
     def get_racial_traits(self):
         return None
@@ -152,7 +152,6 @@ class Foe(Character):
         else:
             ret_val = False
         return ret_val
-
 
     def __str__(self):
         outstr = (f'{self.__class__.__name__}\n'
@@ -185,7 +184,7 @@ class Foe(Character):
                   f'source_credit_url: {self.source_credit_url}\n'
                   f'source_credit_comment: {self.source_credit_comment}\n')
 
-        outstr = (f'\n{outstr}\n')
+        outstr = f'\n{outstr}\n'
         return outstr
 
 

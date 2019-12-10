@@ -7,9 +7,11 @@ class Fieldsector(object):
                  lighting='Normal'  # Bright, Normal, Dim, Dark
                  ):
         self.terrain_options = ["Normal", "Difficult"]
-        self.terrain = self.set_terrain(terrain)
+        self.set_terrain(terrain)
+        self.original_terrain = self.terrain
         self.lighting_options = ["Bright", "Normal", "Dim", "Dark"]
-        self.lighting = self.set_lighting(lighting)
+        self.set_lighting(lighting)
+        self.original_lighting = self.lighting
         self.occupied = False
         self.occupied_by = None
         self.occupied_by_index = None
@@ -26,11 +28,11 @@ class Fieldsector(object):
         return self.occupied
 
     def occupy_sector(self,
-                      identifierName=None,
-                      identifierIndex=None):
+                      identifier_name=None,
+                      identifier_index=None):
         self.occupied = True
-        self.occupied_by = identifierName
-        self.occupied_by_index = identifierIndex
+        self.occupied_by = identifier_name
+        self.occupied_by_index = identifier_index
 
     def leave_sector(self):
         self.occupied = False

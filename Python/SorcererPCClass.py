@@ -3,9 +3,9 @@ from PlayerCharacterClass import PlayerCharacterClass
 
 class SorcererPCClass(PlayerCharacterClass):
     def __init__(self, db,
-                 characterAlteringClassOptions=None):
+                 character_altering_class_options=None):
         PlayerCharacterClass.__init__(self, db, "Sorcerer",
-                                      characterAlteringClassOptions)
+                                      character_altering_class_options)
         self.archetype_label = "Sorcerous Origin"
         self.melee_weapon = "Dagger"
         self.melee_weapon_offhand = "Dagger"
