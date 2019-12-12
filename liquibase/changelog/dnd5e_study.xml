@@ -36,6 +36,55 @@
         schemaName="dnd_5e"
         tableName="lu_study_instance"/>
       </changeSet>
+      <changeSet author="mdbdba" id="lu_study_2">
+        <createTable
+                schemaName="dnd_5e"
+                tableName="lu_study_run_status">
+          <column name="value" type="varchar(16)"/>
+        </createTable>
+        <addPrimaryKey
+            columnNames="value"
+            constraintName="pk_lu_study_run_status"
+            schemaName="dnd_5e"
+            tableName="lu_study_run_status"/>
+
+      </changeSet>
+      <changeSet author="mdbdba" id="lu_study_3">
+          <insert schemaName="dnd_5e" tableName="lu_study_run_status">
+              <column name="value" value="New"/>
+          </insert>
+          <insert schemaName="dnd_5e" tableName="lu_study_run_status">
+              <column name="value" value="Starting"/>
+          </insert>
+          <insert schemaName="dnd_5e" tableName="lu_study_run_status">
+              <column name="value" value="Running"/>
+          </insert>
+          <insert schemaName="dnd_5e" tableName="lu_study_run_status">
+              <column name="value" value="StatsGen"/>
+          </insert>
+          <insert schemaName="dnd_5e" tableName="lu_study_run_status">
+              <column name="value" value="Done"/>
+          </insert>
+      </changeSet>
+      <changeSet author="mdbdba" id="lu_study_4">
+        <addColumn
+                schemaName="dnd_5e"
+                tableName="lu_study_instance">
+          <column name="run_status" type="varchar(32)"/>
+        </addColumn>
+        <addForeignKeyConstraint baseColumnNames="run_status"
+            baseTableName="lu_study_instance"
+            constraintName="fk_study_run_status"
+            deferrable="true"
+            initiallyDeferred="true"
+            onDelete="CASCADE"
+            onUpdate="RESTRICT"
+            referencedColumnNames="value"
+            referencedTableName="lu_study_run_status"/>
+
+
+
+      </changeSet>
 </databaseChangeLog>
 
 
