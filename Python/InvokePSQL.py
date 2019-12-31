@@ -16,7 +16,8 @@ class InvokePSQL(object):
                      f"user='{config['DEFAULT']['user']}' " 
                      f"password='{config['DEFAULT']['password']}' " 
                      f"port='{config['DEFAULT']['port']}'")
-
+        self.db_id_str = (f"{config['DEFAULT']['user']}@{config['DEFAULT']['host']}:" 
+                          f"{config['DEFAULT']['port']}/{config['DEFAULT']['dbname']}")
         try:
             # print('connecting to PostgreSQL database...')
             self.connection = pg.connect(db_config)
@@ -25,7 +26,7 @@ class InvokePSQL(object):
             self.db_version = self.cursor.fetchone()
 
         except Exception as error:
-            print('Error: connection not established {}'.format(error))
+            print(f"Error: connection to {self.db_id_str} not established {error}")
 
     def insert_and_return_id(self, stmt):
         try:
@@ -68,6 +69,8 @@ class InvokePSQL(object):
         if self.cursor is not None:
             self.cursor.close()
 
+    def __repr__(self):
+        return self.db_id_str
 
 if __name__ == '__main__':
     a1 = InvokePSQL()

@@ -10,7 +10,7 @@ from InvokePSQL import InvokePSQL    # NOQA
 def test_Attack_with_Club():
     db = InvokePSQL()
     a = Weapon(db, 'Club')
-    b = Attack(a, 0)
+    b = Attack(weapon_obj=a, attack_modifier=0, damage_modifier=0)
     assert(b.weapon_obj.name == 'Club')
     assert(b.vantage == 'Normal')
     assert(b.die_used == 4)
@@ -22,7 +22,7 @@ def test_Attack_with_Club():
 def test_Attack_with_Spear():
     db = InvokePSQL()
     a = Weapon(db, 'Spear')
-    b = Attack(a, 0)
+    b = Attack(weapon_obj=a, attack_modifier=0, damage_modifier=0)
     assert(b.weapon_obj.name == 'Spear')
     assert(b.vantage == 'Normal')
     assert(b.die_used == 8)

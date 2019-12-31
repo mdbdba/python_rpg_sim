@@ -9,12 +9,14 @@ from CommonFunctions import string_to_array
 class Foe(Character):
     def __init__(self,
                  db,
+                 foe_name=None,
                  foe_candidate="Random",
                  challenge_level=".25",
                  damage_generator="Random",
                  hit_point_generator="Max",
                  debug_ind=0):
         gender_candidate = 'U'
+        self.name = foe_name
         ability_array_str = 'Common'
         if foe_candidate == "Random":
             foe_candidate = self.find_random(db, challenge_level)
@@ -76,7 +78,12 @@ class Foe(Character):
         results = db.query(sql)
         try:
             # results[0][0]     # id,
-            self.name = results[0][1]     # name,
+            if self.name is None:
+                self.name = results[0][1]     # name,
+            # if name is used for something specific (skeleton_1, or jimmyjam,
+            # this will tell us what creature it is.
+            # Otherwise, these two will match.
+            self.race = results[0][1]
             self.foe_type = results[0][2]     # foe_type,
             self.size = results[0][3]     # size,
             self.base_walking_speed = results[0][4]     # base_walking_speed,
@@ -136,6 +143,9 @@ class Foe(Character):
     def get_name(self):
         return self.name
 
+    def get_race(self):
+        return self.race
+
     def get_alignment_str(self):
         return self.alignment
 
@@ -157,6 +167,7 @@ class Foe(Character):
         outstr = (f'{self.__class__.__name__}\n'
                   f'gender: {self.gender}\n'
                   f'name: {self.get_name()}\n'
+                  f'race: {self.get_race()}\n'
                   f'foe_type: {self.foe_type}\n'
                   f'size: {self.size}\n'
                   f'alignment: {self.get_alignment_str() }\n'

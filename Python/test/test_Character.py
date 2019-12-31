@@ -36,7 +36,7 @@ def test_Character_Default():
     assert(a1.poisoned_ind is False)
     assert(a1.prone_ind is False)
     assert(a1.stunned_ind is False)
-    assert(a1.unconcious_ind is False)
+    assert(a1.unconscious_ind is False)
     assert(a1.exhaustion_level == 0)
     assert(a1.cur_movement > 10)
 
@@ -197,7 +197,7 @@ def test_Character_Death():
     assert(a1.alive is True)
     assert(a1.stabilized is False)
     a1.heal(10)
-    assert(a1.cur_hit_points == 10)
+    assert(a1.cur_hit_points == 11)
     assert(a1.alive is True)
     assert(a1.stabilized is True)
     a1.melee_defend(modifier=13, possible_damage=(2 * a1.hit_points),

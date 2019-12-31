@@ -22,7 +22,7 @@ def ctx_decorator(ctx):
             ctx.add_crumb(t_class, t_method, kwds)
             ret = wrapped(*args, **kwds)
             # print("print attempt")
-            ctx.print_crumbs()
+            # ctx.print_crumbs()
             ctx.pop_crumb()
             return ret
         else:

@@ -7,7 +7,7 @@ ctx = Ctx(app_username='Study_class_init')
 class Study:
     @ctx_decorator(ctx)
     def __init__(self, ctx: Ctx, app_username: str, study_name: str,
-                 study_instance_id: int = None, repititions: int = None):
+                 study_instance_id: int = None, repetitions: int = None):
         self.ctx = ctx
         if self.ctx.app_username == "Unknown" or self.ctx.app_username == "Study_class_init":
             self.ctx.app_username = app_username
@@ -15,7 +15,7 @@ class Study:
         self.log = RpgLogging(logger_name='study_logger', level_threshold='debug')
         self.app_username = app_username
         self.study_name = study_name
-        self.repititions = repititions
+        self.repititions = repetitions
         if study_instance_id is None:
             self.log.debug("Setting up Study Instance", self.ctx)
             # ----- TODO  ----------------

@@ -85,6 +85,18 @@
 
 
       </changeSet>
+      <changeSet author="mdbdba" id="lu_study_5">
+          <renameTable
+              schemaName="dnd_5e"
+              newTableName="study_instance"
+              oldTableName="lu_study_instance" />
+      </changeSet>
+      <changeSet author="mdbdba" id="study_6">
+        <renameTable
+                schemaName="dnd_5e"
+                newTableName="study"
+                oldTableName="lu_study" />
+      </changeSet>
 </databaseChangeLog>
 
 

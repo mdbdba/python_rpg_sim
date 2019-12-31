@@ -55,7 +55,10 @@ class pcClass(Base):
     source_credit_url = Column(String)
     source_credit_comment = Column(String)
 
-# class party(Base):
-#     __tablename__ = 'party'
-#     name = Column(String)
-#     character_id = Column(Integer)
+
+class studyInstance(Base):
+    __tablename__ = 'study_instance'
+    id = Column(Integer, primary_key=True)
+    study_name = Column(String)
+    stats = Column(String)
+    run_status = Column(String)
