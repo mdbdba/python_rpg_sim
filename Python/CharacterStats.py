@@ -12,6 +12,7 @@ def get_empty_dict():
 class CharacterStats:
     study_instance_id: int
     series_id: int
+    encounter_id: int
     character_id: int
     character_name: str
     character_class: str

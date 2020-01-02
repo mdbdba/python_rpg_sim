@@ -7,8 +7,8 @@ from Foe import Foe
 from Encounter import Encounter
 from TraceIt import TraceIt
 from SeriesStats import SeriesStats
+from EncounterStats import EncounterStats
 from CharacterStats import CharacterStats
-
 
 try:
     ctx
@@ -93,6 +93,9 @@ class Series(object):
         for series_counter in range(self.encounter_repetitions):
             display_repetition = series_counter + 1
             print(f"Encounter Repetition: {display_repetition}")
+            t_encounter_stats = EncounterStats(study_instance_id=self.study_instance_id,
+                                               series_id=self.series_id,
+                                               encounter_id=series_counter)
             heroes = self.get_named_party()
             opponents = self.get_foes()
             for Hero in heroes:
@@ -101,8 +104,8 @@ class Series(object):
             for Opponent in opponents:
                 print(f"  {Opponent.get_name()}")
             e = Encounter(heroes, opponents, debug_ind=self.debug_ind_param, tracer=self.t.tracer)
-            self.stats.winning_team = e.winning_list_name
-            self.stats.duration = e.round
+            t_encounter_stats.winning_team = e.winning_list_name
+            t_encounter_stats.duration = e.round
             print(f"The winning party was: {e.winning_list_name} in {e.round} rounds.")
             print(f"The surviving {e.winning_list_name} members:")
             for i in range(len(e.winning_list)):
@@ -112,6 +115,7 @@ class Series(object):
             for Hero in heroes:
                 t_char_stats = CharacterStats(study_instance_id=self.study_instance_id,
                                               series_id=self.series_id,
+                                              encounter_id=series_counter,
                                               character_id=Hero.character_id,
                                               character_name=Hero.get_name(),
                                               character_class=Hero.get_class(),
@@ -125,7 +129,7 @@ class Series(object):
                                               damage_dealt_dict = Hero.get_damage_dealt() ,
                                               damage_taken_dict = Hero.get_damage_taken()
                 )
-                self.stats.heroes.append(t_char_stats)
+                t_encounter_stats.heroes.append(t_char_stats)
                 t_dict = Hero.get_damage_dealt()
                 print(f"  {Hero.get_name()} attacks: {Hero.attack_success_count}/{Hero.attack_roll_count}"
                       f" nat20s:{Hero.attack_roll_nat20_count} nat1s: {Hero.attack_roll_nat1_count}")
@@ -136,6 +140,7 @@ class Series(object):
             for Opponent in opponents:
                 t_char_stats = CharacterStats(study_instance_id=self.study_instance_id,
                                               series_id=self.series_id,
+                                              encounter_id=series_counter,
                                               character_id=-1,
                                               character_name=Opponent.get_name(),
                                               character_class='Foe',
@@ -149,7 +154,7 @@ class Series(object):
                                               damage_dealt_dict=Opponent.get_damage_dealt(),
                                               damage_taken_dict=Opponent.get_damage_taken()
                                               )
-                self.stats.opponents.append(t_char_stats)
+                t_encounter_stats.opponents.append(t_char_stats)
                 t_dict = Opponent.get_damage_dealt()
                 print(f"  {Opponent.get_name()} attacks: {Opponent.attack_success_count}/{Opponent.attack_roll_count}"
                       f" nat20s: {Opponent.attack_roll_nat20_count} nat1s: {Opponent.attack_roll_nat1_count}")
@@ -158,8 +163,10 @@ class Series(object):
                 t_dict = Opponent.get_damage_taken()
                 print(f"  {Opponent.get_name()} damage taken ({t_dict['Total']}): {Opponent.get_damage_taken()}")
 
+            self.stats.encounters.append(t_encounter_stats)
             self.stats.update_totals()
-            print(self.stats)
+
+        print(self.stats)
 
 
 if __name__ == '__main__':
@@ -176,5 +183,5 @@ if __name__ == '__main__':
     t = TraceIt("series")
 
     a1 = Series(db=db, ctx=ctx, study_instance_id=1,
-                encounter_repetitions=1,
+                encounter_repetitions=2,
                 encounter_param_dict=series_dict, tracer=t)
