@@ -1,5 +1,7 @@
 Python/db.ini
 docker/sim_graphql/o11y.ini
+docker/sim_graphql/o11y.ini.dnu
+logs/
 venv/
 venv38/
 

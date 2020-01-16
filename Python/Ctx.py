@@ -6,7 +6,7 @@ from datetime import datetime
 import wrapt
 import logging
 import structlog
-
+import itertools
 
 def ctx_decorator(ctx):
 
@@ -29,90 +29,6 @@ def ctx_decorator(ctx):
             return wrapped(*args, **kwds)
     return wrapper
 
-
-class RpgLogging:
-    def __init__(self, logger_name='rpg_logging', level_threshold='warning'):
-        switcher = {
-            'notset': logging.NOTSET,
-            'debug': logging.DEBUG,
-            'info': logging.INFO,
-            'warning': logging.WARNING,
-            'error': logging.ERROR,
-            'critical': logging.CRITICAL
-        }
-        log_level = switcher.get(level_threshold, logging.WARNING)
-        structlog.configure(
-            processors=[
-                structlog.stdlib.filter_by_level,
-                structlog.stdlib.add_logger_name,
-                structlog.stdlib.add_log_level,
-                structlog.stdlib.PositionalArgumentsFormatter(),
-                structlog.processors.TimeStamper(fmt="iso"),
-                structlog.processors.StackInfoRenderer(),
-                structlog.processors.format_exc_info,
-                structlog.processors.UnicodeDecoder(),
-                structlog.stdlib.render_to_log_kwargs,
-                structlog.processors.ExceptionPrettyPrinter(),
-                structlog.processors.JSONRenderer(indent=2),
-            ],
-            context_class=dict,
-            logger_factory=structlog.stdlib.LoggerFactory(),
-            wrapper_class=structlog.stdlib.BoundLogger,
-            cache_logger_on_first_use=True,
-        )
-        formatter = structlog.stdlib.ProcessorFormatter(
-            processor=structlog.dev.ConsoleRenderer()
-        )
-        handler = logging.StreamHandler()
-        handler.setFormatter(formatter)
-        self.logger = structlog.get_logger(logger_name)
-        self.logger.addHandler(handler)
-        self.logger.setLevel(log_level)
-        self.logger.info("logger configured")
-
-    def get_logger(self):
-        return self.logger
-
-    def get_log_rec(self, msg, ctx, return_crumbs='None'):
-        crumb = []
-        crumbs = []
-        if return_crumbs == 'One' or return_crumbs == 'All':
-            crumb = ctx.get_last_crumb()
-        if return_crumbs == 'All':
-            crumbs = ctx.get_crumbs()
-
-        return {'_text': msg,
-                'app_username': ctx.app_username,
-                'study_name': ctx.study_name,
-                'study_instance_id': ctx.study_instance_id,
-                'series_id': ctx.series_id,
-                'encounter_id': ctx.encounter_id,
-                'trace_id': ctx.trace_id,
-                'request_type':  ctx.request_type,
-                'round': ctx.round,
-                'turn': ctx.turn,
-                'crumb': crumb,
-                'crumbs': crumbs}
-
-    def notset(self, msg, ctx):
-        self.logger.notset(self.get_log_rec(msg, ctx))
-
-    def debug(self, msg, ctx):
-        self.logger.debug(self.get_log_rec(msg, ctx, 'All'))
-
-    def info(self, msg, ctx):
-        self.logger.info(self.get_log_rec(msg, ctx, 'One'))
-
-    def warning(self, msg, ctx):
-        self.logger.warning(self.get_log_rec(msg, ctx))
-
-    def error(self, msg, ctx):
-        self.logger.error(self.get_log_rec(msg, ctx, 'One'))
-
-    def critical(self, msg, ctx):
-        self.logger.critical(self.get_log_rec(msg, ctx, 'All'))
-
-
 @dataclass
 class Crumb:
     className: str
@@ -129,6 +45,7 @@ def init_crumbs():
 class Ctx:
     app_username: str = "Unknown"
     fullyqualified: str = ""
+    logger_name: str = fullyqualified
     trace_id: str = ""
     request_type = "Standard"   # or "Trace"
     study_instance_id: int = -1
@@ -137,7 +54,12 @@ class Ctx:
     encounter_id: int = -1
     round: int = 0
     turn: int = 0
+    log_counter = itertools.count(1,1)
     crumbs: List[Crumb] = field(default_factory=init_crumbs)
+
+
+    def get_next_log_id(self):
+        return next(self.log_counter)
 
     def add_crumb(self, class_name: str, method_name: str, method_params: Dict):
         t_crumb = Crumb(class_name, method_name, method_params)
@@ -164,6 +86,101 @@ class Ctx:
             return_value = []
         return return_value
 
+class RpgLogging:
+    def __init__(self, logger_name='rpg_logging', level_threshold='warning'):
+        switcher = {
+            'notset': logging.NOTSET,
+            'debug': logging.DEBUG,
+            'info': logging.INFO,
+            'warning': logging.WARNING,
+            'error': logging.ERROR,
+            'critical': logging.CRITICAL
+        }
+        self.log_level = switcher.get(level_threshold, logging.WARNING)
+        self.logger_name = logger_name
+        self.logger = structlog.get_logger(logger_name)
+
+
+    def setup_logging(self):
+        logging.basicConfig(
+            format="%(message)s",
+            level=self.log_level,
+            filename=f'../logs/{self.logger_name}.log',
+            filemode='w'
+        )
+        structlog.configure(
+            processors=[
+                structlog.stdlib.filter_by_level,
+                structlog.stdlib.add_logger_name,
+                structlog.stdlib.add_log_level,
+                structlog.stdlib.PositionalArgumentsFormatter(),
+                structlog.processors.TimeStamper(fmt="iso"),
+                structlog.processors.StackInfoRenderer(),
+                structlog.processors.format_exc_info,
+                structlog.processors.UnicodeDecoder(),
+                structlog.stdlib.render_to_log_kwargs,
+                structlog.processors.ExceptionPrettyPrinter(),
+                structlog.processors.JSONRenderer(indent=2),
+            ],
+            context_class=dict,
+            logger_factory=structlog.stdlib.LoggerFactory(),
+            wrapper_class=structlog.stdlib.BoundLogger,
+            cache_logger_on_first_use=True,
+        )
+        formatter = structlog.stdlib.ProcessorFormatter(
+            # processor=structlog.dev.ConsoleRenderer()
+            processor=structlog.processors.JSONRenderer()
+        )
+        handler = logging.StreamHandler()
+        handler.setFormatter(formatter)
+        self.logger = structlog.get_logger(self.logger_name)
+        self.logger.addHandler(handler)
+        self.logger.setLevel(self.log_level)
+        self.logger.info("logger configured")
+
+    def get_log_rec(self, msg:str, ctx:Ctx, return_crumbs='None'):
+        crumb = []
+        crumbs = []
+        if return_crumbs == 'One' or return_crumbs == 'All':
+            crumb = ctx.get_last_crumb()
+        if return_crumbs == 'All':
+            crumbs = ctx.get_crumbs()
+
+        log_id = ctx.get_next_log_id()
+
+        return {'_text': msg,
+                'app_username': ctx.app_username,
+                'study_name': ctx.study_name,
+                'study_instance_id': ctx.study_instance_id,
+                'series_id': ctx.series_id,
+                'encounter_id': ctx.encounter_id,
+                'trace_id': ctx.trace_id,
+                'request_type':  ctx.request_type,
+                'round': ctx.round,
+                'turn': ctx.turn,
+                'log_id': log_id,
+                'crumb': crumb,
+                'crumbs': crumbs}
+
+    def notset(self, msg, ctx):
+        self.logger.notset(self.get_log_rec(msg, ctx))
+
+    def debug(self, msg, ctx):
+        self.logger.debug(self.get_log_rec(msg, ctx, 'All'))
+
+    def info(self, msg, ctx):
+        self.logger.info(self.get_log_rec(msg, ctx, 'One'))
+
+    def warning(self, msg, ctx):
+        self.logger.warning(self.get_log_rec(msg, ctx))
+
+    def error(self, msg, ctx):
+        self.logger.error(self.get_log_rec(msg, ctx, 'One'))
+
+    def critical(self, msg, ctx):
+        self.logger.critical(self.get_log_rec(msg, ctx, 'All'))
+
+
 
 if __name__ == '__main__':
     ctx = Ctx(app_username='demo_user_1', encounter_id=123, round=0, turn=0)
@@ -174,9 +191,14 @@ if __name__ == '__main__':
     print(ctx.get_last_crumb())
     ctx.pop_crumb()
     print(ctx.get_last_crumb())
-    l = RpgLogging('ctx_main_test', 'debug')
+    # -----------
+    l = RpgLogging(__name__, 'debug')
+    l.setup_logging()
     l.debug("debug message", ctx)
     l.info("info message", ctx)
     l.warning("warning message", ctx)
     l.error("error message", ctx)
     l.critical("critical message", ctx)
+
+    m = RpgLogging('ctx_main_test', 'debug')
+    m.debug("debug message", ctx)

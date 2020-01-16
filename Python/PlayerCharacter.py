@@ -21,11 +21,13 @@ from WarlockPCClass import WarlockPCClass
 from WizardPCClass import WizardPCClass
 from Weapon import Weapon
 from Die import Die
+from Ctx import Ctx
 
 
 class PlayerCharacter(Character):
     def __init__(self,
                  db,
+                 ctx:Ctx,
                  character_id=-1,
                  race_candidate="Random",
                  class_candidate="Random",
@@ -36,7 +38,7 @@ class PlayerCharacter(Character):
                  level=1,
                  debug_ind=0):
 
-        Character.__init__(self, db, gender_candidate,
+        Character.__init__(self, db, ctx, gender_candidate,
                            ability_array_str, damage_generator,
                            hit_point_generator, level, debug_ind)
         if character_id == -1:
@@ -91,9 +93,8 @@ class PlayerCharacter(Character):
         self.class_eval[-1]["abilityArray"] = (
             array_to_string(self.get_ability_array()))
 
-        if self.debug_ind == 1:
-            for pi in self.__str__().splitlines():
-                self.logger.debug(f"{self.get_name()}: {pi}")
+        for pi in self.__str__().splitlines():
+            self.logger.debug(f"{self.get_name()}: {pi}", ctx)
 
     def assign_race(self, race_candidate):
         self.last_method_log = f'assign_race({race_candidate})'
@@ -207,7 +208,7 @@ class PlayerCharacter(Character):
         if self.hit_point_generator == 'Max':
             ret_val = (self.hit_points + (hit_die + modifier + racial_adj))
         else:
-            d = Die(self.hit_die)
+            d = Die(self.get_hit_die())
             ret_val = d.roll(1) + (modifier + racial_adj)
         return ret_val
 
@@ -600,20 +601,21 @@ class PlayerCharacter(Character):
 
 if __name__ == '__main__':
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate='Hill dwarf', level=10, debug_ind=1)
+    ctx = Ctx(app_username='playercharacter_class_init')
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate='Hill dwarf', level=10, debug_ind=1)
 
-    a2 = PlayerCharacter(db=db,
+    a2 = PlayerCharacter(db=db, ctx=ctx,
                          ability_array_str='10,11,12,13,14,15',
                          debug_ind=1)
     a2.ability_array_obj.set_preference_array(pref_array=string_to_array(
                                             '5,0,2,1,4,3'
                                             ))
-    a5 = PlayerCharacter(db, race_candidate='Hill dwarf', level=10, debug_ind=1)
+    a5 = PlayerCharacter(db=db, ctx=ctx, race_candidate='Hill dwarf', level=10, debug_ind=1)
     for i in range(len(a5.get_class_eval())):
         for key, value in a5.get_class_eval()[i].items():
             print(f"{i} -- {str(key).ljust(25)}: {value}")
 #
-    a6 = PlayerCharacter(db,
+    a6 = PlayerCharacter(db=db, ctx=ctx,
                          ability_array_str="18,12,12,10,10,8",
                          race_candidate="Mountain Dwarf",
                          class_candidate="Barbarian",
@@ -628,7 +630,7 @@ if __name__ == '__main__':
     t_a1 = a5.default_melee_attack()
     a6.melee_defend(attack_value=t_a1[0], possible_damage=t_a1[1], damage_type=t_a1[2])
 
-    a7 = PlayerCharacter(db,
+    a7 = PlayerCharacter(db=db, ctx=ctx,
                          ability_array_str="6,6,6,6,6,6",
                          race_candidate="Half-Orc",
                          class_candidate="Barbarian",

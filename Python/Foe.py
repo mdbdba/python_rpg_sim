@@ -2,6 +2,7 @@ from InvokePSQL import InvokePSQL
 from Character import Character
 from Weapon import Weapon
 from Die import Die
+from Ctx import Ctx
 
 from CommonFunctions import string_to_array
 
@@ -9,6 +10,7 @@ from CommonFunctions import string_to_array
 class Foe(Character):
     def __init__(self,
                  db,
+                 ctx:Ctx,
                  foe_name=None,
                  foe_candidate="Random",
                  challenge_level=".25",
@@ -21,7 +23,7 @@ class Foe(Character):
         if foe_candidate == "Random":
             foe_candidate = self.find_random(db, challenge_level)
         level = 1   # Player level will always be 1 for Foes
-        Character.__init__(self, db, gender_candidate, ability_array_str,
+        Character.__init__(self, db, ctx, gender_candidate, ability_array_str,
                            damage_generator, hit_point_generator,
                            level, debug_ind)
         self.get_foe(db, foe_candidate)
@@ -40,10 +42,6 @@ class Foe(Character):
                        "hit_point_generator": hit_point_generator,
                        "level": level,
                        "debug_ind": debug_ind})
-
-        if self.debug_ind == 1:
-            for i in self.__str__().splitlines():
-                self.logger.debug(f"{self.get_name()}: {i}")
 
     def get_melee_weapon(self):
         return self.melee_weapon
@@ -201,7 +199,8 @@ class Foe(Character):
 
 if __name__ == '__main__':
     db = InvokePSQL()
-    a1 = Foe(db, foe_candidate="Skeleton", debug_ind=1)
+    ctx = Ctx(app_username='foe_class_init')
+    a1 = Foe(db=db, ctx=ctx, foe_candidate="Skeleton", debug_ind=1)
     print(a1)
     a1.melee_defend(modifier=13, possible_damage=a1.hit_points,
                     damage_type='Bludgeoning')
