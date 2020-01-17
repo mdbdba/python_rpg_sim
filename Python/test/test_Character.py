@@ -5,11 +5,12 @@ from PlayerCharacter import PlayerCharacter    # NOQA
 from InvokePSQL import InvokePSQL    # NOQA
 from CommonFunctions import array_to_string, string_to_array    # NOQA
 from CommonFunctions import compare_arrays    # NOQA
-
+from Ctx import Ctx
 
 def test_Character_Default():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db)
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db,ctx=ctx)
     assert(a1)
     assert(a1.get_name())
     assert(a1.get_raw_ability_array())
@@ -43,7 +44,8 @@ def test_Character_Default():
 
 def test_Character_Strict():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, ability_array_str="strict")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db,ctx=ctx, ability_array_str="strict")
     assert(a1)
     assert(a1.get_raw_ability_array())
     assert(a1.get_ability_array())
@@ -59,7 +61,8 @@ def test_Race_Standard_Array():
     found10 = False
     found8 = False
 
-    a1 = PlayerCharacter(db, ability_array_str="standard")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, ability_array_str="standard")
     assert(a1)
     tmp_array = a1.get_raw_ability_array()
     for i in range(0, 6):
@@ -87,7 +90,8 @@ def test_Race_Standard_Array():
 
 def test_Character_Dwarf_Barbarian():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db,
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx,
                          race_candidate="Mountain dwarf",
                          class_candidate="Barbarian")
     assert(a1)
@@ -112,7 +116,8 @@ def test_Character_Dwarf_Barbarian():
 
 def test_Character_Halfling_Bard():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db,
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx,
                          race_candidate="Stout halfling",
                          class_candidate="Bard")
     assert(a1)
@@ -136,8 +141,9 @@ def test_Character_Halfling_Bard():
 
 def test_RandomGen_Retrieve():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db)
-    b1 = PlayerCharacter(db, character_id=a1.character_id)
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx)
+    b1 = PlayerCharacter(db=db, ctx=ctx, character_id=a1.character_id)
     assert(a1)
     assert(b1)
     assert(a1.level == b1.level)
@@ -169,7 +175,8 @@ def test_RandomGen_Retrieve():
 
 def test_Character_Poison_Resistance():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db,
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx,
                          race_candidate="Mountain Dwarf",
                          class_candidate="Barbarian")
     assert(a1)
@@ -183,7 +190,8 @@ def test_Character_Poison_Resistance():
 
 def test_Character_Death():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db,
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx,
                          ability_array_str="18,12,12,10,10,8",
                          race_candidate="Mountain Dwarf",
                          class_candidate="Barbarian")
@@ -207,7 +215,8 @@ def test_Character_Death():
 
 def test_Character_Checks():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db,
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx,
                          ability_array_str="18,12,12,10,10,8",
                          race_candidate="Mountain Dwarf",
                          class_candidate="Barbarian")
@@ -274,7 +283,8 @@ def test_Character_Checks():
 
 def test_Character_Hilldwarf_Barbarian():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Hill dwarf", class_candidate="Barbarian")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Hill dwarf", class_candidate="Barbarian")
     assert(a1)
     assert(a1.get_race() == "Hill dwarf")
     assert(a1.get_class() == "Barbarian")
@@ -295,7 +305,8 @@ def test_Character_Hilldwarf_Barbarian():
 
 def test_Character_Highelf_Barbarian():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="High elf", class_candidate="Barbarian")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="High elf", class_candidate="Barbarian")
     assert(a1)
     assert(a1.get_race() == "High elf")
     assert(a1.get_class() == "Barbarian")
@@ -315,7 +326,8 @@ def test_Character_Highelf_Barbarian():
 
 def test_Character_Woodelf_Barbarian():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Wood elf", class_candidate="Barbarian")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Wood elf", class_candidate="Barbarian")
     assert(a1)
     assert(a1.get_race() == "Wood elf")
     assert(a1.get_class() == "Barbarian")
@@ -335,7 +347,8 @@ def test_Character_Woodelf_Barbarian():
 
 def test_Character_Lightfoothalfling_Barbarian():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Lightfoot halfling", class_candidate="Barbarian")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Lightfoot halfling", class_candidate="Barbarian")
     assert(a1)
     assert(a1.get_race() == "Lightfoot halfling")
     assert(a1.get_class() == "Barbarian")
@@ -355,7 +368,8 @@ def test_Character_Lightfoothalfling_Barbarian():
 
 def test_Character_Stouthalfling_Barbarian():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Stout halfling", class_candidate="Barbarian")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Stout halfling", class_candidate="Barbarian")
     assert(a1)
     assert(a1.get_race() == "Stout halfling")
     assert(a1.get_class() == "Barbarian")
@@ -375,7 +389,8 @@ def test_Character_Stouthalfling_Barbarian():
 
 def test_Character_HalfElf_Barbarian():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Half-Elf", class_candidate="Barbarian")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Half-Elf", class_candidate="Barbarian")
     assert(a1)
     assert(a1.get_race() == "Half-Elf")
     assert(a1.get_class() == "Barbarian")
@@ -395,7 +410,8 @@ def test_Character_HalfElf_Barbarian():
 
 def test_Character_Human_Barbarian():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Human", class_candidate="Barbarian")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Human", class_candidate="Barbarian")
     assert(a1)
     assert(a1.get_race() == "Human")
     assert(a1.get_class() == "Barbarian")
@@ -415,7 +431,8 @@ def test_Character_Human_Barbarian():
 
 def test_Character_Blackdragonborn_Barbarian():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Black dragonborn", class_candidate="Barbarian")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Black dragonborn", class_candidate="Barbarian")
     assert(a1)
     assert(a1.get_race() == "Black dragonborn")
     assert(a1.get_class() == "Barbarian")
@@ -435,7 +452,8 @@ def test_Character_Blackdragonborn_Barbarian():
 
 def test_Character_Bluedragonborn_Barbarian():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Blue dragonborn", class_candidate="Barbarian")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Blue dragonborn", class_candidate="Barbarian")
     assert(a1)
     assert(a1.get_race() == "Blue dragonborn")
     assert(a1.get_class() == "Barbarian")
@@ -455,7 +473,8 @@ def test_Character_Bluedragonborn_Barbarian():
 
 def test_Character_Brassdragonborn_Barbarian():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Brass dragonborn", class_candidate="Barbarian")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Brass dragonborn", class_candidate="Barbarian")
     assert(a1)
     assert(a1.get_race() == "Brass dragonborn")
     assert(a1.get_class() == "Barbarian")
@@ -475,7 +494,8 @@ def test_Character_Brassdragonborn_Barbarian():
 
 def test_Character_Bronzedragonborn_Barbarian():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Bronze dragonborn", class_candidate="Barbarian")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Bronze dragonborn", class_candidate="Barbarian")
     assert(a1)
     assert(a1.get_race() == "Bronze dragonborn")
     assert(a1.get_class() == "Barbarian")
@@ -495,7 +515,8 @@ def test_Character_Bronzedragonborn_Barbarian():
 
 def test_Character_Copperdragonborn_Barbarian():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Copper dragonborn", class_candidate="Barbarian")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Copper dragonborn", class_candidate="Barbarian")
     assert(a1)
     assert(a1.get_race() == "Copper dragonborn")
     assert(a1.get_class() == "Barbarian")
@@ -515,7 +536,8 @@ def test_Character_Copperdragonborn_Barbarian():
 
 def test_Character_Golddragonborn_Barbarian():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Gold dragonborn", class_candidate="Barbarian")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Gold dragonborn", class_candidate="Barbarian")
     assert(a1)
     assert(a1.get_race() == "Gold dragonborn")
     assert(a1.get_class() == "Barbarian")
@@ -535,7 +557,8 @@ def test_Character_Golddragonborn_Barbarian():
 
 def test_Character_Greendragonborn_Barbarian():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Green dragonborn", class_candidate="Barbarian")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Green dragonborn", class_candidate="Barbarian")
     assert(a1)
     assert(a1.get_race() == "Green dragonborn")
     assert(a1.get_class() == "Barbarian")
@@ -555,7 +578,8 @@ def test_Character_Greendragonborn_Barbarian():
 
 def test_Character_Reddragonborn_Barbarian():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Red dragonborn", class_candidate="Barbarian")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Red dragonborn", class_candidate="Barbarian")
     assert(a1)
     assert(a1.get_race() == "Red dragonborn")
     assert(a1.get_class() == "Barbarian")
@@ -575,7 +599,8 @@ def test_Character_Reddragonborn_Barbarian():
 
 def test_Character_Silverdragonborn_Barbarian():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Silver dragonborn", class_candidate="Barbarian")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Silver dragonborn", class_candidate="Barbarian")
     assert(a1)
     assert(a1.get_race() == "Silver dragonborn")
     assert(a1.get_class() == "Barbarian")
@@ -595,7 +620,8 @@ def test_Character_Silverdragonborn_Barbarian():
 
 def test_Character_Whitedragonborn_Barbarian():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="White dragonborn", class_candidate="Barbarian")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="White dragonborn", class_candidate="Barbarian")
     assert(a1)
     assert(a1.get_race() == "White dragonborn")
     assert(a1.get_class() == "Barbarian")
@@ -615,7 +641,8 @@ def test_Character_Whitedragonborn_Barbarian():
 
 def test_Character_Rockgnome_Barbarian():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Rock gnome", class_candidate="Barbarian")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Rock gnome", class_candidate="Barbarian")
     assert(a1)
     assert(a1.get_race() == "Rock gnome")
     assert(a1.get_class() == "Barbarian")
@@ -635,7 +662,8 @@ def test_Character_Rockgnome_Barbarian():
 
 def test_Character_HalfOrc_Barbarian():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Half-Orc", class_candidate="Barbarian")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Half-Orc", class_candidate="Barbarian")
     assert(a1)
     assert(a1.get_race() == "Half-Orc")
     assert(a1.get_class() == "Barbarian")
@@ -655,7 +683,8 @@ def test_Character_HalfOrc_Barbarian():
 
 def test_Character_Tiefling_Barbarian():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Tiefling", class_candidate="Barbarian")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Tiefling", class_candidate="Barbarian")
     assert(a1)
     assert(a1.get_race() == "Tiefling")
     assert(a1.get_class() == "Barbarian")
@@ -675,7 +704,8 @@ def test_Character_Tiefling_Barbarian():
 
 def test_Character_Centaur_Barbarian():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Centaur", class_candidate="Barbarian")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Centaur", class_candidate="Barbarian")
     assert(a1)
     assert(a1.get_race() == "Centaur")
     assert(a1.get_class() == "Barbarian")
@@ -695,7 +725,8 @@ def test_Character_Centaur_Barbarian():
 
 def test_Character_Blackbearkin_Barbarian():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Black bearkin", class_candidate="Barbarian")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Black bearkin", class_candidate="Barbarian")
     assert(a1)
     assert(a1.get_race() == "Black bearkin")
     assert(a1.get_class() == "Barbarian")
@@ -715,7 +746,8 @@ def test_Character_Blackbearkin_Barbarian():
 
 def test_Character_Brownbearkin_Barbarian():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Brown bearkin", class_candidate="Barbarian")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Brown bearkin", class_candidate="Barbarian")
     assert(a1)
     assert(a1.get_race() == "Brown bearkin")
     assert(a1.get_class() == "Barbarian")
@@ -735,7 +767,8 @@ def test_Character_Brownbearkin_Barbarian():
 
 def test_Character_Koalabearkin_Barbarian():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Koala bearkin", class_candidate="Barbarian")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Koala bearkin", class_candidate="Barbarian")
     assert(a1)
     assert(a1.get_race() == "Koala bearkin")
     assert(a1.get_class() == "Barbarian")
@@ -755,7 +788,8 @@ def test_Character_Koalabearkin_Barbarian():
 
 def test_Character_Pandabearkin_Barbarian():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Panda bearkin", class_candidate="Barbarian")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Panda bearkin", class_candidate="Barbarian")
     assert(a1)
     assert(a1.get_race() == "Panda bearkin")
     assert(a1.get_class() == "Barbarian")
@@ -775,7 +809,8 @@ def test_Character_Pandabearkin_Barbarian():
 
 def test_Character_Polarbearkin_Barbarian():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Polar bearkin", class_candidate="Barbarian")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Polar bearkin", class_candidate="Barbarian")
     assert(a1)
     assert(a1.get_race() == "Polar bearkin")
     assert(a1.get_class() == "Barbarian")
@@ -795,7 +830,8 @@ def test_Character_Polarbearkin_Barbarian():
 
 def test_Character_Burrowskobold_Barbarian():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Burrows kobold", class_candidate="Barbarian")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Burrows kobold", class_candidate="Barbarian")
     assert(a1)
     assert(a1.get_race() == "Burrows kobold")
     assert(a1.get_class() == "Barbarian")
@@ -815,7 +851,8 @@ def test_Character_Burrowskobold_Barbarian():
 
 def test_Character_Loredrakekobold_Barbarian():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Loredrake kobold", class_candidate="Barbarian")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Loredrake kobold", class_candidate="Barbarian")
     assert(a1)
     assert(a1.get_race() == "Loredrake kobold")
     assert(a1.get_class() == "Barbarian")
@@ -835,7 +872,8 @@ def test_Character_Loredrakekobold_Barbarian():
 
 def test_Character_Wingedkobold_Barbarian():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Winged kobold", class_candidate="Barbarian")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Winged kobold", class_candidate="Barbarian")
     assert(a1)
     assert(a1.get_race() == "Winged kobold")
     assert(a1.get_class() == "Barbarian")
@@ -855,7 +893,8 @@ def test_Character_Wingedkobold_Barbarian():
 
 def test_Character_Greenskingoblin_Barbarian():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Greenskin goblin", class_candidate="Barbarian")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Greenskin goblin", class_candidate="Barbarian")
     assert(a1)
     assert(a1.get_race() == "Greenskin goblin")
     assert(a1.get_class() == "Barbarian")
@@ -875,7 +914,8 @@ def test_Character_Greenskingoblin_Barbarian():
 
 def test_Character_Boggartgoblin_Barbarian():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Boggart goblin", class_candidate="Barbarian")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Boggart goblin", class_candidate="Barbarian")
     assert(a1)
     assert(a1.get_race() == "Boggart goblin")
     assert(a1.get_class() == "Barbarian")
@@ -895,7 +935,8 @@ def test_Character_Boggartgoblin_Barbarian():
 
 def test_Character_Gremlingoblin_Barbarian():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Gremlin goblin", class_candidate="Barbarian")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Gremlin goblin", class_candidate="Barbarian")
     assert(a1)
     assert(a1.get_race() == "Gremlin goblin")
     assert(a1.get_class() == "Barbarian")
@@ -915,7 +956,8 @@ def test_Character_Gremlingoblin_Barbarian():
 
 def test_Character_Dryad_Barbarian():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Dryad", class_candidate="Barbarian")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Dryad", class_candidate="Barbarian")
     assert(a1)
     assert(a1.get_race() == "Dryad")
     assert(a1.get_class() == "Barbarian")
@@ -935,7 +977,8 @@ def test_Character_Dryad_Barbarian():
 
 def test_Character_Hilldwarf_Bard():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Hill dwarf", class_candidate="Bard")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Hill dwarf", class_candidate="Bard")
     assert(a1)
     assert(a1.get_race() == "Hill dwarf")
     assert(a1.get_class() == "Bard")
@@ -955,7 +998,8 @@ def test_Character_Hilldwarf_Bard():
 
 def test_Character_Highelf_Bard():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="High elf", class_candidate="Bard")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="High elf", class_candidate="Bard")
     assert(a1)
     assert(a1.get_race() == "High elf")
     assert(a1.get_class() == "Bard")
@@ -975,7 +1019,8 @@ def test_Character_Highelf_Bard():
 
 def test_Character_Mountaindwarf_Bard():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Mountain dwarf", class_candidate="Bard")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Mountain dwarf", class_candidate="Bard")
     assert(a1)
     assert(a1.get_race() == "Mountain dwarf")
     assert(a1.get_class() == "Bard")
@@ -995,7 +1040,8 @@ def test_Character_Mountaindwarf_Bard():
 
 def test_Character_Woodelf_Bard():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Wood elf", class_candidate="Bard")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Wood elf", class_candidate="Bard")
     assert(a1)
     assert(a1.get_race() == "Wood elf")
     assert(a1.get_class() == "Bard")
@@ -1015,7 +1061,8 @@ def test_Character_Woodelf_Bard():
 
 def test_Character_Lightfoothalfling_Bard():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Lightfoot halfling", class_candidate="Bard")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Lightfoot halfling", class_candidate="Bard")
     assert(a1)
     assert(a1.get_race() == "Lightfoot halfling")
     assert(a1.get_class() == "Bard")
@@ -1036,7 +1083,8 @@ def test_Character_Lightfoothalfling_Bard():
 
 def test_Character_HalfElf_Bard():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Half-Elf", class_candidate="Bard")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Half-Elf", class_candidate="Bard")
     assert(a1)
     assert(a1.get_race() == "Half-Elf")
     assert(a1.get_class() == "Bard")
@@ -1056,7 +1104,8 @@ def test_Character_HalfElf_Bard():
 
 def test_Character_Human_Bard():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Human", class_candidate="Bard")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Human", class_candidate="Bard")
     assert(a1)
     assert(a1.get_race() == "Human")
     assert(a1.get_class() == "Bard")
@@ -1076,7 +1125,8 @@ def test_Character_Human_Bard():
 
 def test_Character_Blackdragonborn_Bard():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Black dragonborn", class_candidate="Bard")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Black dragonborn", class_candidate="Bard")
     assert(a1)
     assert(a1.get_race() == "Black dragonborn")
     assert(a1.get_class() == "Bard")
@@ -1096,7 +1146,8 @@ def test_Character_Blackdragonborn_Bard():
 
 def test_Character_Bluedragonborn_Bard():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Blue dragonborn", class_candidate="Bard")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Blue dragonborn", class_candidate="Bard")
     assert(a1)
     assert(a1.get_race() == "Blue dragonborn")
     assert(a1.get_class() == "Bard")
@@ -1116,7 +1167,8 @@ def test_Character_Bluedragonborn_Bard():
 
 def test_Character_Brassdragonborn_Bard():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Brass dragonborn", class_candidate="Bard")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Brass dragonborn", class_candidate="Bard")
     assert(a1)
     assert(a1.get_race() == "Brass dragonborn")
     assert(a1.get_class() == "Bard")
@@ -1136,7 +1188,8 @@ def test_Character_Brassdragonborn_Bard():
 
 def test_Character_Bronzedragonborn_Bard():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Bronze dragonborn", class_candidate="Bard")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Bronze dragonborn", class_candidate="Bard")
     assert(a1)
     assert(a1.get_race() == "Bronze dragonborn")
     assert(a1.get_class() == "Bard")
@@ -1156,7 +1209,8 @@ def test_Character_Bronzedragonborn_Bard():
 
 def test_Character_Copperdragonborn_Bard():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Copper dragonborn", class_candidate="Bard")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Copper dragonborn", class_candidate="Bard")
     assert(a1)
     assert(a1.get_race() == "Copper dragonborn")
     assert(a1.get_class() == "Bard")
@@ -1176,7 +1230,8 @@ def test_Character_Copperdragonborn_Bard():
 
 def test_Character_Golddragonborn_Bard():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Gold dragonborn", class_candidate="Bard")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Gold dragonborn", class_candidate="Bard")
     assert(a1)
     assert(a1.get_race() == "Gold dragonborn")
     assert(a1.get_class() == "Bard")
@@ -1196,7 +1251,8 @@ def test_Character_Golddragonborn_Bard():
 
 def test_Character_Greendragonborn_Bard():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Green dragonborn", class_candidate="Bard")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Green dragonborn", class_candidate="Bard")
     assert(a1)
     assert(a1.get_race() == "Green dragonborn")
     assert(a1.get_class() == "Bard")
@@ -1216,7 +1272,8 @@ def test_Character_Greendragonborn_Bard():
 
 def test_Character_Reddragonborn_Bard():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Red dragonborn", class_candidate="Bard")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Red dragonborn", class_candidate="Bard")
     assert(a1)
     assert(a1.get_race() == "Red dragonborn")
     assert(a1.get_class() == "Bard")
@@ -1236,7 +1293,8 @@ def test_Character_Reddragonborn_Bard():
 
 def test_Character_Silverdragonborn_Bard():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Silver dragonborn", class_candidate="Bard")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Silver dragonborn", class_candidate="Bard")
     assert(a1)
     assert(a1.get_race() == "Silver dragonborn")
     assert(a1.get_class() == "Bard")
@@ -1256,7 +1314,8 @@ def test_Character_Silverdragonborn_Bard():
 
 def test_Character_Whitedragonborn_Bard():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="White dragonborn", class_candidate="Bard")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="White dragonborn", class_candidate="Bard")
     assert(a1)
     assert(a1.get_race() == "White dragonborn")
     assert(a1.get_class() == "Bard")
@@ -1276,7 +1335,8 @@ def test_Character_Whitedragonborn_Bard():
 
 def test_Character_Rockgnome_Bard():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Rock gnome", class_candidate="Bard")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Rock gnome", class_candidate="Bard")
     assert(a1)
     assert(a1.get_race() == "Rock gnome")
     assert(a1.get_class() == "Bard")
@@ -1296,7 +1356,8 @@ def test_Character_Rockgnome_Bard():
 
 def test_Character_HalfOrc_Bard():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Half-Orc", class_candidate="Bard")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Half-Orc", class_candidate="Bard")
     assert(a1)
     assert(a1.get_race() == "Half-Orc")
     assert(a1.get_class() == "Bard")
@@ -1316,7 +1377,8 @@ def test_Character_HalfOrc_Bard():
 
 def test_Character_Tiefling_Bard():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Tiefling", class_candidate="Bard")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Tiefling", class_candidate="Bard")
     assert(a1)
     assert(a1.get_race() == "Tiefling")
     assert(a1.get_class() == "Bard")
@@ -1336,7 +1398,8 @@ def test_Character_Tiefling_Bard():
 
 def test_Character_Centaur_Bard():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Centaur", class_candidate="Bard")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Centaur", class_candidate="Bard")
     assert(a1)
     assert(a1.get_race() == "Centaur")
     assert(a1.get_class() == "Bard")
@@ -1356,7 +1419,8 @@ def test_Character_Centaur_Bard():
 
 def test_Character_Blackbearkin_Bard():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Black bearkin", class_candidate="Bard")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Black bearkin", class_candidate="Bard")
     assert(a1)
     assert(a1.get_race() == "Black bearkin")
     assert(a1.get_class() == "Bard")
@@ -1376,7 +1440,8 @@ def test_Character_Blackbearkin_Bard():
 
 def test_Character_Brownbearkin_Bard():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Brown bearkin", class_candidate="Bard")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Brown bearkin", class_candidate="Bard")
     assert(a1)
     assert(a1.get_race() == "Brown bearkin")
     assert(a1.get_class() == "Bard")
@@ -1396,7 +1461,8 @@ def test_Character_Brownbearkin_Bard():
 
 def test_Character_Koalabearkin_Bard():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Koala bearkin", class_candidate="Bard")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Koala bearkin", class_candidate="Bard")
     assert(a1)
     assert(a1.get_race() == "Koala bearkin")
     assert(a1.get_class() == "Bard")
@@ -1416,7 +1482,8 @@ def test_Character_Koalabearkin_Bard():
 
 def test_Character_Pandabearkin_Bard():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Panda bearkin", class_candidate="Bard")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Panda bearkin", class_candidate="Bard")
     assert(a1)
     assert(a1.get_race() == "Panda bearkin")
     assert(a1.get_class() == "Bard")
@@ -1436,7 +1503,8 @@ def test_Character_Pandabearkin_Bard():
 
 def test_Character_Polarbearkin_Bard():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Polar bearkin", class_candidate="Bard")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Polar bearkin", class_candidate="Bard")
     assert(a1)
     assert(a1.get_race() == "Polar bearkin")
     assert(a1.get_class() == "Bard")
@@ -1456,7 +1524,8 @@ def test_Character_Polarbearkin_Bard():
 
 def test_Character_Burrowskobold_Bard():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Burrows kobold", class_candidate="Bard")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Burrows kobold", class_candidate="Bard")
     assert(a1)
     assert(a1.get_race() == "Burrows kobold")
     assert(a1.get_class() == "Bard")
@@ -1476,7 +1545,8 @@ def test_Character_Burrowskobold_Bard():
 
 def test_Character_Loredrakekobold_Bard():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Loredrake kobold", class_candidate="Bard")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Loredrake kobold", class_candidate="Bard")
     assert(a1)
     assert(a1.get_race() == "Loredrake kobold")
     assert(a1.get_class() == "Bard")
@@ -1496,7 +1566,8 @@ def test_Character_Loredrakekobold_Bard():
 
 def test_Character_Wingedkobold_Bard():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Winged kobold", class_candidate="Bard")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Winged kobold", class_candidate="Bard")
     assert(a1)
     assert(a1.get_race() == "Winged kobold")
     assert(a1.get_class() == "Bard")
@@ -1516,7 +1587,8 @@ def test_Character_Wingedkobold_Bard():
 
 def test_Character_Greenskingoblin_Bard():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Greenskin goblin", class_candidate="Bard")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Greenskin goblin", class_candidate="Bard")
     assert(a1)
     assert(a1.get_race() == "Greenskin goblin")
     assert(a1.get_class() == "Bard")
@@ -1536,7 +1608,8 @@ def test_Character_Greenskingoblin_Bard():
 
 def test_Character_Boggartgoblin_Bard():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Boggart goblin", class_candidate="Bard")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Boggart goblin", class_candidate="Bard")
     assert(a1)
     assert(a1.get_race() == "Boggart goblin")
     assert(a1.get_class() == "Bard")
@@ -1556,7 +1629,8 @@ def test_Character_Boggartgoblin_Bard():
 
 def test_Character_Gremlingoblin_Bard():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Gremlin goblin", class_candidate="Bard")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Gremlin goblin", class_candidate="Bard")
     assert(a1)
     assert(a1.get_race() == "Gremlin goblin")
     assert(a1.get_class() == "Bard")
@@ -1576,7 +1650,8 @@ def test_Character_Gremlingoblin_Bard():
 
 def test_Character_Dryad_Bard():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Dryad", class_candidate="Bard")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Dryad", class_candidate="Bard")
     assert(a1)
     assert(a1.get_race() == "Dryad")
     assert(a1.get_class() == "Bard")
@@ -1596,7 +1671,8 @@ def test_Character_Dryad_Bard():
 
 def test_Character_Hilldwarf_Cleric():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Hill dwarf", class_candidate="Cleric")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Hill dwarf", class_candidate="Cleric")
     assert(a1)
     assert(a1.get_race() == "Hill dwarf")
     assert(a1.get_class() == "Cleric")
@@ -1616,7 +1692,8 @@ def test_Character_Hilldwarf_Cleric():
 
 def test_Character_Highelf_Cleric():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="High elf", class_candidate="Cleric")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="High elf", class_candidate="Cleric")
     assert(a1)
     assert(a1.get_race() == "High elf")
     assert(a1.get_class() == "Cleric")
@@ -1636,7 +1713,8 @@ def test_Character_Highelf_Cleric():
 
 def test_Character_Mountaindwarf_Cleric():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Mountain dwarf", class_candidate="Cleric")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Mountain dwarf", class_candidate="Cleric")
     assert(a1)
     assert(a1.get_race() == "Mountain dwarf")
     assert(a1.get_class() == "Cleric")
@@ -1656,7 +1734,8 @@ def test_Character_Mountaindwarf_Cleric():
 
 def test_Character_Woodelf_Cleric():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Wood elf", class_candidate="Cleric")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Wood elf", class_candidate="Cleric")
     assert(a1)
     assert(a1.get_race() == "Wood elf")
     assert(a1.get_class() == "Cleric")
@@ -1676,7 +1755,8 @@ def test_Character_Woodelf_Cleric():
 
 def test_Character_Lightfoothalfling_Cleric():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Lightfoot halfling", class_candidate="Cleric")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Lightfoot halfling", class_candidate="Cleric")
     assert(a1)
     assert(a1.get_race() == "Lightfoot halfling")
     assert(a1.get_class() == "Cleric")
@@ -1696,7 +1776,8 @@ def test_Character_Lightfoothalfling_Cleric():
 
 def test_Character_Stouthalfling_Cleric():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Stout halfling", class_candidate="Cleric")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Stout halfling", class_candidate="Cleric")
     assert(a1)
     assert(a1.get_race() == "Stout halfling")
     assert(a1.get_class() == "Cleric")
@@ -1716,7 +1797,8 @@ def test_Character_Stouthalfling_Cleric():
 
 def test_Character_HalfElf_Cleric():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Half-Elf", class_candidate="Cleric")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Half-Elf", class_candidate="Cleric")
     assert(a1)
     assert(a1.get_race() == "Half-Elf")
     assert(a1.get_class() == "Cleric")
@@ -1736,7 +1818,8 @@ def test_Character_HalfElf_Cleric():
 
 def test_Character_Human_Cleric():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Human", class_candidate="Cleric")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Human", class_candidate="Cleric")
     assert(a1)
     assert(a1.get_race() == "Human")
     assert(a1.get_class() == "Cleric")
@@ -1756,7 +1839,8 @@ def test_Character_Human_Cleric():
 
 def test_Character_Blackdragonborn_Cleric():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Black dragonborn", class_candidate="Cleric")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Black dragonborn", class_candidate="Cleric")
     assert(a1)
     assert(a1.get_race() == "Black dragonborn")
     assert(a1.get_class() == "Cleric")
@@ -1776,7 +1860,8 @@ def test_Character_Blackdragonborn_Cleric():
 
 def test_Character_Bluedragonborn_Cleric():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Blue dragonborn", class_candidate="Cleric")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Blue dragonborn", class_candidate="Cleric")
     assert(a1)
     assert(a1.get_race() == "Blue dragonborn")
     assert(a1.get_class() == "Cleric")
@@ -1796,7 +1881,8 @@ def test_Character_Bluedragonborn_Cleric():
 
 def test_Character_Brassdragonborn_Cleric():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Brass dragonborn", class_candidate="Cleric")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Brass dragonborn", class_candidate="Cleric")
     assert(a1)
     assert(a1.get_race() == "Brass dragonborn")
     assert(a1.get_class() == "Cleric")
@@ -1816,7 +1902,8 @@ def test_Character_Brassdragonborn_Cleric():
 
 def test_Character_Bronzedragonborn_Cleric():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Bronze dragonborn", class_candidate="Cleric")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Bronze dragonborn", class_candidate="Cleric")
     assert(a1)
     assert(a1.get_race() == "Bronze dragonborn")
     assert(a1.get_class() == "Cleric")
@@ -1836,7 +1923,8 @@ def test_Character_Bronzedragonborn_Cleric():
 
 def test_Character_Copperdragonborn_Cleric():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Copper dragonborn", class_candidate="Cleric")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Copper dragonborn", class_candidate="Cleric")
     assert(a1)
     assert(a1.get_race() == "Copper dragonborn")
     assert(a1.get_class() == "Cleric")
@@ -1856,7 +1944,8 @@ def test_Character_Copperdragonborn_Cleric():
 
 def test_Character_Golddragonborn_Cleric():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Gold dragonborn", class_candidate="Cleric")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Gold dragonborn", class_candidate="Cleric")
     assert(a1)
     assert(a1.get_race() == "Gold dragonborn")
     assert(a1.get_class() == "Cleric")
@@ -1876,7 +1965,8 @@ def test_Character_Golddragonborn_Cleric():
 
 def test_Character_Greendragonborn_Cleric():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Green dragonborn", class_candidate="Cleric")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Green dragonborn", class_candidate="Cleric")
     assert(a1)
     assert(a1.get_race() == "Green dragonborn")
     assert(a1.get_class() == "Cleric")
@@ -1896,7 +1986,8 @@ def test_Character_Greendragonborn_Cleric():
 
 def test_Character_Reddragonborn_Cleric():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Red dragonborn", class_candidate="Cleric")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Red dragonborn", class_candidate="Cleric")
     assert(a1)
     assert(a1.get_race() == "Red dragonborn")
     assert(a1.get_class() == "Cleric")
@@ -1916,7 +2007,8 @@ def test_Character_Reddragonborn_Cleric():
 
 def test_Character_Silverdragonborn_Cleric():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Silver dragonborn", class_candidate="Cleric")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Silver dragonborn", class_candidate="Cleric")
     assert(a1)
     assert(a1.get_race() == "Silver dragonborn")
     assert(a1.get_class() == "Cleric")
@@ -1936,7 +2028,8 @@ def test_Character_Silverdragonborn_Cleric():
 
 def test_Character_Whitedragonborn_Cleric():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="White dragonborn", class_candidate="Cleric")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="White dragonborn", class_candidate="Cleric")
     assert(a1)
     assert(a1.get_race() == "White dragonborn")
     assert(a1.get_class() == "Cleric")
@@ -1956,7 +2049,8 @@ def test_Character_Whitedragonborn_Cleric():
 
 def test_Character_Rockgnome_Cleric():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Rock gnome", class_candidate="Cleric")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Rock gnome", class_candidate="Cleric")
     assert(a1)
     assert(a1.get_race() == "Rock gnome")
     assert(a1.get_class() == "Cleric")
@@ -1976,7 +2070,8 @@ def test_Character_Rockgnome_Cleric():
 
 def test_Character_HalfOrc_Cleric():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Half-Orc", class_candidate="Cleric")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Half-Orc", class_candidate="Cleric")
     assert(a1)
     assert(a1.get_race() == "Half-Orc")
     assert(a1.get_class() == "Cleric")
@@ -1996,7 +2091,8 @@ def test_Character_HalfOrc_Cleric():
 
 def test_Character_Tiefling_Cleric():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Tiefling", class_candidate="Cleric")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Tiefling", class_candidate="Cleric")
     assert(a1)
     assert(a1.get_race() == "Tiefling")
     assert(a1.get_class() == "Cleric")
@@ -2016,7 +2112,8 @@ def test_Character_Tiefling_Cleric():
 
 def test_Character_Centaur_Cleric():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Centaur", class_candidate="Cleric")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Centaur", class_candidate="Cleric")
     assert(a1)
     assert(a1.get_race() == "Centaur")
     assert(a1.get_class() == "Cleric")
@@ -2036,7 +2133,8 @@ def test_Character_Centaur_Cleric():
 
 def test_Character_Blackbearkin_Cleric():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Black bearkin", class_candidate="Cleric")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Black bearkin", class_candidate="Cleric")
     assert(a1)
     assert(a1.get_race() == "Black bearkin")
     assert(a1.get_class() == "Cleric")
@@ -2056,7 +2154,8 @@ def test_Character_Blackbearkin_Cleric():
 
 def test_Character_Brownbearkin_Cleric():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Brown bearkin", class_candidate="Cleric")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Brown bearkin", class_candidate="Cleric")
     assert(a1)
     assert(a1.get_race() == "Brown bearkin")
     assert(a1.get_class() == "Cleric")
@@ -2076,7 +2175,8 @@ def test_Character_Brownbearkin_Cleric():
 
 def test_Character_Koalabearkin_Cleric():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Koala bearkin", class_candidate="Cleric")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Koala bearkin", class_candidate="Cleric")
     assert(a1)
     assert(a1.get_race() == "Koala bearkin")
     assert(a1.get_class() == "Cleric")
@@ -2096,7 +2196,8 @@ def test_Character_Koalabearkin_Cleric():
 
 def test_Character_Pandabearkin_Cleric():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Panda bearkin", class_candidate="Cleric")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Panda bearkin", class_candidate="Cleric")
     assert(a1)
     assert(a1.get_race() == "Panda bearkin")
     assert(a1.get_class() == "Cleric")
@@ -2116,7 +2217,8 @@ def test_Character_Pandabearkin_Cleric():
 
 def test_Character_Polarbearkin_Cleric():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Polar bearkin", class_candidate="Cleric")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Polar bearkin", class_candidate="Cleric")
     assert(a1)
     assert(a1.get_race() == "Polar bearkin")
     assert(a1.get_class() == "Cleric")
@@ -2136,7 +2238,8 @@ def test_Character_Polarbearkin_Cleric():
 
 def test_Character_Burrowskobold_Cleric():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Burrows kobold", class_candidate="Cleric")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Burrows kobold", class_candidate="Cleric")
     assert(a1)
     assert(a1.get_race() == "Burrows kobold")
     assert(a1.get_class() == "Cleric")
@@ -2156,7 +2259,8 @@ def test_Character_Burrowskobold_Cleric():
 
 def test_Character_Loredrakekobold_Cleric():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Loredrake kobold", class_candidate="Cleric")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Loredrake kobold", class_candidate="Cleric")
     assert(a1)
     assert(a1.get_race() == "Loredrake kobold")
     assert(a1.get_class() == "Cleric")
@@ -2176,7 +2280,8 @@ def test_Character_Loredrakekobold_Cleric():
 
 def test_Character_Wingedkobold_Cleric():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Winged kobold", class_candidate="Cleric")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Winged kobold", class_candidate="Cleric")
     assert(a1)
     assert(a1.get_race() == "Winged kobold")
     assert(a1.get_class() == "Cleric")
@@ -2196,7 +2301,8 @@ def test_Character_Wingedkobold_Cleric():
 
 def test_Character_Greenskingoblin_Cleric():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Greenskin goblin", class_candidate="Cleric")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Greenskin goblin", class_candidate="Cleric")
     assert(a1)
     assert(a1.get_race() == "Greenskin goblin")
     assert(a1.get_class() == "Cleric")
@@ -2216,7 +2322,8 @@ def test_Character_Greenskingoblin_Cleric():
 
 def test_Character_Boggartgoblin_Cleric():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Boggart goblin", class_candidate="Cleric")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Boggart goblin", class_candidate="Cleric")
     assert(a1)
     assert(a1.get_race() == "Boggart goblin")
     assert(a1.get_class() == "Cleric")
@@ -2236,7 +2343,8 @@ def test_Character_Boggartgoblin_Cleric():
 
 def test_Character_Gremlingoblin_Cleric():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Gremlin goblin", class_candidate="Cleric")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Gremlin goblin", class_candidate="Cleric")
     assert(a1)
     assert(a1.get_race() == "Gremlin goblin")
     assert(a1.get_class() == "Cleric")
@@ -2256,7 +2364,8 @@ def test_Character_Gremlingoblin_Cleric():
 
 def test_Character_Dryad_Cleric():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Dryad", class_candidate="Cleric")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Dryad", class_candidate="Cleric")
     assert(a1)
     assert(a1.get_race() == "Dryad")
     assert(a1.get_class() == "Cleric")
@@ -2276,7 +2385,8 @@ def test_Character_Dryad_Cleric():
 
 def test_Character_Hilldwarf_Druid():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Hill dwarf", class_candidate="Druid")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Hill dwarf", class_candidate="Druid")
     assert(a1)
     assert(a1.get_race() == "Hill dwarf")
     assert(a1.get_class() == "Druid")
@@ -2296,7 +2406,8 @@ def test_Character_Hilldwarf_Druid():
 
 def test_Character_Highelf_Druid():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="High elf", class_candidate="Druid")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="High elf", class_candidate="Druid")
     assert(a1)
     assert(a1.get_race() == "High elf")
     assert(a1.get_class() == "Druid")
@@ -2316,7 +2427,8 @@ def test_Character_Highelf_Druid():
 
 def test_Character_Mountaindwarf_Druid():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Mountain dwarf", class_candidate="Druid")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Mountain dwarf", class_candidate="Druid")
     assert(a1)
     assert(a1.get_race() == "Mountain dwarf")
     assert(a1.get_class() == "Druid")
@@ -2336,7 +2448,8 @@ def test_Character_Mountaindwarf_Druid():
 
 def test_Character_Woodelf_Druid():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Wood elf", class_candidate="Druid")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Wood elf", class_candidate="Druid")
     assert(a1)
     assert(a1.get_race() == "Wood elf")
     assert(a1.get_class() == "Druid")
@@ -2356,7 +2469,8 @@ def test_Character_Woodelf_Druid():
 
 def test_Character_Lightfoothalfling_Druid():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Lightfoot halfling", class_candidate="Druid")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Lightfoot halfling", class_candidate="Druid")
     assert(a1)
     assert(a1.get_race() == "Lightfoot halfling")
     assert(a1.get_class() == "Druid")
@@ -2376,7 +2490,8 @@ def test_Character_Lightfoothalfling_Druid():
 
 def test_Character_Stouthalfling_Druid():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Stout halfling", class_candidate="Druid")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Stout halfling", class_candidate="Druid")
     assert(a1)
     assert(a1.get_race() == "Stout halfling")
     assert(a1.get_class() == "Druid")
@@ -2396,7 +2511,8 @@ def test_Character_Stouthalfling_Druid():
 
 def test_Character_HalfElf_Druid():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Half-Elf", class_candidate="Druid")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Half-Elf", class_candidate="Druid")
     assert(a1)
     assert(a1.get_race() == "Half-Elf")
     assert(a1.get_class() == "Druid")
@@ -2416,7 +2532,8 @@ def test_Character_HalfElf_Druid():
 
 def test_Character_Human_Druid():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Human", class_candidate="Druid")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Human", class_candidate="Druid")
     assert(a1)
     assert(a1.get_race() == "Human")
     assert(a1.get_class() == "Druid")
@@ -2436,7 +2553,8 @@ def test_Character_Human_Druid():
 
 def test_Character_Blackdragonborn_Druid():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Black dragonborn", class_candidate="Druid")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Black dragonborn", class_candidate="Druid")
     assert(a1)
     assert(a1.get_race() == "Black dragonborn")
     assert(a1.get_class() == "Druid")
@@ -2456,7 +2574,8 @@ def test_Character_Blackdragonborn_Druid():
 
 def test_Character_Bluedragonborn_Druid():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Blue dragonborn", class_candidate="Druid")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Blue dragonborn", class_candidate="Druid")
     assert(a1)
     assert(a1.get_race() == "Blue dragonborn")
     assert(a1.get_class() == "Druid")
@@ -2476,7 +2595,8 @@ def test_Character_Bluedragonborn_Druid():
 
 def test_Character_Brassdragonborn_Druid():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Brass dragonborn", class_candidate="Druid")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Brass dragonborn", class_candidate="Druid")
     assert(a1)
     assert(a1.get_race() == "Brass dragonborn")
     assert(a1.get_class() == "Druid")
@@ -2496,7 +2616,8 @@ def test_Character_Brassdragonborn_Druid():
 
 def test_Character_Bronzedragonborn_Druid():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Bronze dragonborn", class_candidate="Druid")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Bronze dragonborn", class_candidate="Druid")
     assert(a1)
     assert(a1.get_race() == "Bronze dragonborn")
     assert(a1.get_class() == "Druid")
@@ -2516,7 +2637,8 @@ def test_Character_Bronzedragonborn_Druid():
 
 def test_Character_Copperdragonborn_Druid():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Copper dragonborn", class_candidate="Druid")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Copper dragonborn", class_candidate="Druid")
     assert(a1)
     assert(a1.get_race() == "Copper dragonborn")
     assert(a1.get_class() == "Druid")
@@ -2536,7 +2658,8 @@ def test_Character_Copperdragonborn_Druid():
 
 def test_Character_Golddragonborn_Druid():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Gold dragonborn", class_candidate="Druid")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Gold dragonborn", class_candidate="Druid")
     assert(a1)
     assert(a1.get_race() == "Gold dragonborn")
     assert(a1.get_class() == "Druid")
@@ -2556,7 +2679,8 @@ def test_Character_Golddragonborn_Druid():
 
 def test_Character_Greendragonborn_Druid():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Green dragonborn", class_candidate="Druid")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Green dragonborn", class_candidate="Druid")
     assert(a1)
     assert(a1.get_race() == "Green dragonborn")
     assert(a1.get_class() == "Druid")
@@ -2576,7 +2700,8 @@ def test_Character_Greendragonborn_Druid():
 
 def test_Character_Reddragonborn_Druid():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Red dragonborn", class_candidate="Druid")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Red dragonborn", class_candidate="Druid")
     assert(a1)
     assert(a1.get_race() == "Red dragonborn")
     assert(a1.get_class() == "Druid")
@@ -2596,7 +2721,8 @@ def test_Character_Reddragonborn_Druid():
 
 def test_Character_Silverdragonborn_Druid():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Silver dragonborn", class_candidate="Druid")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Silver dragonborn", class_candidate="Druid")
     assert(a1)
     assert(a1.get_race() == "Silver dragonborn")
     assert(a1.get_class() == "Druid")
@@ -2616,7 +2742,8 @@ def test_Character_Silverdragonborn_Druid():
 
 def test_Character_Whitedragonborn_Druid():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="White dragonborn", class_candidate="Druid")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="White dragonborn", class_candidate="Druid")
     assert(a1)
     assert(a1.get_race() == "White dragonborn")
     assert(a1.get_class() == "Druid")
@@ -2636,7 +2763,8 @@ def test_Character_Whitedragonborn_Druid():
 
 def test_Character_Rockgnome_Druid():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Rock gnome", class_candidate="Druid")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Rock gnome", class_candidate="Druid")
     assert(a1)
     assert(a1.get_race() == "Rock gnome")
     assert(a1.get_class() == "Druid")
@@ -2656,7 +2784,8 @@ def test_Character_Rockgnome_Druid():
 
 def test_Character_HalfOrc_Druid():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Half-Orc", class_candidate="Druid")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Half-Orc", class_candidate="Druid")
     assert(a1)
     assert(a1.get_race() == "Half-Orc")
     assert(a1.get_class() == "Druid")
@@ -2676,7 +2805,8 @@ def test_Character_HalfOrc_Druid():
 
 def test_Character_Tiefling_Druid():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Tiefling", class_candidate="Druid")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Tiefling", class_candidate="Druid")
     assert(a1)
     assert(a1.get_race() == "Tiefling")
     assert(a1.get_class() == "Druid")
@@ -2696,7 +2826,8 @@ def test_Character_Tiefling_Druid():
 
 def test_Character_Centaur_Druid():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Centaur", class_candidate="Druid")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Centaur", class_candidate="Druid")
     assert(a1)
     assert(a1.get_race() == "Centaur")
     assert(a1.get_class() == "Druid")
@@ -2716,7 +2847,8 @@ def test_Character_Centaur_Druid():
 
 def test_Character_Blackbearkin_Druid():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Black bearkin", class_candidate="Druid")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Black bearkin", class_candidate="Druid")
     assert(a1)
     assert(a1.get_race() == "Black bearkin")
     assert(a1.get_class() == "Druid")
@@ -2736,7 +2868,8 @@ def test_Character_Blackbearkin_Druid():
 
 def test_Character_Brownbearkin_Druid():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Brown bearkin", class_candidate="Druid")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Brown bearkin", class_candidate="Druid")
     assert(a1)
     assert(a1.get_race() == "Brown bearkin")
     assert(a1.get_class() == "Druid")
@@ -2756,7 +2889,8 @@ def test_Character_Brownbearkin_Druid():
 
 def test_Character_Koalabearkin_Druid():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Koala bearkin", class_candidate="Druid")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Koala bearkin", class_candidate="Druid")
     assert(a1)
     assert(a1.get_race() == "Koala bearkin")
     assert(a1.get_class() == "Druid")
@@ -2776,7 +2910,8 @@ def test_Character_Koalabearkin_Druid():
 
 def test_Character_Pandabearkin_Druid():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Panda bearkin", class_candidate="Druid")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Panda bearkin", class_candidate="Druid")
     assert(a1)
     assert(a1.get_race() == "Panda bearkin")
     assert(a1.get_class() == "Druid")
@@ -2796,7 +2931,8 @@ def test_Character_Pandabearkin_Druid():
 
 def test_Character_Polarbearkin_Druid():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Polar bearkin", class_candidate="Druid")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Polar bearkin", class_candidate="Druid")
     assert(a1)
     assert(a1.get_race() == "Polar bearkin")
     assert(a1.get_class() == "Druid")
@@ -2816,7 +2952,8 @@ def test_Character_Polarbearkin_Druid():
 
 def test_Character_Burrowskobold_Druid():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Burrows kobold", class_candidate="Druid")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Burrows kobold", class_candidate="Druid")
     assert(a1)
     assert(a1.get_race() == "Burrows kobold")
     assert(a1.get_class() == "Druid")
@@ -2836,7 +2973,8 @@ def test_Character_Burrowskobold_Druid():
 
 def test_Character_Loredrakekobold_Druid():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Loredrake kobold", class_candidate="Druid")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Loredrake kobold", class_candidate="Druid")
     assert(a1)
     assert(a1.get_race() == "Loredrake kobold")
     assert(a1.get_class() == "Druid")
@@ -2856,7 +2994,8 @@ def test_Character_Loredrakekobold_Druid():
 
 def test_Character_Wingedkobold_Druid():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Winged kobold", class_candidate="Druid")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Winged kobold", class_candidate="Druid")
     assert(a1)
     assert(a1.get_race() == "Winged kobold")
     assert(a1.get_class() == "Druid")
@@ -2876,7 +3015,8 @@ def test_Character_Wingedkobold_Druid():
 
 def test_Character_Greenskingoblin_Druid():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Greenskin goblin", class_candidate="Druid")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Greenskin goblin", class_candidate="Druid")
     assert(a1)
     assert(a1.get_race() == "Greenskin goblin")
     assert(a1.get_class() == "Druid")
@@ -2896,7 +3036,8 @@ def test_Character_Greenskingoblin_Druid():
 
 def test_Character_Boggartgoblin_Druid():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Boggart goblin", class_candidate="Druid")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Boggart goblin", class_candidate="Druid")
     assert(a1)
     assert(a1.get_race() == "Boggart goblin")
     assert(a1.get_class() == "Druid")
@@ -2916,7 +3057,8 @@ def test_Character_Boggartgoblin_Druid():
 
 def test_Character_Gremlingoblin_Druid():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Gremlin goblin", class_candidate="Druid")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Gremlin goblin", class_candidate="Druid")
     assert(a1)
     assert(a1.get_race() == "Gremlin goblin")
     assert(a1.get_class() == "Druid")
@@ -2936,7 +3078,8 @@ def test_Character_Gremlingoblin_Druid():
 
 def test_Character_Dryad_Druid():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Dryad", class_candidate="Druid")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Dryad", class_candidate="Druid")
     assert(a1)
     assert(a1.get_race() == "Dryad")
     assert(a1.get_class() == "Druid")
@@ -2956,7 +3099,8 @@ def test_Character_Dryad_Druid():
 
 def test_Character_Hilldwarf_Fighter():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Hill dwarf", class_candidate="Fighter")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Hill dwarf", class_candidate="Fighter")
     assert(a1)
     assert(a1.get_race() == "Hill dwarf")
     assert(a1.get_class() == "Fighter")
@@ -2976,7 +3120,8 @@ def test_Character_Hilldwarf_Fighter():
 
 def test_Character_Highelf_Fighter():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="High elf", class_candidate="Fighter")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="High elf", class_candidate="Fighter")
     assert(a1)
     assert(a1.get_race() == "High elf")
     assert(a1.get_class() == "Fighter")
@@ -2996,7 +3141,8 @@ def test_Character_Highelf_Fighter():
 
 def test_Character_Mountaindwarf_Fighter():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Mountain dwarf", class_candidate="Fighter")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Mountain dwarf", class_candidate="Fighter")
     assert(a1)
     assert(a1.get_race() == "Mountain dwarf")
     assert(a1.get_class() == "Fighter")
@@ -3016,7 +3162,8 @@ def test_Character_Mountaindwarf_Fighter():
 
 def test_Character_Woodelf_Fighter():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Wood elf", class_candidate="Fighter")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Wood elf", class_candidate="Fighter")
     assert(a1)
     assert(a1.get_race() == "Wood elf")
     assert(a1.get_class() == "Fighter")
@@ -3036,7 +3183,8 @@ def test_Character_Woodelf_Fighter():
 
 def test_Character_Lightfoothalfling_Fighter():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Lightfoot halfling", class_candidate="Fighter")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Lightfoot halfling", class_candidate="Fighter")
     assert(a1)
     assert(a1.get_race() == "Lightfoot halfling")
     assert(a1.get_class() == "Fighter")
@@ -3056,7 +3204,8 @@ def test_Character_Lightfoothalfling_Fighter():
 
 def test_Character_Stouthalfling_Fighter():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Stout halfling", class_candidate="Fighter")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Stout halfling", class_candidate="Fighter")
     assert(a1)
     assert(a1.get_race() == "Stout halfling")
     assert(a1.get_class() == "Fighter")
@@ -3076,7 +3225,8 @@ def test_Character_Stouthalfling_Fighter():
 
 def test_Character_HalfElf_Fighter():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Half-Elf", class_candidate="Fighter")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Half-Elf", class_candidate="Fighter")
     assert(a1)
     assert(a1.get_race() == "Half-Elf")
     assert(a1.get_class() == "Fighter")
@@ -3096,7 +3246,8 @@ def test_Character_HalfElf_Fighter():
 
 def test_Character_Human_Fighter():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Human", class_candidate="Fighter")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Human", class_candidate="Fighter")
     assert(a1)
     assert(a1.get_race() == "Human")
     assert(a1.get_class() == "Fighter")
@@ -3116,7 +3267,8 @@ def test_Character_Human_Fighter():
 
 def test_Character_Blackdragonborn_Fighter():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Black dragonborn", class_candidate="Fighter")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Black dragonborn", class_candidate="Fighter")
     assert(a1)
     assert(a1.get_race() == "Black dragonborn")
     assert(a1.get_class() == "Fighter")
@@ -3136,7 +3288,8 @@ def test_Character_Blackdragonborn_Fighter():
 
 def test_Character_Bluedragonborn_Fighter():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Blue dragonborn", class_candidate="Fighter")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Blue dragonborn", class_candidate="Fighter")
     assert(a1)
     assert(a1.get_race() == "Blue dragonborn")
     assert(a1.get_class() == "Fighter")
@@ -3156,7 +3309,8 @@ def test_Character_Bluedragonborn_Fighter():
 
 def test_Character_Brassdragonborn_Fighter():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Brass dragonborn", class_candidate="Fighter")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Brass dragonborn", class_candidate="Fighter")
     assert(a1)
     assert(a1.get_race() == "Brass dragonborn")
     assert(a1.get_class() == "Fighter")
@@ -3176,7 +3330,8 @@ def test_Character_Brassdragonborn_Fighter():
 
 def test_Character_Bronzedragonborn_Fighter():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Bronze dragonborn", class_candidate="Fighter")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Bronze dragonborn", class_candidate="Fighter")
     assert(a1)
     assert(a1.get_race() == "Bronze dragonborn")
     assert(a1.get_class() == "Fighter")
@@ -3196,7 +3351,8 @@ def test_Character_Bronzedragonborn_Fighter():
 
 def test_Character_Copperdragonborn_Fighter():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Copper dragonborn", class_candidate="Fighter")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Copper dragonborn", class_candidate="Fighter")
     assert(a1)
     assert(a1.get_race() == "Copper dragonborn")
     assert(a1.get_class() == "Fighter")
@@ -3216,7 +3372,8 @@ def test_Character_Copperdragonborn_Fighter():
 
 def test_Character_Golddragonborn_Fighter():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Gold dragonborn", class_candidate="Fighter")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Gold dragonborn", class_candidate="Fighter")
     assert(a1)
     assert(a1.get_race() == "Gold dragonborn")
     assert(a1.get_class() == "Fighter")
@@ -3236,7 +3393,8 @@ def test_Character_Golddragonborn_Fighter():
 
 def test_Character_Greendragonborn_Fighter():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Green dragonborn", class_candidate="Fighter")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Green dragonborn", class_candidate="Fighter")
     assert(a1)
     assert(a1.get_race() == "Green dragonborn")
     assert(a1.get_class() == "Fighter")
@@ -3256,7 +3414,8 @@ def test_Character_Greendragonborn_Fighter():
 
 def test_Character_Reddragonborn_Fighter():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Red dragonborn", class_candidate="Fighter")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Red dragonborn", class_candidate="Fighter")
     assert(a1)
     assert(a1.get_race() == "Red dragonborn")
     assert(a1.get_class() == "Fighter")
@@ -3276,7 +3435,8 @@ def test_Character_Reddragonborn_Fighter():
 
 def test_Character_Silverdragonborn_Fighter():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Silver dragonborn", class_candidate="Fighter")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Silver dragonborn", class_candidate="Fighter")
     assert(a1)
     assert(a1.get_race() == "Silver dragonborn")
     assert(a1.get_class() == "Fighter")
@@ -3296,7 +3456,8 @@ def test_Character_Silverdragonborn_Fighter():
 
 def test_Character_Whitedragonborn_Fighter():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="White dragonborn", class_candidate="Fighter")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="White dragonborn", class_candidate="Fighter")
     assert(a1)
     assert(a1.get_race() == "White dragonborn")
     assert(a1.get_class() == "Fighter")
@@ -3316,7 +3477,8 @@ def test_Character_Whitedragonborn_Fighter():
 
 def test_Character_Rockgnome_Fighter():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Rock gnome", class_candidate="Fighter")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Rock gnome", class_candidate="Fighter")
     assert(a1)
     assert(a1.get_race() == "Rock gnome")
     assert(a1.get_class() == "Fighter")
@@ -3336,7 +3498,8 @@ def test_Character_Rockgnome_Fighter():
 
 def test_Character_HalfOrc_Fighter():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Half-Orc", class_candidate="Fighter")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Half-Orc", class_candidate="Fighter")
     assert(a1)
     assert(a1.get_race() == "Half-Orc")
     assert(a1.get_class() == "Fighter")
@@ -3356,7 +3519,8 @@ def test_Character_HalfOrc_Fighter():
 
 def test_Character_Tiefling_Fighter():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Tiefling", class_candidate="Fighter")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Tiefling", class_candidate="Fighter")
     assert(a1)
     assert(a1.get_race() == "Tiefling")
     assert(a1.get_class() == "Fighter")
@@ -3376,7 +3540,8 @@ def test_Character_Tiefling_Fighter():
 
 def test_Character_Centaur_Fighter():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Centaur", class_candidate="Fighter")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Centaur", class_candidate="Fighter")
     assert(a1)
     assert(a1.get_race() == "Centaur")
     assert(a1.get_class() == "Fighter")
@@ -3396,7 +3561,8 @@ def test_Character_Centaur_Fighter():
 
 def test_Character_Blackbearkin_Fighter():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Black bearkin", class_candidate="Fighter")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Black bearkin", class_candidate="Fighter")
     assert(a1)
     assert(a1.get_race() == "Black bearkin")
     assert(a1.get_class() == "Fighter")
@@ -3416,7 +3582,8 @@ def test_Character_Blackbearkin_Fighter():
 
 def test_Character_Brownbearkin_Fighter():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Brown bearkin", class_candidate="Fighter")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Brown bearkin", class_candidate="Fighter")
     assert(a1)
     assert(a1.get_race() == "Brown bearkin")
     assert(a1.get_class() == "Fighter")
@@ -3436,7 +3603,8 @@ def test_Character_Brownbearkin_Fighter():
 
 def test_Character_Koalabearkin_Fighter():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Koala bearkin", class_candidate="Fighter")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Koala bearkin", class_candidate="Fighter")
     assert(a1)
     assert(a1.get_race() == "Koala bearkin")
     assert(a1.get_class() == "Fighter")
@@ -3456,7 +3624,8 @@ def test_Character_Koalabearkin_Fighter():
 
 def test_Character_Pandabearkin_Fighter():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Panda bearkin", class_candidate="Fighter")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Panda bearkin", class_candidate="Fighter")
     assert(a1)
     assert(a1.get_race() == "Panda bearkin")
     assert(a1.get_class() == "Fighter")
@@ -3476,7 +3645,8 @@ def test_Character_Pandabearkin_Fighter():
 
 def test_Character_Polarbearkin_Fighter():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Polar bearkin", class_candidate="Fighter")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Polar bearkin", class_candidate="Fighter")
     assert(a1)
     assert(a1.get_race() == "Polar bearkin")
     assert(a1.get_class() == "Fighter")
@@ -3496,7 +3666,8 @@ def test_Character_Polarbearkin_Fighter():
 
 def test_Character_Burrowskobold_Fighter():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Burrows kobold", class_candidate="Fighter")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Burrows kobold", class_candidate="Fighter")
     assert(a1)
     assert(a1.get_race() == "Burrows kobold")
     assert(a1.get_class() == "Fighter")
@@ -3516,7 +3687,8 @@ def test_Character_Burrowskobold_Fighter():
 
 def test_Character_Loredrakekobold_Fighter():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Loredrake kobold", class_candidate="Fighter")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Loredrake kobold", class_candidate="Fighter")
     assert(a1)
     assert(a1.get_race() == "Loredrake kobold")
     assert(a1.get_class() == "Fighter")
@@ -3536,7 +3708,8 @@ def test_Character_Loredrakekobold_Fighter():
 
 def test_Character_Wingedkobold_Fighter():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Winged kobold", class_candidate="Fighter")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Winged kobold", class_candidate="Fighter")
     assert(a1)
     assert(a1.get_race() == "Winged kobold")
     assert(a1.get_class() == "Fighter")
@@ -3556,7 +3729,8 @@ def test_Character_Wingedkobold_Fighter():
 
 def test_Character_Greenskingoblin_Fighter():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Greenskin goblin", class_candidate="Fighter")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Greenskin goblin", class_candidate="Fighter")
     assert(a1)
     assert(a1.get_race() == "Greenskin goblin")
     assert(a1.get_class() == "Fighter")
@@ -3576,7 +3750,8 @@ def test_Character_Greenskingoblin_Fighter():
 
 def test_Character_Boggartgoblin_Fighter():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Boggart goblin", class_candidate="Fighter")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Boggart goblin", class_candidate="Fighter")
     assert(a1)
     assert(a1.get_race() == "Boggart goblin")
     assert(a1.get_class() == "Fighter")
@@ -3596,7 +3771,8 @@ def test_Character_Boggartgoblin_Fighter():
 
 def test_Character_Gremlingoblin_Fighter():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Gremlin goblin", class_candidate="Fighter")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Gremlin goblin", class_candidate="Fighter")
     assert(a1)
     assert(a1.get_race() == "Gremlin goblin")
     assert(a1.get_class() == "Fighter")
@@ -3616,7 +3792,8 @@ def test_Character_Gremlingoblin_Fighter():
 
 def test_Character_Dryad_Fighter():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Dryad", class_candidate="Fighter")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Dryad", class_candidate="Fighter")
     assert(a1)
     assert(a1.get_race() == "Dryad")
     assert(a1.get_class() == "Fighter")
@@ -3636,7 +3813,8 @@ def test_Character_Dryad_Fighter():
 
 def test_Character_Hilldwarf_Monk():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Hill dwarf", class_candidate="Monk")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Hill dwarf", class_candidate="Monk")
     assert(a1)
     assert(a1.get_race() == "Hill dwarf")
     assert(a1.get_class() == "Monk")
@@ -3656,7 +3834,8 @@ def test_Character_Hilldwarf_Monk():
 
 def test_Character_Highelf_Monk():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="High elf", class_candidate="Monk")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="High elf", class_candidate="Monk")
     assert(a1)
     assert(a1.get_race() == "High elf")
     assert(a1.get_class() == "Monk")
@@ -3676,7 +3855,8 @@ def test_Character_Highelf_Monk():
 
 def test_Character_Mountaindwarf_Monk():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Mountain dwarf", class_candidate="Monk")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Mountain dwarf", class_candidate="Monk")
     assert(a1)
     assert(a1.get_race() == "Mountain dwarf")
     assert(a1.get_class() == "Monk")
@@ -3696,7 +3876,8 @@ def test_Character_Mountaindwarf_Monk():
 
 def test_Character_Woodelf_Monk():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Wood elf", class_candidate="Monk")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Wood elf", class_candidate="Monk")
     assert(a1)
     assert(a1.get_race() == "Wood elf")
     assert(a1.get_class() == "Monk")
@@ -3716,7 +3897,8 @@ def test_Character_Woodelf_Monk():
 
 def test_Character_Lightfoothalfling_Monk():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Lightfoot halfling", class_candidate="Monk")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Lightfoot halfling", class_candidate="Monk")
     assert(a1)
     assert(a1.get_race() == "Lightfoot halfling")
     assert(a1.get_class() == "Monk")
@@ -3736,7 +3918,8 @@ def test_Character_Lightfoothalfling_Monk():
 
 def test_Character_Stouthalfling_Monk():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Stout halfling", class_candidate="Monk")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Stout halfling", class_candidate="Monk")
     assert(a1)
     assert(a1.get_race() == "Stout halfling")
     assert(a1.get_class() == "Monk")
@@ -3756,7 +3939,8 @@ def test_Character_Stouthalfling_Monk():
 
 def test_Character_HalfElf_Monk():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Half-Elf", class_candidate="Monk")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Half-Elf", class_candidate="Monk")
     assert(a1)
     assert(a1.get_race() == "Half-Elf")
     assert(a1.get_class() == "Monk")
@@ -3776,7 +3960,8 @@ def test_Character_HalfElf_Monk():
 
 def test_Character_Human_Monk():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Human", class_candidate="Monk")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Human", class_candidate="Monk")
     assert(a1)
     assert(a1.get_race() == "Human")
     assert(a1.get_class() == "Monk")
@@ -3796,7 +3981,8 @@ def test_Character_Human_Monk():
 
 def test_Character_Blackdragonborn_Monk():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Black dragonborn", class_candidate="Monk")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Black dragonborn", class_candidate="Monk")
     assert(a1)
     assert(a1.get_race() == "Black dragonborn")
     assert(a1.get_class() == "Monk")
@@ -3816,7 +4002,8 @@ def test_Character_Blackdragonborn_Monk():
 
 def test_Character_Bluedragonborn_Monk():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Blue dragonborn", class_candidate="Monk")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Blue dragonborn", class_candidate="Monk")
     assert(a1)
     assert(a1.get_race() == "Blue dragonborn")
     assert(a1.get_class() == "Monk")
@@ -3836,7 +4023,8 @@ def test_Character_Bluedragonborn_Monk():
 
 def test_Character_Brassdragonborn_Monk():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Brass dragonborn", class_candidate="Monk")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Brass dragonborn", class_candidate="Monk")
     assert(a1)
     assert(a1.get_race() == "Brass dragonborn")
     assert(a1.get_class() == "Monk")
@@ -3856,7 +4044,8 @@ def test_Character_Brassdragonborn_Monk():
 
 def test_Character_Bronzedragonborn_Monk():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Bronze dragonborn", class_candidate="Monk")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Bronze dragonborn", class_candidate="Monk")
     assert(a1)
     assert(a1.get_race() == "Bronze dragonborn")
     assert(a1.get_class() == "Monk")
@@ -3876,7 +4065,8 @@ def test_Character_Bronzedragonborn_Monk():
 
 def test_Character_Copperdragonborn_Monk():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Copper dragonborn", class_candidate="Monk")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Copper dragonborn", class_candidate="Monk")
     assert(a1)
     assert(a1.get_race() == "Copper dragonborn")
     assert(a1.get_class() == "Monk")
@@ -3896,7 +4086,8 @@ def test_Character_Copperdragonborn_Monk():
 
 def test_Character_Golddragonborn_Monk():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Gold dragonborn", class_candidate="Monk")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Gold dragonborn", class_candidate="Monk")
     assert(a1)
     assert(a1.get_race() == "Gold dragonborn")
     assert(a1.get_class() == "Monk")
@@ -3916,7 +4107,8 @@ def test_Character_Golddragonborn_Monk():
 
 def test_Character_Greendragonborn_Monk():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Green dragonborn", class_candidate="Monk")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Green dragonborn", class_candidate="Monk")
     assert(a1)
     assert(a1.get_race() == "Green dragonborn")
     assert(a1.get_class() == "Monk")
@@ -3936,7 +4128,8 @@ def test_Character_Greendragonborn_Monk():
 
 def test_Character_Reddragonborn_Monk():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Red dragonborn", class_candidate="Monk")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Red dragonborn", class_candidate="Monk")
     assert(a1)
     assert(a1.get_race() == "Red dragonborn")
     assert(a1.get_class() == "Monk")
@@ -3956,7 +4149,8 @@ def test_Character_Reddragonborn_Monk():
 
 def test_Character_Silverdragonborn_Monk():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Silver dragonborn", class_candidate="Monk")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Silver dragonborn", class_candidate="Monk")
     assert(a1)
     assert(a1.get_race() == "Silver dragonborn")
     assert(a1.get_class() == "Monk")
@@ -3976,7 +4170,8 @@ def test_Character_Silverdragonborn_Monk():
 
 def test_Character_Whitedragonborn_Monk():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="White dragonborn", class_candidate="Monk")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="White dragonborn", class_candidate="Monk")
     assert(a1)
     assert(a1.get_race() == "White dragonborn")
     assert(a1.get_class() == "Monk")
@@ -3996,7 +4191,8 @@ def test_Character_Whitedragonborn_Monk():
 
 def test_Character_Rockgnome_Monk():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Rock gnome", class_candidate="Monk")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Rock gnome", class_candidate="Monk")
     assert(a1)
     assert(a1.get_race() == "Rock gnome")
     assert(a1.get_class() == "Monk")
@@ -4016,7 +4212,8 @@ def test_Character_Rockgnome_Monk():
 
 def test_Character_HalfOrc_Monk():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Half-Orc", class_candidate="Monk")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Half-Orc", class_candidate="Monk")
     assert(a1)
     assert(a1.get_race() == "Half-Orc")
     assert(a1.get_class() == "Monk")
@@ -4036,7 +4233,8 @@ def test_Character_HalfOrc_Monk():
 
 def test_Character_Tiefling_Monk():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Tiefling", class_candidate="Monk")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Tiefling", class_candidate="Monk")
     assert(a1)
     assert(a1.get_race() == "Tiefling")
     assert(a1.get_class() == "Monk")
@@ -4056,7 +4254,8 @@ def test_Character_Tiefling_Monk():
 
 def test_Character_Centaur_Monk():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Centaur", class_candidate="Monk")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Centaur", class_candidate="Monk")
     assert(a1)
     assert(a1.get_race() == "Centaur")
     assert(a1.get_class() == "Monk")
@@ -4076,7 +4275,8 @@ def test_Character_Centaur_Monk():
 
 def test_Character_Blackbearkin_Monk():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Black bearkin", class_candidate="Monk")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Black bearkin", class_candidate="Monk")
     assert(a1)
     assert(a1.get_race() == "Black bearkin")
     assert(a1.get_class() == "Monk")
@@ -4096,7 +4296,8 @@ def test_Character_Blackbearkin_Monk():
 
 def test_Character_Brownbearkin_Monk():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Brown bearkin", class_candidate="Monk")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Brown bearkin", class_candidate="Monk")
     assert(a1)
     assert(a1.get_race() == "Brown bearkin")
     assert(a1.get_class() == "Monk")
@@ -4116,7 +4317,8 @@ def test_Character_Brownbearkin_Monk():
 
 def test_Character_Koalabearkin_Monk():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Koala bearkin", class_candidate="Monk")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Koala bearkin", class_candidate="Monk")
     assert(a1)
     assert(a1.get_race() == "Koala bearkin")
     assert(a1.get_class() == "Monk")
@@ -4136,7 +4338,8 @@ def test_Character_Koalabearkin_Monk():
 
 def test_Character_Pandabearkin_Monk():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Panda bearkin", class_candidate="Monk")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Panda bearkin", class_candidate="Monk")
     assert(a1)
     assert(a1.get_race() == "Panda bearkin")
     assert(a1.get_class() == "Monk")
@@ -4156,7 +4359,8 @@ def test_Character_Pandabearkin_Monk():
 
 def test_Character_Polarbearkin_Monk():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Polar bearkin", class_candidate="Monk")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Polar bearkin", class_candidate="Monk")
     assert(a1)
     assert(a1.get_race() == "Polar bearkin")
     assert(a1.get_class() == "Monk")
@@ -4176,7 +4380,8 @@ def test_Character_Polarbearkin_Monk():
 
 def test_Character_Burrowskobold_Monk():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Burrows kobold", class_candidate="Monk")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Burrows kobold", class_candidate="Monk")
     assert(a1)
     assert(a1.get_race() == "Burrows kobold")
     assert(a1.get_class() == "Monk")
@@ -4196,7 +4401,8 @@ def test_Character_Burrowskobold_Monk():
 
 def test_Character_Loredrakekobold_Monk():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Loredrake kobold", class_candidate="Monk")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Loredrake kobold", class_candidate="Monk")
     assert(a1)
     assert(a1.get_race() == "Loredrake kobold")
     assert(a1.get_class() == "Monk")
@@ -4216,7 +4422,8 @@ def test_Character_Loredrakekobold_Monk():
 
 def test_Character_Wingedkobold_Monk():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Winged kobold", class_candidate="Monk")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Winged kobold", class_candidate="Monk")
     assert(a1)
     assert(a1.get_race() == "Winged kobold")
     assert(a1.get_class() == "Monk")
@@ -4236,7 +4443,8 @@ def test_Character_Wingedkobold_Monk():
 
 def test_Character_Greenskingoblin_Monk():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Greenskin goblin", class_candidate="Monk")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Greenskin goblin", class_candidate="Monk")
     assert(a1)
     assert(a1.get_race() == "Greenskin goblin")
     assert(a1.get_class() == "Monk")
@@ -4256,7 +4464,8 @@ def test_Character_Greenskingoblin_Monk():
 
 def test_Character_Boggartgoblin_Monk():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Boggart goblin", class_candidate="Monk")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Boggart goblin", class_candidate="Monk")
     assert(a1)
     assert(a1.get_race() == "Boggart goblin")
     assert(a1.get_class() == "Monk")
@@ -4276,7 +4485,8 @@ def test_Character_Boggartgoblin_Monk():
 
 def test_Character_Gremlingoblin_Monk():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Gremlin goblin", class_candidate="Monk")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Gremlin goblin", class_candidate="Monk")
     assert(a1)
     assert(a1.get_race() == "Gremlin goblin")
     assert(a1.get_class() == "Monk")
@@ -4296,7 +4506,8 @@ def test_Character_Gremlingoblin_Monk():
 
 def test_Character_Dryad_Monk():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Dryad", class_candidate="Monk")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Dryad", class_candidate="Monk")
     assert(a1)
     assert(a1.get_race() == "Dryad")
     assert(a1.get_class() == "Monk")
@@ -4316,7 +4527,8 @@ def test_Character_Dryad_Monk():
 
 def test_Character_Hilldwarf_Paladin():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Hill dwarf", class_candidate="Paladin")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Hill dwarf", class_candidate="Paladin")
     assert(a1)
     assert(a1.get_race() == "Hill dwarf")
     assert(a1.get_class() == "Paladin")
@@ -4336,7 +4548,8 @@ def test_Character_Hilldwarf_Paladin():
 
 def test_Character_Highelf_Paladin():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="High elf", class_candidate="Paladin")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="High elf", class_candidate="Paladin")
     assert(a1)
     assert(a1.get_race() == "High elf")
     assert(a1.get_class() == "Paladin")
@@ -4356,7 +4569,8 @@ def test_Character_Highelf_Paladin():
 
 def test_Character_Mountaindwarf_Paladin():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Mountain dwarf", class_candidate="Paladin")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Mountain dwarf", class_candidate="Paladin")
     assert(a1)
     assert(a1.get_race() == "Mountain dwarf")
     assert(a1.get_class() == "Paladin")
@@ -4376,7 +4590,8 @@ def test_Character_Mountaindwarf_Paladin():
 
 def test_Character_Woodelf_Paladin():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Wood elf", class_candidate="Paladin")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Wood elf", class_candidate="Paladin")
     assert(a1)
     assert(a1.get_race() == "Wood elf")
     assert(a1.get_class() == "Paladin")
@@ -4396,7 +4611,8 @@ def test_Character_Woodelf_Paladin():
 
 def test_Character_Lightfoothalfling_Paladin():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Lightfoot halfling", class_candidate="Paladin")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Lightfoot halfling", class_candidate="Paladin")
     assert(a1)
     assert(a1.get_race() == "Lightfoot halfling")
     assert(a1.get_class() == "Paladin")
@@ -4416,7 +4632,8 @@ def test_Character_Lightfoothalfling_Paladin():
 
 def test_Character_Stouthalfling_Paladin():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Stout halfling", class_candidate="Paladin")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Stout halfling", class_candidate="Paladin")
     assert(a1)
     assert(a1.get_race() == "Stout halfling")
     assert(a1.get_class() == "Paladin")
@@ -4436,7 +4653,8 @@ def test_Character_Stouthalfling_Paladin():
 
 def test_Character_HalfElf_Paladin():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Half-Elf", class_candidate="Paladin")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Half-Elf", class_candidate="Paladin")
     assert(a1)
     assert(a1.get_race() == "Half-Elf")
     assert(a1.get_class() == "Paladin")
@@ -4456,7 +4674,8 @@ def test_Character_HalfElf_Paladin():
 
 def test_Character_Human_Paladin():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Human", class_candidate="Paladin")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Human", class_candidate="Paladin")
     assert(a1)
     assert(a1.get_race() == "Human")
     assert(a1.get_class() == "Paladin")
@@ -4476,7 +4695,8 @@ def test_Character_Human_Paladin():
 
 def test_Character_Blackdragonborn_Paladin():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Black dragonborn", class_candidate="Paladin")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Black dragonborn", class_candidate="Paladin")
     assert(a1)
     assert(a1.get_race() == "Black dragonborn")
     assert(a1.get_class() == "Paladin")
@@ -4496,7 +4716,8 @@ def test_Character_Blackdragonborn_Paladin():
 
 def test_Character_Bluedragonborn_Paladin():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Blue dragonborn", class_candidate="Paladin")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Blue dragonborn", class_candidate="Paladin")
     assert(a1)
     assert(a1.get_race() == "Blue dragonborn")
     assert(a1.get_class() == "Paladin")
@@ -4516,7 +4737,8 @@ def test_Character_Bluedragonborn_Paladin():
 
 def test_Character_Brassdragonborn_Paladin():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Brass dragonborn", class_candidate="Paladin")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Brass dragonborn", class_candidate="Paladin")
     assert(a1)
     assert(a1.get_race() == "Brass dragonborn")
     assert(a1.get_class() == "Paladin")
@@ -4536,7 +4758,8 @@ def test_Character_Brassdragonborn_Paladin():
 
 def test_Character_Bronzedragonborn_Paladin():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Bronze dragonborn", class_candidate="Paladin")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Bronze dragonborn", class_candidate="Paladin")
     assert(a1)
     assert(a1.get_race() == "Bronze dragonborn")
     assert(a1.get_class() == "Paladin")
@@ -4556,7 +4779,8 @@ def test_Character_Bronzedragonborn_Paladin():
 
 def test_Character_Copperdragonborn_Paladin():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Copper dragonborn", class_candidate="Paladin")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Copper dragonborn", class_candidate="Paladin")
     assert(a1)
     assert(a1.get_race() == "Copper dragonborn")
     assert(a1.get_class() == "Paladin")
@@ -4576,7 +4800,8 @@ def test_Character_Copperdragonborn_Paladin():
 
 def test_Character_Golddragonborn_Paladin():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Gold dragonborn", class_candidate="Paladin")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Gold dragonborn", class_candidate="Paladin")
     assert(a1)
     assert(a1.get_race() == "Gold dragonborn")
     assert(a1.get_class() == "Paladin")
@@ -4596,7 +4821,8 @@ def test_Character_Golddragonborn_Paladin():
 
 def test_Character_Greendragonborn_Paladin():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Green dragonborn", class_candidate="Paladin")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Green dragonborn", class_candidate="Paladin")
     assert(a1)
     assert(a1.get_race() == "Green dragonborn")
     assert(a1.get_class() == "Paladin")
@@ -4616,7 +4842,8 @@ def test_Character_Greendragonborn_Paladin():
 
 def test_Character_Reddragonborn_Paladin():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Red dragonborn", class_candidate="Paladin")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Red dragonborn", class_candidate="Paladin")
     assert(a1)
     assert(a1.get_race() == "Red dragonborn")
     assert(a1.get_class() == "Paladin")
@@ -4636,7 +4863,8 @@ def test_Character_Reddragonborn_Paladin():
 
 def test_Character_Silverdragonborn_Paladin():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Silver dragonborn", class_candidate="Paladin")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Silver dragonborn", class_candidate="Paladin")
     assert(a1)
     assert(a1.get_race() == "Silver dragonborn")
     assert(a1.get_class() == "Paladin")
@@ -4656,7 +4884,8 @@ def test_Character_Silverdragonborn_Paladin():
 
 def test_Character_Whitedragonborn_Paladin():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="White dragonborn", class_candidate="Paladin")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="White dragonborn", class_candidate="Paladin")
     assert(a1)
     assert(a1.get_race() == "White dragonborn")
     assert(a1.get_class() == "Paladin")
@@ -4676,7 +4905,8 @@ def test_Character_Whitedragonborn_Paladin():
 
 def test_Character_Rockgnome_Paladin():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Rock gnome", class_candidate="Paladin")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Rock gnome", class_candidate="Paladin")
     assert(a1)
     assert(a1.get_race() == "Rock gnome")
     assert(a1.get_class() == "Paladin")
@@ -4696,7 +4926,8 @@ def test_Character_Rockgnome_Paladin():
 
 def test_Character_HalfOrc_Paladin():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Half-Orc", class_candidate="Paladin")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Half-Orc", class_candidate="Paladin")
     assert(a1)
     assert(a1.get_race() == "Half-Orc")
     assert(a1.get_class() == "Paladin")
@@ -4716,7 +4947,8 @@ def test_Character_HalfOrc_Paladin():
 
 def test_Character_Tiefling_Paladin():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Tiefling", class_candidate="Paladin")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Tiefling", class_candidate="Paladin")
     assert(a1)
     assert(a1.get_race() == "Tiefling")
     assert(a1.get_class() == "Paladin")
@@ -4736,7 +4968,8 @@ def test_Character_Tiefling_Paladin():
 
 def test_Character_Centaur_Paladin():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Centaur", class_candidate="Paladin")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Centaur", class_candidate="Paladin")
     assert(a1)
     assert(a1.get_race() == "Centaur")
     assert(a1.get_class() == "Paladin")
@@ -4756,7 +4989,8 @@ def test_Character_Centaur_Paladin():
 
 def test_Character_Blackbearkin_Paladin():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Black bearkin", class_candidate="Paladin")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Black bearkin", class_candidate="Paladin")
     assert(a1)
     assert(a1.get_race() == "Black bearkin")
     assert(a1.get_class() == "Paladin")
@@ -4776,7 +5010,8 @@ def test_Character_Blackbearkin_Paladin():
 
 def test_Character_Brownbearkin_Paladin():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Brown bearkin", class_candidate="Paladin")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Brown bearkin", class_candidate="Paladin")
     assert(a1)
     assert(a1.get_race() == "Brown bearkin")
     assert(a1.get_class() == "Paladin")
@@ -4796,7 +5031,8 @@ def test_Character_Brownbearkin_Paladin():
 
 def test_Character_Koalabearkin_Paladin():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Koala bearkin", class_candidate="Paladin")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Koala bearkin", class_candidate="Paladin")
     assert(a1)
     assert(a1.get_race() == "Koala bearkin")
     assert(a1.get_class() == "Paladin")
@@ -4816,7 +5052,8 @@ def test_Character_Koalabearkin_Paladin():
 
 def test_Character_Pandabearkin_Paladin():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Panda bearkin", class_candidate="Paladin")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Panda bearkin", class_candidate="Paladin")
     assert(a1)
     assert(a1.get_race() == "Panda bearkin")
     assert(a1.get_class() == "Paladin")
@@ -4836,7 +5073,8 @@ def test_Character_Pandabearkin_Paladin():
 
 def test_Character_Polarbearkin_Paladin():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Polar bearkin", class_candidate="Paladin")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Polar bearkin", class_candidate="Paladin")
     assert(a1)
     assert(a1.get_race() == "Polar bearkin")
     assert(a1.get_class() == "Paladin")
@@ -4856,7 +5094,8 @@ def test_Character_Polarbearkin_Paladin():
 
 def test_Character_Burrowskobold_Paladin():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Burrows kobold", class_candidate="Paladin")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Burrows kobold", class_candidate="Paladin")
     assert(a1)
     assert(a1.get_race() == "Burrows kobold")
     assert(a1.get_class() == "Paladin")
@@ -4876,7 +5115,8 @@ def test_Character_Burrowskobold_Paladin():
 
 def test_Character_Loredrakekobold_Paladin():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Loredrake kobold", class_candidate="Paladin")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Loredrake kobold", class_candidate="Paladin")
     assert(a1)
     assert(a1.get_race() == "Loredrake kobold")
     assert(a1.get_class() == "Paladin")
@@ -4896,7 +5136,8 @@ def test_Character_Loredrakekobold_Paladin():
 
 def test_Character_Wingedkobold_Paladin():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Winged kobold", class_candidate="Paladin")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Winged kobold", class_candidate="Paladin")
     assert(a1)
     assert(a1.get_race() == "Winged kobold")
     assert(a1.get_class() == "Paladin")
@@ -4916,7 +5157,8 @@ def test_Character_Wingedkobold_Paladin():
 
 def test_Character_Greenskingoblin_Paladin():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Greenskin goblin", class_candidate="Paladin")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Greenskin goblin", class_candidate="Paladin")
     assert(a1)
     assert(a1.get_race() == "Greenskin goblin")
     assert(a1.get_class() == "Paladin")
@@ -4936,7 +5178,8 @@ def test_Character_Greenskingoblin_Paladin():
 
 def test_Character_Boggartgoblin_Paladin():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Boggart goblin", class_candidate="Paladin")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Boggart goblin", class_candidate="Paladin")
     assert(a1)
     assert(a1.get_race() == "Boggart goblin")
     assert(a1.get_class() == "Paladin")
@@ -4956,7 +5199,8 @@ def test_Character_Boggartgoblin_Paladin():
 
 def test_Character_Gremlingoblin_Paladin():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Gremlin goblin", class_candidate="Paladin")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Gremlin goblin", class_candidate="Paladin")
     assert(a1)
     assert(a1.get_race() == "Gremlin goblin")
     assert(a1.get_class() == "Paladin")
@@ -4976,7 +5220,8 @@ def test_Character_Gremlingoblin_Paladin():
 
 def test_Character_Dryad_Paladin():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Dryad", class_candidate="Paladin")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Dryad", class_candidate="Paladin")
     assert(a1)
     assert(a1.get_race() == "Dryad")
     assert(a1.get_class() == "Paladin")
@@ -4996,7 +5241,8 @@ def test_Character_Dryad_Paladin():
 
 def test_Character_Hilldwarf_Ranger():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Hill dwarf", class_candidate="Ranger")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Hill dwarf", class_candidate="Ranger")
     assert(a1)
     assert(a1.get_race() == "Hill dwarf")
     assert(a1.get_class() == "Ranger")
@@ -5016,7 +5262,8 @@ def test_Character_Hilldwarf_Ranger():
 
 def test_Character_Highelf_Ranger():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="High elf", class_candidate="Ranger")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="High elf", class_candidate="Ranger")
     assert(a1)
     assert(a1.get_race() == "High elf")
     assert(a1.get_class() == "Ranger")
@@ -5036,7 +5283,8 @@ def test_Character_Highelf_Ranger():
 
 def test_Character_Mountaindwarf_Ranger():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Mountain dwarf", class_candidate="Ranger")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Mountain dwarf", class_candidate="Ranger")
     assert(a1)
     assert(a1.get_race() == "Mountain dwarf")
     assert(a1.get_class() == "Ranger")
@@ -5056,7 +5304,8 @@ def test_Character_Mountaindwarf_Ranger():
 
 def test_Character_Woodelf_Ranger():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Wood elf", class_candidate="Ranger")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Wood elf", class_candidate="Ranger")
     assert(a1)
     assert(a1.get_race() == "Wood elf")
     assert(a1.get_class() == "Ranger")
@@ -5076,7 +5325,8 @@ def test_Character_Woodelf_Ranger():
 
 def test_Character_Lightfoothalfling_Ranger():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Lightfoot halfling", class_candidate="Ranger")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Lightfoot halfling", class_candidate="Ranger")
     assert(a1)
     assert(a1.get_race() == "Lightfoot halfling")
     assert(a1.get_class() == "Ranger")
@@ -5096,7 +5346,8 @@ def test_Character_Lightfoothalfling_Ranger():
 
 def test_Character_Stouthalfling_Ranger():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Stout halfling", class_candidate="Ranger")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Stout halfling", class_candidate="Ranger")
     assert(a1)
     assert(a1.get_race() == "Stout halfling")
     assert(a1.get_class() == "Ranger")
@@ -5116,7 +5367,8 @@ def test_Character_Stouthalfling_Ranger():
 
 def test_Character_HalfElf_Ranger():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Half-Elf", class_candidate="Ranger")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Half-Elf", class_candidate="Ranger")
     assert(a1)
     assert(a1.get_race() == "Half-Elf")
     assert(a1.get_class() == "Ranger")
@@ -5136,7 +5388,8 @@ def test_Character_HalfElf_Ranger():
 
 def test_Character_Human_Ranger():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Human", class_candidate="Ranger")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Human", class_candidate="Ranger")
     assert(a1)
     assert(a1.get_race() == "Human")
     assert(a1.get_class() == "Ranger")
@@ -5156,7 +5409,8 @@ def test_Character_Human_Ranger():
 
 def test_Character_Blackdragonborn_Ranger():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Black dragonborn", class_candidate="Ranger")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Black dragonborn", class_candidate="Ranger")
     assert(a1)
     assert(a1.get_race() == "Black dragonborn")
     assert(a1.get_class() == "Ranger")
@@ -5176,7 +5430,8 @@ def test_Character_Blackdragonborn_Ranger():
 
 def test_Character_Bluedragonborn_Ranger():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Blue dragonborn", class_candidate="Ranger")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Blue dragonborn", class_candidate="Ranger")
     assert(a1)
     assert(a1.get_race() == "Blue dragonborn")
     assert(a1.get_class() == "Ranger")
@@ -5196,7 +5451,8 @@ def test_Character_Bluedragonborn_Ranger():
 
 def test_Character_Brassdragonborn_Ranger():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Brass dragonborn", class_candidate="Ranger")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Brass dragonborn", class_candidate="Ranger")
     assert(a1)
     assert(a1.get_race() == "Brass dragonborn")
     assert(a1.get_class() == "Ranger")
@@ -5216,7 +5472,8 @@ def test_Character_Brassdragonborn_Ranger():
 
 def test_Character_Bronzedragonborn_Ranger():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Bronze dragonborn", class_candidate="Ranger")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Bronze dragonborn", class_candidate="Ranger")
     assert(a1)
     assert(a1.get_race() == "Bronze dragonborn")
     assert(a1.get_class() == "Ranger")
@@ -5236,7 +5493,8 @@ def test_Character_Bronzedragonborn_Ranger():
 
 def test_Character_Copperdragonborn_Ranger():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Copper dragonborn", class_candidate="Ranger")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Copper dragonborn", class_candidate="Ranger")
     assert(a1)
     assert(a1.get_race() == "Copper dragonborn")
     assert(a1.get_class() == "Ranger")
@@ -5256,7 +5514,8 @@ def test_Character_Copperdragonborn_Ranger():
 
 def test_Character_Golddragonborn_Ranger():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Gold dragonborn", class_candidate="Ranger")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Gold dragonborn", class_candidate="Ranger")
     assert(a1)
     assert(a1.get_race() == "Gold dragonborn")
     assert(a1.get_class() == "Ranger")
@@ -5276,7 +5535,8 @@ def test_Character_Golddragonborn_Ranger():
 
 def test_Character_Greendragonborn_Ranger():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Green dragonborn", class_candidate="Ranger")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Green dragonborn", class_candidate="Ranger")
     assert(a1)
     assert(a1.get_race() == "Green dragonborn")
     assert(a1.get_class() == "Ranger")
@@ -5296,7 +5556,8 @@ def test_Character_Greendragonborn_Ranger():
 
 def test_Character_Reddragonborn_Ranger():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Red dragonborn", class_candidate="Ranger")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Red dragonborn", class_candidate="Ranger")
     assert(a1)
     assert(a1.get_race() == "Red dragonborn")
     assert(a1.get_class() == "Ranger")
@@ -5316,7 +5577,8 @@ def test_Character_Reddragonborn_Ranger():
 
 def test_Character_Silverdragonborn_Ranger():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Silver dragonborn", class_candidate="Ranger")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Silver dragonborn", class_candidate="Ranger")
     assert(a1)
     assert(a1.get_race() == "Silver dragonborn")
     assert(a1.get_class() == "Ranger")
@@ -5336,7 +5598,8 @@ def test_Character_Silverdragonborn_Ranger():
 
 def test_Character_Whitedragonborn_Ranger():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="White dragonborn", class_candidate="Ranger")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="White dragonborn", class_candidate="Ranger")
     assert(a1)
     assert(a1.get_race() == "White dragonborn")
     assert(a1.get_class() == "Ranger")
@@ -5356,7 +5619,8 @@ def test_Character_Whitedragonborn_Ranger():
 
 def test_Character_Rockgnome_Ranger():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Rock gnome", class_candidate="Ranger")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Rock gnome", class_candidate="Ranger")
     assert(a1)
     assert(a1.get_race() == "Rock gnome")
     assert(a1.get_class() == "Ranger")
@@ -5376,7 +5640,8 @@ def test_Character_Rockgnome_Ranger():
 
 def test_Character_HalfOrc_Ranger():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Half-Orc", class_candidate="Ranger")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Half-Orc", class_candidate="Ranger")
     assert(a1)
     assert(a1.get_race() == "Half-Orc")
     assert(a1.get_class() == "Ranger")
@@ -5396,7 +5661,8 @@ def test_Character_HalfOrc_Ranger():
 
 def test_Character_Tiefling_Ranger():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Tiefling", class_candidate="Ranger")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Tiefling", class_candidate="Ranger")
     assert(a1)
     assert(a1.get_race() == "Tiefling")
     assert(a1.get_class() == "Ranger")
@@ -5416,7 +5682,8 @@ def test_Character_Tiefling_Ranger():
 
 def test_Character_Centaur_Ranger():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Centaur", class_candidate="Ranger")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Centaur", class_candidate="Ranger")
     assert(a1)
     assert(a1.get_race() == "Centaur")
     assert(a1.get_class() == "Ranger")
@@ -5436,7 +5703,8 @@ def test_Character_Centaur_Ranger():
 
 def test_Character_Blackbearkin_Ranger():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Black bearkin", class_candidate="Ranger")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Black bearkin", class_candidate="Ranger")
     assert(a1)
     assert(a1.get_race() == "Black bearkin")
     assert(a1.get_class() == "Ranger")
@@ -5456,7 +5724,8 @@ def test_Character_Blackbearkin_Ranger():
 
 def test_Character_Brownbearkin_Ranger():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Brown bearkin", class_candidate="Ranger")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Brown bearkin", class_candidate="Ranger")
     assert(a1)
     assert(a1.get_race() == "Brown bearkin")
     assert(a1.get_class() == "Ranger")
@@ -5476,7 +5745,8 @@ def test_Character_Brownbearkin_Ranger():
 
 def test_Character_Koalabearkin_Ranger():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Koala bearkin", class_candidate="Ranger")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Koala bearkin", class_candidate="Ranger")
     assert(a1)
     assert(a1.get_race() == "Koala bearkin")
     assert(a1.get_class() == "Ranger")
@@ -5496,7 +5766,8 @@ def test_Character_Koalabearkin_Ranger():
 
 def test_Character_Pandabearkin_Ranger():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Panda bearkin", class_candidate="Ranger")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Panda bearkin", class_candidate="Ranger")
     assert(a1)
     assert(a1.get_race() == "Panda bearkin")
     assert(a1.get_class() == "Ranger")
@@ -5516,7 +5787,8 @@ def test_Character_Pandabearkin_Ranger():
 
 def test_Character_Polarbearkin_Ranger():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Polar bearkin", class_candidate="Ranger")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Polar bearkin", class_candidate="Ranger")
     assert(a1)
     assert(a1.get_race() == "Polar bearkin")
     assert(a1.get_class() == "Ranger")
@@ -5536,7 +5808,8 @@ def test_Character_Polarbearkin_Ranger():
 
 def test_Character_Burrowskobold_Ranger():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Burrows kobold", class_candidate="Ranger")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Burrows kobold", class_candidate="Ranger")
     assert(a1)
     assert(a1.get_race() == "Burrows kobold")
     assert(a1.get_class() == "Ranger")
@@ -5556,7 +5829,8 @@ def test_Character_Burrowskobold_Ranger():
 
 def test_Character_Loredrakekobold_Ranger():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Loredrake kobold", class_candidate="Ranger")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Loredrake kobold", class_candidate="Ranger")
     assert(a1)
     assert(a1.get_race() == "Loredrake kobold")
     assert(a1.get_class() == "Ranger")
@@ -5576,7 +5850,8 @@ def test_Character_Loredrakekobold_Ranger():
 
 def test_Character_Wingedkobold_Ranger():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Winged kobold", class_candidate="Ranger")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Winged kobold", class_candidate="Ranger")
     assert(a1)
     assert(a1.get_race() == "Winged kobold")
     assert(a1.get_class() == "Ranger")
@@ -5596,7 +5871,8 @@ def test_Character_Wingedkobold_Ranger():
 
 def test_Character_Greenskingoblin_Ranger():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Greenskin goblin", class_candidate="Ranger")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Greenskin goblin", class_candidate="Ranger")
     assert(a1)
     assert(a1.get_race() == "Greenskin goblin")
     assert(a1.get_class() == "Ranger")
@@ -5616,7 +5892,8 @@ def test_Character_Greenskingoblin_Ranger():
 
 def test_Character_Boggartgoblin_Ranger():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Boggart goblin", class_candidate="Ranger")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Boggart goblin", class_candidate="Ranger")
     assert(a1)
     assert(a1.get_race() == "Boggart goblin")
     assert(a1.get_class() == "Ranger")
@@ -5636,7 +5913,8 @@ def test_Character_Boggartgoblin_Ranger():
 
 def test_Character_Gremlingoblin_Ranger():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Gremlin goblin", class_candidate="Ranger")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Gremlin goblin", class_candidate="Ranger")
     assert(a1)
     assert(a1.get_race() == "Gremlin goblin")
     assert(a1.get_class() == "Ranger")
@@ -5656,7 +5934,8 @@ def test_Character_Gremlingoblin_Ranger():
 
 def test_Character_Dryad_Ranger():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Dryad", class_candidate="Ranger")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Dryad", class_candidate="Ranger")
     assert(a1)
     assert(a1.get_race() == "Dryad")
     assert(a1.get_class() == "Ranger")
@@ -5676,7 +5955,8 @@ def test_Character_Dryad_Ranger():
 
 def test_Character_Hilldwarf_Rogue():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Hill dwarf", class_candidate="Rogue")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Hill dwarf", class_candidate="Rogue")
     assert(a1)
     assert(a1.get_race() == "Hill dwarf")
     assert(a1.get_class() == "Rogue")
@@ -5696,7 +5976,8 @@ def test_Character_Hilldwarf_Rogue():
 
 def test_Character_Highelf_Rogue():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="High elf", class_candidate="Rogue")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="High elf", class_candidate="Rogue")
     assert(a1)
     assert(a1.get_race() == "High elf")
     assert(a1.get_class() == "Rogue")
@@ -5716,7 +5997,8 @@ def test_Character_Highelf_Rogue():
 
 def test_Character_Mountaindwarf_Rogue():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Mountain dwarf", class_candidate="Rogue")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Mountain dwarf", class_candidate="Rogue")
     assert(a1)
     assert(a1.get_race() == "Mountain dwarf")
     assert(a1.get_class() == "Rogue")
@@ -5736,7 +6018,8 @@ def test_Character_Mountaindwarf_Rogue():
 
 def test_Character_Woodelf_Rogue():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Wood elf", class_candidate="Rogue")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Wood elf", class_candidate="Rogue")
     assert(a1)
     assert(a1.get_race() == "Wood elf")
     assert(a1.get_class() == "Rogue")
@@ -5756,7 +6039,8 @@ def test_Character_Woodelf_Rogue():
 
 def test_Character_Lightfoothalfling_Rogue():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Lightfoot halfling", class_candidate="Rogue")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Lightfoot halfling", class_candidate="Rogue")
     assert(a1)
     assert(a1.get_race() == "Lightfoot halfling")
     assert(a1.get_class() == "Rogue")
@@ -5776,7 +6060,8 @@ def test_Character_Lightfoothalfling_Rogue():
 
 def test_Character_Stouthalfling_Rogue():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Stout halfling", class_candidate="Rogue")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Stout halfling", class_candidate="Rogue")
     assert(a1)
     assert(a1.get_race() == "Stout halfling")
     assert(a1.get_class() == "Rogue")
@@ -5796,7 +6081,8 @@ def test_Character_Stouthalfling_Rogue():
 
 def test_Character_HalfElf_Rogue():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Half-Elf", class_candidate="Rogue")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Half-Elf", class_candidate="Rogue")
     assert(a1)
     assert(a1.get_race() == "Half-Elf")
     assert(a1.get_class() == "Rogue")
@@ -5816,7 +6102,8 @@ def test_Character_HalfElf_Rogue():
 
 def test_Character_Human_Rogue():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Human", class_candidate="Rogue")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Human", class_candidate="Rogue")
     assert(a1)
     assert(a1.get_race() == "Human")
     assert(a1.get_class() == "Rogue")
@@ -5836,7 +6123,8 @@ def test_Character_Human_Rogue():
 
 def test_Character_Blackdragonborn_Rogue():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Black dragonborn", class_candidate="Rogue")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Black dragonborn", class_candidate="Rogue")
     assert(a1)
     assert(a1.get_race() == "Black dragonborn")
     assert(a1.get_class() == "Rogue")
@@ -5856,7 +6144,8 @@ def test_Character_Blackdragonborn_Rogue():
 
 def test_Character_Bluedragonborn_Rogue():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Blue dragonborn", class_candidate="Rogue")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Blue dragonborn", class_candidate="Rogue")
     assert(a1)
     assert(a1.get_race() == "Blue dragonborn")
     assert(a1.get_class() == "Rogue")
@@ -5876,7 +6165,8 @@ def test_Character_Bluedragonborn_Rogue():
 
 def test_Character_Brassdragonborn_Rogue():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Brass dragonborn", class_candidate="Rogue")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Brass dragonborn", class_candidate="Rogue")
     assert(a1)
     assert(a1.get_race() == "Brass dragonborn")
     assert(a1.get_class() == "Rogue")
@@ -5896,7 +6186,8 @@ def test_Character_Brassdragonborn_Rogue():
 
 def test_Character_Bronzedragonborn_Rogue():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Bronze dragonborn", class_candidate="Rogue")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Bronze dragonborn", class_candidate="Rogue")
     assert(a1)
     assert(a1.get_race() == "Bronze dragonborn")
     assert(a1.get_class() == "Rogue")
@@ -5916,7 +6207,8 @@ def test_Character_Bronzedragonborn_Rogue():
 
 def test_Character_Copperdragonborn_Rogue():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Copper dragonborn", class_candidate="Rogue")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Copper dragonborn", class_candidate="Rogue")
     assert(a1)
     assert(a1.get_race() == "Copper dragonborn")
     assert(a1.get_class() == "Rogue")
@@ -5936,7 +6228,8 @@ def test_Character_Copperdragonborn_Rogue():
 
 def test_Character_Golddragonborn_Rogue():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Gold dragonborn", class_candidate="Rogue")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Gold dragonborn", class_candidate="Rogue")
     assert(a1)
     assert(a1.get_race() == "Gold dragonborn")
     assert(a1.get_class() == "Rogue")
@@ -5956,7 +6249,8 @@ def test_Character_Golddragonborn_Rogue():
 
 def test_Character_Greendragonborn_Rogue():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Green dragonborn", class_candidate="Rogue")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Green dragonborn", class_candidate="Rogue")
     assert(a1)
     assert(a1.get_race() == "Green dragonborn")
     assert(a1.get_class() == "Rogue")
@@ -5976,7 +6270,8 @@ def test_Character_Greendragonborn_Rogue():
 
 def test_Character_Reddragonborn_Rogue():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Red dragonborn", class_candidate="Rogue")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Red dragonborn", class_candidate="Rogue")
     assert(a1)
     assert(a1.get_race() == "Red dragonborn")
     assert(a1.get_class() == "Rogue")
@@ -5996,7 +6291,8 @@ def test_Character_Reddragonborn_Rogue():
 
 def test_Character_Silverdragonborn_Rogue():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Silver dragonborn", class_candidate="Rogue")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Silver dragonborn", class_candidate="Rogue")
     assert(a1)
     assert(a1.get_race() == "Silver dragonborn")
     assert(a1.get_class() == "Rogue")
@@ -6016,7 +6312,8 @@ def test_Character_Silverdragonborn_Rogue():
 
 def test_Character_Whitedragonborn_Rogue():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="White dragonborn", class_candidate="Rogue")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="White dragonborn", class_candidate="Rogue")
     assert(a1)
     assert(a1.get_race() == "White dragonborn")
     assert(a1.get_class() == "Rogue")
@@ -6036,7 +6333,8 @@ def test_Character_Whitedragonborn_Rogue():
 
 def test_Character_Rockgnome_Rogue():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Rock gnome", class_candidate="Rogue")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Rock gnome", class_candidate="Rogue")
     assert(a1)
     assert(a1.get_race() == "Rock gnome")
     assert(a1.get_class() == "Rogue")
@@ -6056,7 +6354,8 @@ def test_Character_Rockgnome_Rogue():
 
 def test_Character_HalfOrc_Rogue():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Half-Orc", class_candidate="Rogue")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Half-Orc", class_candidate="Rogue")
     assert(a1)
     assert(a1.get_race() == "Half-Orc")
     assert(a1.get_class() == "Rogue")
@@ -6076,7 +6375,8 @@ def test_Character_HalfOrc_Rogue():
 
 def test_Character_Tiefling_Rogue():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Tiefling", class_candidate="Rogue")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Tiefling", class_candidate="Rogue")
     assert(a1)
     assert(a1.get_race() == "Tiefling")
     assert(a1.get_class() == "Rogue")
@@ -6096,7 +6396,8 @@ def test_Character_Tiefling_Rogue():
 
 def test_Character_Centaur_Rogue():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Centaur", class_candidate="Rogue")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Centaur", class_candidate="Rogue")
     assert(a1)
     assert(a1.get_race() == "Centaur")
     assert(a1.get_class() == "Rogue")
@@ -6116,7 +6417,8 @@ def test_Character_Centaur_Rogue():
 
 def test_Character_Blackbearkin_Rogue():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Black bearkin", class_candidate="Rogue")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Black bearkin", class_candidate="Rogue")
     assert(a1)
     assert(a1.get_race() == "Black bearkin")
     assert(a1.get_class() == "Rogue")
@@ -6136,7 +6438,8 @@ def test_Character_Blackbearkin_Rogue():
 
 def test_Character_Brownbearkin_Rogue():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Brown bearkin", class_candidate="Rogue")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Brown bearkin", class_candidate="Rogue")
     assert(a1)
     assert(a1.get_race() == "Brown bearkin")
     assert(a1.get_class() == "Rogue")
@@ -6156,7 +6459,8 @@ def test_Character_Brownbearkin_Rogue():
 
 def test_Character_Koalabearkin_Rogue():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Koala bearkin", class_candidate="Rogue")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Koala bearkin", class_candidate="Rogue")
     assert(a1)
     assert(a1.get_race() == "Koala bearkin")
     assert(a1.get_class() == "Rogue")
@@ -6176,7 +6480,8 @@ def test_Character_Koalabearkin_Rogue():
 
 def test_Character_Pandabearkin_Rogue():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Panda bearkin", class_candidate="Rogue")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Panda bearkin", class_candidate="Rogue")
     assert(a1)
     assert(a1.get_race() == "Panda bearkin")
     assert(a1.get_class() == "Rogue")
@@ -6196,7 +6501,8 @@ def test_Character_Pandabearkin_Rogue():
 
 def test_Character_Polarbearkin_Rogue():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Polar bearkin", class_candidate="Rogue")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Polar bearkin", class_candidate="Rogue")
     assert(a1)
     assert(a1.get_race() == "Polar bearkin")
     assert(a1.get_class() == "Rogue")
@@ -6216,7 +6522,8 @@ def test_Character_Polarbearkin_Rogue():
 
 def test_Character_Burrowskobold_Rogue():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Burrows kobold", class_candidate="Rogue")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Burrows kobold", class_candidate="Rogue")
     assert(a1)
     assert(a1.get_race() == "Burrows kobold")
     assert(a1.get_class() == "Rogue")
@@ -6236,7 +6543,8 @@ def test_Character_Burrowskobold_Rogue():
 
 def test_Character_Loredrakekobold_Rogue():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Loredrake kobold", class_candidate="Rogue")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Loredrake kobold", class_candidate="Rogue")
     assert(a1)
     assert(a1.get_race() == "Loredrake kobold")
     assert(a1.get_class() == "Rogue")
@@ -6256,7 +6564,8 @@ def test_Character_Loredrakekobold_Rogue():
 
 def test_Character_Wingedkobold_Rogue():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Winged kobold", class_candidate="Rogue")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Winged kobold", class_candidate="Rogue")
     assert(a1)
     assert(a1.get_race() == "Winged kobold")
     assert(a1.get_class() == "Rogue")
@@ -6276,7 +6585,8 @@ def test_Character_Wingedkobold_Rogue():
 
 def test_Character_Greenskingoblin_Rogue():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Greenskin goblin", class_candidate="Rogue")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Greenskin goblin", class_candidate="Rogue")
     assert(a1)
     assert(a1.get_race() == "Greenskin goblin")
     assert(a1.get_class() == "Rogue")
@@ -6296,7 +6606,8 @@ def test_Character_Greenskingoblin_Rogue():
 
 def test_Character_Boggartgoblin_Rogue():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Boggart goblin", class_candidate="Rogue")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Boggart goblin", class_candidate="Rogue")
     assert(a1)
     assert(a1.get_race() == "Boggart goblin")
     assert(a1.get_class() == "Rogue")
@@ -6316,7 +6627,8 @@ def test_Character_Boggartgoblin_Rogue():
 
 def test_Character_Gremlingoblin_Rogue():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Gremlin goblin", class_candidate="Rogue")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Gremlin goblin", class_candidate="Rogue")
     assert(a1)
     assert(a1.get_race() == "Gremlin goblin")
     assert(a1.get_class() == "Rogue")
@@ -6336,7 +6648,8 @@ def test_Character_Gremlingoblin_Rogue():
 
 def test_Character_Dryad_Rogue():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Dryad", class_candidate="Rogue")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Dryad", class_candidate="Rogue")
     assert(a1)
     assert(a1.get_race() == "Dryad")
     assert(a1.get_class() == "Rogue")
@@ -6356,7 +6669,8 @@ def test_Character_Dryad_Rogue():
 
 def test_Character_Hilldwarf_Sorcerer():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Hill dwarf", class_candidate="Sorcerer")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Hill dwarf", class_candidate="Sorcerer")
     assert(a1)
     assert(a1.get_race() == "Hill dwarf")
     assert(a1.get_class() == "Sorcerer")
@@ -6376,7 +6690,8 @@ def test_Character_Hilldwarf_Sorcerer():
 
 def test_Character_Highelf_Sorcerer():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="High elf", class_candidate="Sorcerer")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="High elf", class_candidate="Sorcerer")
     assert(a1)
     assert(a1.get_race() == "High elf")
     assert(a1.get_class() == "Sorcerer")
@@ -6396,7 +6711,8 @@ def test_Character_Highelf_Sorcerer():
 
 def test_Character_Mountaindwarf_Sorcerer():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Mountain dwarf", class_candidate="Sorcerer")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Mountain dwarf", class_candidate="Sorcerer")
     assert(a1)
     assert(a1.get_race() == "Mountain dwarf")
     assert(a1.get_class() == "Sorcerer")
@@ -6416,7 +6732,8 @@ def test_Character_Mountaindwarf_Sorcerer():
 
 def test_Character_Woodelf_Sorcerer():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Wood elf", class_candidate="Sorcerer")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Wood elf", class_candidate="Sorcerer")
     assert(a1)
     assert(a1.get_race() == "Wood elf")
     assert(a1.get_class() == "Sorcerer")
@@ -6436,7 +6753,8 @@ def test_Character_Woodelf_Sorcerer():
 
 def test_Character_Lightfoothalfling_Sorcerer():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Lightfoot halfling", class_candidate="Sorcerer")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Lightfoot halfling", class_candidate="Sorcerer")
     assert(a1)
     assert(a1.get_race() == "Lightfoot halfling")
     assert(a1.get_class() == "Sorcerer")
@@ -6456,7 +6774,8 @@ def test_Character_Lightfoothalfling_Sorcerer():
 
 def test_Character_Stouthalfling_Sorcerer():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Stout halfling", class_candidate="Sorcerer")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Stout halfling", class_candidate="Sorcerer")
     assert(a1)
     assert(a1.get_race() == "Stout halfling")
     assert(a1.get_class() == "Sorcerer")
@@ -6476,7 +6795,8 @@ def test_Character_Stouthalfling_Sorcerer():
 
 def test_Character_HalfElf_Sorcerer():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Half-Elf", class_candidate="Sorcerer")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Half-Elf", class_candidate="Sorcerer")
     assert(a1)
     assert(a1.get_race() == "Half-Elf")
     assert(a1.get_class() == "Sorcerer")
@@ -6496,7 +6816,8 @@ def test_Character_HalfElf_Sorcerer():
 
 def test_Character_Human_Sorcerer():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Human", class_candidate="Sorcerer")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Human", class_candidate="Sorcerer")
     assert(a1)
     assert(a1.get_race() == "Human")
     assert(a1.get_class() == "Sorcerer")
@@ -6516,7 +6837,8 @@ def test_Character_Human_Sorcerer():
 
 def test_Character_Blackdragonborn_Sorcerer():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Black dragonborn", class_candidate="Sorcerer")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Black dragonborn", class_candidate="Sorcerer")
     assert(a1)
     assert(a1.get_race() == "Black dragonborn")
     assert(a1.get_class() == "Sorcerer")
@@ -6536,7 +6858,8 @@ def test_Character_Blackdragonborn_Sorcerer():
 
 def test_Character_Bluedragonborn_Sorcerer():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Blue dragonborn", class_candidate="Sorcerer")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Blue dragonborn", class_candidate="Sorcerer")
     assert(a1)
     assert(a1.get_race() == "Blue dragonborn")
     assert(a1.get_class() == "Sorcerer")
@@ -6556,7 +6879,8 @@ def test_Character_Bluedragonborn_Sorcerer():
 
 def test_Character_Brassdragonborn_Sorcerer():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Brass dragonborn", class_candidate="Sorcerer")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Brass dragonborn", class_candidate="Sorcerer")
     assert(a1)
     assert(a1.get_race() == "Brass dragonborn")
     assert(a1.get_class() == "Sorcerer")
@@ -6576,7 +6900,8 @@ def test_Character_Brassdragonborn_Sorcerer():
 
 def test_Character_Bronzedragonborn_Sorcerer():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Bronze dragonborn", class_candidate="Sorcerer")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Bronze dragonborn", class_candidate="Sorcerer")
     assert(a1)
     assert(a1.get_race() == "Bronze dragonborn")
     assert(a1.get_class() == "Sorcerer")
@@ -6596,7 +6921,8 @@ def test_Character_Bronzedragonborn_Sorcerer():
 
 def test_Character_Copperdragonborn_Sorcerer():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Copper dragonborn", class_candidate="Sorcerer")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Copper dragonborn", class_candidate="Sorcerer")
     assert(a1)
     assert(a1.get_race() == "Copper dragonborn")
     assert(a1.get_class() == "Sorcerer")
@@ -6616,7 +6942,8 @@ def test_Character_Copperdragonborn_Sorcerer():
 
 def test_Character_Golddragonborn_Sorcerer():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Gold dragonborn", class_candidate="Sorcerer")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Gold dragonborn", class_candidate="Sorcerer")
     assert(a1)
     assert(a1.get_race() == "Gold dragonborn")
     assert(a1.get_class() == "Sorcerer")
@@ -6636,7 +6963,8 @@ def test_Character_Golddragonborn_Sorcerer():
 
 def test_Character_Greendragonborn_Sorcerer():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Green dragonborn", class_candidate="Sorcerer")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Green dragonborn", class_candidate="Sorcerer")
     assert(a1)
     assert(a1.get_race() == "Green dragonborn")
     assert(a1.get_class() == "Sorcerer")
@@ -6656,7 +6984,8 @@ def test_Character_Greendragonborn_Sorcerer():
 
 def test_Character_Reddragonborn_Sorcerer():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Red dragonborn", class_candidate="Sorcerer")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Red dragonborn", class_candidate="Sorcerer")
     assert(a1)
     assert(a1.get_race() == "Red dragonborn")
     assert(a1.get_class() == "Sorcerer")
@@ -6676,7 +7005,8 @@ def test_Character_Reddragonborn_Sorcerer():
 
 def test_Character_Silverdragonborn_Sorcerer():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Silver dragonborn", class_candidate="Sorcerer")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Silver dragonborn", class_candidate="Sorcerer")
     assert(a1)
     assert(a1.get_race() == "Silver dragonborn")
     assert(a1.get_class() == "Sorcerer")
@@ -6696,7 +7026,8 @@ def test_Character_Silverdragonborn_Sorcerer():
 
 def test_Character_Whitedragonborn_Sorcerer():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="White dragonborn", class_candidate="Sorcerer")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="White dragonborn", class_candidate="Sorcerer")
     assert(a1)
     assert(a1.get_race() == "White dragonborn")
     assert(a1.get_class() == "Sorcerer")
@@ -6716,7 +7047,8 @@ def test_Character_Whitedragonborn_Sorcerer():
 
 def test_Character_Rockgnome_Sorcerer():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Rock gnome", class_candidate="Sorcerer")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Rock gnome", class_candidate="Sorcerer")
     assert(a1)
     assert(a1.get_race() == "Rock gnome")
     assert(a1.get_class() == "Sorcerer")
@@ -6736,7 +7068,8 @@ def test_Character_Rockgnome_Sorcerer():
 
 def test_Character_HalfOrc_Sorcerer():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Half-Orc", class_candidate="Sorcerer")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Half-Orc", class_candidate="Sorcerer")
     assert(a1)
     assert(a1.get_race() == "Half-Orc")
     assert(a1.get_class() == "Sorcerer")
@@ -6756,7 +7089,8 @@ def test_Character_HalfOrc_Sorcerer():
 
 def test_Character_Tiefling_Sorcerer():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Tiefling", class_candidate="Sorcerer")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Tiefling", class_candidate="Sorcerer")
     assert(a1)
     assert(a1.get_race() == "Tiefling")
     assert(a1.get_class() == "Sorcerer")
@@ -6776,7 +7110,8 @@ def test_Character_Tiefling_Sorcerer():
 
 def test_Character_Centaur_Sorcerer():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Centaur", class_candidate="Sorcerer")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Centaur", class_candidate="Sorcerer")
     assert(a1)
     assert(a1.get_race() == "Centaur")
     assert(a1.get_class() == "Sorcerer")
@@ -6796,7 +7131,8 @@ def test_Character_Centaur_Sorcerer():
 
 def test_Character_Blackbearkin_Sorcerer():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Black bearkin", class_candidate="Sorcerer")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Black bearkin", class_candidate="Sorcerer")
     assert(a1)
     assert(a1.get_race() == "Black bearkin")
     assert(a1.get_class() == "Sorcerer")
@@ -6816,7 +7152,8 @@ def test_Character_Blackbearkin_Sorcerer():
 
 def test_Character_Brownbearkin_Sorcerer():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Brown bearkin", class_candidate="Sorcerer")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Brown bearkin", class_candidate="Sorcerer")
     assert(a1)
     assert(a1.get_race() == "Brown bearkin")
     assert(a1.get_class() == "Sorcerer")
@@ -6836,7 +7173,8 @@ def test_Character_Brownbearkin_Sorcerer():
 
 def test_Character_Koalabearkin_Sorcerer():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Koala bearkin", class_candidate="Sorcerer")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Koala bearkin", class_candidate="Sorcerer")
     assert(a1)
     assert(a1.get_race() == "Koala bearkin")
     assert(a1.get_class() == "Sorcerer")
@@ -6856,7 +7194,8 @@ def test_Character_Koalabearkin_Sorcerer():
 
 def test_Character_Pandabearkin_Sorcerer():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Panda bearkin", class_candidate="Sorcerer")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Panda bearkin", class_candidate="Sorcerer")
     assert(a1)
     assert(a1.get_race() == "Panda bearkin")
     assert(a1.get_class() == "Sorcerer")
@@ -6876,7 +7215,8 @@ def test_Character_Pandabearkin_Sorcerer():
 
 def test_Character_Polarbearkin_Sorcerer():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Polar bearkin", class_candidate="Sorcerer")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Polar bearkin", class_candidate="Sorcerer")
     assert(a1)
     assert(a1.get_race() == "Polar bearkin")
     assert(a1.get_class() == "Sorcerer")
@@ -6896,7 +7236,8 @@ def test_Character_Polarbearkin_Sorcerer():
 
 def test_Character_Burrowskobold_Sorcerer():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Burrows kobold", class_candidate="Sorcerer")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Burrows kobold", class_candidate="Sorcerer")
     assert(a1)
     assert(a1.get_race() == "Burrows kobold")
     assert(a1.get_class() == "Sorcerer")
@@ -6916,7 +7257,8 @@ def test_Character_Burrowskobold_Sorcerer():
 
 def test_Character_Loredrakekobold_Sorcerer():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Loredrake kobold", class_candidate="Sorcerer")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Loredrake kobold", class_candidate="Sorcerer")
     assert(a1)
     assert(a1.get_race() == "Loredrake kobold")
     assert(a1.get_class() == "Sorcerer")
@@ -6936,7 +7278,8 @@ def test_Character_Loredrakekobold_Sorcerer():
 
 def test_Character_Wingedkobold_Sorcerer():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Winged kobold", class_candidate="Sorcerer")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Winged kobold", class_candidate="Sorcerer")
     assert(a1)
     assert(a1.get_race() == "Winged kobold")
     assert(a1.get_class() == "Sorcerer")
@@ -6956,7 +7299,8 @@ def test_Character_Wingedkobold_Sorcerer():
 
 def test_Character_Greenskingoblin_Sorcerer():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Greenskin goblin", class_candidate="Sorcerer")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Greenskin goblin", class_candidate="Sorcerer")
     assert(a1)
     assert(a1.get_race() == "Greenskin goblin")
     assert(a1.get_class() == "Sorcerer")
@@ -6976,7 +7320,8 @@ def test_Character_Greenskingoblin_Sorcerer():
 
 def test_Character_Boggartgoblin_Sorcerer():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Boggart goblin", class_candidate="Sorcerer")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Boggart goblin", class_candidate="Sorcerer")
     assert(a1)
     assert(a1.get_race() == "Boggart goblin")
     assert(a1.get_class() == "Sorcerer")
@@ -6996,7 +7341,8 @@ def test_Character_Boggartgoblin_Sorcerer():
 
 def test_Character_Gremlingoblin_Sorcerer():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Gremlin goblin", class_candidate="Sorcerer")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Gremlin goblin", class_candidate="Sorcerer")
     assert(a1)
     assert(a1.get_race() == "Gremlin goblin")
     assert(a1.get_class() == "Sorcerer")
@@ -7016,7 +7362,8 @@ def test_Character_Gremlingoblin_Sorcerer():
 
 def test_Character_Dryad_Sorcerer():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Dryad", class_candidate="Sorcerer")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Dryad", class_candidate="Sorcerer")
     assert(a1)
     assert(a1.get_race() == "Dryad")
     assert(a1.get_class() == "Sorcerer")
@@ -7036,7 +7383,8 @@ def test_Character_Dryad_Sorcerer():
 
 def test_Character_Hilldwarf_Warlock():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Hill dwarf", class_candidate="Warlock")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Hill dwarf", class_candidate="Warlock")
     assert(a1)
     assert(a1.get_race() == "Hill dwarf")
     assert(a1.get_class() == "Warlock")
@@ -7056,7 +7404,8 @@ def test_Character_Hilldwarf_Warlock():
 
 def test_Character_Highelf_Warlock():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="High elf", class_candidate="Warlock")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="High elf", class_candidate="Warlock")
     assert(a1)
     assert(a1.get_race() == "High elf")
     assert(a1.get_class() == "Warlock")
@@ -7076,7 +7425,8 @@ def test_Character_Highelf_Warlock():
 
 def test_Character_Mountaindwarf_Warlock():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Mountain dwarf", class_candidate="Warlock")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Mountain dwarf", class_candidate="Warlock")
     assert(a1)
     assert(a1.get_race() == "Mountain dwarf")
     assert(a1.get_class() == "Warlock")
@@ -7096,7 +7446,8 @@ def test_Character_Mountaindwarf_Warlock():
 
 def test_Character_Woodelf_Warlock():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Wood elf", class_candidate="Warlock")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Wood elf", class_candidate="Warlock")
     assert(a1)
     assert(a1.get_race() == "Wood elf")
     assert(a1.get_class() == "Warlock")
@@ -7116,7 +7467,8 @@ def test_Character_Woodelf_Warlock():
 
 def test_Character_Lightfoothalfling_Warlock():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Lightfoot halfling", class_candidate="Warlock")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Lightfoot halfling", class_candidate="Warlock")
     assert(a1)
     assert(a1.get_race() == "Lightfoot halfling")
     assert(a1.get_class() == "Warlock")
@@ -7136,7 +7488,8 @@ def test_Character_Lightfoothalfling_Warlock():
 
 def test_Character_Stouthalfling_Warlock():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Stout halfling", class_candidate="Warlock")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Stout halfling", class_candidate="Warlock")
     assert(a1)
     assert(a1.get_race() == "Stout halfling")
     assert(a1.get_class() == "Warlock")
@@ -7156,7 +7509,8 @@ def test_Character_Stouthalfling_Warlock():
 
 def test_Character_HalfElf_Warlock():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Half-Elf", class_candidate="Warlock")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Half-Elf", class_candidate="Warlock")
     assert(a1)
     assert(a1.get_race() == "Half-Elf")
     assert(a1.get_class() == "Warlock")
@@ -7176,7 +7530,8 @@ def test_Character_HalfElf_Warlock():
 
 def test_Character_Human_Warlock():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Human", class_candidate="Warlock")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Human", class_candidate="Warlock")
     assert(a1)
     assert(a1.get_race() == "Human")
     assert(a1.get_class() == "Warlock")
@@ -7196,7 +7551,8 @@ def test_Character_Human_Warlock():
 
 def test_Character_Blackdragonborn_Warlock():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Black dragonborn", class_candidate="Warlock")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Black dragonborn", class_candidate="Warlock")
     assert(a1)
     assert(a1.get_race() == "Black dragonborn")
     assert(a1.get_class() == "Warlock")
@@ -7216,7 +7572,8 @@ def test_Character_Blackdragonborn_Warlock():
 
 def test_Character_Bluedragonborn_Warlock():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Blue dragonborn", class_candidate="Warlock")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Blue dragonborn", class_candidate="Warlock")
     assert(a1)
     assert(a1.get_race() == "Blue dragonborn")
     assert(a1.get_class() == "Warlock")
@@ -7236,7 +7593,8 @@ def test_Character_Bluedragonborn_Warlock():
 
 def test_Character_Brassdragonborn_Warlock():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Brass dragonborn", class_candidate="Warlock")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Brass dragonborn", class_candidate="Warlock")
     assert(a1)
     assert(a1.get_race() == "Brass dragonborn")
     assert(a1.get_class() == "Warlock")
@@ -7256,7 +7614,8 @@ def test_Character_Brassdragonborn_Warlock():
 
 def test_Character_Bronzedragonborn_Warlock():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Bronze dragonborn", class_candidate="Warlock")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Bronze dragonborn", class_candidate="Warlock")
     assert(a1)
     assert(a1.get_race() == "Bronze dragonborn")
     assert(a1.get_class() == "Warlock")
@@ -7276,7 +7635,8 @@ def test_Character_Bronzedragonborn_Warlock():
 
 def test_Character_Copperdragonborn_Warlock():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Copper dragonborn", class_candidate="Warlock")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Copper dragonborn", class_candidate="Warlock")
     assert(a1)
     assert(a1.get_race() == "Copper dragonborn")
     assert(a1.get_class() == "Warlock")
@@ -7296,7 +7656,8 @@ def test_Character_Copperdragonborn_Warlock():
 
 def test_Character_Golddragonborn_Warlock():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Gold dragonborn", class_candidate="Warlock")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Gold dragonborn", class_candidate="Warlock")
     assert(a1)
     assert(a1.get_race() == "Gold dragonborn")
     assert(a1.get_class() == "Warlock")
@@ -7316,7 +7677,8 @@ def test_Character_Golddragonborn_Warlock():
 
 def test_Character_Greendragonborn_Warlock():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Green dragonborn", class_candidate="Warlock")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Green dragonborn", class_candidate="Warlock")
     assert(a1)
     assert(a1.get_race() == "Green dragonborn")
     assert(a1.get_class() == "Warlock")
@@ -7336,7 +7698,8 @@ def test_Character_Greendragonborn_Warlock():
 
 def test_Character_Reddragonborn_Warlock():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Red dragonborn", class_candidate="Warlock")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Red dragonborn", class_candidate="Warlock")
     assert(a1)
     assert(a1.get_race() == "Red dragonborn")
     assert(a1.get_class() == "Warlock")
@@ -7356,7 +7719,8 @@ def test_Character_Reddragonborn_Warlock():
 
 def test_Character_Silverdragonborn_Warlock():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Silver dragonborn", class_candidate="Warlock")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Silver dragonborn", class_candidate="Warlock")
     assert(a1)
     assert(a1.get_race() == "Silver dragonborn")
     assert(a1.get_class() == "Warlock")
@@ -7376,7 +7740,8 @@ def test_Character_Silverdragonborn_Warlock():
 
 def test_Character_Whitedragonborn_Warlock():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="White dragonborn", class_candidate="Warlock")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="White dragonborn", class_candidate="Warlock")
     assert(a1)
     assert(a1.get_race() == "White dragonborn")
     assert(a1.get_class() == "Warlock")
@@ -7396,7 +7761,8 @@ def test_Character_Whitedragonborn_Warlock():
 
 def test_Character_Rockgnome_Warlock():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Rock gnome", class_candidate="Warlock")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Rock gnome", class_candidate="Warlock")
     assert(a1)
     assert(a1.get_race() == "Rock gnome")
     assert(a1.get_class() == "Warlock")
@@ -7416,7 +7782,8 @@ def test_Character_Rockgnome_Warlock():
 
 def test_Character_HalfOrc_Warlock():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Half-Orc", class_candidate="Warlock")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Half-Orc", class_candidate="Warlock")
     assert(a1)
     assert(a1.get_race() == "Half-Orc")
     assert(a1.get_class() == "Warlock")
@@ -7436,7 +7803,8 @@ def test_Character_HalfOrc_Warlock():
 
 def test_Character_Tiefling_Warlock():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Tiefling", class_candidate="Warlock")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Tiefling", class_candidate="Warlock")
     assert(a1)
     assert(a1.get_race() == "Tiefling")
     assert(a1.get_class() == "Warlock")
@@ -7456,7 +7824,8 @@ def test_Character_Tiefling_Warlock():
 
 def test_Character_Centaur_Warlock():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Centaur", class_candidate="Warlock")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Centaur", class_candidate="Warlock")
     assert(a1)
     assert(a1.get_race() == "Centaur")
     assert(a1.get_class() == "Warlock")
@@ -7476,7 +7845,8 @@ def test_Character_Centaur_Warlock():
 
 def test_Character_Blackbearkin_Warlock():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Black bearkin", class_candidate="Warlock")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Black bearkin", class_candidate="Warlock")
     assert(a1)
     assert(a1.get_race() == "Black bearkin")
     assert(a1.get_class() == "Warlock")
@@ -7496,7 +7866,8 @@ def test_Character_Blackbearkin_Warlock():
 
 def test_Character_Brownbearkin_Warlock():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Brown bearkin", class_candidate="Warlock")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Brown bearkin", class_candidate="Warlock")
     assert(a1)
     assert(a1.get_race() == "Brown bearkin")
     assert(a1.get_class() == "Warlock")
@@ -7516,7 +7887,8 @@ def test_Character_Brownbearkin_Warlock():
 
 def test_Character_Koalabearkin_Warlock():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Koala bearkin", class_candidate="Warlock")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Koala bearkin", class_candidate="Warlock")
     assert(a1)
     assert(a1.get_race() == "Koala bearkin")
     assert(a1.get_class() == "Warlock")
@@ -7536,7 +7908,8 @@ def test_Character_Koalabearkin_Warlock():
 
 def test_Character_Pandabearkin_Warlock():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Panda bearkin", class_candidate="Warlock")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Panda bearkin", class_candidate="Warlock")
     assert(a1)
     assert(a1.get_race() == "Panda bearkin")
     assert(a1.get_class() == "Warlock")
@@ -7556,7 +7929,8 @@ def test_Character_Pandabearkin_Warlock():
 
 def test_Character_Polarbearkin_Warlock():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Polar bearkin", class_candidate="Warlock")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Polar bearkin", class_candidate="Warlock")
     assert(a1)
     assert(a1.get_race() == "Polar bearkin")
     assert(a1.get_class() == "Warlock")
@@ -7576,7 +7950,8 @@ def test_Character_Polarbearkin_Warlock():
 
 def test_Character_Burrowskobold_Warlock():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Burrows kobold", class_candidate="Warlock")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Burrows kobold", class_candidate="Warlock")
     assert(a1)
     assert(a1.get_race() == "Burrows kobold")
     assert(a1.get_class() == "Warlock")
@@ -7596,7 +7971,8 @@ def test_Character_Burrowskobold_Warlock():
 
 def test_Character_Loredrakekobold_Warlock():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Loredrake kobold", class_candidate="Warlock")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Loredrake kobold", class_candidate="Warlock")
     assert(a1)
     assert(a1.get_race() == "Loredrake kobold")
     assert(a1.get_class() == "Warlock")
@@ -7616,7 +7992,8 @@ def test_Character_Loredrakekobold_Warlock():
 
 def test_Character_Wingedkobold_Warlock():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Winged kobold", class_candidate="Warlock")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Winged kobold", class_candidate="Warlock")
     assert(a1)
     assert(a1.get_race() == "Winged kobold")
     assert(a1.get_class() == "Warlock")
@@ -7636,7 +8013,8 @@ def test_Character_Wingedkobold_Warlock():
 
 def test_Character_Greenskingoblin_Warlock():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Greenskin goblin", class_candidate="Warlock")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Greenskin goblin", class_candidate="Warlock")
     assert(a1)
     assert(a1.get_race() == "Greenskin goblin")
     assert(a1.get_class() == "Warlock")
@@ -7656,7 +8034,8 @@ def test_Character_Greenskingoblin_Warlock():
 
 def test_Character_Boggartgoblin_Warlock():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Boggart goblin", class_candidate="Warlock")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Boggart goblin", class_candidate="Warlock")
     assert(a1)
     assert(a1.get_race() == "Boggart goblin")
     assert(a1.get_class() == "Warlock")
@@ -7676,7 +8055,8 @@ def test_Character_Boggartgoblin_Warlock():
 
 def test_Character_Gremlingoblin_Warlock():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Gremlin goblin", class_candidate="Warlock")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Gremlin goblin", class_candidate="Warlock")
     assert(a1)
     assert(a1.get_race() == "Gremlin goblin")
     assert(a1.get_class() == "Warlock")
@@ -7696,7 +8076,8 @@ def test_Character_Gremlingoblin_Warlock():
 
 def test_Character_Dryad_Warlock():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Dryad", class_candidate="Warlock")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Dryad", class_candidate="Warlock")
     assert(a1)
     assert(a1.get_race() == "Dryad")
     assert(a1.get_class() == "Warlock")
@@ -7716,7 +8097,8 @@ def test_Character_Dryad_Warlock():
 
 def test_Character_Hilldwarf_Wizard():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Hill dwarf", class_candidate="Wizard")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Hill dwarf", class_candidate="Wizard")
     assert(a1)
     assert(a1.get_race() == "Hill dwarf")
     assert(a1.get_class() == "Wizard")
@@ -7736,7 +8118,8 @@ def test_Character_Hilldwarf_Wizard():
 
 def test_Character_Highelf_Wizard():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="High elf", class_candidate="Wizard")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="High elf", class_candidate="Wizard")
     assert(a1)
     assert(a1.get_race() == "High elf")
     assert(a1.get_class() == "Wizard")
@@ -7756,7 +8139,8 @@ def test_Character_Highelf_Wizard():
 
 def test_Character_Mountaindwarf_Wizard():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Mountain dwarf", class_candidate="Wizard")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Mountain dwarf", class_candidate="Wizard")
     assert(a1)
     assert(a1.get_race() == "Mountain dwarf")
     assert(a1.get_class() == "Wizard")
@@ -7776,7 +8160,8 @@ def test_Character_Mountaindwarf_Wizard():
 
 def test_Character_Woodelf_Wizard():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Wood elf", class_candidate="Wizard")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Wood elf", class_candidate="Wizard")
     assert(a1)
     assert(a1.get_race() == "Wood elf")
     assert(a1.get_class() == "Wizard")
@@ -7796,7 +8181,8 @@ def test_Character_Woodelf_Wizard():
 
 def test_Character_Lightfoothalfling_Wizard():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Lightfoot halfling", class_candidate="Wizard")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Lightfoot halfling", class_candidate="Wizard")
     assert(a1)
     assert(a1.get_race() == "Lightfoot halfling")
     assert(a1.get_class() == "Wizard")
@@ -7816,7 +8202,8 @@ def test_Character_Lightfoothalfling_Wizard():
 
 def test_Character_Stouthalfling_Wizard():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Stout halfling", class_candidate="Wizard")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Stout halfling", class_candidate="Wizard")
     assert(a1)
     assert(a1.get_race() == "Stout halfling")
     assert(a1.get_class() == "Wizard")
@@ -7836,7 +8223,8 @@ def test_Character_Stouthalfling_Wizard():
 
 def test_Character_HalfElf_Wizard():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Half-Elf", class_candidate="Wizard")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Half-Elf", class_candidate="Wizard")
     assert(a1)
     assert(a1.get_race() == "Half-Elf")
     assert(a1.get_class() == "Wizard")
@@ -7856,7 +8244,8 @@ def test_Character_HalfElf_Wizard():
 
 def test_Character_Human_Wizard():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Human", class_candidate="Wizard")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Human", class_candidate="Wizard")
     assert(a1)
     assert(a1.get_race() == "Human")
     assert(a1.get_class() == "Wizard")
@@ -7876,7 +8265,8 @@ def test_Character_Human_Wizard():
 
 def test_Character_Blackdragonborn_Wizard():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Black dragonborn", class_candidate="Wizard")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Black dragonborn", class_candidate="Wizard")
     assert(a1)
     assert(a1.get_race() == "Black dragonborn")
     assert(a1.get_class() == "Wizard")
@@ -7896,7 +8286,8 @@ def test_Character_Blackdragonborn_Wizard():
 
 def test_Character_Bluedragonborn_Wizard():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Blue dragonborn", class_candidate="Wizard")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Blue dragonborn", class_candidate="Wizard")
     assert(a1)
     assert(a1.get_race() == "Blue dragonborn")
     assert(a1.get_class() == "Wizard")
@@ -7916,7 +8307,8 @@ def test_Character_Bluedragonborn_Wizard():
 
 def test_Character_Brassdragonborn_Wizard():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Brass dragonborn", class_candidate="Wizard")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Brass dragonborn", class_candidate="Wizard")
     assert(a1)
     assert(a1.get_race() == "Brass dragonborn")
     assert(a1.get_class() == "Wizard")
@@ -7936,7 +8328,8 @@ def test_Character_Brassdragonborn_Wizard():
 
 def test_Character_Bronzedragonborn_Wizard():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Bronze dragonborn", class_candidate="Wizard")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Bronze dragonborn", class_candidate="Wizard")
     assert(a1)
     assert(a1.get_race() == "Bronze dragonborn")
     assert(a1.get_class() == "Wizard")
@@ -7956,7 +8349,8 @@ def test_Character_Bronzedragonborn_Wizard():
 
 def test_Character_Copperdragonborn_Wizard():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Copper dragonborn", class_candidate="Wizard")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Copper dragonborn", class_candidate="Wizard")
     assert(a1)
     assert(a1.get_race() == "Copper dragonborn")
     assert(a1.get_class() == "Wizard")
@@ -7976,7 +8370,8 @@ def test_Character_Copperdragonborn_Wizard():
 
 def test_Character_Golddragonborn_Wizard():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Gold dragonborn", class_candidate="Wizard")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Gold dragonborn", class_candidate="Wizard")
     assert(a1)
     assert(a1.get_race() == "Gold dragonborn")
     assert(a1.get_class() == "Wizard")
@@ -7996,7 +8391,8 @@ def test_Character_Golddragonborn_Wizard():
 
 def test_Character_Greendragonborn_Wizard():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Green dragonborn", class_candidate="Wizard")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Green dragonborn", class_candidate="Wizard")
     assert(a1)
     assert(a1.get_race() == "Green dragonborn")
     assert(a1.get_class() == "Wizard")
@@ -8016,7 +8412,8 @@ def test_Character_Greendragonborn_Wizard():
 
 def test_Character_Reddragonborn_Wizard():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Red dragonborn", class_candidate="Wizard")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Red dragonborn", class_candidate="Wizard")
     assert(a1)
     assert(a1.get_race() == "Red dragonborn")
     assert(a1.get_class() == "Wizard")
@@ -8036,7 +8433,8 @@ def test_Character_Reddragonborn_Wizard():
 
 def test_Character_Silverdragonborn_Wizard():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Silver dragonborn", class_candidate="Wizard")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Silver dragonborn", class_candidate="Wizard")
     assert(a1)
     assert(a1.get_race() == "Silver dragonborn")
     assert(a1.get_class() == "Wizard")
@@ -8056,7 +8454,8 @@ def test_Character_Silverdragonborn_Wizard():
 
 def test_Character_Whitedragonborn_Wizard():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="White dragonborn", class_candidate="Wizard")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="White dragonborn", class_candidate="Wizard")
     assert(a1)
     assert(a1.get_race() == "White dragonborn")
     assert(a1.get_class() == "Wizard")
@@ -8076,7 +8475,8 @@ def test_Character_Whitedragonborn_Wizard():
 
 def test_Character_Rockgnome_Wizard():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Rock gnome", class_candidate="Wizard")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Rock gnome", class_candidate="Wizard")
     assert(a1)
     assert(a1.get_race() == "Rock gnome")
     assert(a1.get_class() == "Wizard")
@@ -8096,7 +8496,8 @@ def test_Character_Rockgnome_Wizard():
 
 def test_Character_HalfOrc_Wizard():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Half-Orc", class_candidate="Wizard")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Half-Orc", class_candidate="Wizard")
     assert(a1)
     assert(a1.get_race() == "Half-Orc")
     assert(a1.get_class() == "Wizard")
@@ -8116,7 +8517,8 @@ def test_Character_HalfOrc_Wizard():
 
 def test_Character_Tiefling_Wizard():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Tiefling", class_candidate="Wizard")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Tiefling", class_candidate="Wizard")
     assert(a1)
     assert(a1.get_race() == "Tiefling")
     assert(a1.get_class() == "Wizard")
@@ -8136,7 +8538,8 @@ def test_Character_Tiefling_Wizard():
 
 def test_Character_Centaur_Wizard():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Centaur", class_candidate="Wizard")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Centaur", class_candidate="Wizard")
     assert(a1)
     assert(a1.get_race() == "Centaur")
     assert(a1.get_class() == "Wizard")
@@ -8156,7 +8559,8 @@ def test_Character_Centaur_Wizard():
 
 def test_Character_Blackbearkin_Wizard():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Black bearkin", class_candidate="Wizard")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Black bearkin", class_candidate="Wizard")
     assert(a1)
     assert(a1.get_race() == "Black bearkin")
     assert(a1.get_class() == "Wizard")
@@ -8176,7 +8580,8 @@ def test_Character_Blackbearkin_Wizard():
 
 def test_Character_Brownbearkin_Wizard():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Brown bearkin", class_candidate="Wizard")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Brown bearkin", class_candidate="Wizard")
     assert(a1)
     assert(a1.get_race() == "Brown bearkin")
     assert(a1.get_class() == "Wizard")
@@ -8196,7 +8601,8 @@ def test_Character_Brownbearkin_Wizard():
 
 def test_Character_Koalabearkin_Wizard():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Koala bearkin", class_candidate="Wizard")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Koala bearkin", class_candidate="Wizard")
     assert(a1)
     assert(a1.get_race() == "Koala bearkin")
     assert(a1.get_class() == "Wizard")
@@ -8216,7 +8622,8 @@ def test_Character_Koalabearkin_Wizard():
 
 def test_Character_Pandabearkin_Wizard():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Panda bearkin", class_candidate="Wizard")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Panda bearkin", class_candidate="Wizard")
     assert(a1)
     assert(a1.get_race() == "Panda bearkin")
     assert(a1.get_class() == "Wizard")
@@ -8236,7 +8643,8 @@ def test_Character_Pandabearkin_Wizard():
 
 def test_Character_Polarbearkin_Wizard():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Polar bearkin", class_candidate="Wizard")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Polar bearkin", class_candidate="Wizard")
     assert(a1)
     assert(a1.get_race() == "Polar bearkin")
     assert(a1.get_class() == "Wizard")
@@ -8256,7 +8664,8 @@ def test_Character_Polarbearkin_Wizard():
 
 def test_Character_Burrowskobold_Wizard():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Burrows kobold", class_candidate="Wizard")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Burrows kobold", class_candidate="Wizard")
     assert(a1)
     assert(a1.get_race() == "Burrows kobold")
     assert(a1.get_class() == "Wizard")
@@ -8276,7 +8685,8 @@ def test_Character_Burrowskobold_Wizard():
 
 def test_Character_Loredrakekobold_Wizard():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Loredrake kobold", class_candidate="Wizard")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Loredrake kobold", class_candidate="Wizard")
     assert(a1)
     assert(a1.get_race() == "Loredrake kobold")
     assert(a1.get_class() == "Wizard")
@@ -8296,7 +8706,8 @@ def test_Character_Loredrakekobold_Wizard():
 
 def test_Character_Wingedkobold_Wizard():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Winged kobold", class_candidate="Wizard")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Winged kobold", class_candidate="Wizard")
     assert(a1)
     assert(a1.get_race() == "Winged kobold")
     assert(a1.get_class() == "Wizard")
@@ -8316,7 +8727,8 @@ def test_Character_Wingedkobold_Wizard():
 
 def test_Character_Greenskingoblin_Wizard():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Greenskin goblin", class_candidate="Wizard")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Greenskin goblin", class_candidate="Wizard")
     assert(a1)
     assert(a1.get_race() == "Greenskin goblin")
     assert(a1.get_class() == "Wizard")
@@ -8336,7 +8748,8 @@ def test_Character_Greenskingoblin_Wizard():
 
 def test_Character_Boggartgoblin_Wizard():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Boggart goblin", class_candidate="Wizard")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Boggart goblin", class_candidate="Wizard")
     assert(a1)
     assert(a1.get_race() == "Boggart goblin")
     assert(a1.get_class() == "Wizard")
@@ -8356,7 +8769,8 @@ def test_Character_Boggartgoblin_Wizard():
 
 def test_Character_Gremlingoblin_Wizard():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Gremlin goblin", class_candidate="Wizard")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Gremlin goblin", class_candidate="Wizard")
     assert(a1)
     assert(a1.get_race() == "Gremlin goblin")
     assert(a1.get_class() == "Wizard")
@@ -8376,7 +8790,8 @@ def test_Character_Gremlingoblin_Wizard():
 
 def test_Character_Dryad_Wizard():
     db = InvokePSQL()
-    a1 = PlayerCharacter(db, race_candidate="Dryad", class_candidate="Wizard")
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate="Dryad", class_candidate="Wizard")
     assert(a1)
     assert(a1.get_race() == "Dryad")
     assert(a1.get_class() == "Wizard")

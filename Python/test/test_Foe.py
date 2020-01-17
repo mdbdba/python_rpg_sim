@@ -5,11 +5,13 @@ from Foe import Foe    # NOQA
 from InvokePSQL import InvokePSQL    # NOQA
 from CommonFunctions import array_to_string, string_to_array    # NOQA
 from CommonFunctions import compare_arrays    # NOQA
+from Ctx import Ctx
 
 
 def test_Foe_Default():
     db = InvokePSQL()
-    a1 = Foe(db)
+    ctx = Ctx(app_username='foe_init', logger_name="test_logger")
+    a1 = Foe(db=db, ctx=ctx)
     assert(a1)
     assert(a1.get_name())
     assert(a1.get_raw_ability_array())
@@ -39,7 +41,8 @@ def test_Foe_Default():
 
 def test_Foe_Skeleton():
     db = InvokePSQL()
-    a1 = Foe(db, foe_candidate='Skeleton', debug_ind=1)
+    ctx = Ctx(app_username='foe_init', logger_name="test_logger")
+    a1 = Foe(db=db, ctx=ctx, foe_candidate='Skeleton', debug_ind=1)
     assert(a1)
     assert(a1.get_name() == 'Skeleton')
     assert(a1.foe_type == "Undead")
@@ -61,7 +64,8 @@ def test_Foe_Skeleton():
 
 def test_Foe_Gnoll():
     db = InvokePSQL()
-    a1 = Foe(db, foe_candidate='Gnoll', debug_ind=1)
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = Foe(db=db, ctx=ctx, foe_candidate='Gnoll', debug_ind=1)
     assert(a1)
     assert(a1.get_name() == 'Gnoll')
     assert(a1.foe_type == "Humanoid")
@@ -83,7 +87,8 @@ def test_Foe_Gnoll():
 
 def test_Foe_Gnoll_Death():
     db = InvokePSQL()
-    a1 = Foe(db, foe_candidate='Gnoll', debug_ind=1)
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = Foe(db=db, ctx=ctx, foe_candidate='Gnoll', debug_ind=1)
     assert(a1)
     assert(a1.get_name() == 'Gnoll')
     a1.melee_defend(modifier=15, possible_damage=a1.hit_points,
@@ -102,7 +107,8 @@ def test_Foe_Gnoll_Death():
 
 def test_Character_Checks():
     db = InvokePSQL()
-    a1 = Foe(db, foe_candidate='Skeleton', debug_ind=1)
+    ctx = Ctx(app_username='character_class_init', logger_name="test_logger")
+    a1 = Foe(db=db, ctx=ctx, foe_candidate='Skeleton', debug_ind=1)
     assert(a1)
     assert(a1.get_name() == "Skeleton")
     res = a1.check('Strength', 'Normal', 5)

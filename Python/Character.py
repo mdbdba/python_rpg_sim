@@ -837,7 +837,7 @@ class Character(object):
 
 if __name__ == '__main__':
     logger_name='character_main_test'
-    ctx = Ctx(app_username='character_class_init')
+    ctx = Ctx(app_username='character_class_init', logger_name=logger_name)
     logger = RpgLogging(logger_name=__name__, level_threshold='debug')
     logger.setup_logging()
     db = InvokePSQL()
