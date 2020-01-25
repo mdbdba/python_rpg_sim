@@ -1,11 +1,12 @@
 import random
 from PointInTimeAmount import RollAmount
-
-
+from Ctx import Ctx
+from Ctx import ctx_decorator
 
 
 class Die(object):
-    def __init__(self, sides=20, debug_ind=False):
+    @ctx_decorator
+    def __init__(self, ctx, sides=20, debug_ind=False):
         """
         Randomization class
 
@@ -33,7 +34,8 @@ class Die(object):
     # that sort of thing (more info: Python private method convention)
     # This simplifies the calls being done from the other methods
 
-    def _perform_roll(self, rolls, dropvalue=False,
+    @ctx_decorator
+    def _perform_roll(self, ctx, rolls, dropvalue=False,
                       dropfrom="Low", halved=False):
         """
         Handles the calculations for the class.
@@ -80,7 +82,8 @@ class Die(object):
 
         return tot
 
-    def roll(self, rolls=1, droplowest=False):
+    @ctx_decorator
+    def roll(self, ctx, rolls=1, droplowest=False):
         """
         Perform a number of standard rolls and return the sum
 
@@ -89,46 +92,51 @@ class Die(object):
 
         """
         if droplowest:
-            result = self._perform_roll(rolls, dropvalue=True, dropfrom="Low")
+            result = self._perform_roll(rolls=rolls, ctx=ctx, dropvalue=True, dropfrom="Low")
         else:
-            result = self._perform_roll(rolls, dropvalue=False)
+            result = self._perform_roll(rolls=rolls, ctx=ctx, dropvalue=False)
 
         return result
 
-    def roll_with_advantage(self):
+    @ctx_decorator
+    def roll_with_advantage(self, ctx):
         """
         Perform a single roll with advantage
 
         """
-        return self._perform_roll(2, dropvalue=True, dropfrom="Low")
+        return self._perform_roll( ctx=ctx, rolls=2, dropvalue=True, dropfrom="Low")
 
-    def roll_with_disadvantage(self):
+    @ctx_decorator
+    def roll_with_disadvantage(self, ctx):
         """
         Perform a single roll with disadvantage
 
         """
-        return self._perform_roll(2, dropvalue=True, dropfrom="High")
+        return self._perform_roll(ctx=ctx, rolls=2, dropvalue=True, dropfrom="High")
 
-    def roll_with_resistance(self, rolls):
+    @ctx_decorator
+    def roll_with_resistance(self, ctx, rolls):
         """
         Perform rolls and return half the total sum
 
         """
-        return self._perform_roll(rolls, dropvalue=False, halved=True)
+        return self._perform_roll(ctx=ctx, rolls=rolls, dropvalue=False, halved=True)
 
-    def get_sum(self, startingval, multiplier):
-        return startingval + self.roll(multiplier)
+    @ctx_decorator
+    def get_sum(self, ctx, startingval, multiplier):
+        return startingval + self.roll(ctx=ctx, rolls=multiplier)
 
 
 # Define a basic test case that'll just make sure the class works.
 if __name__ == '__main__':
-    d6 = Die(6)
-    print(f'Roll d6 3 times: {d6.roll(3, droplowest=False)}')
-    print(f'Roll d6 4 times, drop lowest: {d6.roll(4, droplowest=True)}')
-    print(f'Roll with advantage: {d6.roll_with_advantage()}')
-    print(f'Roll with disadvantage: {d6.roll_with_disadvantage()}')
-    print(f'Roll for damage with resistance: {d6.roll_with_resistance(6)}')
-    print(f'get_sum: {d6.get_sum(3, 1)}')
+    ctx = Ctx(app_username='Die_init')
+    d6 = Die(ctx=ctx, sides=6)
+    print(f'Roll d6 3 times: {d6.roll(ctx=ctx, rolls=3, droplowest=False)}')
+    print(f'Roll d6 4 times, drop lowest: {d6.roll(ctx=ctx, rolls=4, droplowest=True)}')
+    print(f'Roll with advantage: {d6.roll_with_advantage(ctx=ctx)}')
+    print(f'Roll with disadvantage: {d6.roll_with_disadvantage(ctx=ctx)}')
+    print(f'Roll for damage with resistance: {d6.roll_with_resistance(ctx=ctx, rolls=6)}')
+    print(f'get_sum: {d6.get_sum(ctx=ctx, startingval=3, multiplier=1)}')
     print(d6.get_last_detail())
     for each_roll in d6.details:
         print(each_roll)

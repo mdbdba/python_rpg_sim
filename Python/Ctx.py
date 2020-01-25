@@ -8,26 +8,27 @@ import logging
 import structlog
 import itertools
 
-def ctx_decorator(ctx):
 
-    @wrapt.decorator
-    def wrapper(wrapped, instance, args, kwds):
-        ctx.fullyqualified = wrapped.__qualname__
-        if '.' in ctx.fullyqualified:
-            t = string_to_string_array(ctx.fullyqualified, '.')
-            t_class = t[0]
-            t_method = t[1]
+@wrapt.decorator
+def ctx_decorator(wrapped, instance, args, kwds):
+    # print(f'instance: {instance}')
+    ctx = kwds.get('ctx')
+    ctx.fullyqualified = wrapped.__qualname__
+    if '.' in ctx.fullyqualified:
+        t = string_to_string_array(ctx.fullyqualified, '.')
+        t_class = t[0]
+        t_method = t[1]
 
-            # print(f'SRC: class: {t_class} function: {t_method} params: {args} {kwds}')
-            ctx.add_crumb(t_class, t_method, kwds)
-            ret = wrapped(*args, **kwds)
-            # print("print attempt")
-            # ctx.print_crumbs()
-            ctx.pop_crumb()
-            return ret
-        else:
-            return wrapped(*args, **kwds)
-    return wrapper
+        # print(f'SRC: class: {t_class} function: {t_method} params: {args} {kwds}')
+        ctx.add_crumb(t_class, t_method, kwds)
+        ret = wrapped(*args, **kwds)
+        # print("print attempt")
+        # ctx.print_crumbs()
+        ctx.pop_crumb()
+        return ret
+    else:
+        return wrapped(*args, **kwds)
+
 
 @dataclass
 class Crumb:
@@ -192,7 +193,7 @@ if __name__ == '__main__':
     ctx.pop_crumb()
     print(ctx.get_last_crumb())
     # -----------
-    l = RpgLogging(__name__, 'debug')
+    l = RpgLogging('ctx_test', 'debug')
     l.setup_logging()
     l.debug("debug message", ctx)
     l.info("info message", ctx)

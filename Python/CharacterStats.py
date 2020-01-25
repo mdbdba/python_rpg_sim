@@ -48,7 +48,7 @@ class CharacterStats:
     damage_dealt_dict: Dict = field(default_factory=get_empty_damage_dict)
     damage_taken_dict: Dict = field(default_factory=get_empty_damage_dict)
 
-    def append_attack_roll(self, values: Tuple):
+    def append_attack_roll(self, ctx, values: Tuple):
         nat, adj = values
         self.attack_rolls.append(values)
         self.attack_attempts += 1

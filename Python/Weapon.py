@@ -1,9 +1,11 @@
 from collections import defaultdict
-
+from Ctx import Ctx, ctx_decorator
 
 class Weapon(object):
-    def __init__(self, db, name):
+    @ctx_decorator
+    def __init__(self, db, ctx, name):
         self.db = db
+        self.ctx = ctx
         self.name = name
         self.melee_weapon_ind = False
         self.martial_weapon_ind = False
@@ -23,15 +25,16 @@ class Weapon(object):
         # is being wielded two-handed.
         self.versatile_2hnd_mod = None
         self.versatile_2hnd_die = None
-        self.setWeaponProperties(self.db)
+        self.setWeaponProperties(db=self.db, ctx=ctx)
         self.damage_dict = defaultdict(list)
-        self.setDamageType(self.db)
-        self.setWeaponInfo(self.db)
+        self.setDamageType(db=self.db, ctx=ctx)
+        self.setWeaponInfo(db=self.db, ctx=ctx)
 
     def setWeaponProficient(self, value=True):
         self.proficient_ind = value
 
-    def setWeaponProperties(self, db):
+    @ctx_decorator
+    def setWeaponProperties(self, db, ctx):
         sql = (f"select property "
                f"from dnd_5e.lu_weapon_weapon_property "
                f"where weapon = '{self.name}';")
@@ -59,7 +62,8 @@ class Weapon(object):
             if row[0] == 'Heavy':
                 self.heavy_ind = True
 
-    def setDamageType(self, db):
+    @ctx_decorator
+    def setDamageType(self, db, ctx):
         sql = (f"select damage_type "
                f"from dnd_5e.lu_weapon_damage_type "
                f"where weapon = '{self.name}';")
@@ -70,7 +74,8 @@ class Weapon(object):
                 self.damage_dict[row[0]].append(1)
                 self.default_damage_type = row[0]
 
-    def setWeaponInfo(self, db):
+    @ctx_decorator
+    def setWeaponInfo(self, db, ctx):
         sql = (f"select category, damage_modifier, damage_die, "
                f"case when range_1 is null then -1 "
                f"else range_1 end as range_1, "

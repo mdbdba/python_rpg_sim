@@ -1,11 +1,14 @@
 from PlayerCharacterClass import PlayerCharacterClass
+from Ctx import Ctx
+from Ctx import ctx_decorator
 
 
 class WarlockPCClass(PlayerCharacterClass):
-    def __init__(self, db,
+    @ctx_decorator
+    def __init__(self, db, ctx,
                  character_altering_class_options=None):
-        PlayerCharacterClass.__init__(self, db, "Warlock",
-                                      character_altering_class_options)
+        PlayerCharacterClass.__init__(self, db=db, ctx=ctx, classCandidate="Warlock",
+                                      characterAlteringClassOptions=character_altering_class_options)
         self.archetype_label = "Otherworldly Patron"
         self.melee_weapon = "Dagger"
         self.melee_weapon_offhand = "Dagger"

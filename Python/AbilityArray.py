@@ -1,6 +1,8 @@
 from Die import Die
 # from CommonFunctions import array_to_string, string_to_array
 from CommonFunctions import string_to_array
+from Ctx import Ctx
+from Ctx import ctx_decorator
 
 
 """
@@ -19,7 +21,8 @@ Parameters:
 
 
 class AbilityArray(object):
-    def __init__(self, array_type="Common",
+    @ctx_decorator
+    def __init__(self, ctx: Ctx, array_type="Common",
                  raw_array=None,
                  pref_array=None,
                  racial_array=None,
@@ -28,12 +31,14 @@ class AbilityArray(object):
         """
         Generate a list of values to serve as Ability Scores
 
-        :param array_type: Choose the way the Ability Scores are created.
+        :param ctx: pass the context object for logging
+        :param raw_array: if an array already exists treat it as is.
         :param pref_array: Array that defines how the rolls should be ordered.
-        :param racial_array:
+        :param racial_array: Array of racial bonuses for the abilities
         :param ignore_racial_bonus: Ignore ability bonuses for races.
         :param debug_ind: log to class_eval array? (default: False)
         """
+        self.ctx = ctx
         self.array_type = array_type
         self.pref_array = pref_array
         self.pref_str_array = ['', '', '', '', '', '']
@@ -65,9 +70,10 @@ class AbilityArray(object):
                                 "pref_array": pref_array,
                                 "ignore_pref_array": ignore_pref_array,
                                 "debug_ind": debug_ind})
-        self._populate()
+        self._populate(ctx=ctx)
 
-    def _populate(self):
+    @ctx_decorator
+    def _populate(self, ctx):
         """
         Populate a candidate array of Ability Scores
         """
@@ -90,12 +96,12 @@ class AbilityArray(object):
         elif self.array_type == "point_buy_three_max":
             self.candidate_array = point_buy_three_max
         else:
-            d = Die(6)
+            d = Die(ctx=ctx, sides=6)
             for i in range(0, 6):
                 if self.array_type == "strict":
-                    pr = d.roll(3, False)
+                    pr = d.roll(ctx=ctx, rolls=3, droplowest=False)
                 else:
-                    pr = d.roll(4, True)
+                    pr = d.roll(ctx=ctx, rolls=4, droplowest=True)
 
                 self.candidate_array.append(pr)
 
@@ -105,21 +111,24 @@ class AbilityArray(object):
         if self.debug_ind:
             self.class_eval[-1]["raw_array"] = self.raw_array[:]
 
-        self.set_ability_array()
+        self.set_ability_array(ctx=ctx)
 
-    def set_ability_array(self):
-        self.set_ability_preferences()
+    @ctx_decorator
+    def set_ability_array(self, ctx):
+        self.set_ability_preferences(ctx=ctx)
 
         if self.racial_array:
-            self.set_racial_adjustment()
+            self.set_racial_adjustment(ctx=ctx)
 
-    def set_preference_array(self, pref_array):
+    @ctx_decorator
+    def set_preference_array(self, ctx, pref_array):
         self.pref_array = pref_array
-        self.set_pref_str_array()
+        self.set_pref_str_array(ctx=ctx)
         self.ignore_pref_array = False
-        self.set_ability_array()
+        self.set_ability_array(ctx=ctx)
 
-    def set_pref_str_array(self):
+    @ctx_decorator
+    def set_pref_str_array(self, ctx):
         for p in range(len(self.pref_array)):
             if self.pref_array[p] == 0:
                 self.pref_str_array[p] = 'Strength'
@@ -137,7 +146,8 @@ class AbilityArray(object):
     def get_pref_str_array(self):
         return self.pref_str_array
 
-    def set_ability_preferences(self):
+    @ctx_decorator
+    def set_ability_preferences(self, ctx):
         """
         Arrange the ability array by a defined order.
         """
@@ -216,12 +226,14 @@ class AbilityArray(object):
         """
         return self.class_eval
 
-    def set_racial_array(self, bonus_array):
+    @ctx_decorator
+    def set_racial_array(self, ctx, bonus_array):
         self.racial_array = bonus_array
         self.class_eval[-1]["racial_array"] = self.racial_array[:]
-        self.set_ability_array()
+        self.set_ability_array(ctx=ctx)
 
-    def set_racial_adjustment(self):
+    @ctx_decorator
+    def set_racial_adjustment(self, ctx):
         if self.ignore_racial_bonus:
             self.class_eval[-1]["racial_adjustment"] = "Ignored"
         else:
@@ -230,7 +242,8 @@ class AbilityArray(object):
                     self.ability_array[pr] + self.racial_array[pr])
             self.class_eval[-1]["racial_adjustment"] = self.ability_array[:]
 
-    def ability_score_improvement(self):
+    @ctx_decorator
+    def ability_score_improvement(self, ctx):
         points = 2
         while points > 0:
             for pr in range(len(self.ability_array)):
@@ -253,7 +266,8 @@ class AbilityArray(object):
 if __name__ == '__main__':
 
     pref_array = [0, 5, 2, 4, 1, 3]
-    a1 = AbilityArray(pref_array=pref_array)
+    ctx = Ctx(app_username='AbilityArray_main')
+    a1 = AbilityArray(ctx=ctx, pref_array=pref_array)
     print(a1.get_raw_array())
     print(a1.get_numerical_sorted_array())
     print(a1.get_array())
@@ -265,7 +279,7 @@ if __name__ == '__main__':
             print(f"{str(key).ljust(25)}: {value}")
     print("end class eval")
 
-    a = AbilityArray(array_type="Standard",
+    a = AbilityArray(ctx=ctx, array_type="Standard",
                      pref_array=string_to_array('5,0,2,1,4,3'),
                      racial_array=string_to_array('0,0,0,0,1,2'),
                      debug_ind=True)
@@ -277,10 +291,10 @@ if __name__ == '__main__':
     for key, value in a.get_class_eval()[-1].items():
         print(f"{str(key).ljust(25)}: {value}")
     print("end class eval")
-    a2 = AbilityArray(array_type="Common",
+    a2 = AbilityArray(ctx=ctx, array_type="Common",
                       pref_array=string_to_array('1,2,5,0,4,3'),
                       debug_ind=True)
-    a2.set_racial_array(string_to_array('0,2,1,0,0,0'))
+    a2.set_racial_array(ctx=ctx, bonus_array=string_to_array('0,2,1,0,0,0'))
     print(a2.get_raw_array())
     print(a2.get_pref_array())
     print(a2.get_array())
@@ -290,7 +304,7 @@ if __name__ == '__main__':
         print(f"{str(key).ljust(25)}: {value}")
     print("end class eval")
 
-    b = AbilityArray(array_type="Strict",
+    b = AbilityArray(ctx=ctx, array_type="Strict",
                      pref_array=string_to_array('5,0,2,1,4,3'),
                      racial_array=string_to_array('0,0,0,0,1,2'),
                      ignore_racial_bonus=True,
@@ -304,7 +318,7 @@ if __name__ == '__main__':
         print(f"{str(key).ljust(25)}: {value}")
     print("end class eval")
 
-    b2 = AbilityArray(array_type="Predefined",
+    b2 = AbilityArray(ctx=ctx, array_type="Predefined",
                       raw_array=string_to_array('6,6,6,6,6,6'),
                       pref_array=string_to_array('5,0,2,1,4,3'),
                       racial_array=string_to_array('0,0,0,0,1,2'),

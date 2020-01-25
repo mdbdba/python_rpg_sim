@@ -14,14 +14,14 @@ from Ctx import Ctx
 from Ctx import ctx_decorator
 from Ctx import RpgLogging
 
-try:
-    ctx
-except NameError:
-    ctx = Ctx(app_username='Series_class_init')
+# try:
+#     ctx
+# except NameError:
+#     ctx = Ctx(app_username='Series_class_init')
 
 
 class Series(object):
-    @ctx_decorator(ctx)
+    @ctx_decorator
     def __init__(self, db: InvokePSQL, ctx: Ctx,
                  study_instance_id: int,
                  encounter_repetitions: int,
@@ -54,7 +54,7 @@ class Series(object):
               f"debug_ind={debug_ind}")
         self.run_series()
 
-    @ctx_decorator(ctx)
+    @ctx_decorator
     def assign_encounter_params(self):
         if 'party_name' in self.encounter_param_dict.keys():
             self.party_name_param = self.encounter_param_dict['party_name']
@@ -67,7 +67,7 @@ class Series(object):
         if 'debug_ind' in self.encounter_param_dict.keys():
             self.debug_ind_param = self.encounter_param_dict['debug_ind']
 
-    @ctx_decorator(ctx)
+    @ctx_decorator
     def get_named_party(self):
         p = []
         sql = f"select count(name) from dnd_5e.party where name = '{self.party_name_param}'"
@@ -80,7 +80,7 @@ class Series(object):
             p.append(tmp_char)
         return p
 
-    @ctx_decorator(ctx)
+    @ctx_decorator
     def get_foes(self):
         f = []
 
@@ -96,7 +96,7 @@ class Series(object):
                          debug_ind=self.debug_ind_param))
         return f
 
-    @ctx_decorator(ctx)
+    @ctx_decorator
     def run_series(self):
         for series_counter in range(self.encounter_repetitions):
             display_repetition = series_counter + 1
@@ -188,6 +188,7 @@ class Series(object):
 
 if __name__ == '__main__':
     db = InvokePSQL()
+    ctx = Ctx(app_username='Series_class_init')
 
     series_dict = {
         "opponent_party_size": "4",

@@ -5,12 +5,13 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 from Attack import Attack    # NOQA
 from Weapon import Weapon    # NOQA
 from InvokePSQL import InvokePSQL    # NOQA
-
+from Ctx import Ctx
 
 def test_Attack_with_Club():
+    ctx = Ctx(app_username='Testing')
     db = InvokePSQL()
-    a = Weapon(db, 'Club')
-    b = Attack(weapon_obj=a, attack_modifier=0, damage_modifier=0)
+    a = Weapon(db=db, ctx=ctx, name='Club')
+    b = Attack(ctx=ctx, weapon_obj=a, attack_modifier=0, damage_modifier=0)
     assert(b.weapon_obj.name == 'Club')
     assert(b.vantage == 'Normal')
     assert(b.die_used == 4)
@@ -20,9 +21,10 @@ def test_Attack_with_Club():
 
 
 def test_Attack_with_Spear():
+    ctx = Ctx(app_username='Testing')
     db = InvokePSQL()
-    a = Weapon(db, 'Spear')
-    b = Attack(weapon_obj=a, attack_modifier=0, damage_modifier=0)
+    a = Weapon(db=db, ctx=ctx, name='Spear')
+    b = Attack(ctx=ctx, weapon_obj=a, attack_modifier=0, damage_modifier=0)
     assert(b.weapon_obj.name == 'Spear')
     assert(b.vantage == 'Normal')
     assert(b.die_used == 8)

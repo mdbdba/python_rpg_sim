@@ -1,5 +1,5 @@
-
-# import logging
+import sys
+import traceback
 
 from operator import itemgetter
 
@@ -176,11 +176,11 @@ class Encounter(object):
         dist_list = sorted(dist_list, reverse=False, key=itemgetter(0))
         return dist_list
 
-    def add_to_initiative_list(self, src_single: object, source_list_name: str,
+    def add_to_initiative_list(self, src_single, source_list_name: str,
                                source_list_position: int):
         with self.tracer.span(name='add_to_initiative_list'):
-            pc = src_single.check('Perception', 'Normal', 10)
-            ini = src_single.roll_for_initiative('Normal')
+            pc = src_single.check(ctx=ctx, skill='Perception', vantage='Normal', dc=10)
+            ini = src_single.roll_for_initiative(ctx=ctx, vantage='Normal')
             field_max = self.field_size - 1
 
             if source_list_name == 'Heroes':
@@ -346,7 +346,8 @@ class Encounter(object):
                 # Do they know why they are there?
                 if not self.initiative[initiative_ind][2]:
                     # bonusaction_used = True
-                    self.initiative[initiative_ind][2] = cur_active.check('Perception', 'Normal', 10)
+                    self.initiative[initiative_ind][2] = cur_active.check(ctx=ctx, skill='Perception',
+                                                                          vantage='Normal', dc=10)
                 # Move
                 # Define an obj for the current active combatant
                 #    0 - How many sectors can they move
@@ -381,7 +382,7 @@ class Encounter(object):
                 # If they don't have a ranged weapon or spell attack
                 # they must be a melee fighter.  When not in melee range
                 # use action for movement.
-                cur_action = cur_active.get_action(dl)
+                cur_action = cur_active.get_action(ctx=ctx, dist_list=dl)
 
                 if cur_action == 'Movement':
                     if self.debug_ind == 1:
@@ -434,9 +435,9 @@ class Encounter(object):
                                     t_vantage = 'Advantage'
                             else:
                                 t_vantage = 'Normal'
-                            directed_attack_tup = directed_user.default_melee_attack(vantage=t_vantage)
+                            directed_attack_tup = directed_user.default_melee_attack(ctx=ctx, vantage=t_vantage)
                             self.stats.inc_attack_attempts(waiting_action[0])
-                            successful_defend = cur_active.melee_defend(attack_value=directed_attack_tup[0],
+                            successful_defend = cur_active.melee_defend(ctx=ctx, attack_value=directed_attack_tup[0],
                                                                         possible_damage=directed_attack_tup[1],
                                                                         damage_type=directed_attack_tup[2])
                             if self.debug_ind == 1:
@@ -450,7 +451,7 @@ class Encounter(object):
 
                             if not successful_defend:
                                 self.stats.inc_attack_successes(waiting_action[0])
-                                directed_user.inc_damage_dealt(damage_type=directed_attack_tup[2],
+                                directed_user.inc_damage_dealt(ctx=ctx, damage_type=directed_attack_tup[2],
                                                                amount=directed_attack_tup[1])
                                 directed_user.attack_success_count += 1
 
@@ -477,9 +478,10 @@ class Encounter(object):
                         else:
                             t_vantage = 'Normal'
 
-                        active_attack_tup = cur_active.default_melee_attack(vantage=t_vantage)
+                        active_attack_tup = cur_active.default_melee_attack(ctx=ctx, vantage=t_vantage)
                         self.stats.inc_attack_attempts(self.initiative[initiative_ind][0])
-                        successful_defend = target.melee_defend(attack_value=active_attack_tup[0],
+                        successful_defend = target.melee_defend(ctx=ctx,
+                                                                attack_value=active_attack_tup[0],
                                                                 possible_damage=active_attack_tup[1],
                                                                 damage_type=active_attack_tup[2])
 
@@ -494,7 +496,7 @@ class Encounter(object):
 
                         if not successful_defend:
                             self.stats.inc_attack_successes(self.initiative[initiative_ind][0])
-                            cur_active.inc_damage_dealt(damage_type=active_attack_tup[2], amount=active_attack_tup[1])
+                            cur_active.inc_damage_dealt(ctx=ctx, damage_type=active_attack_tup[2], amount=active_attack_tup[1])
                             cur_active.attack_success_count += 1
 
                         if not target.alive:
@@ -503,7 +505,7 @@ class Encounter(object):
             elif cur_active.alive:  # currently alive but less than 1 hit point
                 if self.debug_ind == 1:
                     self.logger.debug(f"{cur_active.get_name()} is unconscious. ", ctx)
-                cur_active.death_save()
+                cur_active.death_save(ctx=ctx)
                 if not cur_active.alive:
                     self.cleanup_dead_player(cur_active, self.initiative[initiative_ind][0],
                                              self.initiative[initiative_ind][1])
@@ -700,16 +702,44 @@ if __name__ == '__main__':
     ctx = Ctx(app_username='encounter_class_init', logger_name=logger_name)
     logger = RpgLogging(logger_name=logger_name, level_threshold='debug')
     logger.setup_logging()
-    db = InvokePSQL()
-    Heroes = []
-    Opponents = []
-    Heroes.append(PlayerCharacter(db, ctx, debug_ind=1))
-    Heroes.append(PlayerCharacter(db, ctx, debug_ind=1))
-    Opponents.append(Foe(db, ctx, foe_candidate='Skeleton', debug_ind=1))
-    Opponents.append(Foe(db, ctx, foe_candidate='Skeleton', debug_ind=1))
-    e1 = Encounter(ctx=ctx, heroes=Heroes, opponents=Opponents, debug_ind=1)
-    print(f"The winning party was: {e1.winning_list_name} in {e1.round} rounds.")
-    print(f"The surviving {e1.winning_list_name} members:")
-    for i in range(len(e1.winning_list)):
-        if e1.winning_list[i].alive:
-            print(f'{e1.winning_list[i].get_name()}')
+    try:
+        db = InvokePSQL()
+        Heroes = []
+        Opponents = []
+        Heroes.append(PlayerCharacter(db=db, ctx=ctx, debug_ind=1))
+        Heroes.append(PlayerCharacter(db=db, ctx=ctx, debug_ind=1))
+        Opponents.append(Foe(db=db, ctx=ctx, foe_candidate='Skeleton', debug_ind=1))
+        Opponents.append(Foe(db=db, ctx=ctx, foe_candidate='Skeleton', debug_ind=1))
+        e1 = Encounter(ctx=ctx, heroes=Heroes, opponents=Opponents, debug_ind=1)
+        print(f"The winning party was: {e1.winning_list_name} in {e1.round} rounds.")
+        print(f"The surviving {e1.winning_list_name} members:")
+        for i in range(len(e1.winning_list)):
+            if e1.winning_list[i].alive:
+                print(f'{e1.winning_list[i].get_name()}')
+
+    except Exception as error:
+        exc_type, exc_value, exc_traceback = sys.exc_info()
+        print(ctx)
+        print(f'Context Information:\n\t'
+              f'App_username:      {ctx.app_username}\n\t'
+              f'Full Name:         {ctx.fullyqualified}\n\t'
+              f'Logger Name:       {ctx.logger_name}\n\t' 
+              f'Trace Id:          {ctx.trace_id}\n\t' 
+              f'Study Instance Id: {ctx.study_instance_id}\n\t' 
+              f'Study Name:        {ctx.study_name}\n\t' 
+              f'Series Id:         {ctx.series_id}\n\t' 
+              f'Encounter Id:      {ctx.encounter_id}\n\t' 
+              f'Round:             {ctx.round}\n\t' 
+              f'Turn:              {ctx.turn}\n' )
+
+        for line in ctx.crumbs:
+            print(line)
+            print(f'\tclass:        {line.className}\n\t' 
+                  f'method:       {line.methodName}\n\t'
+                  f'timestamp:    {line.timestamp}\n')
+            for mhd in line.methodParams.keys():
+                if mhd != 'ctx':
+                    print(f'{mhd}: {line.methodParams[mhd]}')
+
+        for line in traceback.format_exception(exc_type, exc_value, exc_traceback):
+            print(line)
