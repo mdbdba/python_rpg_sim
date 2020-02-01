@@ -1,18 +1,26 @@
+import sys
+import traceback
+
 from InvokePSQL import InvokePSQL
 from PlayerCharacter import PlayerCharacter
 from CommonFunctions import string_to_array
+from Ctx import Ctx
+from Ctx import ctx_decorator
+from Ctx import RpgLogging
 
 class Party(object):
+    @ctx_decorator
     def __init__(self,
-             db,
-             name,
-             character_id_str=None,
-             party_composition_id=11,
-             ability_array_str="10,10,10,10,10,10",
-             level=1,
-             gender_candidate="Random",
-             overwrite_party=False,
-             debug_ind=0):
+                 db,
+                 ctx,
+                 name,
+                 character_id_str=None,
+                 party_composition_id=11,
+                 ability_array_str="10,10,10,10,10,10",
+                 level=1,
+                 gender_candidate="Random",
+                 overwrite_party=False,
+                 debug_ind=0):
 
         self.character_id_str = character_id_str
         self.party_composition_id = party_composition_id
@@ -24,21 +32,21 @@ class Party(object):
         self.character_ids = []
         self.character_list = []
 
-        if self.party_name_exists(db) and not overwrite_party:
+        if self.party_name_exists(db=db, ctx=ctx) and not overwrite_party:
             print(f'Using the {self.name} party that already exists.')
-            self.set_existing_characters(db)
+            self.set_existing_characters(db=db, ctx=ctx)
         else:
-            if not self.party_composition_exists(db) and character_id_str is None:
+            if not self.party_composition_exists(db=db, ctx=ctx) and character_id_str is None:
                 raise Exception(f'The party composition id, {party_composition_id}, does not exist.')
 
             if character_id_str is None:
                 print(f'Creating {name}: a level {level} party consisting of '
                       f'{party_composition_id} with abilities: {ability_array_str}')
-                party_classes = self.get_party_composition(db)
+                party_classes = self.get_party_composition(db=db, ctx=ctx)
                 for party_class in party_classes:
-                    primary_race = self.get_primary_race(db, party_class[0])
+                    primary_race = self.get_primary_race(db=db, ctx=ctx, pclass=party_class[0])
                     print(f'create {primary_race} {party_class[0]}')
-                    tmppc = PlayerCharacter(db, class_candidate=party_class[0], race_candidate=primary_race,
+                    tmppc = PlayerCharacter(db=db, ctx=ctx, class_candidate=party_class[0], race_candidate=primary_race,
                                     gender_candidate=self.gender_candidate,
                                     ability_array_str=self.ability_array_str,
                                     debug_ind=self.debug_ind)
@@ -51,9 +59,9 @@ class Party(object):
                        f'character ids: {character_id_str}')
                 self.character_ids = string_to_array(self.character_id_str)
 
-            self.verify_character_id_list(db)
-            self.create_party_in_db(db)
-            self.character_list = self.build_character_list(db)
+            self.verify_character_id_list(db=db, ctx=ctx)
+            self.create_party_in_db(db=db, ctx=ctx)
+            self.character_list = self.build_character_list(db=db, ctx=ctx)
 
     def get_party_name(self):
         return self.name
@@ -61,38 +69,44 @@ class Party(object):
     def get_party(self):
         return self.character_list
 
-    def set_existing_characters(self, db):
+    @ctx_decorator
+    def set_existing_characters(self, db, ctx):
         sql=f"select character_id from dnd_5e.party where name = '{self.name}'"
         res = db.query(sql)
         for character_id in res:
-            tmppc = PlayerCharacter(db, character_id=character_id[0], debug_ind=self.debug_ind)
+            tmppc = PlayerCharacter(db=db, ctx=ctx, character_id=character_id[0], debug_ind=self.debug_ind)
             self.character_ids.append(tmppc.character_id)
             self.character_list.append(tmppc)
 
         return res
 
-    def build_character_list(self,db):
+    @ctx_decorator
+    def build_character_list(self, db, ctx):
         tmp_list = []
         for id in self.character_ids:
-            tmp_list.append(PlayerCharacter(db, character_id=id), debug_ind=self.debug_ind)
+            tmp_list.append(PlayerCharacter(db=db, ctx=ctx, character_id=id))
         return tmp_list
 
-    def get_primary_race(self,db, pclass):
+    @ctx_decorator
+    def get_primary_race(self,db, ctx, pclass):
         sql=f"select primary_race_candidate from dnd_5e.lu_class where class = '{pclass}'"
         res = db.query(sql)
         return res[0][0]
 
-    def get_party_composition(self,db):
+    @ctx_decorator
+    def get_party_composition(self, db, ctx):
         sql = f"select class from party_composition_class where party_composition_id = {self.party_composition_id};"
         res = db.query(sql)
         return res
 
-    def create_party_in_db(self,db):
+    @ctx_decorator
+    def create_party_in_db(self, db, ctx):
         for character_id in self.character_ids:
             sql = f"insert into dnd_5e.party(name,character_id) values ('{self.name}',{character_id})"
             db.insert(sql)
 
-    def verify_character_id(self,db, character_id):
+    @ctx_decorator
+    def verify_character_id(self,db, ctx, character_id):
         sql = f"select count(id) from dnd_5e.character where id={character_id};"
         res = db.query(sql)
         if res[0][0] == 1:
@@ -102,16 +116,18 @@ class Party(object):
 
         return return_value
 
-    def verify_character_id_list(self,db):
+    @ctx_decorator
+    def verify_character_id_list(self, db, ctx):
         fail_str = ""
         for character_id in self.character_ids:
-            if not self.verify_character_id(db, character_id):
+            if not self.verify_character_id(db=db, ctx=ctx, character_id=character_id):
                 fail_str = f'{fail_str}{character_id}, '
         if len(fail_str) > 0:
                 fail_str = fail_str[:-2]
                 raise Exception(f"Character ids: {fail_str} do not exist")
 
-    def party_name_exists(self, db):
+    @ctx_decorator
+    def party_name_exists(self, db, ctx):
         sql = f"select count(name) from party where name='{self.name}';"
         res = db.query(sql)
         if res[0][0] > 0:
@@ -121,7 +137,8 @@ class Party(object):
 
         return return_value
 
-    def party_composition_exists(self, db):
+    @ctx_decorator
+    def party_composition_exists(self, db, ctx):
         sql = f"select count(id) from party_composition where id='{self.party_composition_id}';"
         res = db.query(sql)
         if res[0][0] == 1:
@@ -132,6 +149,32 @@ class Party(object):
         return return_value
 
 if __name__ == '__main__':
-    db = InvokePSQL()
-    a = Party(db, name='AllStars_3')
-    print(a.get_party())
+    logger_name = 'encounter_main_test'
+    ctx = Ctx(app_username='encounter_class_init', logger_name=logger_name)
+    logger = RpgLogging(logger_name=logger_name, level_threshold='debug')
+    logger.setup_logging()
+    try:
+        db = InvokePSQL()
+        a = Party(db=db, ctx=ctx, name='AllStars_3')
+        print(a.get_party())
+    except Exception as error:
+        exc_type, exc_value, exc_traceback = sys.exc_info()
+        print(ctx)
+        print(f'Context Information:\n\t'
+              f'App_username:      {ctx.app_username}\n\t'
+              f'Full Name:         {ctx.fullyqualified}\n\t'
+              f'Logger Name:       {ctx.logger_name}\n\t' 
+              f'Trace Id:          {ctx.trace_id}\n\t' 
+              f'Study Instance Id: {ctx.study_instance_id}\n\t' 
+              f'Study Name:        {ctx.study_name}\n\t' 
+              f'Series Id:         {ctx.series_id}\n\t' 
+              f'Encounter Id:      {ctx.encounter_id}\n\t' 
+              f'Round:             {ctx.round}\n\t' 
+              f'Turn:              {ctx.turn}\n' )
+
+        for line in ctx.crumbs:
+            print(line)
+
+        for line in traceback.format_exception(exc_type, exc_value, exc_traceback):
+            print(line)
+

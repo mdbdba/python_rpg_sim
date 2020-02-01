@@ -13,6 +13,7 @@ from InvokePSQL import InvokePSQL
 from TraceIt import TraceIt
 from Ctx import RpgLogging
 from Ctx import Ctx
+from Ctx import ctx_decorator
 
 
 class Encounter(object):
@@ -64,7 +65,7 @@ class Encounter(object):
             #     log_fmt = '%(asctime)s - %(levelname)s - %(message)s'
             #     logging.basicConfig(format=log_fmt, level=logging.DEBUG)
             #     self.logger = logging.getLogger(__name__)
-            self.logger = RpgLogging(logger_name=__name__)
+            self.logger = RpgLogging(logger_name=ctx.logger_name)
             # initialize the field.
             tot_objs: int = field_size * field_size
             self.field_size = field_size
@@ -76,30 +77,37 @@ class Encounter(object):
 
             with self.tracer.span(name='build_initiative_list'):
                 for position, Hero in enumerate(heroes):
-                    self.add_to_initiative_list(Hero, 'Heroes', position)
+                    self.add_to_initiative_list(ctx=ctx,
+                                                src_single=Hero,
+                                                source_list_name='Heroes',
+                                                source_list_position=position)
 
                 self.o_cnt = len(opponents)
                 for position, Opponent in enumerate(opponents):
-                    self.add_to_initiative_list(Opponent, 'Opponents', position)
+                    self.add_to_initiative_list(ctx=ctx,
+                                                src_single=Opponent,
+                                                source_list_name='Opponents',
+                                                source_list_position=position)
                 self.initiative = sorted(self.initiative, reverse=True,
                                          key=itemgetter(3))
 
             if self.debug_ind == 1:
                 self.logger.debug(f"Initiative Array: {self.initiative}", ctx)
 
-            self.master_loop()
+            self.master_loop(ctx=ctx)
 
     def get_encounter_stats(self):
         return self.stats
 
-    def get_characters_stats(self):
+    @ctx_decorator
+    def get_characters_stats(self, ctx):
         characters_stats_dict = {'Heroes': [], 'Opponents': []}
 
         for hero in self.Heroes:
-            characters_stats_dict['Heroes'].append(hero.get_character_stats())
+            characters_stats_dict['Heroes'].append(hero.get_character_stats(ctx=ctx))
 
         for opponent in self.Opponents:
-            characters_stats_dict['Opponents'].append(opponent.get_character_stats())
+            characters_stats_dict['Opponents'].append(opponent.get_character_stats(ctx=ctx))
 
         return characters_stats_dict
 
@@ -132,21 +140,23 @@ class Encounter(object):
         ret_val: int = (px * self.field_size) + py
         return ret_val
 
-    def sector_is_unoccupied(self, px: int, py: int) -> bool:
+    @ctx_decorator
+    def sector_is_unoccupied(self, ctx: Ctx, px: int, py: int) -> bool:
         # with self.tracer.span(name='sector_is_unoccupied'):
         list_index: int = self.get_array_index(px, py)
         ret_val: bool = not self.field_map[list_index].occupied
 
         if self.debug_ind == 1:
             msg = f"Is [{px}][{py}] field_map[{list_index}] available: {ret_val}"
-            self.logger.debug(msg, ctx)
+            self.logger.debug(msg, self.ctx)
             if not ret_val:
                 msg = (f"Occupied by: {self.field_map[list_index].occupied_by}" 
                        f"[{self.field_map[list_index].occupied_by_index}]")
-                self.logger.debug(msg, ctx)
+                self.logger.debug(msg, self.ctx)
         return ret_val
 
-    def move(self, identifier_name, identifier_index,
+    @ctx_decorator
+    def move(self, ctx: Ctx, identifier_name, identifier_index,
              leave_x, leave_y,
              occupy_x, occupy_y):
         # with self.tracer.span(name='move'):
@@ -160,8 +170,8 @@ class Encounter(object):
         self.field_map[leave_list_ind].leave_sector()
         self.field_map[occupy_list_ind].occupy_sector(identifier_name,
                                                       identifier_index)
-
-    def get_target_distance_array(self, my_x, my_y, target_name):
+    @ctx_decorator
+    def get_target_distance_array(self, ctx: Ctx, my_x, my_y, target_name):
         # with self.tracer.span(name='get_target_distance_array'):
         dist_list = []
         for fx in range(len(self.field_map)):
@@ -176,7 +186,8 @@ class Encounter(object):
         dist_list = sorted(dist_list, reverse=False, key=itemgetter(0))
         return dist_list
 
-    def add_to_initiative_list(self, src_single, source_list_name: str,
+    @ctx_decorator
+    def add_to_initiative_list(self, ctx: Ctx, src_single, source_list_name: str,
                                source_list_position: int):
         with self.tracer.span(name='add_to_initiative_list'):
             pc = src_single.check(ctx=ctx, skill='Perception', vantage='Normal', dc=10)
@@ -213,25 +224,32 @@ class Encounter(object):
                 # pos = self.get_array_index(initiative_rec[4], initiative_rec[5])
         return ret_val
 
-    def remove_player_from_field(self, list_name: str, list_index: int):
+    @ctx_decorator
+    def remove_player_from_field_by_index(self, ctx: Ctx, list_name: str, list_index: int):
         xy_loc = self.get_player_location(list_name, list_index)
         loc = self.get_array_index(xy_loc[0], xy_loc[1])
         self.field_map[loc].leave_sector()
 
-    def master_loop(self):
+    @ctx_decorator
+    def remove_player_from_field(self, ctx: Ctx, x_loc: int, y_loc: int):
+        loc = self.get_array_index(x_loc, y_loc)
+        self.field_map[loc].leave_sector()
+
+    @ctx_decorator
+    def master_loop(self, ctx: Ctx):
         self.round = 1
         waiting_for = []
         while self.active:
             with self.tracer.span(name='master_loop_iteration'):
                 for i in range(len(self.initiative)):
                     if self.active:
-                        self.turn(i, waiting_for)
-                        self.active = self.still_active()
+                        self.turn(ctx=ctx, initiative_ind=i, waiting_for=waiting_for)
+                        self.active = self.still_active(ctx=ctx)
 
                 if self.active:
                     self.round += 1
                 else:
-                    self.wrap_up()
+                    self.wrap_up(ctx=ctx)
 
                 if self.round > 59:
                     self.active = False
@@ -243,8 +261,8 @@ class Encounter(object):
                             msg = (f"[{x}] [{a}][{b}] {self.field_map[x].occupied_by}"
                                    f"[{self.field_map[x].occupied_by_index}]")
                             self.logger.debug(msg, ctx)
-
-    def wrap_up(self):
+    @ctx_decorator
+    def wrap_up(self, ctx: Ctx):
         with self.tracer.span(name='wrap_up'):
             self.stats.winning_team = self.winning_list_name
             self.stats.duration_rds = self.round
@@ -264,8 +282,8 @@ class Encounter(object):
                         msg = (f"[{x}] [{a}][{b}] {self.field_map[x].occupied_by}"
                                f"[{self.field_map[x].occupied_by_index}]")
                         self.logger.debug(msg, ctx)
-
-    def still_active(self):
+    @ctx_decorator
+    def still_active(self, ctx: Ctx):
         with self.tracer.span(name='still_active'):
             ret_val = False
             sub_val1 = False
@@ -287,12 +305,16 @@ class Encounter(object):
 
             return ret_val
 
-    def cleanup_dead_player(self, player, x_loc, y_loc):
+    @ctx_decorator
+    def cleanup_dead_player(self, ctx: Ctx, player, list_name: str, list_index: int):
         if self.debug_ind == 1:
             self.logger.debug(f"{player.get_name()} is dead. Removing them from melee and field list. ", ctx)
 
-        self.remove_all_from_melee_with(player)
-        self.remove_player_from_field(x_loc, y_loc)
+        xy_loc = self.get_player_location(list_name=list_name, list_index=list_index )
+        x_loc = int(xy_loc[0])
+        y_loc = int(xy_loc[1])
+        self.remove_all_from_melee_with(ctx=ctx, player=player)
+        self.remove_player_from_field(ctx=ctx, x_loc=x_loc, y_loc=y_loc)
         for initiative_rec in self.initiative:
             if (initiative_rec[0] == x_loc and
                     initiative_rec[1] == y_loc):
@@ -301,7 +323,8 @@ class Encounter(object):
                 if len(initiative_rec) > 3:
                     del initiative_rec[4]
 
-    def turn(self, initiative_ind, waiting_for):
+    @ctx_decorator
+    def turn(self, ctx: Ctx, initiative_ind, waiting_for):
         with self.tracer.span(name='turn'):
 
             # try:
@@ -327,14 +350,14 @@ class Encounter(object):
                            f'[{self.initiative[initiative_ind][5]}]')
                 self.logger.debug(msg, ctx)
 
-            self.remove_waiting_for(initiative_ind, waiting_for)
+            self.remove_waiting_for(ctx=ctx, initiative_ind=initiative_ind, waiting_for=waiting_for)
 
             if cur_active.alive and cur_active.cur_hit_points > 0:
 
-                dl = (self.get_target_distance_array(
-                        self.initiative[initiative_ind][4],
-                        self.initiative[initiative_ind][5],
-                        target_array_name))
+                dl = (self.get_target_distance_array(ctx=ctx,
+                                                     my_x=self.initiative[initiative_ind][4],
+                                                     my_y=self.initiative[initiative_ind][5],
+                                                     target_name=target_array_name))
 
                 if self.debug_ind == 1:
                     for j in range(len(dl)):
@@ -363,10 +386,10 @@ class Encounter(object):
                            f"y loc:         {self.initiative[initiative_ind][5]}")
                     self.logger.debug(msg, ctx)
 
-                avail_mvmt = self.movement(avail_mvmt,
-                                           cur_active,
-                                           self.initiative[initiative_ind],
-                                           dl)
+                avail_mvmt = self.movement(ctx=ctx, avail_movement=avail_mvmt,
+                                           cur_active=cur_active,
+                                           cur_init=self.initiative[initiative_ind],
+                                           dest_list=dl)
 
                 if self.debug_ind == 1:
                     msg = (f"movement left: {avail_mvmt} " 
@@ -390,11 +413,10 @@ class Encounter(object):
                         self.logger.debug(msg, ctx)
 
                     avail_mvmt = cur_active.cur_movement / 5
-                    avail_mvmt = self.movement(avail_mvmt,
-                                               cur_active,
-                                               self.initiative[
-                                                  initiative_ind],
-                                               dl)
+                    avail_mvmt = self.movement(ctx=ctx, avail_movement=avail_mvmt,
+                                               cur_active=cur_active,
+                                               cur_init=self.initiative[ initiative_ind],
+                                               dest_list=dl)
                     if self.debug_ind == 1:
                         for j in range(len(dl)):
                             self.logger.debug(f"dist AFTER Action: "
@@ -415,7 +437,7 @@ class Encounter(object):
                         self.logger.debug(f"{cur_active.get_name()} is in melee with " 
                                           f"{dl[0][3]}[{dl[0][4]}]", ctx)
                     # do any superceding actions
-                    s1 = self.get_waiting_for(initiative_ind, waiting_for)
+                    s1 = self.get_waiting_for(ctx=ctx, initiative_ind=initiative_ind, waiting_for=waiting_for)
                     for waiting_action in s1:
                         # Melee action happens here.
                         if self.debug_ind == 1:
@@ -456,9 +478,9 @@ class Encounter(object):
                                 directed_user.attack_success_count += 1
 
                             if not cur_active.alive:
-                                self.cleanup_dead_player(cur_active,
-                                                         self.initiative[initiative_ind][0],
-                                                         self.initiative[initiative_ind][1])
+                                self.cleanup_dead_player(ctx=ctx, player=cur_active,
+                                                         list_name=self.initiative[initiative_ind][0],
+                                                         list_index=self.initiative[initiative_ind][1])
 
                     if cur_active.cur_hit_points > 0:
                         target = self.get_player(dl[0][3], dl[0][4])
@@ -496,24 +518,26 @@ class Encounter(object):
 
                         if not successful_defend:
                             self.stats.inc_attack_successes(self.initiative[initiative_ind][0])
-                            cur_active.inc_damage_dealt(ctx=ctx, damage_type=active_attack_tup[2], amount=active_attack_tup[1])
+                            cur_active.inc_damage_dealt(ctx=ctx,
+                                                        damage_type=active_attack_tup[2],
+                                                        amount=active_attack_tup[1])
                             cur_active.attack_success_count += 1
 
                         if not target.alive:
-                            self.cleanup_dead_player(target, dl[0][3], dl[0][4])
+                            self.cleanup_dead_player(ctx=ctx, player=target, list_name=dl[0][3], list_index=dl[0][4])
 
             elif cur_active.alive:  # currently alive but less than 1 hit point
                 if self.debug_ind == 1:
                     self.logger.debug(f"{cur_active.get_name()} is unconscious. ", ctx)
                 cur_active.death_save(ctx=ctx)
                 if not cur_active.alive:
-                    self.cleanup_dead_player(cur_active, self.initiative[initiative_ind][0],
-                                             self.initiative[initiative_ind][1])
+                    self.cleanup_dead_player(ctx=ctx, player=cur_active, list_name=self.initiative[initiative_ind][0],
+                                             list_index=self.initiative[initiative_ind][1])
             else:
                 if self.debug_ind == 1:
                     self.logger.debug(f"{cur_active.get_name()} is dead. Their turn is skipped. ", ctx)
-
-    def remove_waiting_for(self, initiative_ind, waiting_for):
+    @ctx_decorator
+    def remove_waiting_for(self, ctx: Ctx, initiative_ind, waiting_for):
         # with self.tracer.span(name='remove_waiting_for'):
         if self.debug_ind == 1:
             self.logger.debug(f"Clear any waits for {self.initiative[initiative_ind][0]}" 
@@ -525,7 +549,8 @@ class Encounter(object):
                     self.logger.debug(f"removing: {sublist[0]}[{sublist[1]}]", ctx)
                 waiting_for.remove(sublist)
 
-    def get_waiting_for(self, initiative_ind, waiting_for):
+    @ctx_decorator
+    def get_waiting_for(self, ctx: Ctx, initiative_ind, waiting_for):
         with self.tracer.span(name='get_waiting_for'):
             if self.debug_ind == 1:
                 self.logger.debug(f"Anyone waiting on {self.initiative[initiative_ind][0]}" 
@@ -540,8 +565,8 @@ class Encounter(object):
                     waiting_for.remove(sublist)
 
             return ret_val
-
-    def is_in_melee(self, player):
+    @ctx_decorator
+    def is_in_melee(self, ctx: Ctx, player):
         if player.get_name() in self.melee_with.keys():
             if len(self.melee_with[player.get_name()]) > 0:
                 ret_val = True
@@ -554,7 +579,8 @@ class Encounter(object):
     def get_melee_with(self, player):
         return self.melee_with[player.get_name()]
 
-    def add_to_melee_with(self, player, the_target_player):
+    @ctx_decorator
+    def add_to_melee_with(self, ctx: Ctx, player, the_target_player):
         if player.get_name() in self.melee_with.keys():
             if (any(the_target_player.get_name() in sublist
                     for sublist in self.melee_with[player.get_name()])):
@@ -569,14 +595,16 @@ class Encounter(object):
         else:
             self.melee_with[the_target_player.get_name()] = [player.get_name()]
 
-    def remove_all_from_melee_with(self, player):
+    @ctx_decorator
+    def remove_all_from_melee_with(self, ctx: Ctx, player):
         # remove all references for this player from melee_with.  Whether key or value
         self.melee_with[player.get_name()] = []
         for subname in self.melee_with.keys():
             if any(player.get_name() in sublist for sublist in self.melee_with[subname]):
                 self.melee_with[subname].remove(player.get_name())
 
-    def remove_from_melee_with(self, player, the_target_player):
+    @ctx_decorator
+    def remove_from_melee_with(self, ctx: Ctx, player, the_target_player):
         if player.get_name() in self.melee_with.keys():
             if (any(the_target_player.get_name() in sublist
                     for sublist in self.melee_with[player.get_name()])):
@@ -587,10 +615,11 @@ class Encounter(object):
                     for sublist in self.melee_with[the_target_player.get_name()])):
                 self.melee_with[the_target_player.get_name()].remove(player.get_name())
 
-    def movement(self, avail_movement, cur_active, cur_init, dest_list):
+    @ctx_decorator
+    def movement(self, ctx: Ctx, avail_movement, cur_active, cur_init, dest_list):
         # with self.tracer.span(name='movement'):
         if cur_init[2]:     # if they've figured out what's going on.
-            if self.is_in_melee(cur_active):
+            if self.is_in_melee(ctx=ctx, player=cur_active):
                 pass
             elif cur_active.combat_preference == 'Melee':
                 # run straight towards closest enemy
@@ -625,7 +654,8 @@ class Encounter(object):
                             self.logger.debug(f"dist_x and dist_y = 0. Somethings wrong.", ctx)
                         mvmt = False
                     elif abs_dist_x <= 1 and abs_dist_y <= 1:
-                        self.add_to_melee_with(cur_active, self.get_player(dest_list[0][3], dest_list[0][4]))
+                        self.add_to_melee_with(ctx=ctx, player=cur_active,
+                                               the_target_player=self.get_player(dest_list[0][3], dest_list[0][4]))
                         if self.debug_ind == 1:
                             self.logger.debug(f"*** Is in melee with " 
                                               f"{dest_list[0][3]}[{dest_list[0][4]}].", ctx)
@@ -675,10 +705,10 @@ class Encounter(object):
 
                         move_success = False
                         for pi in range(3):
-                            if self.sector_is_unoccupied(tl_x[pi], tl_y[pi]):
-                                self.move(cur_init[0], cur_init[1],
-                                          cur_x, cur_y,
-                                          tl_x[pi], tl_y[pi])
+                            if self.sector_is_unoccupied(ctx=ctx, px=tl_x[pi], py=tl_y[pi]):
+                                self.move(ctx=ctx, identifier_name=cur_init[0], identifier_index=cur_init[1],
+                                          leave_x=cur_x, leave_y=cur_y,
+                                          occupy_x=tl_x[pi], occupy_y=tl_y[pi])
                                 cur_x = tl_x[pi]
                                 cur_y = tl_y[pi]
                                 avail_movement -= 1

@@ -1,10 +1,8 @@
 import sys
 import os
-
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 from PlayerCharacterClass import PlayerCharacterClass    # NOQA
-from Ctx import Ctx
-# from Common.InvokePSQL import InvokePSQL    # NOQA
+from Ctx import Ctx   # NOQA
 from BardPCClass import BardPCClass    # NOQA
 from BarbarianPCClass import BarbarianPCClass    # NOQA
 from ClericPCClass import ClericPCClass    # NOQA
@@ -23,14 +21,14 @@ from InvokePSQL import InvokePSQL    # NOQA
 def test_class_default():
     ctx = Ctx(app_username='Testing')
     db = InvokePSQL()
-    a = PlayerCharacterClass(db=db,ctx=ctx)
+    a = PlayerCharacterClass(db=db, ctx=ctx)
     assert(len(a.name) > 3)
 
 
 def test_class_barbarian():
     ctx = Ctx(app_username='Testing')
     db = InvokePSQL()
-    a = BarbarianPCClass(db=db,ctx=ctx)
+    a = BarbarianPCClass(db=db, ctx=ctx)
     assert(a.name == 'Barbarian')
     assert(a.hit_die == 12)
     assert(a.ability_sort_array == [0, 2, 1, 4, 5, 3])
@@ -48,7 +46,7 @@ def test_class_barbarian():
 def test_class_bard():
     ctx = Ctx(app_username='Testing')
     db = InvokePSQL()
-    a = BardPCClass(db=db,ctx=ctx)
+    a = BardPCClass(db=db, ctx=ctx)
     assert(a.name == 'Bard')
     assert(a.hit_die == 8)
     assert(a.ability_sort_array == [5, 1, 2, 0, 4, 3])
@@ -66,7 +64,7 @@ def test_class_bard():
 def test_class_cleric():
     ctx = Ctx(app_username='Testing')
     db = InvokePSQL()
-    a = ClericPCClass(db=db,ctx=ctx)
+    a = ClericPCClass(db=db, ctx=ctx)
     assert(a.name == 'Cleric')
     assert(a.hit_die == 8)
     assert(a.ability_sort_array == [4, 2, 0, 1, 5, 3])
@@ -84,7 +82,7 @@ def test_class_cleric():
 def test_class_druid():
     ctx = Ctx(app_username='Testing')
     db = InvokePSQL()
-    a = DruidPCClass(db=db,ctx=ctx)
+    a = DruidPCClass(db=db, ctx=ctx)
     assert(a.name == 'Druid')
     assert(a.hit_die == 8)
     assert(a.ability_sort_array == [4, 2, 1, 3, 5, 0])
@@ -102,7 +100,7 @@ def test_class_druid():
 def test_class_fighter():
     ctx = Ctx(app_username='Testing')
     db = InvokePSQL()
-    a = FighterPCClass(db=db,ctx=ctx)
+    a = FighterPCClass(db=db, ctx=ctx)
     assert(a.name == 'Fighter')
     assert(a.hit_die == 10)
     assert(a.ability_sort_array == [0, 2, 1, 5, 4, 3])
@@ -120,7 +118,7 @@ def test_class_fighter():
 def test_class_monk():
     ctx = Ctx(app_username='Testing')
     db = InvokePSQL()
-    a = MonkPCClass(db=db,ctx=ctx)
+    a = MonkPCClass(db=db, ctx=ctx)
     assert(a.name == 'Monk')
     assert(a.hit_die == 8)
     assert(a.ability_sort_array == [1, 4, 2, 0, 3, 5])
@@ -138,7 +136,7 @@ def test_class_monk():
 def test_class_paladin():
     ctx = Ctx(app_username='Testing')
     db = InvokePSQL()
-    a = PaladinPCClass(db=db,ctx=ctx)
+    a = PaladinPCClass(db=db, ctx=ctx)
     assert(a.name == 'Paladin')
     assert(a.hit_die == 10)
     assert(a.ability_sort_array == [0, 5, 2, 4, 1, 3])
@@ -156,7 +154,7 @@ def test_class_paladin():
 def test_class_ranger():
     ctx = Ctx(app_username='Testing')
     db = InvokePSQL()
-    a = RangerPCClass(db=db,ctx=ctx)
+    a = RangerPCClass(db=db, ctx=ctx)
     assert(a.name == 'Ranger')
     assert(a.hit_die == 10)
     assert(a.ability_sort_array == [1, 4, 2, 0, 3, 5])
@@ -175,7 +173,7 @@ def test_class_ranger():
 def test_class_rogue():
     ctx = Ctx(app_username='Testing')
     db = InvokePSQL()
-    a = RoguePCClass(db=db,ctx=ctx)
+    a = RoguePCClass(db=db, ctx=ctx)
     assert(a.name == 'Rogue')
     assert(a.hit_die == 8)
     assert(a.ability_sort_array == [1, 5, 2, 3, 0, 4])
@@ -194,7 +192,7 @@ def test_class_rogue():
 def test_class_sorcerer():
     ctx = Ctx(app_username='Testing')
     db = InvokePSQL()
-    a = SorcererPCClass(db=db,ctx=ctx)
+    a = SorcererPCClass(db=db, ctx=ctx)
     assert(a.name == 'Sorcerer')
     assert(a.hit_die == 6)
     assert(a.ability_sort_array == [5, 2, 1, 4, 3, 0])
@@ -213,7 +211,7 @@ def test_class_sorcerer():
 def test_class_warlock():
     ctx = Ctx(app_username='Testing')
     db = InvokePSQL()
-    a = WarlockPCClass(db=db,ctx=ctx)
+    a = WarlockPCClass(db=db, ctx=ctx)
     assert(a.name == 'Warlock')
     assert(a.hit_die == 8)
     assert(a.ability_sort_array == [5, 2, 1, 4, 3, 0])
@@ -232,7 +230,7 @@ def test_class_warlock():
 def test_class_wizard():
     ctx = Ctx(app_username='Testing')
     db = InvokePSQL()
-    a = WizardPCClass(db=db,ctx=ctx)
+    a = WizardPCClass(db=db, ctx=ctx)
     assert(a.name == 'Wizard')
     assert(a.hit_die == 6)
     assert(a.ability_sort_array == [3, 1, 2, 4, 0, 5])

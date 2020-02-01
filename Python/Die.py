@@ -2,6 +2,7 @@ import random
 from PointInTimeAmount import RollAmount
 from Ctx import Ctx
 from Ctx import ctx_decorator
+from Ctx import RpgLogging
 
 
 class Die(object):
@@ -16,6 +17,7 @@ class Die(object):
         self.sides = sides
         self.debug_ind = debug_ind
         self.details = []  # RollAmount(die_used=sides)
+        self.logger = RpgLogging(logger_name=ctx.logger_name)
 
     def get_last_detail(self):
         """
@@ -48,6 +50,8 @@ class Die(object):
         """
         t_roll_details = RollAmount(die_used=self.sides)
         t_roll_details.die_rolls = rolls
+        # print(f'adding roll id: {t_roll_details.roll_id} to {ctx.crumbs[-1]}')
+        ctx.add_roll_id(t_roll_details.roll_id)
         if dropvalue:
             t_roll_details.adjustment_values["dropvalue"] = dropvalue
             t_roll_details.adjustment_values["dropfrom"] = dropfrom
@@ -78,7 +82,11 @@ class Die(object):
             tot = tot // 2
 
         t_roll_details.die_total_used = tot
+
         self.details.append(t_roll_details)
+
+        # raise Exception('Test Exception')
+        self.logger.debug(t_roll_details, ctx)
 
         return tot
 
