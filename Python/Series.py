@@ -181,7 +181,8 @@ class Series(object):
 
 if __name__ == '__main__':
     series_id = random.randrange(0, 100000, 2)
-    logger_name = f'Series: series_main_{series_id}'
+    # logger_name = f'Series: series_main_{series_id}'
+    logger_name = f'series_main_{series_id}'
     ctx = Ctx(app_username='series_class_init', logger_name=logger_name)
     logger = RpgLogging(logger_name=logger_name, level_threshold='debug')
     logger.setup_logging()

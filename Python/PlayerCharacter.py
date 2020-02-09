@@ -98,7 +98,7 @@ class PlayerCharacter(Character):
             array_to_string(self.get_ability_array()))
 
         for pi in self.__str__().splitlines():
-            self.logger.debug(f"{self.get_name()}: {pi}", ctx)
+            self.logger.debug(msg=f"{self.get_name()}: {pi}", ctx=ctx)
 
     @ctx_decorator
     def assign_race(self, ctx, race_candidate):
@@ -618,6 +618,84 @@ class PlayerCharacter(Character):
         outstr = f'\n{outstr}\n'
         return outstr
 
+    def __repr__(self):
+        outstr = (f'{{ "class": "{self.__class__.__name__}", '
+                  f'"Name": "{self.get_name()}", '
+                  f'"Id": "{self.character_id}", '
+                  f'"TTA": "{self.get_tta()}", '
+                  f'"Gender": "{self.get_gender()}", '
+                  f'"Race": "{self.get_race()}", '
+                  f'"Movement": "{self.cur_movement}", '
+                  f'"Class": "{self.get_class()}", '
+                  f'"Armor Class": "{self.armor_class}", '
+                  f'"Level": "{self.level}", '
+                  f'"Hit Die": "{self.get_hit_die()}", ')
+        if self.cur_hit_points:
+            outstr = (f'{outstr}"Hit Points": "{self.cur_hit_points}/'
+                      f'{self.hit_points}", ')
+        if self.proficiency_bonus:
+            outstr = (f'{outstr}"Prof Bonus": "{self.proficiency_bonus}", ')
+
+        outstr = (f'{outstr}'
+                  f'"Height": "{inches_to_feet(self.get_height())}", '
+                  f'"Weight": "{self.get_weight()} pounds", '
+                  f'"Alignment": "{self.get_alignment_str()}", '
+                  f'"AlignAbbrev": "{self.get_alignment_abbrev()}", '
+                  f'"Skin Tone": "{self.get_skin_tone()}", ')
+
+        if self.get_hair_color():
+            outstr = (f'{outstr}"Hair Color": "{self.get_hair_color()}", '
+                      f'"Hair Type":  "{self.get_hair_type()}", ')
+
+        outstr = (f'{outstr}"Eye Color": "{self.get_eye_color()}", '
+                  f'"Size": "{self.race_obj.size}", ')
+        if self.race_obj.source_credit_url:
+            outstr = (f'{outstr}"Race URL": '
+                      f'"{self.race_obj.source_credit_url}", ')
+        if self.race_obj.source_credit_comment:
+            outstr = (f'{outstr}"Race Comment": '
+                      f'"{self.race_obj.source_credit_comment}", ')
+
+        if self.finesse_ability_mod is not None:
+            outstr = (f'{outstr}"Finesse Ability": '
+                      f'"{self.finesse_ability_mod}", ')
+        if self.melee_weapon is not None:
+            outstr = (f'{outstr}"Melee Weapon": '
+                      f'"{self.melee_weapon}", ')
+        if self.ranged_weapon is not None:
+            outstr = (f'{outstr}"Ranged Weapon": '
+                      f'"{self.ranged_weapon}", ')
+        if self.ranged_ammunition_amt is not None:
+            outstr = (f'{outstr}"Ranged Ammo": '
+                      f'"{self.ranged_ammunition_amt}", ')
+
+        outstr = (f'{outstr}"Raw Ability Array": '
+                  f'{self.get_raw_ability_array()}, '
+                  f'"Ordered Array": '
+                  f'{self.get_numerically_sorted_ability_array()}, '
+                  f'"Sort Array": "{self.get_ability_pref_str_array()}", '
+                  f'"Nbr Sort Array": {self.ability_array_obj.get_pref_array()}, '
+                  f'"Sorted": {self.get_sorted_ability_array()}, ')
+
+        if self.race_obj.languages:
+            outstr = f'{outstr}"Languages": ['
+            for l in self.race_obj.languages:
+                outstr = f'{outstr} "{l}", '
+            if outstr[-2:] == ', ':
+                outstr = outstr[:-2]
+            outstr = f'{outstr}], '
+
+        outstr = f'{outstr}"damage ADJ": {{'
+
+        for pkey, pvalue in sorted(self.damage_adj.items()):
+            if len(pvalue) > 2:
+                outstr = f'{outstr}"{pkey}": "{pvalue}", '
+        if outstr[-2:] == ', ':
+            outstr = outstr[:-2]
+        outstr = f'{outstr}}}}}'
+        return outstr
+
+
 
 if __name__ == '__main__':
     db = InvokePSQL()
@@ -655,3 +733,5 @@ if __name__ == '__main__':
                          race_candidate="Half-Orc",
                          class_candidate="Barbarian",
                          debug_ind=1)
+
+    print(a7.__repr__())

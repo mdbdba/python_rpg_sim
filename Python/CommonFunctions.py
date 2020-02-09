@@ -62,7 +62,7 @@ def compare_arrays(array1, array2):
 def inches_to_feet(inches):
     feet = inches // 12
     remainder = inches % 12
-    return f"{feet}'{remainder}\""
+    return f"{feet}ft. {remainder}in."
 
 
 def dict_to_string(src_dict, linebreaks=False, left_justify=0):

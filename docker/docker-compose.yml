@@ -27,6 +27,8 @@ services:
       - "16686:16686"
       - "14268:14268"
       - "9411:9411"
+    networks:
+      - rpg
 
   sim_graphql:
     build: ./sim_graphql
@@ -40,17 +42,20 @@ services:
     depends_on:
       - pgs
 
-#  elk:
-#    image: sebp/elk
-#    container_name: elk
-#    ports:
-#      - "5601:5601"
-#      - "9200:9200"
-#      - "5044:5044"
-#    networks:
-#      - rpg
-#    volumes:
-#     - ~/rpg/docker_data/elk/data:/var/lib/elasticsearch
+  elk:
+    image: sebp/elk
+    container_name: elk
+    ports:
+      - "5601:5601"
+      - "9200:9200"
+      - "5044:5044"
+    networks:
+      - rpg
+    environment:
+      - CLUSTER_NAME=rpg
+    volumes:
+      - ~/rpg/docker_data/elk/data:/var/lib/elasticsearch
+      - ~/rpg/logs:/rpg_out
 #   web:
 #     image: php:apache  # pulling image from DockerHub
 #     container_name: web
@@ -59,7 +64,7 @@ services:
 #     ports:
 #       - 8081:80  # host:container
 #     depends_on:
-#       - simrest  # website is not going to work 
+#       - simrest  # website is not going to work
 #                  # unless observatory-service is running
   
 networks:

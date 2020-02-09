@@ -86,7 +86,7 @@ class Die(object):
         self.details.append(t_roll_details)
 
         # raise Exception('Test Exception')
-        self.logger.debug(t_roll_details, ctx)
+        self.logger.debug(msg=t_roll_details, ctx=ctx)
 
         return tot
 

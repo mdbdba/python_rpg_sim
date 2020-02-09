@@ -123,22 +123,32 @@ class Weapon(object):
 
     def __repr__(self):
 
-        out_str = (f'class: weapon, name: {self.name!r}, '
-              f'melee_weapon_ind: {self.melee_weapon_ind!r}, '
-              f'martial_weapon_ind: {self.martial_weapon_ind!r}, '
-              f'two_handed_ind: {self.two_handed_ind!r}, '
-              f'versatile_ind: {self.versatile_ind!r}, '
-              f'reach_ind: {self.reach_ind!r}, '
-              f'thrown_ind: {self.thrown_ind!r}, '
-              f'ranged_weapon_ind: {self.ranged_weapon_ind!r}, '
-              f'loading_ind: {self.loading_ind!r}, '
-              f'light_ind: {self.light_ind!r}, '
-              f'heavy_ind: {self.heavy_ind!r}, '
-              f'finesse_ind: {self.finesse_ind!r}, '
-              f'proficient_ind: {self.proficient_ind!r}, '
-              f'default_damage_type: {self.default_damage_type!r}, '
-              f'versatile_2hnd_mod: {self.versatile_2hnd_mod!r}, '
-              f'versatile_2hnd_die: {self.versatile_2hnd_die!r}, '
-              f'damage_dict: {self.damage_dict!r}')
+        out_str = (f'{{ "name": "{self.name}", '
+              f'"melee_weapon_ind": "{self.melee_weapon_ind}", '
+              f'"martial_weapon_ind": "{self.martial_weapon_ind}", '
+              f'"two_handed_ind": "{self.two_handed_ind}", '
+              f'"versatile_ind": "{self.versatile_ind}", '
+              f'"reach_ind": "{self.reach_ind}", '
+              f'"thrown_ind": "{self.thrown_ind}", '
+              f'"ranged_weapon_ind": "{self.ranged_weapon_ind}", '
+              f'"loading_ind": "{self.loading_ind}", '
+              f'"light_ind": "{self.light_ind}", '
+              f'"heavy_ind": "{self.heavy_ind}", '
+              f'"finesse_ind": "{self.finesse_ind}", '
+              f'"proficient_ind": "{self.proficient_ind}", '
+              f'"default_damage_type": "{self.default_damage_type}", '
+              f'"versatile_2hnd_mod": "{str(self.versatile_2hnd_mod)}", '
+              f'"versatile_2hnd_die": "{str(self.versatile_2hnd_die)}", '
+              f'"damage_dict": {{')
+        for dd in self.damage_dict.keys():
+            if self.damage_dict[dd] is None:
+                out_str = (f'{out_str} "{dd}": "None", ')
+            elif isinstance(self.damage_dict[dd], (str, bool)):
+                out_str = (f'{out_str} "{dd}": "{self.damage_dict[dd]}", ')
+            else:
+                out_str = (f'{out_str} "{dd}": {self.damage_dict[dd]!r}, ')
+        if out_str[-2:] == ', ':
+            out_str = out_str[:-2]
+        out_str = f'{out_str}}}'
 
         return out_str

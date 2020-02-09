@@ -259,7 +259,7 @@ class Character(object):
         self.cur_movement = 0
         msg = (f"{self.get_name()}: zero movement to " 
                f"{self.cur_movement}")
-        self.logger.debug(msg, self.ctx)
+        self.logger.debug(msg=msg, ctx=self.ctx)
 
     @ctx_decorator
     def half_movement(self, ctx):
@@ -267,7 +267,7 @@ class Character(object):
         self.cur_movement = self.cur_movement // 2
         msg = (f"{self.get_name()}: half movement to "
                f"{self.cur_movement}")
-        self.logger.debug(msg, self.ctx)
+        self.logger.debug(msg=msg, ctx=self.ctx)
 
     @ctx_decorator
     def double_movement(self, ctx):
@@ -275,7 +275,7 @@ class Character(object):
         self.cur_movement = self.get_base_movement() * 2
         msg = (f"{self.get_name()}: double movement to "
                f"{self.cur_movement}")
-        self.logger.debug(msg, self.ctx)
+        self.logger.debug(msg=msg, ctx=self.ctx)
 
     @ctx_decorator
     def reset_movement(self, ctx):
@@ -283,7 +283,7 @@ class Character(object):
         self.cur_movement = self.get_base_movement()
         msg = (f"{self.get_name()}: reset movement to "
                f"{self.cur_movement}")
-        self.logger.debug(msg, self.ctx)
+        self.logger.debug(msg=msg, ctx=self.ctx)
 
     @ctx_decorator
     def change_exhaustion_level(self, amount, ctx):
@@ -315,7 +315,7 @@ class Character(object):
 
         msg = (f"{self.get_name()}: exhaustion level change to "
                f"{self.exhaustion_level}")
-        self.logger.debug(msg, self.ctx)
+        self.logger.debug(msg=msg, ctx=self.ctx)
 
     @ctx_decorator
     def get_ability_modifier(self, ability, ctx):
@@ -390,7 +390,7 @@ class Character(object):
 
         msg = (f"{self.get_name()}: armorClass set to "
                f"{self.armor_class}")
-        self.logger.debug(msg, self.ctx)
+        self.logger.debug(msg=msg, ctx=self.ctx)
 
     @ctx_decorator
     def contest_check(self, ability, ctx, vantage='Normal'):
@@ -409,7 +409,7 @@ class Character(object):
 
         msg = (f"{self.get_name()}: contest_check "
                f"{ability} with {vantage} vantage returned {ret_val}")
-        self.logger.debug(msg, self.ctx)
+        self.logger.debug(msg=msg, ctx=self.ctx)
 
         return ret_val
 
@@ -418,7 +418,7 @@ class Character(object):
         ret_val = self.contest_check(ctx=ctx, ability='Dexterity', vantage=vantage)
         msg = (f"{self.get_name()}: roll_for_initiative "
                f"with {vantage} vantage returned {ret_val}")
-        self.logger.debug(msg, self.ctx)
+        self.logger.debug(msg=msg, ctx=self.ctx)
         return ret_val
 
     def get_racial_traits(self):
@@ -436,7 +436,7 @@ class Character(object):
                         ret_val = True
         msg = (f"{self.get_name()}: Proficiency for "
                f"with {ability} returned {ret_val}")
-        self.logger.debug(msg, self.ctx)
+        self.logger.debug(msg=msg, ctx=self.ctx)
 
         return ret_val
 
@@ -445,8 +445,8 @@ class Character(object):
         self.death_save_failed_cnt += amount
         if self.death_save_failed_cnt >= 3:
             self.alive = False
-            self.logger.debug(f'{self.get_name()}: Three failed death saves. '
-                              f'Character has died.', self.ctx)
+            self.logger.debug(msg=f'{self.get_name()}: Three failed death saves. '
+                              f'Character has died.', ctx=self.ctx)
 
     @ctx_decorator
     def stabilize(self, ctx):
@@ -457,7 +457,7 @@ class Character(object):
         self.stabilized = True
         self.alive = True
         self.unconscious_ind = False
-        self.logger.debug(f'{self.get_name()}: Has stabilized.', self.ctx)
+        self.logger.debug(msg=f'{self.get_name()}: Has stabilized.', ctx=self.ctx)
 
     @ctx_decorator
     def death_save(self, ctx, vantage='Normal'):
@@ -493,7 +493,7 @@ class Character(object):
         #                f'Character has died.')
 
         msg = f"{self.get_name()}: {tmp_str}"
-        self.logger.debug(msg, self.ctx)
+        self.logger.debug(msg=msg, ctx=self.ctx)
 
     @ctx_decorator
     def check(self, ctx, skill, vantage='Normal', dc=10):
@@ -562,7 +562,7 @@ class Character(object):
             tmp_str = f'{tmp_str} (false)\n'
 
         msg = f"{self.get_name()}: {tmp_str}"
-        self.logger.debug(msg, self.ctx)
+        self.logger.debug(msg=msg, ctx=self.ctx)
 
         return res
 
@@ -614,7 +614,7 @@ class Character(object):
 
         #     for i in tmp_str.splitlines():
         #         self.logger.debug(f"{self.get_name()}: {i}", self.ctx)
-        self.logger.debug(f"{self.get_name()}: {tmp_str}", self.ctx)
+        self.logger.debug(msg=f"{self.get_name()}: {tmp_str}", ctx=self.ctx)
 
     @ctx_decorator
     def get_action(self, ctx, dist_list):
@@ -688,10 +688,10 @@ class Character(object):
                          damage_modifier=damage_modifier,
                          versatile_use_2handed=False, vantage=vantage)
 
-        self.logger.debug(f"{self.get_name()}: Ranged Attack Value: "
-                          f"{attempt.attack_value}", self.ctx)
-        self.logger.debug(f"{self.get_name()}: Ranged Poss. damage: "
-                          f"{attempt.possible_damage}", self.ctx)
+        self.logger.debug(msg=f"{self.get_name()}: Ranged Attack Value: "
+                          f"{attempt.attack_value}", ctx=self.ctx)
+        self.logger.debug(msg=f"{self.get_name()}: Ranged Poss. damage: "
+                          f"{attempt.possible_damage}", ctx=self.ctx)
 
     @ctx_decorator
     def is_not_using_shield(self, ctx):
@@ -739,10 +739,10 @@ class Character(object):
         attack_roll: tuple = (attempt.natural_value, attempt.attack_value)
         self.attack_rolls.append(attack_roll)
 
-        self.logger.debug(f"{self.get_name()}: Melee Attack Value: "
-                          f"{attempt.attack_value}", self.ctx)
-        self.logger.debug(f"{self.get_name()}: Melee Poss. damage: "
-                          f"{attempt.possible_damage}", self.ctx)
+        self.logger.debug(msg=f"{self.get_name()}: Melee Attack Value: "
+                          f"{attempt.attack_value}", ctx=self.ctx)
+        self.logger.debug(msg=f"{self.get_name()}: Melee Poss. damage: "
+                          f"{attempt.possible_damage}", ctx=self.ctx)
         return ret_val
 
     @ctx_decorator
@@ -752,7 +752,7 @@ class Character(object):
                                 f'{vantage}, {possible_damage}, ' 
                                 f'{damage_type})')
 
-        self.logger.debug(f"{self.get_name()} attempts to defend against melee.", self.ctx)
+        self.logger.debug(msg=f"{self.get_name()} attempts to defend against melee.", ctx=self.ctx)
 
         d = Die(ctx=ctx, sides=20)
         if self.prone_ind:
@@ -778,8 +778,8 @@ class Character(object):
             ret = False
             if self.cur_hit_points < 1:
                 self.incr_death_save_failed_cnt(ctx=ctx, amount=2)
-                self.logger.debug(f"{self.get_name()}: attacked while unconscious. Incurs two failed Death Saves.",
-                                  self.ctx)
+                self.logger.debug(msg=f"{self.get_name()}: attacked while unconscious. Incurs two failed Death Saves.",
+                                  ctx=self.ctx)
 
             if possible_damage > 0:
                 self.damage(ctx=ctx, amount=possible_damage, damage_type=damage_type)
@@ -791,7 +791,7 @@ class Character(object):
         # for i in tmp_str.splitlines():
         #     self.logger.debug(f"{self.get_name()}: {i}", self.ctx)
         # for i in tmp_str.splitlines():
-        self.logger.debug(f"{self.get_name()}: {tmp_str}", self.ctx)
+        self.logger.debug(msg=f"{self.get_name()}: {tmp_str}", ctx=self.ctx)
 
         return ret
 
@@ -829,7 +829,7 @@ class Character(object):
             ret = True
 
         msg = f"{self.get_name()}: {tmp_str}"
-        self.logger.debug(msg, self.ctx)
+        self.logger.debug(msg=msg, ctx=self.ctx)
 
         return ret
 
@@ -851,7 +851,7 @@ class Character(object):
 
         # for i in tmp_str.splitlines():
         #    self.logger.debug(f"{self.get_name()}: {i}", self.ctx)
-        self.logger.debug(f"{self.get_name()}: {tmp_str}", self.ctx)
+        self.logger.debug(msg=f"{self.get_name()}: {tmp_str}", ctx=self.ctx)
 
     @ctx_decorator
     def revive(self, ctx):
@@ -860,7 +860,7 @@ class Character(object):
         self.cur_hit_points = self.hit_points
 
         msg = f"{self.get_name()}: Has been Revived."
-        self.logger.debug(msg, self.ctx)
+        self.logger.debug(msg=msg, ctx=self.ctx)
 
     @ctx_decorator
     def get_ranged_range(self, ctx):

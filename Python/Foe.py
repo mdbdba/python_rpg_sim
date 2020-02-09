@@ -207,6 +207,40 @@ class Foe(Character):
         outstr = f'\n{outstr}\n'
         return outstr
 
+    def __repr__(self):
+        outstr = (f'{{ "class": "{self.__class__.__name__}", '
+                  f'"gender": "{self.get_gender()}", '
+                  f'"name": "{self.get_name()}", '
+                  f'"race": "{self.get_race()}", '
+                  f'"foe_type": "{self.foe_type}", '
+                  f'"size": "{self.size}", '
+                  f'"alignment": "{self.get_alignment_str() }", '
+                  f'"alignment abbrev": "{self.get_alignment_abbrev(ctx=self.ctx) }", '
+                  f'"base_walking_speed": "{self.base_walking_speed}", '
+                  f'"challenge_level": "{self.challenge_level}", '
+                  f'"ability_array_str": "{self.ability_array_str}", '
+                  f'"returned ability_array": {self.get_ability_array()}, '
+                  f'"ability_modifier_array": "{self.ability_modifier_array }", '
+                  f'"hit_point_die": {self.hit_point_die }, '
+                  f'"hit_point_modifier": {self.hit_point_modifier }, '
+                  f'"hit_point_adjustment": {self.hit_point_adjustment}, '
+                  f'"standard_hit_points": {self.standard_hit_points}, '
+                  f'"armor_class": {self.armor_class}, '
+                  f'"hit_points": {self.hit_points}, '
+                  f'"cur_hit_points": {self.cur_hit_points}, '
+                  f'"temp_hit_points": {self.temp_hit_points}, '
+                  f'"ranged_weapon": "{self.ranged_weapon }", '
+                  f'"melee_weapon": "{self.melee_weapon }", '
+                  f'"ranged_ammunition_type": "{self.ranged_ammunition_type }", '
+                  f'"ranged_ammunition_amt": {self.ranged_ammunition_amt }, '
+                  f'"armor": "{self.armor }", '
+                  f'"shield": "{self.shield }", '
+                  f'"source_material": "{self.source_material }", '
+                  f'"source_credit_url": "{self.source_credit_url}", '
+                  f'"source_credit_comment": "{self.source_credit_comment}" }}')
+
+        return outstr
+
 
 if __name__ == '__main__':
     db = InvokePSQL()
@@ -218,3 +252,4 @@ if __name__ == '__main__':
     a1.heal(ctx=ctx, amount=10)
     a1.melee_defend(ctx=ctx, modifier=13, possible_damage=(2 * a1.hit_points),
                     damage_type='Bludgeoning')
+    print(a1.__repr__())
