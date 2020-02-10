@@ -2,6 +2,8 @@ from dataclasses import dataclass, field
 from typing import Dict, List   # Others: Set, Tuple, Optional
 from CommonFunctions import string_to_string_array
 from CommonFunctions import get_random_key
+# from Foe import Foe
+# from PlayerCharacter import PlayerCharacter
 from datetime import datetime
 
 import wrapt
@@ -96,6 +98,8 @@ class Crumb:
             if mhd not in self.hide_arg_list:
                 if isinstance(self.methodParams[mhd], (str, bool)):
                     out_str = (f'{out_str} {mhd} = \'{self.methodParams[mhd]}\', ')
+                # elif isinstance(self.methodParams[mhd], (Foe, PlayerCharacter)):
+                #     out_str = (f'{out_str} {mhd} = \'{self.methodParams[mhd].get_user_header()}\', ')
                 else:
                     out_str = (f'{out_str} {mhd} = {self.methodParams[mhd]}, ')
         if out_str[-2:] == ', ':
@@ -118,6 +122,8 @@ class Crumb:
                     out_str = (f'{out_str} "{mhd}": "None", ')
                 elif isinstance(self.methodParams[mhd], (str, bool)):
                     out_str = (f'{out_str} "{mhd}": "{self.methodParams[mhd]}", ')
+            #     elif isinstance(self.methodParams[mhd], (Foe, PlayerCharacter)):
+            #         out_str = (f'{out_str} "{mhd}": "{self.methodParams[mhd].get_user_header()}", ')
                 else:
                     out_str = (f'{out_str} "{mhd}": {self.methodParams[mhd]!r}, ')
         if out_str[-2:] == ', ':
@@ -125,7 +131,6 @@ class Crumb:
         out_str = (f'{out_str}}}, "roll_ids": {self.rollIds}, '
                    f'"timestamp": "{str(self.timestamp)}"}}')
         return out_str
-
 
 def init_crumbs():
     return []
@@ -182,6 +187,23 @@ class Ctx:
             return_value = []
         return return_value
 
+    def __repr__(self):
+        out_str = (f'{{ "app_username": "{self.app_username}", '
+                   f'"fullyqualified": "{self.fullyqualified}", '
+                   f'"logger_name": "{self.logger_name}", '
+                   f'"trace_id": "{self.trace_id}", '
+                   f'"request_type": "{self.request_type}", '
+                   f'"study_instance_id": "{self.study_instance_id}", '
+                   f'"study_name": "{self.study_name}", '
+                   f'"series_id": "{self.series_id}", '
+                   f'"encounter_id": "{self.encounter_id}", '
+                   f'"round": "{self.round}", '
+                   f'"turn": "{self.turn}", '
+                   f'"crumbs": [{self.crumbs}] }}')
+
+        return out_str
+
+
 class RpgLogging:
     def __init__(self, logger_name='rpg_logging', level_threshold='warning'):
         switcher = {
@@ -207,31 +229,31 @@ class RpgLogging:
         )
         structlog.configure(
             processors=[
-                structlog.stdlib.filter_by_level,
+                # structlog.stdlib.filter_by_level,
                 structlog.stdlib.add_logger_name,
                 structlog.stdlib.add_log_level,
                 structlog.stdlib.PositionalArgumentsFormatter(),
                 structlog.processors.TimeStamper(fmt="iso"),
                 structlog.processors.StackInfoRenderer(),
                 structlog.processors.format_exc_info,
-                # structlog.processors.UnicodeDecoder(),
+                 structlog.processors.UnicodeDecoder(),
                 structlog.stdlib.render_to_log_kwargs,
-                structlog.processors.ExceptionPrettyPrinter(),
-                # structlog.processors.JSONRenderer(indent=4),
+                # structlog.processors.ExceptionPrettyPrinter(),
+                structlog.processors.JSONRenderer(indent=4),
             ],
             context_class=dict,
             logger_factory=structlog.stdlib.LoggerFactory(),
             wrapper_class=structlog.stdlib.BoundLogger,
             cache_logger_on_first_use=True,
         )
-        formatter = structlog.stdlib.ProcessorFormatter(
-            # processor=structlog.dev.ConsoleRenderer()
-            processor=structlog.processors.JSONRenderer()
-        )
-        handler = logging.StreamHandler()
-        handler.setFormatter(formatter)
+        # formatter = structlog.stdlib.ProcessorFormatter(
+        #     # processor=structlog.dev.ConsoleRenderer()
+        #     processor=structlog.processors.JSONRenderer()
+        # )
+        # handler = logging.StreamHandler(sys.stdout)
+        # handler.setFormatter(formatter)
         self.logger = structlog.get_logger(self.logger_name)
-        self.logger.addHandler(handler)
+        # self.logger.addHandler(handler)
         self.logger.setLevel(self.log_level)
         # self.logger.info("logger configured")
 

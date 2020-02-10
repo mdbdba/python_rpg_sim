@@ -734,4 +734,8 @@ if __name__ == '__main__':
                          class_candidate="Barbarian",
                          debug_ind=1)
 
+    print(a1.__repr__())
+    print(a2.__repr__())
+    print(a5.__repr__())
+    print(a6.__repr__())
     print(a7.__repr__())

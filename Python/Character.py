@@ -616,6 +616,9 @@ class Character(object):
         #         self.logger.debug(f"{self.get_name()}: {i}", self.ctx)
         self.logger.debug(msg=f"{self.get_name()}: {tmp_str}", ctx=self.ctx)
 
+    def get_user_header(self):
+        return f'{self.name}({self.cur_hit_points}/{self.hit_points})'
+
     @ctx_decorator
     def get_action(self, ctx, dist_list):
         ret_val = "Done"
