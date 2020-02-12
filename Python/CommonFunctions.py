@@ -2,6 +2,8 @@ import math
 import os
 import fnmatch
 import sys
+import datetime
+import json
 
 from os import urandom
 from random import randint
@@ -98,3 +100,9 @@ def find_file(file_name: str) -> str:
         if fnmatch.fnmatch(file, file_name):
             return os.path.join(curpath, file)
 
+def fix_date_for_json(o):
+    if isinstance(o, datetime.datetime):
+        return o.__str__()
+
+def fix_dict_for_json(d):
+    return json.loads(json.dumps(d, default=fix_date_for_json))

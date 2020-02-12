@@ -58,6 +58,7 @@ class Encounter(object):
             self.Opponents = opponents
             self.active = True
             self.round = 0
+            self.last_turn = 0
             self.winning_list = []
             self.winning_list_name = ""
             # if ((self.debug_ind == 1) and
@@ -104,10 +105,18 @@ class Encounter(object):
         characters_stats_dict = {'Heroes': [], 'Opponents': []}
 
         for hero in self.Heroes:
-            characters_stats_dict['Heroes'].append(hero.get_character_stats(ctx=ctx))
+            t_id = { "name": hero.get_name(),
+                     "side": "Heroes"
+                   }
+            t_stats = hero.get_character_stats(ctx=ctx)
+            characters_stats_dict['Heroes'].append({**t_id, **t_stats})
 
         for opponent in self.Opponents:
-            characters_stats_dict['Opponents'].append(opponent.get_character_stats(ctx=ctx))
+            t_id = { "name": opponent.get_name(),
+                     "side": "Opponents"
+                   }
+            t_stats = opponent.get_character_stats(ctx=ctx)
+            characters_stats_dict['Opponents'].append({**t_id, **t_stats})
 
         return characters_stats_dict
 
@@ -245,6 +254,7 @@ class Encounter(object):
                     if self.active:
                         self.turn(ctx=ctx, initiative_ind=i, waiting_for=waiting_for)
                         self.active = self.still_active(ctx=ctx)
+                        self.last_turn = i
 
                 if self.active:
                     self.round += 1
@@ -266,22 +276,25 @@ class Encounter(object):
         with self.tracer.span(name='wrap_up'):
             self.stats.winning_team = self.winning_list_name
             self.stats.duration_rds = self.round
-            if self.debug_ind == 1:
-                jdict = {
-                    "winner": self.winning_list_name,
-                    "round": self.round,
-                    "surviving_members": [],
-                    "final_field_map": [] }
-                for i in range(len(self.winning_list)):
-                    if self.winning_list[i].alive:
-                        jdict["surviving_members"].append(self.winning_list[i].get_name())
+            jdict = {
+                "winner": self.winning_list_name,
+                "result_round": self.round,
+                "result_turn": self.last_turn,
+                "surviving_members": [],
+                "final_field_map": [] }
+            for i in range(len(self.winning_list)):
+                if self.winning_list[i].alive:
+                    jdict["surviving_members"].append(self.winning_list[i].get_name())
 
-                for x in range(len(self.field_map)):
-                    if self.field_map[x].occupied:
-                        a, b = self.get_grid_position(x)
-                        occupied_loc = [x, a, b, self.field_map[x].occupied_by, self.field_map[x].occupied_by_index]
-                        jdict["final_field_map"].append(occupied_loc)
-                self.logger.debug(msg='Encounter Result', json_dict=jdict, ctx=ctx)
+            for x in range(len(self.field_map)):
+                if self.field_map[x].occupied:
+                    a, b = self.get_grid_position(x)
+                    occupied_loc = [ self.get_player(self.field_map[x].occupied_by,
+                                    self.field_map[x].occupied_by_index).get_name(),
+                                    self.field_map[x].occupied_by, x, a, b]
+                    jdict["final_field_map"].append(occupied_loc)
+            self.logger.debug(msg='encounter_result', json_dict=jdict, ctx=ctx)
+
     @ctx_decorator
     def still_active(self, ctx: Ctx):
         with self.tracer.span(name='still_active'):

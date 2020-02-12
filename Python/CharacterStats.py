@@ -92,3 +92,5 @@ class CharacterStats:
     def get_damage_taken(self):
         return self.damage_taken_dict
 
+    def get_dict(self):
+        return self.__dict__

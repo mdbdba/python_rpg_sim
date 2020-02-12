@@ -156,7 +156,7 @@ class Character(object):
 
     @ctx_decorator
     def get_character_stats(self, ctx):
-        return self.stats
+        return self.stats.get_dict()
 
     def get_name(self):
         return "Generic Character"

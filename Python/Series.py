@@ -11,7 +11,7 @@ from TraceIt import TraceIt
 from SeriesStats import SeriesStats
 # from EncounterStats import EncounterStats
 from CharacterStats import CharacterStats
-
+from CommonFunctions import fix_dict_for_json
 from Ctx import Ctx
 from Ctx import ctx_decorator
 from Ctx import RpgLogging
@@ -30,6 +30,7 @@ class Series(object):
         self.study_instance_id = study_instance_id
         self.series_id = series_id
         self.stats = SeriesStats(study_instance_id=self.study_instance_id, series_id=self.series_id)
+        self.logger = RpgLogging(logger_name=ctx.logger_name)
         self.t = tracer
         self.encounter_repetitions = encounter_repetitions
         self.encounter_param_dict = encounter_param_dict
@@ -175,9 +176,12 @@ class Series(object):
 
             print(e.get_characters_stats(ctx=ctx))
             # self.stats.update_totals()
+            self.logger.debug(ctx=ctx,msg='character_stats',
+                              json_dict=fix_dict_for_json(e.get_characters_stats(ctx=ctx)))
+
 
         print(self.stats)
-
+        self.logger.debug(ctx=ctx,msg='series_stats', json_dict=fix_dict_for_json(self.stats.get_dict()))
 
 if __name__ == '__main__':
     series_id = random.randrange(0, 100000, 2)

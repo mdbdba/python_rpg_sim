@@ -175,33 +175,34 @@ class Ctx:
 
     def get_last_crumb(self):
         if len(self.crumbs) > 0:
-            return_value = self.crumbs[-1]
+            return_value = self.crumbs[-1].__dict__
         else:
             return_value = []
         return return_value
 
     def get_crumbs(self):
         if len(self.crumbs) > 0:
-            return_value = self.crumbs
+            return_value = self.crumbs.__dict__
         else:
             return_value = []
         return return_value
 
     def __repr__(self):
-        out_str = (f'{{ "app_username": "{self.app_username}", '
-                   f'"fullyqualified": "{self.fullyqualified}", '
-                   f'"logger_name": "{self.logger_name}", '
-                   f'"trace_id": "{self.trace_id}", '
-                   f'"request_type": "{self.request_type}", '
-                   f'"study_instance_id": "{self.study_instance_id}", '
-                   f'"study_name": "{self.study_name}", '
-                   f'"series_id": "{self.series_id}", '
-                   f'"encounter_id": "{self.encounter_id}", '
-                   f'"round": "{self.round}", '
-                   f'"turn": "{self.turn}", '
-                   f'"crumbs": [{self.crumbs}] }}')
+        # out_str = (f'{{ "app_username": "{self.app_username}", '
+        #            f'"fullyqualified": "{self.fullyqualified}", '
+        #            f'"logger_name": "{self.logger_name}", '
+        #            f'"trace_id": "{self.trace_id}", '
+        #            f'"request_type": "{self.request_type}", '
+        #            f'"study_instance_id": "{self.study_instance_id}", '
+        #            f'"study_name": "{self.study_name}", '
+        #            f'"series_id": "{self.series_id}", '
+        #            f'"encounter_id": "{self.encounter_id}", '
+        #            f'"round": "{self.round}", '
+        #            f'"turn": "{self.turn}", '
+        #            f'"crumbs": [{self.crumbs}] }}')
 
-        return out_str
+        # return out_str
+        return 'Ctx'
 
 
 class RpgLogging:
@@ -285,10 +286,12 @@ class RpgLogging:
             tmp_dict['_text'] = msg
 
         if json_dict is not None and len(json_dict) > 0:
-            return_dict = { **tmp_dict, **json_dict}
-        else:
-            return_dict = tmp_dict
-        return return_dict
+            tmp_dict['_json'] = json_dict
+        #     return_dict = { **tmp_dict, **json_dict}
+        # else:
+        #     return_dict = tmp_dict
+
+        return tmp_dict
 
     def notset(self, ctx, msg=None, json_dict=None):
         self.logger.notset(self.get_log_rec(msg=msg, json_dict=json_dict, ctx=ctx))

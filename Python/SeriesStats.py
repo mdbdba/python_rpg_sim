@@ -45,3 +45,18 @@ class SeriesStats:
         self.series_total_attack_attempts +=  encounter_stats.opponents_attack_attempts
         self.series_total_attack_successes += encounter_stats.heroes_attack_successes
         self.series_total_attack_successes += encounter_stats.opponents_attack_successes
+
+    def get_dict(self):
+        return self.__dict__
+    # def __repr__(self):
+    #     out_str = (f'"study_instance_id": "{self.study_instance_id}", '
+    #                f'"series_id":  "{self.series_id}", '
+    #                f'"starting_timestamp": "{str(self.starting_timestamp)}", '
+    #                f'"update_timestamp": "{str(self.update_timestamp)}", '
+    #                f'"series_heroes_attack_attempts": {self.series_heroes_attack_attempts}, '
+    #                f'"series_heroes_attack_successes": {self.series_heroes_attack_successes}, '
+    #                f'"series_opponents_attack_attempts": {self.series_opponents_attack_attempts}, '
+    #                f'"series_opponents_attack_successes": {self.series_opponents_attack_successes}, '
+    #                f'"series_total_attack_attempts": {self.series_total_attack_attempts}, '
+    #                f'"series_total_attack_successes": {self.series_total_attack_successes}, ')
+    #     return out_str
