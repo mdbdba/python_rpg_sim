@@ -62,7 +62,6 @@ class PlayerCharacter(Character):
 
         if character_id == -1:
             self.create_character(db=db,
-                                  ctx=ctx,
                                   race_candidate=race_candidate,
                                   class_candidate=class_candidate,
                                   gender_candidate=gender_candidate,
@@ -70,17 +69,17 @@ class PlayerCharacter(Character):
                                   level=self.level)
         else:
             self.character_id = character_id
-            self.get_character(db=db, ctx=ctx, character_id=self.character_id)
+            self.get_character(db=db, character_id=self.character_id)
 
-        self.feature_obj = self.class_obj.getClassLevelFeature(ctx=ctx, level=self.level, db=db)
-        self.reset_movement(ctx=ctx)
-        self.set_finesse_ability(ctx=ctx)
-        self.set_proficiency_bonus(ctx=ctx)
-        self.set_damage_adjs(db=db, ctx=ctx)
-        self.set_armor_class(ctx=ctx)
+        self.feature_obj = self.class_obj.getClassLevelFeature(level=self.level, db=db)
+        self.reset_movement()
+        self.set_finesse_ability()
+        self.set_proficiency_bonus()
+        self.set_damage_adjs(db=db)
+        self.set_armor_class()
 
         if character_id == -1:
-            self.save_character(db=db, ctx=ctx)
+            self.save_character(db=db)
 
         self.class_eval[-1]["character_id"] = self.character_id
         self.class_eval[-1]["race"] = self.get_race()
@@ -101,10 +100,10 @@ class PlayerCharacter(Character):
             self.logger.debug(msg=f"{self.get_name()}: {pi}", ctx=ctx)
 
     @ctx_decorator
-    def assign_race(self, ctx, race_candidate):
+    def assign_race(self, race_candidate):
         self.last_method_log = f'assign_race({race_candidate})'
         if race_candidate == "Random":
-            rand_obj = CharacterRace(db=self.db, ctx=ctx, race_candidate=race_candidate)
+            rand_obj = CharacterRace(db=self.db, ctx=self.ctx, race_candidate=race_candidate)
             race_to_use = rand_obj.race
         else:
             race_to_use = race_candidate
@@ -112,12 +111,11 @@ class PlayerCharacter(Character):
         if self.debug_ind == 1:
             self.class_eval[-1]["RaceToUse"] = race_to_use
 
-        return CharacterRace(db=self.db, ctx=ctx, race_candidate=race_to_use)
+        return CharacterRace(db=self.db, ctx=self.ctx, race_candidate=race_to_use)
 
     @ctx_decorator
     def create_character(self,
                          db,
-                         ctx,
                          race_candidate,
                          class_candidate,
                          gender_candidate,
@@ -130,32 +128,31 @@ class PlayerCharacter(Character):
                                 f'{gender_candidate}, '
                                 f'{ability_array_type}, '
                                 f'{level})')
-        self.assign_ability_array(ctx=ctx)
-        self.race_obj = self.assign_race(ctx=ctx, race_candidate=race_candidate)
-        self.class_obj = self.assign_class(ctx=ctx, class_candidate=class_candidate)
-        self.race_obj.set_randoms(db=self.db, ctx=ctx, gender=self.gender)
+        self.assign_ability_array()
+        self.race_obj = self.assign_race(race_candidate=race_candidate)
+        self.class_obj = self.assign_class(class_candidate=class_candidate)
+        self.race_obj.set_randoms(db=self.db, gender=self.gender)
 
-        self.ability_array_obj.set_preference_array(ctx=ctx, pref_array=self.get_ability_sort_array())
-        self.ability_array_obj.set_racial_array(ctx=ctx,
-                                                bonus_array=self.get_racial_ability_bonus_array())
+        self.ability_array_obj.set_preference_array(pref_array=self.get_ability_sort_array())
+        self.ability_array_obj.set_racial_array(bonus_array=self.get_racial_ability_bonus_array())
 
         # Since ability array bonuses are figured when levels change we
         # will figure hit points the same way.  That way of the constitution
         # mod changes from level to level the hit points will reflect that.
         if self.class_obj.melee_weapon is not None:
-            self.melee_weapon_obj = Weapon(db=db, ctx=ctx, name=self.get_melee_weapon())
+            self.melee_weapon_obj = Weapon(db=db, ctx=self.ctx, name=self.get_melee_weapon())
             self.melee_weapon_obj.setWeaponProficient()
         if self.class_obj.ranged_weapon is not None:
-            self.ranged_weapon_obj = Weapon(db=db, ctx=ctx, name=self.get_ranged_weapon())
+            self.ranged_weapon_obj = Weapon(db=db, ctx=self.ctx, name=self.get_ranged_weapon())
 
         self.hit_points = 0
-        self.adjust_for_levels(db=db, ctx=ctx)
-        self.set_armor_class(ctx=ctx)
+        self.adjust_for_levels(db=db)
+        self.set_armor_class()
         self.cur_hit_points = self.hit_points
         self.temp_hit_points = 0
 
     @ctx_decorator
-    def adjust_for_levels(self, db, ctx):
+    def adjust_for_levels(self, db):
         for l in range(self.level):
             level = l + 1  # range indexes start at 0.
             # if there's ability change for this level make that change
@@ -167,14 +164,14 @@ class PlayerCharacter(Character):
             result = db.query(sql)
             if int(result[0][0]) == 1:
                 # print("\n\n\nDoing ability_score_improvement\n\n\n")
-                self.ability_array_obj.ability_score_improvement(ctx=ctx)
+                self.ability_array_obj.ability_score_improvement()
 
             # since the constitution could change at each level
             # that would affect the hit point amount. So, have to
             # do it for each level.
-            self.set_ability_modifier_array(db=db, ctx=ctx)
+            self.set_ability_modifier_array(db=db)
             # Add new hit points
-            self.hit_points = self.add_hit_points(db=self.db, ctx=ctx, hit_die=self.get_hit_die(),
+            self.hit_points = self.add_hit_points(db=self.db, hit_die=self.get_hit_die(),
                                                   modifier=self.ability_modifier_array[2])
             if self.debug_ind == 1:
                 hp_str = f"hitPoints_level_{level}"
@@ -187,7 +184,7 @@ class PlayerCharacter(Character):
                     self.class_eval[-1][dfstr] = (self.hit_points - tlhp)
 
     @ctx_decorator
-    def set_ability_modifier_array(self, db, ctx):
+    def set_ability_modifier_array(self, db):
         q = self.get_ability_array()
         for r in range(len(q)):
             sql = (f"select modifier "
@@ -198,7 +195,7 @@ class PlayerCharacter(Character):
             self.ability_modifier_array[r] = int(result[0][0])
 
     @ctx_decorator
-    def add_hit_points(self, db, ctx, hit_die, modifier):
+    def add_hit_points(self, db, hit_die, modifier):
         self.last_method_log = (f'assign_hit_points( '
                                 f'{hit_die}, '
                                 f'{modifier})')
@@ -223,7 +220,7 @@ class PlayerCharacter(Character):
         return ret_val
 
     @ctx_decorator
-    def save_character(self, db, ctx):
+    def save_character(self, db):
         self.last_method_log = f'save_character(db)'
         raw_ability_string = array_to_string(self.get_raw_ability_array())
         ability_base_string = array_to_string(self.get_raw_ability_array())
@@ -260,7 +257,7 @@ class PlayerCharacter(Character):
         self.character_id = db.insert_and_return_id(sql)
 
     @ctx_decorator
-    def valid_character_id(self, db, ctx, character_id):
+    def valid_character_id(self, db, character_id):
         self.last_method_log = (f'valid_character_id(db, '
                               f'{character_id})')
         sql = (f"select count(id) from dnd_5e.character where "
@@ -273,10 +270,10 @@ class PlayerCharacter(Character):
             return False
 
     @ctx_decorator
-    def get_character(self, db, ctx, character_id):
+    def get_character(self, db, character_id):
         self.last_method_log = (f'get_character(db, '
                               f'{character_id})')
-        if self.valid_character_id(db=db, ctx=ctx, character_id=character_id):
+        if self.valid_character_id(db=db, character_id=character_id):
             sql = (f"select name, gender, race, class, "
                    f"level, TTA, raw_ability_string, "
                    f"ability_base_string, ability_string, "
@@ -290,8 +287,8 @@ class PlayerCharacter(Character):
             results = db.query(sql)
 
             self.gender = results[0][1]
-            self.race_obj = self.assign_race(ctx=ctx, race_candidate=results[0][2])
-            self.race_obj.set_randoms( ctx=ctx,
+            self.race_obj = self.assign_race(race_candidate=results[0][2])
+            self.race_obj.set_randoms(
                    name=results[0][0],
                    alignment={"alignment": results[0][16],
                               "abbreviation": results[0][17]},
@@ -301,7 +298,7 @@ class PlayerCharacter(Character):
                    eye_color=results[0][21])
             self.race_obj.height = results[0][14]
             self.race_obj.weight = results[0][15]
-            self.class_obj = self.assign_class(ctx=ctx, class_candidate=results[0][3])
+            self.class_obj = self.assign_class(class_candidate=results[0][3])
             self.level = results[0][4]
             self.tta = results[0][5]
             self.ability_array_str = results[0][6]
@@ -314,11 +311,11 @@ class PlayerCharacter(Character):
             self.class_obj.armor = results[0][26]
             self.class_obj.shield = results[0][27]
 
-            self.assign_ability_array(ctx=ctx, sort_array=self.class_obj.getClassAbilitySortArray())
-            self.ability_array_obj.set_racial_array(ctx=ctx, bonus_array=self.race_obj.ability_bonuses)
+            self.assign_ability_array(sort_array=self.class_obj.getClassAbilitySortArray())
+            self.ability_array_obj.set_racial_array(bonus_array=self.race_obj.ability_bonuses)
             self.hit_points = 0
-            self.adjust_for_levels(db=db, ctx=ctx)
-            self.set_armor_class(ctx=ctx)
+            self.adjust_for_levels(db=db)
+            self.set_armor_class()
             self.cur_hit_points = self.hit_points
             self.temp_hit_points = 0
 
@@ -326,10 +323,10 @@ class PlayerCharacter(Character):
             # will figure hit points the same way.  That way of the constitution
             # mod changes from level to level the hit points will reflect that.
             if self.class_obj.melee_weapon is not None:
-                self.melee_weapon_obj = Weapon(db=db, ctx=ctx, name=self.get_melee_weapon())
+                self.melee_weapon_obj = Weapon(db=db, ctx=self.ctx, name=self.get_melee_weapon())
                 self.melee_weapon_obj.setWeaponProficient()
             if self.class_obj.ranged_weapon is not None:
-                self.ranged_weapon_obj = Weapon(db=db, ctx=ctx, name=self.get_ranged_weapon())
+                self.ranged_weapon_obj = Weapon(db=db, ctx=self.ctx, name=self.get_ranged_weapon())
 
             tmp_rab_str = array_to_string(self.race_obj.ability_bonuses)
 
@@ -339,19 +336,19 @@ class PlayerCharacter(Character):
                            f"{ability_racial_mod_string} "
                            f"{tmp_rab_str}**\n")
                 print(tmp_str)
-            self.set_armor_class(ctx=ctx)
+            self.set_armor_class()
 
     def get_ability_sort_array(self):
         return self.class_obj.ability_sort_array
 
     @ctx_decorator
-    def set_preference_array(self, ctx, pref_array_str):
+    def set_preference_array(self, pref_array_str):
         tmp_array = string_to_array(pref_array_str)
         self.ability_array_obj.set_preference_array(pref_array=tmp_array)
         self.set_ability_modifier_array(self.db)
 
     @ctx_decorator
-    def set_racial_array(self, ctx, bonus_array):
+    def set_racial_array(self, bonus_array):
         tmp_array = string_to_array(bonus_array)
         self.ability_array_obj.set_racial_array(bonus_array=tmp_array)
         self.set_ability_modifier_array(self.db)
@@ -423,32 +420,32 @@ class PlayerCharacter(Character):
         return self.race_obj.traitContainer.traits
 
     @ctx_decorator
-    def assign_class(self, ctx, class_candidate):
+    def assign_class(self, class_candidate):
         self.last_method_log = f'assign_class(db, {class_candidate})'
 
         if class_candidate == "Random":
             tmp_class = getRandomClassName(self.db)
         else:
             tmp_class = class_candidate
-        obj = self.class_subclass_switch(ctx=ctx, class_candidate=tmp_class)
+        obj = self.class_subclass_switch(class_candidate=tmp_class)
 
         return obj
 
     @ctx_decorator
-    def class_subclass_switch(self, ctx, class_candidate):
+    def class_subclass_switch(self, class_candidate):
         switcher = {
-            'Barbarian': BarbarianPCClass(db=self.db, ctx=ctx),
-            'Bard': BardPCClass(db=self.db, ctx=ctx),
-            'Cleric': ClericPCClass(db=self.db, ctx=ctx),
-            'Druid': DruidPCClass(db=self.db, ctx=ctx),
-            'Fighter': FighterPCClass(db=self.db, ctx=ctx),
-            'Monk': MonkPCClass(db=self.db, ctx=ctx),
-            'Paladin': PaladinPCClass(db=self.db, ctx=ctx),
-            'Ranger': RangerPCClass(db=self.db, ctx=ctx),
-            'Rogue': RoguePCClass(db=self.db, ctx=ctx),
-            'Sorcerer': SorcererPCClass(db=self.db, ctx=ctx),
-            'Warlock': WarlockPCClass(db=self.db, ctx=ctx),
-            'Wizard': WizardPCClass(db=self.db, ctx=ctx)
+            'Barbarian': BarbarianPCClass(db=self.db, ctx=self.ctx),
+            'Bard': BardPCClass(db=self.db, ctx=self.ctx),
+            'Cleric': ClericPCClass(db=self.db, ctx=self.ctx),
+            'Druid': DruidPCClass(db=self.db, ctx=self.ctx),
+            'Fighter': FighterPCClass(db=self.db, ctx=self.ctx),
+            'Monk': MonkPCClass(db=self.db, ctx=self.ctx),
+            'Paladin': PaladinPCClass(db=self.db, ctx=self.ctx),
+            'Ranger': RangerPCClass(db=self.db, ctx=self.ctx),
+            'Rogue': RoguePCClass(db=self.db, ctx=self.ctx),
+            'Sorcerer': SorcererPCClass(db=self.db, ctx=self.ctx),
+            'Warlock': WarlockPCClass(db=self.db, ctx=self.ctx),
+            'Wizard': WizardPCClass(db=self.db, ctx=self.ctx)
         }
         return switcher.get(class_candidate, "Unknown Class")
 
@@ -461,7 +458,7 @@ class PlayerCharacter(Character):
     #         self.finesse_ability_mod = 'Dexterity'
 
     @ctx_decorator
-    def set_damage_adjs(self, db, ctx):
+    def set_damage_adjs(self, db):
         self.last_method_log = (f'setDamagedAdjs(db)')
         sql = (f"select rt.affected_name, rt.affect "
                f"from lu_racial_trait as rt "
@@ -485,7 +482,7 @@ class PlayerCharacter(Character):
                 dict_to_string(self.damage_adj))
 
     @ctx_decorator
-    def set_proficiency_bonus(self, ctx):
+    def set_proficiency_bonus(self):
         for a in range(len(self.feature_obj)):
             if self.feature_obj[a][2] == 'proficiency_bonus':
                 self.proficiency_bonus = self.feature_obj[a][4]
@@ -494,15 +491,15 @@ class PlayerCharacter(Character):
             self.class_eval[-1]["Proficiency Bonus"] = self.proficiency_bonus
 
     @ctx_decorator
-    def is_not_using_shield(self, ctx):
+    def is_not_using_shield(self):
         if self.class_obj.shield == 'None':
             ret_val = True
         else:
             ret_val = False
         return ret_val
 
-    def default_melee_attack(self, ctx, vantage='Normal'):
-        return self.melee_attack(ctx=ctx, weapon_obj=self.melee_weapon_obj, vantage=vantage)
+    def default_melee_attack(self, vantage='Normal'):
+        return self.melee_attack(weapon_obj=self.melee_weapon_obj, vantage=vantage)
 
     def __str__(self):
         outstr = (f'{self.__class__.__name__}\n'
@@ -705,7 +702,7 @@ if __name__ == '__main__':
                          ability_array_str='10,11,12,13,14,15',
                          debug_ind=1)
     print(a2)
-    a2.ability_array_obj.set_preference_array(ctx=ctx, pref_array=string_to_array(
+    a2.ability_array_obj.set_preference_array(pref_array=string_to_array(
                                             '5,0,2,1,4,3'
                                             ))
     a5 = PlayerCharacter(db=db, ctx=ctx, race_candidate='Hill dwarf', level=10, debug_ind=1)
@@ -719,14 +716,14 @@ if __name__ == '__main__':
                          class_candidate="Barbarian",
                          debug_ind=1)
 
-    a6.melee_defend(ctx=ctx, modifier=13, possible_damage=a6.hit_points,
+    a6.melee_defend(modifier=13, possible_damage=a6.hit_points,
                     damage_type='Bludgeoning')
-    a6.heal(ctx=ctx, amount=10)
-    a6.melee_defend(ctx=ctx, modifier=13, possible_damage=(2 * a6.hit_points),
+    a6.heal(amount=10)
+    a6.melee_defend(modifier=13, possible_damage=(2 * a6.hit_points),
                     damage_type='Bludgeoning')
-    a6.heal(ctx=ctx, amount=30)
-    t_a1 = a5.default_melee_attack(ctx=ctx)
-    a6.melee_defend(ctx=ctx, attack_value=t_a1[0], possible_damage=t_a1[1], damage_type=t_a1[2])
+    a6.heal(amount=30)
+    t_a1 = a5.default_melee_attack()
+    a6.melee_defend(attack_value=t_a1[0], possible_damage=t_a1[1], damage_type=t_a1[2])
 
     a7 = PlayerCharacter(db=db, ctx=ctx,
                          ability_array_str="6,6,6,6,6,6",

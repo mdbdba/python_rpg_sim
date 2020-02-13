@@ -91,13 +91,13 @@ class Character(object):
         self.armor_class = 0
         self.death_save_passed_cnt = 0
         self.death_save_failed_cnt = 0
-        self.tta = self.set_taliesin_temperament_archetype(ctx=ctx)
+        self.tta = self.set_taliesin_temperament_archetype()
         self.combat_preference = 'Melee'  # 'Melee' or Ranged'
         self.proficiency_bonus = 0
 
         self.last_method_log = ''
         if gender_candidate == "Random":
-            self.gender = self.assign_gender(ctx=ctx)
+            self.gender = self.assign_gender()
         else:
             self.gender = gender_candidate
 
@@ -121,7 +121,7 @@ class Character(object):
         self.ranged_ammunition_amt = None
         self.armor = None
         self.shield = None
-        self.set_finesse_ability(ctx=ctx)
+        self.set_finesse_ability()
 
         self.exhaustion_level = 0
         # 1   Disadvantage on Ability Checks
@@ -139,11 +139,11 @@ class Character(object):
         self.stats = None
         self.init_stats(study_instance_id=study_instance_id,
                         series_id=series_id,
-                        encounter_id=encounter_id,
-                        ctx=ctx)
+                        encounter_id=encounter_id
+                        )
 
     @ctx_decorator
-    def init_stats(self, study_instance_id, series_id, encounter_id, ctx):
+    def init_stats(self, study_instance_id, series_id, encounter_id):
         self.stats = CharacterStats(study_instance_id=study_instance_id,
                                     series_id=series_id,
                                     encounter_id=encounter_id,
@@ -155,29 +155,29 @@ class Character(object):
                                     )
 
     @ctx_decorator
-    def get_character_stats(self, ctx):
+    def get_character_stats(self):
         return self.stats.get_dict()
 
     def get_name(self):
         return "Generic Character"
 
     @ctx_decorator
-    def get_damage_taken(self, ctx):
+    def get_damage_taken(self):
         return self.stats.get_damage_taken()
 
     @ctx_decorator
-    def get_damage_dealt(self, ctx):
+    def get_damage_dealt(self):
         return self.stats.get_damage_dealt()
 
     @ctx_decorator
-    def inc_damage_dealt(self, damage_type, amount, ctx):
+    def inc_damage_dealt(self, damage_type, amount):
         return self.stats.inc_damage_dealt(damage_type=damage_type, amount=amount)
 
     @ctx_decorator
-    def assign_gender(self, ctx):
+    def assign_gender(self):
         self.last_method_log = f"assign_gender(db)"
-        d = Die(ctx=ctx, sides=100)
-        a = d.roll(ctx=ctx)
+        d = Die(ctx=self.ctx, sides=100)
+        a = d.roll()
         if a <= 40:
             result = "M"
         elif 40 < a <= 90:
@@ -191,7 +191,7 @@ class Character(object):
         return self.gender
 
     @ctx_decorator
-    def assign_ability_array(self, ctx, sort_array=None):
+    def assign_ability_array(self, sort_array=None):
         self.last_method_log = (f'assign_ability_array('
                                 f'{self.ability_array_str})')
         # if the string doesn't begin and end with a number, then it must
@@ -199,12 +199,12 @@ class Character(object):
         tmp = self.ability_array_str
         if tmp[0].isdigit() and tmp[-1].isdigit():
             tmp_array = string_to_array(tmp)
-            self.ability_array_obj = AbilityArray(ctx=ctx, array_type="Predefined",
+            self.ability_array_obj = AbilityArray(ctx=self.ctx, array_type="Predefined",
                                                   raw_array=tmp_array,
                                                   pref_array=sort_array,
                                                   debug_ind=self.debug_ind)
         else:
-            self.ability_array_obj = AbilityArray(ctx=ctx, array_type=tmp,
+            self.ability_array_obj = AbilityArray(ctx=self.ctx, array_type=tmp,
                                                   pref_array=sort_array,
                                                   debug_ind=self.debug_ind)
 
@@ -236,7 +236,7 @@ class Character(object):
         return self.ability_array_obj.get_imp_array()
 
     @ctx_decorator
-    def set_taliesin_temperament_archetype(self, ctx):
+    def set_taliesin_temperament_archetype(self):
         self.last_method_log = f'assignTaliesinTemperamentArchetype()'
         align_array = ['Bashful', 'Doc', 'Grumpy', 'Happy', 'Sneezy', 'Sleepy', 'Dopey']
         align_type = align_array[(random.randint(0, 6))]
@@ -254,7 +254,7 @@ class Character(object):
         return 15
 
     @ctx_decorator
-    def zero_movement(self, ctx):
+    def zero_movement(self):
         self.last_method_log = f'zero_movement()'
         self.cur_movement = 0
         msg = (f"{self.get_name()}: zero movement to " 
@@ -262,7 +262,7 @@ class Character(object):
         self.logger.debug(msg=msg, ctx=self.ctx)
 
     @ctx_decorator
-    def half_movement(self, ctx):
+    def half_movement(self):
         self.last_method_log = f'half_movement()'
         self.cur_movement = self.cur_movement // 2
         msg = (f"{self.get_name()}: half movement to "
@@ -270,7 +270,7 @@ class Character(object):
         self.logger.debug(msg=msg, ctx=self.ctx)
 
     @ctx_decorator
-    def double_movement(self, ctx):
+    def double_movement(self):
         self.last_method_log = f'double_movement()'
         self.cur_movement = self.get_base_movement() * 2
         msg = (f"{self.get_name()}: double movement to "
@@ -278,7 +278,7 @@ class Character(object):
         self.logger.debug(msg=msg, ctx=self.ctx)
 
     @ctx_decorator
-    def reset_movement(self, ctx):
+    def reset_movement(self):
         self.last_method_log = f'reset_movement()'
         self.cur_movement = self.get_base_movement()
         msg = (f"{self.get_name()}: reset movement to "
@@ -286,7 +286,7 @@ class Character(object):
         self.logger.debug(msg=msg, ctx=self.ctx)
 
     @ctx_decorator
-    def change_exhaustion_level(self, amount, ctx):
+    def change_exhaustion_level(self, amount):
         self.last_method_log = f'change_exhaustion_level({amount})'
         orig_level = self.exhaustion_level
         self.exhaustion_level += amount
@@ -318,7 +318,7 @@ class Character(object):
         self.logger.debug(msg=msg, ctx=self.ctx)
 
     @ctx_decorator
-    def get_ability_modifier(self, ability, ctx):
+    def get_ability_modifier(self, ability):
         self.last_method_log = f'get_ability_modifier({ability})'
         res = 0
         if ability == 'Strength':
@@ -337,7 +337,7 @@ class Character(object):
         return res
 
     @ctx_decorator
-    def assign_hit_points(self, level, hit_die, modifier, ctx):
+    def assign_hit_points(self, level, hit_die, modifier):
         self.last_method_log = (f'assign_hit_points( ' 
                                 f'{level}, ' 
                                 f'{hit_die}, ' 
@@ -345,13 +345,13 @@ class Character(object):
         if self.hit_point_generator == 'Max':
             ret_str = ((level * hit_die) + (level * modifier))
         else:
-            d = Die(ctx=ctx, sides=hit_die)
-            ret_str = ((d.roll(ctx=ctx, rolls=level)) + (level * modifier))
+            d = Die(ctx=self.ctx, sides=hit_die)
+            ret_str = ((d.roll(rolls=level)) + (level * modifier))
 
         return ret_str
 
     @ctx_decorator
-    def set_armor_class(self, ctx):
+    def set_armor_class(self):
         self.last_method_log = f'set_armor_class()'
         dex_mod = -99
         base_ac = 10
@@ -375,7 +375,7 @@ class Character(object):
                 dex_mod = -99
 
         if dex_mod == -99:
-            dex_mod = self.get_ability_modifier(ability='Dexterity', ctx=ctx)
+            dex_mod = self.get_ability_modifier(ability='Dexterity')
 
         if self.shield is not None and self.shield != 'None':
             sql = (f"select ac_base from dnd_5e.lu_armor "
@@ -393,17 +393,17 @@ class Character(object):
         self.logger.debug(msg=msg, ctx=self.ctx)
 
     @ctx_decorator
-    def contest_check(self, ability, ctx, vantage='Normal'):
+    def contest_check(self, ability, vantage='Normal'):
         self.last_method_log = f'contest_check({ability}, {vantage})'
-        d = Die(ctx=ctx, sides=20)
+        d = Die(ctx=self.ctx, sides=20)
         if vantage == 'Normal':
-            r = d.roll(ctx=ctx)
+            r = d.roll()
         elif vantage == 'Advantage':
-            r = d.roll_with_advantage(ctx=ctx)
+            r = d.roll_with_advantage()
         else:
-            r = d.roll_with_disadvantage(ctx=ctx)
+            r = d.roll_with_disadvantage()
 
-        mod = self.get_ability_modifier(ctx=ctx, ability=ability)
+        mod = self.get_ability_modifier(ability=ability)
 
         ret_val = r + mod
 
@@ -414,8 +414,8 @@ class Character(object):
         return ret_val
 
     @ctx_decorator
-    def roll_for_initiative(self, ctx, vantage='Normal'):
-        ret_val = self.contest_check(ctx=ctx, ability='Dexterity', vantage=vantage)
+    def roll_for_initiative(self, vantage='Normal'):
+        ret_val = self.contest_check(ability='Dexterity', vantage=vantage)
         msg = (f"{self.get_name()}: roll_for_initiative "
                f"with {vantage} vantage returned {ret_val}")
         self.logger.debug(msg=msg, ctx=self.ctx)
@@ -425,7 +425,7 @@ class Character(object):
         return iter([])
 
     @ctx_decorator
-    def check_proficiency_skill(self, ctx, ability):
+    def check_proficiency_skill(self, ability):
         self.last_method_log = f'check_proficiency_skill({ability})'
         ret_val = False
         t = self.get_racial_traits()
@@ -441,7 +441,7 @@ class Character(object):
         return ret_val
 
     @ctx_decorator
-    def incr_death_save_failed_cnt(self, ctx, amount: int = 1):
+    def incr_death_save_failed_cnt(self, amount: int = 1):
         self.death_save_failed_cnt += amount
         if self.death_save_failed_cnt >= 3:
             self.alive = False
@@ -449,7 +449,7 @@ class Character(object):
                               f'Character has died.', ctx=self.ctx)
 
     @ctx_decorator
-    def stabilize(self, ctx):
+    def stabilize(self):
         if self.cur_hit_points < 1:
             self.cur_hit_points = 1
         self.death_save_passed_cnt = 0
@@ -460,12 +460,12 @@ class Character(object):
         self.logger.debug(msg=f'{self.get_name()}: Has stabilized.', ctx=self.ctx)
 
     @ctx_decorator
-    def death_save(self, ctx, vantage='Normal'):
+    def death_save(self, vantage='Normal'):
         self.last_method_log = f'death_save({vantage})'
         tmp_str = 'Performs death save.'
-        res = self.contest_check(ctx=ctx, ability='Death', vantage=vantage)
+        res = self.contest_check(ability='Death', vantage=vantage)
         if res == 20:  # character is stablized
-            self.stabilize(ctx=ctx)
+            self.stabilize()
             tmp_str = f'{tmp_str}\nResult: Nat 20. Character Stabilized'
         elif res >= 10:  # normal pass
             self.death_save_passed_cnt += 1
@@ -473,18 +473,18 @@ class Character(object):
                        f'{self.death_save_passed_cnt}/' 
                        f'{self.death_save_failed_cnt}')
         elif res == 1:   # crit fail
-            self.incr_death_save_failed_cnt(ctx=ctx, amount=2)
+            self.incr_death_save_failed_cnt(amount=2)
             tmp_str = (f'{tmp_str}\nCrit fail. Current counts: (P/F) ' 
                        f'{self.death_save_passed_cnt}/' 
                        f'{self.death_save_failed_cnt}')
         else:   # res < 10 -- normal fail
-            self.incr_death_save_failed_cnt(ctx=ctx, amount=1)
+            self.incr_death_save_failed_cnt(amount=1)
             tmp_str = (f'{tmp_str}\nFailed. Current counts: (P/F) ' 
                        f'{self.death_save_passed_cnt}/' 
                        f'{self.death_save_failed_cnt}')
 
         if self.death_save_passed_cnt >= 3:
-            self.stabilize(ctx=ctx)
+            self.stabilize()
             tmp_str = (f'{tmp_str}\nThree passed death saves. ' 
                        f'Character Stabilized')
         # elif self.death_save_failed_cnt >= 3:
@@ -496,7 +496,7 @@ class Character(object):
         self.logger.debug(msg=msg, ctx=self.ctx)
 
     @ctx_decorator
-    def check(self, ctx, skill, vantage='Normal', dc=10):
+    def check(self, skill, vantage='Normal', dc=10):
         self.last_method_log = f'check({skill}, {vantage}, {dc})'
         tmp_str = ''
         # Saving throw
@@ -510,7 +510,7 @@ class Character(object):
                     vantage = 'Normal'
                 else:
                     vantage = 'Disadvantage'
-            adjusted_roll = self.contest_check(ctx=ctx, ability=ability, vantage=vantage)
+            adjusted_roll = self.contest_check(ability=ability, vantage=vantage)
         else:
             # Skill check
             if skill == 'Athletics':
@@ -544,9 +544,9 @@ class Character(object):
                     vantage = 'Normal'
                 else:
                     vantage = 'Disadvantage'
-            adjusted_roll = self.contest_check(ctx=ctx, ability=ability, vantage=vantage)
+            adjusted_roll = self.contest_check(ability=ability, vantage=vantage)
 
-            if self.check_proficiency_skill(ctx=ctx, ability=skill):
+            if self.check_proficiency_skill(ability=skill):
                 adjusted_roll = adjusted_roll + int(self.proficiency_bonus)
                 tmp_str = f'{tmp_str} + Prof({self.proficiency_bonus}) '
 
@@ -570,7 +570,7 @@ class Character(object):
         return self.damage_generator
 
     @ctx_decorator
-    def damage(self, ctx, amount, damage_type="Unknown"):
+    def damage(self, amount, damage_type="Unknown"):
         self.last_method_log = f'damage({amount}, {damage_type})'
 
         tmp_type = self.damage_adj[damage_type]
@@ -601,7 +601,7 @@ class Character(object):
                 tmp_str = (f'{tmp_str}\n{(amount - self.cur_hit_points)}' 
                            f' exceeds hit points' 
                            f'({self.hit_points}): Instant Death')
-                self.incr_death_save_failed_cnt(ctx=ctx, amount=3)
+                self.incr_death_save_failed_cnt(amount=3)
 
             self.cur_hit_points = 0
         else:
@@ -620,7 +620,7 @@ class Character(object):
         return f'{self.name}({self.cur_hit_points}/{self.hit_points})'
 
     @ctx_decorator
-    def get_action(self, ctx, dist_list):
+    def get_action(self, dist_list):
         ret_val = "Done"
         op_dist = dist_list[0][0]
         if not self.alive:
@@ -648,16 +648,16 @@ class Character(object):
         return 'Normal'
 
     @ctx_decorator
-    def set_finesse_ability(self, ctx):
-        s = self.get_ability_modifier('Strength', ctx=ctx)
-        d = self.get_ability_modifier('Dexterity', ctx=ctx)
+    def set_finesse_ability(self):
+        s = self.get_ability_modifier('Strength')
+        d = self.get_ability_modifier('Dexterity')
         if s > d:
             self.finesse_ability_mod = 'Strength'
         else:
             self.finesse_ability_mod = 'Dexterity'
 
     @ctx_decorator
-    def add_proficiency_bonus_for_attack(self, ctx, weapon_obj):
+    def add_proficiency_bonus_for_attack(self, weapon_obj):
         # determine modifier
         # 1)  is this a martial weapon that needs specific proficiency
         #     if it is and the character has that, or the weapon is a standard
@@ -672,7 +672,7 @@ class Character(object):
         return ret_val
 
     @ctx_decorator
-    def ranged_attack(self, weapon_obj, ctx, vantage='Normal'):
+    def ranged_attack(self, weapon_obj, vantage='Normal'):
         # determine modifier
         # 1)  is this a martial weapon that needs specific proficiency
         #     if it is and the character has that, or the weapon is a standard
@@ -697,11 +697,11 @@ class Character(object):
                           f"{attempt.possible_damage}", ctx=self.ctx)
 
     @ctx_decorator
-    def is_not_using_shield(self, ctx):
+    def is_not_using_shield(self):
         return False
 
     @ctx_decorator
-    def melee_attack(self, ctx, weapon_obj, vantage='Normal') -> tuple:
+    def melee_attack(self, weapon_obj, vantage='Normal') -> tuple:
         # determine modifier
         # 1)  is this a martial weapon that needs specific proficiency
         #     if it is and the character has that, or the weapon is a standard
@@ -712,24 +712,24 @@ class Character(object):
         #     modifier = int(self.proficiency_bonus)
         # else:
         #     modifier = 0
-        modifier = self.add_proficiency_bonus_for_attack(ctx=ctx, weapon_obj=weapon_obj)
+        modifier = self.add_proficiency_bonus_for_attack(weapon_obj=weapon_obj)
         # damage_modifier = 0
         # 2)  Add the users Ability bonus, Strength for standard weapons
         #     or self.finesse_ability_mod for Finesse wepons
         if weapon_obj.finesse_ind is True:
-            modifier += self.get_ability_modifier(ctx=ctx, ability=self.finesse_ability_mod)
-            damage_modifier = self.get_ability_modifier(ctx=ctx, ability=self.finesse_ability_mod)
+            modifier += self.get_ability_modifier(ability=self.finesse_ability_mod)
+            damage_modifier = self.get_ability_modifier(ability=self.finesse_ability_mod)
         else:
-            modifier += self.get_ability_modifier(ctx=ctx, ability='Strength')
-            damage_modifier = self.get_ability_modifier(ctx=ctx, ability='Strength')
+            modifier += self.get_ability_modifier(ability='Strength')
+            damage_modifier = self.get_ability_modifier(ability='Strength')
 
         # if self.classObj.shield is None and weapon_obj.versatile_ind is True:
-        if self.is_not_using_shield(ctx=ctx) and weapon_obj.versatile_ind is True:
+        if self.is_not_using_shield() and weapon_obj.versatile_ind is True:
             v2h = True
         else:
             v2h = False
 
-        attempt = Attack(ctx=ctx, weapon_obj=weapon_obj,
+        attempt = Attack(ctx=self.ctx, weapon_obj=weapon_obj,
                          attack_modifier=modifier, damage_modifier=damage_modifier,
                          versatile_use_2handed=v2h, vantage=vantage)
         ret_val: tuple = (attempt.attack_value, attempt.possible_damage, attempt.damage_type)
@@ -749,7 +749,7 @@ class Character(object):
         return ret_val
 
     @ctx_decorator
-    def melee_defend(self, ctx, modifier=0, vantage='Normal',
+    def melee_defend(self, modifier=0, vantage='Normal',
                      possible_damage=0, damage_type='Unknown', attack_value=None):
         self.last_method_log = (f'melee_defend({modifier}, ' 
                                 f'{vantage}, {possible_damage}, ' 
@@ -757,7 +757,7 @@ class Character(object):
 
         self.logger.debug(msg=f"{self.get_name()} attempts to defend against melee.", ctx=self.ctx)
 
-        d = Die(ctx=ctx, sides=20)
+        d = Die(ctx=self.ctx, sides=20)
         if self.prone_ind:
             if vantage == 'Disadvantage':
                 vantage = 'Normal'
@@ -767,11 +767,11 @@ class Character(object):
             value = attack_value
         else:
             if vantage == 'Disadvantage':
-                t_val = d.roll_with_disadvantage(ctx=ctx)
+                t_val = d.roll_with_disadvantage()
             elif vantage == 'Advantage':
-                t_val = d.roll_with_advantage(ctx=ctx)
+                t_val = d.roll_with_advantage()
             else:
-                t_val = d.roll(ctx=ctx)
+                t_val = d.roll()
 
             value = t_val + modifier
 
@@ -780,12 +780,12 @@ class Character(object):
                        f'{value} >= {self.armor_class}')
             ret = False
             if self.cur_hit_points < 1:
-                self.incr_death_save_failed_cnt(ctx=ctx, amount=2)
+                self.incr_death_save_failed_cnt(amount=2)
                 self.logger.debug(msg=f"{self.get_name()}: attacked while unconscious. Incurs two failed Death Saves.",
                                   ctx=self.ctx)
 
             if possible_damage > 0:
-                self.damage(ctx=ctx, amount=possible_damage, damage_type=damage_type)
+                self.damage(amount=possible_damage, damage_type=damage_type)
         else:
             tmp_str = (f'Successful defence against a melee attack roll: ' 
                        f'{value} < {self.armor_class}')
@@ -799,12 +799,12 @@ class Character(object):
         return ret
 
     @ctx_decorator
-    def ranged_defend(self, ctx, modifier=0, vantage='Normal',
+    def ranged_defend(self, modifier=0, vantage='Normal',
                       possible_damage=0, damage_type='Unknown'):
         self.last_method_log = (f'ranged_defend({modifier}, ' 
                                 f'{vantage}, {possible_damage}' 
                                 f'{damage_type})')
-        d = Die(ctx=ctx, sides=20)
+        d = Die(ctx=self.ctx, sides=20)
         if self.prone_ind:
             if vantage == 'Advantage':
                 vantage = 'Normal'
@@ -812,11 +812,11 @@ class Character(object):
                 vantage = 'Disadvantage'
 
         if vantage == 'Disadvantage':
-            t_val = d.roll_with_disadvantage(ctx=ctx)
+            t_val = d.roll_with_disadvantage()
         elif vantage == 'Advantage':
-            t_val = d.roll_with_advantage(ctx=ctx)
+            t_val = d.roll_with_advantage()
         else:
-            t_val = d.roll(ctx=ctx)
+            t_val = d.roll()
 
         value = t_val + modifier
 
@@ -837,11 +837,11 @@ class Character(object):
         return ret
 
     @ctx_decorator
-    def heal(self, ctx, amount):
+    def heal(self, amount):
         self.last_method_log = f'heal({amount})'
         tmp_str = f'Heals {amount} hit points.'
         if self.cur_hit_points == 0 and self.alive:
-            self.stabilize(ctx=ctx)
+            self.stabilize()
 
         if (self.cur_hit_points + amount) > self.hit_points:
             self.cur_hit_points = self.hit_points
@@ -857,7 +857,7 @@ class Character(object):
         self.logger.debug(msg=f"{self.get_name()}: {tmp_str}", ctx=self.ctx)
 
     @ctx_decorator
-    def revive(self, ctx):
+    def revive(self):
         self.last_method_log = f'revive()'
         self.stabilize()
         self.cur_hit_points = self.hit_points
@@ -866,7 +866,7 @@ class Character(object):
         self.logger.debug(msg=msg, ctx=self.ctx)
 
     @ctx_decorator
-    def get_ranged_range(self, ctx):
+    def get_ranged_range(self):
         if self.ranged_weapon:
             sql = (f"select range_1 from lu_weapon "
                    f"and name = '{self.ranged_weapon}' "
@@ -887,16 +887,16 @@ if __name__ == '__main__':
     try:
         db = InvokePSQL()
         a1 = Character(db=db, ctx=ctx, debug_ind=1)
-        a1.assign_ability_array(ctx=ctx)
-        a1.set_armor_class(ctx=ctx)
+        a1.assign_ability_array()
+        a1.set_armor_class()
         print(a1.get_gender())
         a2 = Character(db=db, ctx=ctx, ability_array_str='10,11,12,13,14,15', debug_ind=1)
-        a2.assign_ability_array(ctx=ctx)
-        a2.set_armor_class(ctx=ctx)
+        a2.assign_ability_array()
+        a2.set_armor_class()
         print(a2.get_raw_ability_array())
         print(a2.get_ability_pref_array())
         print(a2.get_sorted_ability_array())
-        a2.ability_array_obj.set_preference_array(ctx=ctx,pref_array=string_to_array('5,0,2,1,4,3'))
+        a2.ability_array_obj.set_preference_array(pref_array=string_to_array('5,0,2,1,4,3'))
         print(a2.get_raw_ability_array())
         print(a2.get_ability_pref_array())
         print(a2.get_sorted_ability_array())
@@ -905,8 +905,8 @@ if __name__ == '__main__':
 
         # a3 = Character(db, level=43)
         a2 = Character(db=db, ctx=ctx, ability_array_str='6,6,6,6,6,6', debug_ind=1)
-        a2.assign_ability_array(ctx=ctx)
-        a2.set_armor_class(ctx=ctx)
+        a2.assign_ability_array()
+        a2.set_armor_class()
         print(a2.get_raw_ability_array())
         print(a2.get_ability_pref_array())
         print(a2.get_sorted_ability_array())

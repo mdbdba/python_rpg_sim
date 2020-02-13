@@ -24,14 +24,14 @@ class Foe(Character):
         self.name = foe_name
         ability_array_str = 'Common'
         if foe_candidate == "Random":
-            foe_candidate = self.find_random(db=db, ctx=ctx, challenge_level=challenge_level)
+            foe_candidate = self.find_random(db=db, challenge_level=challenge_level)
         level = 1   # Player level will always be 1 for Foes
         Character.__init__(self, db=db, ctx=ctx, gender_candidate=gender_candidate,
                            ability_array_str=ability_array_str,
                            damage_generator=damage_generator,
                            hit_point_generator=hit_point_generator,
                            level=level, debug_ind=debug_ind)
-        self.get_foe(db=db, ctx=ctx, foe_candidate=foe_candidate)
+        self.get_foe(db=db, foe_candidate=foe_candidate)
 
         if self.melee_weapon is not None:
             self.melee_weapon_obj = Weapon(db=db, ctx=ctx, name=self.get_melee_weapon())
@@ -55,11 +55,11 @@ class Foe(Character):
         return self.ranged_weapon
 
     @ctx_decorator
-    def default_melee_attack(self, ctx, vantage='Normal'):
-        return self.melee_attack(ctx=ctx, weapon_obj=self.melee_weapon_obj, vantage=vantage)
+    def default_melee_attack(self, vantage='Normal'):
+        return self.melee_attack(weapon_obj=self.melee_weapon_obj, vantage=vantage)
 
     @ctx_decorator
-    def find_random(self, db, ctx, challenge_level):
+    def find_random(self, db, challenge_level):
         sql = (f"SELECT name FROM dnd_5e.foe "
                f"where challenge_level='{challenge_level}' "
                f"ORDER BY RANDOM() LIMIT 1")
@@ -71,7 +71,7 @@ class Foe(Character):
         return retstr
 
     @ctx_decorator
-    def get_foe(self, db, ctx, foe_candidate):
+    def get_foe(self, db, foe_candidate):
         sql = (f"SELECT id, name, foe_type, size, base_walking_speed, "
                f"challenge_level, ability_string, ability_modifier_string, "
                f"hit_point_die, hit_point_modifier, hit_point_adjustment, "
@@ -112,16 +112,16 @@ class Foe(Character):
             self.source_material = results[0][19]     # source_material,
             self.source_credit_url = results[0][20]     # source_credit_url,
             self.source_credit_comment = results[0][21]
-            self.assign_ability_array(ctx=ctx)
-            self.set_armor_class(ctx=ctx)
-            self.hit_points = self.assign_hit_points(ctx=ctx)
+            self.assign_ability_array()
+            self.set_armor_class()
+            self.hit_points = self.assign_hit_points()
             self.cur_hit_points = self.hit_points
             self.temp_hit_points = 0
         except IndexError:
             raise ValueError(f'Could not find foe: {foe_candidate}')
 
     @ctx_decorator
-    def assign_hit_points(self, ctx):
+    def assign_hit_points(self ):
         self.lastMethodLog = (f'assign_hit_points( '
                               f'{self.hit_point_die}, '
                               f'{self.hit_point_modifier}, '
@@ -157,7 +157,7 @@ class Foe(Character):
         return self.alignment
 
     @ctx_decorator
-    def get_alignment_abbrev(self, ctx):
+    def get_alignment_abbrev(self):
         sql = (f"select abbreviation from lu_alignment where value = "
                f"'{self.alignment}';")
         results = self.db.query(sql)
@@ -165,7 +165,7 @@ class Foe(Character):
         return results[0][0]
 
     @ctx_decorator
-    def is_not_using_shield(self, ctx):
+    def is_not_using_shield(self):
         if self.shield == 'None':
             ret_val = True
         else:
@@ -180,7 +180,7 @@ class Foe(Character):
                   f'foe_type: {self.foe_type}\n'
                   f'size: {self.size}\n'
                   f'alignment: {self.get_alignment_str() }\n'
-                  f'alignment abbrev: {self.get_alignment_abbrev(ctx=self.ctx) }\n'
+                  f'alignment abbrev: {self.get_alignment_abbrev() }\n'
                   f'base_walking_speed: {self.base_walking_speed }\n'
                   f'challenge_level: {self.challenge_level }\n'
                   f'ability_array_str: {self.ability_array_str }\n'
@@ -215,7 +215,7 @@ class Foe(Character):
                   f'"foe_type": "{self.foe_type}", '
                   f'"size": "{self.size}", '
                   f'"alignment": "{self.get_alignment_str() }", '
-                  f'"alignment abbrev": "{self.get_alignment_abbrev(ctx=self.ctx) }", '
+                  f'"alignment abbrev": "{self.get_alignment_abbrev() }", '
                   f'"base_walking_speed": "{self.base_walking_speed}", '
                   f'"challenge_level": "{self.challenge_level}", '
                   f'"ability_array_str": "{self.ability_array_str}", '
@@ -247,9 +247,9 @@ if __name__ == '__main__':
     ctx = Ctx(app_username='foe_class_init')
     a1 = Foe(db=db, ctx=ctx, foe_candidate="Skeleton", debug_ind=1)
     print(a1)
-    a1.melee_defend(ctx=ctx, modifier=13, possible_damage=a1.hit_points,
+    a1.melee_defend(modifier=13, possible_damage=a1.hit_points,
                     damage_type='Bludgeoning')
-    a1.heal(ctx=ctx, amount=10)
-    a1.melee_defend(ctx=ctx, modifier=13, possible_damage=(2 * a1.hit_points),
+    a1.heal(amount=10)
+    a1.melee_defend(modifier=13, possible_damage=(2 * a1.hit_points),
                     damage_type='Bludgeoning')
     print(a1.__repr__())

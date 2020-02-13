@@ -18,6 +18,7 @@ class Die(object):
         self.debug_ind = debug_ind
         self.details = []  # RollAmount(die_used=sides)
         self.logger = RpgLogging(logger_name=ctx.logger_name)
+        self.ctx = ctx
 
     def get_last_detail(self):
         """
@@ -37,7 +38,7 @@ class Die(object):
     # This simplifies the calls being done from the other methods
 
     @ctx_decorator
-    def _perform_roll(self, ctx, rolls, dropvalue=False,
+    def _perform_roll(self, rolls, dropvalue=False,
                       dropfrom="Low", halved=False):
         """
         Handles the calculations for the class.
@@ -51,7 +52,7 @@ class Die(object):
         t_roll_details = RollAmount(die_used=self.sides)
         t_roll_details.die_rolls = rolls
         # print(f'adding roll id: {t_roll_details.roll_id} to {ctx.crumbs[-1]}')
-        ctx.add_roll_id(t_roll_details.roll_id)
+        self.ctx.add_roll_id(t_roll_details.roll_id)
         if dropvalue:
             t_roll_details.adjustment_values["dropvalue"] = dropvalue
             t_roll_details.adjustment_values["dropfrom"] = dropfrom
@@ -86,12 +87,12 @@ class Die(object):
         self.details.append(t_roll_details)
 
         # raise Exception('Test Exception')
-        self.logger.debug(msg=t_roll_details, ctx=ctx)
+        self.logger.debug(msg=t_roll_details, ctx=self.ctx)
 
         return tot
 
     @ctx_decorator
-    def roll(self, ctx, rolls=1, droplowest=False):
+    def roll(self, rolls=1, droplowest=False):
         """
         Perform a number of standard rolls and return the sum
 
@@ -100,51 +101,51 @@ class Die(object):
 
         """
         if droplowest:
-            result = self._perform_roll(rolls=rolls, ctx=ctx, dropvalue=True, dropfrom="Low")
+            result = self._perform_roll(rolls=rolls, dropvalue=True, dropfrom="Low")
         else:
-            result = self._perform_roll(rolls=rolls, ctx=ctx, dropvalue=False)
+            result = self._perform_roll(rolls=rolls, dropvalue=False)
 
         return result
 
     @ctx_decorator
-    def roll_with_advantage(self, ctx):
+    def roll_with_advantage(self):
         """
         Perform a single roll with advantage
 
         """
-        return self._perform_roll( ctx=ctx, rolls=2, dropvalue=True, dropfrom="Low")
+        return self._perform_roll( rolls=2, dropvalue=True, dropfrom="Low")
 
     @ctx_decorator
-    def roll_with_disadvantage(self, ctx):
+    def roll_with_disadvantage(self):
         """
         Perform a single roll with disadvantage
 
         """
-        return self._perform_roll(ctx=ctx, rolls=2, dropvalue=True, dropfrom="High")
+        return self._perform_roll(rolls=2, dropvalue=True, dropfrom="High")
 
     @ctx_decorator
-    def roll_with_resistance(self, ctx, rolls):
+    def roll_with_resistance(self, rolls):
         """
         Perform rolls and return half the total sum
 
         """
-        return self._perform_roll(ctx=ctx, rolls=rolls, dropvalue=False, halved=True)
+        return self._perform_roll(rolls=rolls, dropvalue=False, halved=True)
 
     @ctx_decorator
-    def get_sum(self, ctx, startingval, multiplier):
-        return startingval + self.roll(ctx=ctx, rolls=multiplier)
+    def get_sum(self, startingval, multiplier):
+        return startingval + self.roll(rolls=multiplier)
 
 
 # Define a basic test case that'll just make sure the class works.
 if __name__ == '__main__':
     ctx = Ctx(app_username='Die_init')
     d6 = Die(ctx=ctx, sides=6)
-    print(f'Roll d6 3 times: {d6.roll(ctx=ctx, rolls=3, droplowest=False)}')
-    print(f'Roll d6 4 times, drop lowest: {d6.roll(ctx=ctx, rolls=4, droplowest=True)}')
-    print(f'Roll with advantage: {d6.roll_with_advantage(ctx=ctx)}')
-    print(f'Roll with disadvantage: {d6.roll_with_disadvantage(ctx=ctx)}')
-    print(f'Roll for damage with resistance: {d6.roll_with_resistance(ctx=ctx, rolls=6)}')
-    print(f'get_sum: {d6.get_sum(ctx=ctx, startingval=3, multiplier=1)}')
+    print(f'Roll d6 3 times: {d6.roll(rolls=3, droplowest=False)}')
+    print(f'Roll d6 4 times, drop lowest: {d6.roll(rolls=4, droplowest=True)}')
+    print(f'Roll with advantage: {d6.roll_with_advantage()}')
+    print(f'Roll with disadvantage: {d6.roll_with_disadvantage()}')
+    print(f'Roll for damage with resistance: {d6.roll_with_resistance(rolls=6)}')
+    print(f'get_sum: {d6.get_sum(startingval=3, multiplier=1)}')
     print(d6.get_last_detail())
     for each_roll in d6.details:
         print(each_roll)

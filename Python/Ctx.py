@@ -2,6 +2,7 @@ from dataclasses import dataclass, field
 from typing import Dict, List   # Others: Set, Tuple, Optional
 from CommonFunctions import string_to_string_array
 from CommonFunctions import get_random_key
+from CommonFunctions import fix_dict_for_json
 # from Foe import Foe
 # from PlayerCharacter import PlayerCharacter
 from datetime import datetime
@@ -16,8 +17,14 @@ import json
 
 @wrapt.decorator
 def ctx_decorator(wrapped, instance, args, kwds):
-    # print(f'instance: {instance}')
-    ctx = kwds.get('ctx')
+    ctx = None
+    if instance and (getattr(instance, 'ctx', 'NotThere') != 'NotThere'):
+        ctx = instance.ctx
+    elif ('ctx' in kwds):
+        ctx = kwds.get('ctx')
+    if ctx is None:
+        raise ValueError('ctx obj not found.')
+
     ctx.fullyqualified = wrapped.__qualname__
     if '.' in ctx.fullyqualified:
         t = string_to_string_array(ctx.fullyqualified, '.')
@@ -43,7 +50,6 @@ def ctx_decorator(wrapped, instance, args, kwds):
             end_time = datetime.now()
             jdict = { 'Parent': tmp_parent_id,
                       'Event': event_id,
-                      # 'Crumb': ctx.crumbs[-1],
                       'start_time': str(start_time),
                       'end_time': str(end_time),
                       'duration': str(end_time - start_time),
@@ -52,7 +58,7 @@ def ctx_decorator(wrapped, instance, args, kwds):
             logger.debug(msg='Event Context Record', json_dict=jdict, ctx=ctx)
 
         if len(ctx.crumbs[-1].rollIds) > 0:
-            if ctx.crumbs[-1].className == 'Die':
+            if ctx.crumbs[-1].className == 'Die' and len(ctx.crumbs) > 1:
                 ctx.crumbs[-2].rollIds.extend(ctx.crumbs[-1].rollIds)
             else:
                 jdict = {'Parent': tmp_parent_id,
@@ -175,14 +181,14 @@ class Ctx:
 
     def get_last_crumb(self):
         if len(self.crumbs) > 0:
-            return_value = self.crumbs[-1].__dict__
+            return_value = fix_dict_for_json(self.crumbs[-1].__dict__)
         else:
             return_value = []
         return return_value
 
     def get_crumbs(self):
         if len(self.crumbs) > 0:
-            return_value = self.crumbs.__dict__
+            return_value = fix_dict_for_json(self.crumbs.__dict__)
         else:
             return_value = []
         return return_value

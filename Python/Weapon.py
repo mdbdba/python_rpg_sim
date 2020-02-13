@@ -25,16 +25,16 @@ class Weapon(object):
         # is being wielded two-handed.
         self.versatile_2hnd_mod = None
         self.versatile_2hnd_die = None
-        self.setWeaponProperties(db=self.db, ctx=ctx)
+        self.setWeaponProperties(db=self.db)
         self.damage_dict = defaultdict(list)
-        self.setDamageType(db=self.db, ctx=ctx)
-        self.setWeaponInfo(db=self.db, ctx=ctx)
+        self.setDamageType(db=self.db)
+        self.setWeaponInfo(db=self.db)
 
     def setWeaponProficient(self, value=True):
         self.proficient_ind = value
 
     @ctx_decorator
-    def setWeaponProperties(self, db, ctx):
+    def setWeaponProperties(self, db):
         sql = (f"select property "
                f"from dnd_5e.lu_weapon_weapon_property "
                f"where weapon = '{self.name}';")
@@ -63,7 +63,7 @@ class Weapon(object):
                 self.heavy_ind = True
 
     @ctx_decorator
-    def setDamageType(self, db, ctx):
+    def setDamageType(self, db):
         sql = (f"select damage_type "
                f"from dnd_5e.lu_weapon_damage_type "
                f"where weapon = '{self.name}';")
@@ -75,7 +75,7 @@ class Weapon(object):
                 self.default_damage_type = row[0]
 
     @ctx_decorator
-    def setWeaponInfo(self, db, ctx):
+    def setWeaponInfo(self, db):
         sql = (f"select category, damage_modifier, damage_die, "
                f"case when range_1 is null then -1 "
                f"else range_1 end as range_1, "

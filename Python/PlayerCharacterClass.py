@@ -30,6 +30,7 @@ class PlayerCharacterClass(object):
                  characterAlteringClassOptions=None):
         self.name = ""
         self.subclass_of = ""
+        self.ctx = ctx
         # Strength = 0
         # Dexterity = 1
         # Constitution = 2
@@ -56,19 +57,19 @@ class PlayerCharacterClass(object):
         if classCandidate == "Random":
             classCandidate = getRandomClassName(db)
 
-        if self.validClassName(db=db, ctx=ctx, classCandidate=classCandidate):
-            self.populateDetails(db=db, ctx=ctx, classCandidate=classCandidate)
+        if self.validClassName(db=db, classCandidate=classCandidate):
+            self.populateDetails(db=db, classCandidate=classCandidate)
         else:
             raise Exception(f'Could not find class: {classCandidate}')
 
-        self.setCharacterAlteringClassFeatures(db=db, ctx=ctx)
+        self.setCharacterAlteringClassFeatures(db=db)
 
     @ctx_decorator
-    def setArmorWeapons(self, ctx):
+    def setArmorWeapons(self):
         pass
 
     @ctx_decorator
-    def validClassName(self, ctx, classCandidate, db):
+    def validClassName(self, classCandidate, db):
         sql = (f"select count(class) from dnd_5e.lu_class where "
                f"lower(class) = lower('{classCandidate}');")
         results = db.query(sql)
@@ -79,7 +80,7 @@ class PlayerCharacterClass(object):
             return False
 
     @ctx_decorator
-    def populateDetails(self, ctx, classCandidate, db):
+    def populateDetails(self, classCandidate, db):
         sql = (f"SELECT class, hit_die, ability_pref_str, "
                f"source_material, source_credit_url, "
                f"source_credit_comment "
@@ -110,7 +111,7 @@ class PlayerCharacterClass(object):
                 else:
                     self.ability_sort_str_array[p] = 'Charisma'
 
-        self.setArmorWeapons(ctx=ctx)
+        self.setArmorWeapons()
 
     def getClass(self):
         return self.name
@@ -119,7 +120,7 @@ class PlayerCharacterClass(object):
         return self.ability_sort_array
 
     @ctx_decorator
-    def setCharacterAlteringClassFeatures(self, db, ctx):
+    def setCharacterAlteringClassFeatures(self, db):
         """ If an array of dictionaries was not passed as the
             characterAlteringClassOptions arg, randomly select the
             options for the character. """
@@ -157,7 +158,7 @@ class PlayerCharacterClass(object):
         return self.CACF_option_array
 
     @ctx_decorator
-    def getClassLevelFeature(self, ctx, level, db):
+    def getClassLevelFeature(self, level, db):
         sql = (f"SELECT class, level, feature, label_1, value_1, "
                f"label_2, value_2, label_3, value_3, label_4, value_4 "
                f"from dnd_5e.lu_class_level_feature "

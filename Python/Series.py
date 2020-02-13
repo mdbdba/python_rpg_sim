@@ -27,6 +27,7 @@ class Series(object):
                  tracer: TraceIt,
                  debug_ind: int = 0):
         self.db = db
+        self.ctx = ctx
         self.study_instance_id = study_instance_id
         self.series_id = series_id
         self.stats = SeriesStats(study_instance_id=self.study_instance_id, series_id=self.series_id)
@@ -44,16 +45,16 @@ class Series(object):
         self.series_stats = []
         self.encounter_stats = []
         self.character_stats = []
-        self.assign_encounter_params(ctx=ctx)
+        self.assign_encounter_params()
         print(f"study_instance_id={study_instance_id} " 
               f"series_id={self.series_id} "
               f"encounter_repetitions={encounter_repetitions} "
               f"encounter_param_dict={encounter_param_dict} "
               f"debug_ind={debug_ind}")
-        self.run_series(ctx=ctx)
+        self.run_series()
 
     @ctx_decorator
-    def assign_encounter_params(self, ctx):
+    def assign_encounter_params(self):
         if 'party_name' in self.encounter_param_dict.keys():
             self.party_name_param = self.encounter_param_dict['party_name']
         if 'hero_party_size' in self.encounter_param_dict.keys():
@@ -66,20 +67,20 @@ class Series(object):
             self.debug_ind_param = self.encounter_param_dict['debug_ind']
 
     @ctx_decorator
-    def get_named_party(self, ctx):
+    def get_named_party(self):
         p = []
         sql = f"select count(name) from dnd_5e.party where name = '{self.party_name_param}'"
         res = self.db.query(sql)
         hero_party_size = int(res[0][0])
         if hero_party_size == 0:
             raise Exception(f'Party {self.party_name_param} could not be found.')
-        full_party = Party(db=self.db, ctx=ctx, name=self.party_name_param, debug_ind=self.debug_ind_param)
+        full_party = Party(db=self.db, ctx=self.ctx, name=self.party_name_param, debug_ind=self.debug_ind_param)
         for tmp_char in full_party.get_party():
             p.append(tmp_char)
         return p
 
     @ctx_decorator
-    def get_foes(self, ctx):
+    def get_foes(self):
         f = []
 
         for opponent_counter in range(int(self.opponent_party_size_param)):
@@ -88,25 +89,25 @@ class Series(object):
                 t_name = f"{self.opponent_candidate_param}({show_counter})"
             else:
                 t_name = None
-            f.append(Foe(db=self.db, ctx=ctx,
+            f.append(Foe(db=self.db, ctx=self.ctx,
                          foe_candidate=self.opponent_candidate_param,
                          foe_name=t_name,
                          debug_ind=self.debug_ind_param))
         return f
 
     @ctx_decorator
-    def run_series(self, ctx):
+    def run_series(self):
         for series_counter in range(self.encounter_repetitions):
             display_repetition = series_counter + 1
             print(f"Encounter Repetition: {display_repetition}")
-            heroes = self.get_named_party(ctx=ctx)
-            opponents = self.get_foes(ctx=ctx)
+            heroes = self.get_named_party()
+            opponents = self.get_foes()
             for Hero in heroes:
                 print(f"  {Hero.get_name()}")
             print(f"Against:")
             for Opponent in opponents:
                 print(f"  {Opponent.get_name()}")
-            e = Encounter(ctx=ctx,
+            e = Encounter(ctx=self.ctx,
                           heroes=heroes,
                           opponents=opponents,
                           debug_ind=self.debug_ind_param,
@@ -137,17 +138,17 @@ class Series(object):
                                               attack_successes=Hero.attack_success_count,
                                               attack_nat20_count=Hero.attack_roll_nat20_count,
                                               attack_nat1_count=Hero.attack_roll_nat1_count,
-                                              damage_dealt_dict=Hero.get_damage_dealt(ctx=ctx),
-                                              damage_taken_dict=Hero.get_damage_taken(ctx=ctx))
+                                              damage_dealt_dict=Hero.get_damage_dealt(),
+                                              damage_taken_dict=Hero.get_damage_taken())
 
                 # t_encounter_stats.heroes.append(t_char_stats)
-                t_dict = Hero.get_damage_dealt(ctx=ctx)
+                t_dict = Hero.get_damage_dealt()
                 print(f"  {Hero.get_name()} attacks: {Hero.attack_success_count}/{Hero.attack_roll_count}"
                       f" nat20s:{Hero.attack_roll_nat20_count} nat1s: {Hero.attack_roll_nat1_count}")
                 print(Hero.attack_rolls)
-                print(f"  {Hero.get_name()} damage dealt ({t_dict['Total']}): {Hero.get_damage_dealt(ctx=ctx)}")
-                t_dict = Hero.get_damage_taken(ctx=ctx)
-                print(f"  {Hero.get_name()} damage taken ({t_dict['Total']}): {Hero.get_damage_taken(ctx=ctx)}")
+                print(f"  {Hero.get_name()} damage dealt ({t_dict['Total']}): {Hero.get_damage_dealt()}")
+                t_dict = Hero.get_damage_taken()
+                print(f"  {Hero.get_name()} damage taken ({t_dict['Total']}): {Hero.get_damage_taken()}")
             for Opponent in opponents:
                 t_char_stats = CharacterStats(study_instance_id=self.study_instance_id,
                                               series_id=self.series_id,
@@ -162,26 +163,26 @@ class Series(object):
                                               attack_successes=Opponent.attack_success_count,
                                               attack_nat20_count=Opponent.attack_roll_nat20_count,
                                               attack_nat1_count=Opponent.attack_roll_nat1_count,
-                                              damage_dealt_dict=Opponent.get_damage_dealt(ctx=ctx),
-                                              damage_taken_dict=Opponent.get_damage_taken(ctx=ctx)
+                                              damage_dealt_dict=Opponent.get_damage_dealt(),
+                                              damage_taken_dict=Opponent.get_damage_taken()
                                               )
                 # t_encounter_stats.opponents.append(t_char_stats)
-                t_dict = Opponent.get_damage_dealt(ctx=ctx)
+                t_dict = Opponent.get_damage_dealt()
                 print(f"  {Opponent.get_name()} attacks: {Opponent.attack_success_count}/{Opponent.attack_roll_count}"
                       f" nat20s: {Opponent.attack_roll_nat20_count} nat1s: {Opponent.attack_roll_nat1_count}")
                 print(Opponent.attack_rolls)
-                print(f"  {Opponent.get_name()} damage dealt ({t_dict['Total']}): {Opponent.get_damage_dealt(ctx=ctx)}")
-                t_dict = Opponent.get_damage_taken(ctx=ctx)
-                print(f"  {Opponent.get_name()} damage taken ({t_dict['Total']}): {Opponent.get_damage_taken(ctx=ctx)}")
+                print(f"  {Opponent.get_name()} damage dealt ({t_dict['Total']}): {Opponent.get_damage_dealt()}")
+                t_dict = Opponent.get_damage_taken()
+                print(f"  {Opponent.get_name()} damage taken ({t_dict['Total']}): {Opponent.get_damage_taken()}")
 
-            print(e.get_characters_stats(ctx=ctx))
+            print(e.get_characters_stats())
             # self.stats.update_totals()
-            self.logger.debug(ctx=ctx,msg='character_stats',
-                              json_dict=fix_dict_for_json(e.get_characters_stats(ctx=ctx)))
+            self.logger.debug(ctx=self.ctx,msg='character_stats',
+                              json_dict=fix_dict_for_json(e.get_characters_stats()))
 
 
         print(self.stats)
-        self.logger.debug(ctx=ctx,msg='series_stats', json_dict=fix_dict_for_json(self.stats.get_dict()))
+        self.logger.debug(ctx=self.ctx,msg='series_stats', json_dict=fix_dict_for_json(self.stats.get_dict()))
 
 if __name__ == '__main__':
     series_id = random.randrange(0, 100000, 2)

@@ -9,6 +9,7 @@ class Attack(object):
                  damage_modifier,
                  versatile_use_2handed=True,
                  vantage='Normal'):
+        self.ctx = ctx
         self.weapon_obj = weapon_obj
         self.damage_type = weapon_obj.default_damage_type
         self.attack_modifier = attack_modifier
@@ -23,8 +24,8 @@ class Attack(object):
             self.versatile_use_2handed = False
         self.rolls_used = None
         self.die_used = None
-        self.possible_damage = self.set_possible_damage(ctx=ctx)
-        self.natural_value = self.roll_attack(ctx=ctx)
+        self.possible_damage = self.set_possible_damage()
+        self.natural_value = self.roll_attack()
         if self.check_natural_value(20):
             self.possible_damage = self.possible_damage * 2
         self.possible_damage += self.damage_modifier
@@ -41,29 +42,29 @@ class Attack(object):
             return False
 
     @ctx_decorator
-    def roll_attack(self, ctx):
-        d = Die(ctx=ctx, sides=20)
+    def roll_attack(self):
+        d = Die(ctx=self.ctx, sides=20)
         if self.vantage == 'Advantage':
-            r = d.roll_with_advantage(ctx=ctx)
+            r = d.roll_with_advantage()
         elif self.vantage == 'Disadvantage':
-            r = d.roll_with_disadvantage(ctx=ctx)
+            r = d.roll_with_disadvantage()
         else:
-            r = d.roll(ctx=ctx)
+            r = d.roll()
         return r
 
     @ctx_decorator
-    def set_possible_damage(self, ctx):
+    def set_possible_damage(self):
         total = 0
         # print(self.weapon_obj.damage_dict.items())
         for key, value in self.weapon_obj.damage_dict.items():
             if value[0] == 1 and self.versatile_use_2handed is True:
-                d = Die(ctx=ctx, sides=self.weapon_obj.versatile_2hnd_die)
+                d = Die(ctx=self.ctx, sides=self.weapon_obj.versatile_2hnd_die)
                 self.die_used = self.weapon_obj.versatile_2hnd_die
                 self.rolls_used = self.weapon_obj.versatile_2hnd_mod
-                total += d.roll(ctx=ctx, rolls=self.weapon_obj.versatile_2hnd_mod)
+                total += d.roll(rolls=self.weapon_obj.versatile_2hnd_mod)
             else:
-                d = Die(ctx=ctx, sides=value[2])
-                total += d.roll(ctx=ctx, rolls=value[1])
+                d = Die(ctx=self.ctx, sides=value[2])
+                total += d.roll(rolls=value[1])
                 self.die_used = value[2]
                 self.rolls_used = value[1]
         return total
