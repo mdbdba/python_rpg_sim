@@ -86,8 +86,7 @@ class Die(object):
 
         self.details.append(t_roll_details)
 
-        # raise Exception('Test Exception')
-        self.logger.debug(msg=t_roll_details, ctx=self.ctx)
+        self.logger.debug(msg='roll_audit', json_dict=t_roll_details.__dict__, ctx=self.ctx)
 
         return tot
 

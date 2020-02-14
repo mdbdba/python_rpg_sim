@@ -41,8 +41,15 @@ def ctx_decorator(wrapped, instance, args, kwds):
         ctx.add_crumb(class_name=t_class, method_name=t_method, method_params=kwds,
                       parent_id=tmp_parent_id, event_id=event_id)
         ret = None
+        roll_ids = {}
         try:
             ret = wrapped(*args, **kwds)
+            if len(ctx.crumbs[-1].rollIds) > 0:
+                if ctx.crumbs[-1].className == 'Die' and len(ctx.crumbs) > 1:
+                    ctx.crumbs[-2].rollIds.extend(ctx.crumbs[-1].rollIds)
+                else:
+                    roll_ids = { 'used rolls': ctx.crumbs[-1].rollIds }
+
         except:
             print("Unexpected error:", sys.exc_info()[0])
             raise
@@ -55,19 +62,21 @@ def ctx_decorator(wrapped, instance, args, kwds):
                       'duration': str(end_time - start_time),
                       'returned': str(ret)
                       }
+            if len(roll_ids) > 0:
+                jdict['roll_ids'] = roll_ids
             logger.debug(msg='Event Context Record', json_dict=jdict, ctx=ctx)
 
-        if len(ctx.crumbs[-1].rollIds) > 0:
-            if ctx.crumbs[-1].className == 'Die' and len(ctx.crumbs) > 1:
-                ctx.crumbs[-2].rollIds.extend(ctx.crumbs[-1].rollIds)
-            else:
-                jdict = {'Parent': tmp_parent_id,
-                         'Event': event_id,
-                         'classname': ctx.crumbs[-1].className,
-                         'methodName': ctx.crumbs[-1].methodName,
-                         'used rolls': ctx.crumbs[-1].rollIds
-                }
-                logger.debug(msg='Roll Evaluation', json_dict=jdict, ctx=ctx)
+        # if len(ctx.crumbs[-1].rollIds) > 0:
+        #     if ctx.crumbs[-1].className == 'Die' and len(ctx.crumbs) > 1:
+        #         ctx.crumbs[-2].rollIds.extend(ctx.crumbs[-1].rollIds)
+        #     else:
+        #         jdict = {'Parent': tmp_parent_id,
+        #                  'Event': event_id,
+        #                  'classname': ctx.crumbs[-1].className,
+        #                  'methodName': ctx.crumbs[-1].methodName,
+        #                  'used rolls': ctx.crumbs[-1].rollIds
+        #         }
+        #         logger.debug(msg='Roll Evaluation', json_dict=jdict, ctx=ctx)
 
         ctx.pop_crumb()
         return ret
