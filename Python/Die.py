@@ -16,9 +16,20 @@ class Die(object):
         """
         self.sides = sides
         self.debug_ind = debug_ind
-        self.details = []  # RollAmount(die_used=sides)
+        self.details = [] # holds rollAmount objs
+        self.method_last_call_audit = {}  # dict where method name key holds last crumb for that method
         self.logger = RpgLogging(logger_name=ctx.logger_name)
         self.ctx = ctx
+
+    def add_method_last_call_audit(self, audit_obj):
+        self.method_last_call_audit[audit_obj['methodName']] = audit_obj
+
+    def get_method_last_call_audit(self, method_name='ALL'):
+        if method_name == 'ALL':
+            return_val = self.method_last_call_audit
+        else:
+            return_val = self.method_last_call_audit[method_name]
+        return return_val
 
     def get_last_detail(self):
         """
@@ -145,6 +156,8 @@ if __name__ == '__main__':
     print(f'Roll with disadvantage: {d6.roll_with_disadvantage()}')
     print(f'Roll for damage with resistance: {d6.roll_with_resistance(rolls=6)}')
     print(f'get_sum: {d6.get_sum(startingval=3, multiplier=1)}')
-    print(d6.get_last_detail())
-    for each_roll in d6.details:
-        print(each_roll)
+
+    print(d6.get_method_last_call_audit())
+    # print(d6.get_last_detail())
+    # for each_roll in d6.details:
+    #     print(each_roll)

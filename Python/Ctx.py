@@ -3,8 +3,6 @@ from typing import Dict, List   # Others: Set, Tuple, Optional
 from CommonFunctions import string_to_string_array
 from CommonFunctions import get_random_key
 from CommonFunctions import fix_dict_for_json
-# from Foe import Foe
-# from PlayerCharacter import PlayerCharacter
 from datetime import datetime
 
 import wrapt
@@ -12,14 +10,15 @@ import logging
 import structlog
 import itertools
 import sys
+import traceback
 import os
-import json
 
 @wrapt.decorator
 def ctx_decorator(wrapped, instance, args, kwds):
     ctx = None
     if instance and (getattr(instance, 'ctx', 'NotThere') != 'NotThere'):
         ctx = instance.ctx
+
     elif ('ctx' in kwds):
         ctx = kwds.get('ctx')
     if ctx is None:
@@ -27,9 +26,13 @@ def ctx_decorator(wrapped, instance, args, kwds):
 
     ctx.fullyqualified = wrapped.__qualname__
     if '.' in ctx.fullyqualified:
+        username_to_use = None
         t = string_to_string_array(ctx.fullyqualified, '.')
         t_class = t[0]
         t_method = t[1]
+        if ( t_class in ['PlayerCharacter', 'Foe'] and t_method not in ['__init__']):
+            if instance.get_name() not in ['Generic Character', 'Not Assigned']:
+                username_to_use = instance.get_name()
         logger = RpgLogging(logger_name=ctx.logger_name)
         event_id = f'EV{get_random_key()}'
         start_time = datetime.now()
@@ -39,7 +42,7 @@ def ctx_decorator(wrapped, instance, args, kwds):
             tmp_parent_id = ctx.crumbs[-1].event_id
 
         ctx.add_crumb(class_name=t_class, method_name=t_method, method_params=kwds,
-                      parent_id=tmp_parent_id, event_id=event_id)
+                      parent_id=tmp_parent_id, event_id=event_id, user_name=username_to_use)
         ret = None
         roll_ids = {}
         try:
@@ -64,28 +67,28 @@ def ctx_decorator(wrapped, instance, args, kwds):
                       }
             if len(roll_ids) > 0:
                 jdict['roll_ids'] = roll_ids
-            logger.debug(msg='Event Context Record', json_dict=jdict, ctx=ctx)
+            logger.debug(msg='event_context_record', json_dict=jdict, ctx=ctx)
+            try:
+                instance.add_method_last_call_audit({**ctx.crumbs[-1].__dict__, **jdict})
+            except:
+                exc_type, exc_value, exc_traceback = sys.exc_info()
 
-        # if len(ctx.crumbs[-1].rollIds) > 0:
-        #     if ctx.crumbs[-1].className == 'Die' and len(ctx.crumbs) > 1:
-        #         ctx.crumbs[-2].rollIds.extend(ctx.crumbs[-1].rollIds)
-        #     else:
-        #         jdict = {'Parent': tmp_parent_id,
-        #                  'Event': event_id,
-        #                  'classname': ctx.crumbs[-1].className,
-        #                  'methodName': ctx.crumbs[-1].methodName,
-        #                  'used rolls': ctx.crumbs[-1].rollIds
-        #         }
-        #         logger.debug(msg='Roll Evaluation', json_dict=jdict, ctx=ctx)
+                edict = { "className": ctx.crumbs[-1].className,
+                          "methodName": ctx.crumbs[-1].methodName,
+                          "error": traceback.format_exception(exc_type, exc_value, exc_traceback)
+                          }
+                logger.warning(msg='method_last_call_audit_error', json_dict=edict, ctx=ctx)
 
         ctx.pop_crumb()
         return ret
     else:
         return wrapped(*args, **kwds)
 
-def set_hide_arg_list():
+def get_hide_arg_list():
     return ['db', 'ctx', 'tracer']
 
+def init_audit_json():
+    return {}
 
 @dataclass
 class Crumb:
@@ -97,9 +100,13 @@ class Crumb:
     parent_id: str
     event_id: str
     call_depth: int
+    audit_json: Dict = field(default_factory=init_audit_json)
     timestamp: datetime = datetime.now()
-    hide_arg_list: List = field(default_factory=set_hide_arg_list)
+    # hide_arg_list: List = field(default_factory=set_hide_arg_list)
 
+
+    def add_audit(self, json_dict: Dict):
+        self.audit_json = {**self.audit_json, **json_dict}
 
     def __str__(self):
         out_str = (f'class_name = {self.className}, '
@@ -110,11 +117,9 @@ class Crumb:
                    f'call_depth =  {self.call_depth}, '
                    'method_params = {' )
         for mhd in self.methodParams.keys():
-            if mhd not in self.hide_arg_list:
+            if mhd not in get_hide_arg_list():
                 if isinstance(self.methodParams[mhd], (str, bool)):
                     out_str = (f'{out_str} {mhd} = \'{self.methodParams[mhd]}\', ')
-                # elif isinstance(self.methodParams[mhd], (Foe, PlayerCharacter)):
-                #     out_str = (f'{out_str} {mhd} = \'{self.methodParams[mhd].get_user_header()}\', ')
                 else:
                     out_str = (f'{out_str} {mhd} = {self.methodParams[mhd]}, ')
         if out_str[-2:] == ', ':
@@ -132,13 +137,11 @@ class Crumb:
                    f'"call_depth":  {self.call_depth}, '
                    '"method_params": {' )
         for mhd in self.methodParams.keys():
-            if mhd not in self.hide_arg_list:
+            if mhd not in get_hide_arg_list():
                 if self.methodParams[mhd] is None:
                     out_str = (f'{out_str} "{mhd}": "None", ')
                 elif isinstance(self.methodParams[mhd], (str, bool)):
                     out_str = (f'{out_str} "{mhd}": "{self.methodParams[mhd]}", ')
-            #     elif isinstance(self.methodParams[mhd], (Foe, PlayerCharacter)):
-            #         out_str = (f'{out_str} "{mhd}": "{self.methodParams[mhd].get_user_header()}", ')
                 else:
                     out_str = (f'{out_str} "{mhd}": {self.methodParams[mhd]!r}, ')
         if out_str[-2:] == ', ':
@@ -172,7 +175,7 @@ class Ctx:
         return next(self.log_counter)
 
     def add_crumb(self, class_name: str, method_name: str, method_params: Dict, parent_id: str,
-                  event_id: str,  user_name: str='Unknown'):
+                  event_id: str,  user_name: str = 'Unknown'):
         t_crumb = Crumb(className=class_name, methodName=method_name, methodParams=method_params,
                         rollIds=[], userName=user_name, parent_id=parent_id, event_id=event_id,
                         call_depth=(len(self.crumbs) + 1))
@@ -196,10 +199,10 @@ class Ctx:
         return return_value
 
     def get_crumbs(self):
+        return_value = []
         if len(self.crumbs) > 0:
-            return_value = fix_dict_for_json(self.crumbs.__dict__)
-        else:
-            return_value = []
+            for crumb in self.crumbs:
+                return_value.append(fix_dict_for_json(crumb.__dict__))
         return return_value
 
     def __repr__(self):
@@ -330,9 +333,9 @@ class RpgLogging:
 
 if __name__ == '__main__':
     ctx = Ctx(app_username='demo_user_1', encounter_id=123, round=0, turn=0)
-    ctx.add_crumb('bogus_class', 'a_method', {"ctx": "THIS SHOULD NOT PRINT", "param1": "value1", "param2": 2}, 'PA1543','EX12345')
-    ctx.add_crumb('bogus_class', 'b_method', {"ctx": "THIS SHOULD NOT PRINT", "param1": "value3", "param2": 4}, 'PA7654','EX23456')
-    ctx.add_crumb('bogus_class', 'c_method', {"ctx": "THIS SHOULD NOT PRINT", "param1": "value5", "param2": 6}, 'PA0987','EX34567')
+    ctx.add_crumb('bogus_class', 'a_method', {"ctx": ctx, "param1": "value1", "param2": 2}, 'PA1543','EX12345')
+    ctx.add_crumb('bogus_class', 'b_method', {"ctx": ctx, "param1": "value3", "param2": 4}, 'PA7654','EX23456')
+    ctx.add_crumb('bogus_class', 'c_method', {"ctx": ctx, "param1": "value5", "param2": 6}, 'PA0987','EX34567')
     print(ctx.print_crumbs())
     print(ctx.get_last_crumb())
     ctx.pop_crumb()

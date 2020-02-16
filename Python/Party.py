@@ -23,6 +23,7 @@ class Party(object):
                  debug_ind=0):
 
         self.ctx = ctx
+        self.method_last_call_audit = {}
         self.character_id_str = character_id_str
         self.party_composition_id = party_composition_id
         self.name = name
@@ -63,6 +64,18 @@ class Party(object):
             self.verify_character_id_list(db=db)
             self.create_party_in_db(db=db)
             self.character_list = self.build_character_list(db=db)
+
+
+    def add_method_last_call_audit(self, audit_obj):
+        self.method_last_call_audit[audit_obj['methodName']] = audit_obj
+
+    def get_method_last_call_audit(self, method_name='ALL'):
+        if method_name == 'ALL':
+            return_val = self.method_last_call_audit
+        else:
+            return_val = self.method_last_call_audit[method_name]
+        return return_val
+
 
     def get_party_name(self):
         return self.name

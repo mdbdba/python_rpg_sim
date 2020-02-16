@@ -54,6 +54,7 @@ class Encounter(object):
         with self.tracer.span(name='encounter'):
             self.ctx = ctx
             self.debug_ind = debug_ind
+            self.method_last_call_audit = {}
             self.Heroes = heroes
             self.Opponents = opponents
             self.active = True
@@ -94,6 +95,17 @@ class Encounter(object):
                 self.logger.debug(msg="Initiative Array: {self.initiative}", ctx=ctx)
 
             self.master_loop()
+
+    def add_method_last_call_audit(self, audit_obj):
+        self.method_last_call_audit[audit_obj['methodName']] = audit_obj
+
+    def get_method_last_call_audit(self, method_name='ALL'):
+        if method_name == 'ALL':
+            return_val = self.method_last_call_audit
+        else:
+            return_val = self.method_last_call_audit[method_name]
+        return return_val
+
 
     def get_encounter_stats(self):
         return self.stats

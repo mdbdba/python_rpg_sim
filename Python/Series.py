@@ -28,6 +28,7 @@ class Series(object):
                  debug_ind: int = 0):
         self.db = db
         self.ctx = ctx
+        self.method_last_call_audit = {}
         self.study_instance_id = study_instance_id
         self.series_id = series_id
         self.stats = SeriesStats(study_instance_id=self.study_instance_id, series_id=self.series_id)
@@ -52,6 +53,18 @@ class Series(object):
               f"encounter_param_dict={encounter_param_dict} "
               f"debug_ind={debug_ind}")
         self.run_series()
+
+
+    def add_method_last_call_audit(self, audit_obj):
+        self.method_last_call_audit[audit_obj['methodName']] = audit_obj
+
+    def get_method_last_call_audit(self, method_name='ALL'):
+        if method_name == 'ALL':
+            return_val = self.method_last_call_audit
+        else:
+            return_val = self.method_last_call_audit[method_name]
+        return return_val
+
 
     @ctx_decorator
     def assign_encounter_params(self):

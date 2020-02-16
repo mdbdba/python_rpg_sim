@@ -10,6 +10,7 @@ class Attack(object):
                  versatile_use_2handed=True,
                  vantage='Normal'):
         self.ctx = ctx
+        self.method_last_call_audit = {}
         self.weapon_obj = weapon_obj
         self.damage_type = weapon_obj.default_damage_type
         self.attack_modifier = attack_modifier
@@ -30,6 +31,16 @@ class Attack(object):
             self.possible_damage = self.possible_damage * 2
         self.possible_damage += self.damage_modifier
         self.attack_value = self.natural_value + self.attack_modifier
+
+    def add_method_last_call_audit(self, audit_obj):
+        self.method_last_call_audit[audit_obj['methodName']] = audit_obj
+
+    def get_method_last_call_audit(self, method_name='ALL'):
+        if method_name == 'ALL':
+            return_val = self.method_last_call_audit
+        else:
+            return_val = self.method_last_call_audit[method_name]
+            return return_val
 
         # print(self.possible_damage)
     def get_natural_value(self):

@@ -4,6 +4,7 @@ from Weapon import Weapon
 from Die import Die
 from Ctx import Ctx
 from Ctx import ctx_decorator
+from Ctx import RpgLogging
 
 from CommonFunctions import string_to_array
 
@@ -122,10 +123,6 @@ class Foe(Character):
 
     @ctx_decorator
     def assign_hit_points(self ):
-        self.lastMethodLog = (f'assign_hit_points( '
-                              f'{self.hit_point_die}, '
-                              f'{self.hit_point_modifier}, '
-                              f'{self.hit_point_adjustment})')
         if not self.hit_point_adjustment:
             self.hit_point_adjustment = 0
 
@@ -139,8 +136,13 @@ class Foe(Character):
             ret_val = (d.roll(self.hit_point_modifier)
                        + self.hit_point_adjustment)
 
-        if self.debug_ind:
-            self.class_eval[-1]["hitPoints"] = ret_val
+        jdict = {
+            "hit_point_generator": self.hit_point_generator,
+            "hit_point_modifier": self.hit_point_modifier,
+            "hit_point_die": self.hit_point_die,
+            "hit_point_admustment": self.hit_point_adjustment
+        }
+        self.ctx.crumbs[-1].add_audit(json_dict=jdict)
 
         return ret_val
 
@@ -244,12 +246,36 @@ class Foe(Character):
 
 if __name__ == '__main__':
     db = InvokePSQL()
-    ctx = Ctx(app_username='foe_class_init')
-    a1 = Foe(db=db, ctx=ctx, foe_candidate="Skeleton", debug_ind=1)
-    print(a1)
-    a1.melee_defend(modifier=13, possible_damage=a1.hit_points,
-                    damage_type='Bludgeoning')
-    a1.heal(amount=10)
-    a1.melee_defend(modifier=13, possible_damage=(2 * a1.hit_points),
-                    damage_type='Bludgeoning')
-    print(a1.__repr__())
+    logger_name = f'foe_main'
+    ctx = Ctx(app_username='foe_class_init', logger_name=logger_name)
+    logger = RpgLogging(logger_name=logger_name, level_threshold='debug')
+    logger.setup_logging()
+    try:
+        a1 = Foe(db=db, ctx=ctx, foe_candidate="Skeleton", debug_ind=1)
+        print(a1)
+        a1.melee_defend(modifier=13, possible_damage=a1.hit_points,
+                        damage_type='Bludgeoning')
+        a1.heal(amount=10)
+        a1.melee_defend(modifier=13, possible_damage=(2 * a1.hit_points),
+                        damage_type='Bludgeoning')
+        print(a1.__repr__())
+
+    except Exception as error:
+        exc_type, exc_value, exc_traceback = sys.exc_info()
+        print(f'Context Information:\n\t'
+              f'App_username:      {ctx.app_username}\n\t'
+              f'Full Name:         {ctx.fullyqualified}\n\t'
+              f'Logger Name:       {ctx.logger_name}\n\t' 
+              f'Trace Id:          {ctx.trace_id}\n\t' 
+              f'Study Instance Id: {ctx.study_instance_id}\n\t' 
+              f'Study Name:        {ctx.study_name}\n\t' 
+              f'Series Id:         {ctx.series_id}\n\t' 
+              f'Encounter Id:      {ctx.encounter_id}\n\t' 
+              f'Round:             {ctx.round}\n\t' 
+              f'Turn:              {ctx.turn}\n')
+
+        for line in ctx.crumbs:
+            print(line)
+
+        for line in traceback.format_exception(exc_type, exc_value, exc_traceback):
+            print(line)

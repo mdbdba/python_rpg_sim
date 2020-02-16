@@ -9,6 +9,7 @@ class Study:
     def __init__(self, ctx: Ctx, app_username: str, study_name: str,
                  study_instance_id: int = None, repetitions: int = None):
         self.ctx = ctx
+        self.method_last_call_audit = {}
         if self.ctx.app_username == "Unknown" or self.ctx.app_username == "Study_class_init":
             self.ctx.app_username = app_username
 
@@ -29,6 +30,16 @@ class Study:
         #
 
         self.log.debug("Leaving class init.", self.ctx)
+
+    def add_method_last_call_audit(self, audit_obj):
+        self.method_last_call_audit[audit_obj['methodName']] = audit_obj
+
+    def get_method_last_call_audit(self, method_name='ALL'):
+        if method_name == 'ALL':
+            return_val = self.method_last_call_audit
+        else:
+            return_val = self.method_last_call_audit[method_name]
+        return return_val
 
     @ctx_decorator(ctx)
     def test_method_a(self, id):

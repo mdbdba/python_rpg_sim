@@ -39,6 +39,7 @@ class AbilityArray(object):
         :param debug_ind: log to class_eval array? (default: False)
         """
         self.ctx = ctx
+        self.method_last_call_audit = {}
         self.array_type = array_type
         self.pref_array = pref_array
         self.pref_str_array = ['', '', '', '', '', '']
@@ -71,6 +72,17 @@ class AbilityArray(object):
                                 "ignore_pref_array": ignore_pref_array,
                                 "debug_ind": debug_ind})
         self._populate()
+
+
+    def add_method_last_call_audit(self, audit_obj):
+        self.method_last_call_audit[audit_obj['methodName']] = audit_obj
+
+    def get_method_last_call_audit(self, method_name='ALL'):
+        if method_name == 'ALL':
+            return_val = self.method_last_call_audit
+        else:
+            return_val = self.method_last_call_audit[method_name]
+        return return_val
 
     @ctx_decorator
     def _populate(self):

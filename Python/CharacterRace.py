@@ -10,6 +10,7 @@ class CharacterRace(object):
     def __init__(self, db, ctx, race_candidate="Random", use_rasm_ind=True):
         self.ctx = ctx
         self.use_rasm_ind = use_rasm_ind
+        self.method_last_call_audit = {}
         self.race = ""
         self.subrace_of = ""
         self.maturity_age = -999
@@ -54,6 +55,18 @@ class CharacterRace(object):
                 self.populate_details(db=db, race_candidate=race_candidate)
             else:
                 raise Exception(f'Could not find race: {race_candidate}')
+
+
+    def add_method_last_call_audit(self, audit_obj):
+        self.method_last_call_audit[audit_obj['methodName']] = audit_obj
+
+    def get_method_last_call_audit(self, method_name='ALL'):
+        if method_name == 'ALL':
+            return_val = self.method_last_call_audit
+        else:
+            return_val = self.method_last_call_audit[method_name]
+        return return_val
+
 
     @ctx_decorator
     def get_random_race_name(self, db, parent_race="None"):

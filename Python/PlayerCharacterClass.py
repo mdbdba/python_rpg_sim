@@ -31,6 +31,7 @@ class PlayerCharacterClass(object):
         self.name = ""
         self.subclass_of = ""
         self.ctx = ctx
+        self.method_last_call_audit = {}
         # Strength = 0
         # Dexterity = 1
         # Constitution = 2
@@ -63,6 +64,18 @@ class PlayerCharacterClass(object):
             raise Exception(f'Could not find class: {classCandidate}')
 
         self.setCharacterAlteringClassFeatures(db=db)
+
+
+    def add_method_last_call_audit(self, audit_obj):
+        self.method_last_call_audit[audit_obj['methodName']] = audit_obj
+
+    def get_method_last_call_audit(self, method_name='ALL'):
+        if method_name == 'ALL':
+            return_val = self.method_last_call_audit
+        else:
+            return_val = self.method_last_call_audit[method_name]
+        return return_val
+
 
     @ctx_decorator
     def setArmorWeapons(self):

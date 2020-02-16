@@ -34,6 +34,7 @@ class Character(object):
         # raise Exception("test error")
         self.db = db
         self.ctx = ctx
+        self.method_last_call_audit = {}
         level = int(level)
         if level < 1 or level > 20:
             raise ValueError('Level should be between 1 and 20.')
@@ -45,11 +46,6 @@ class Character(object):
         self.debug_ind = debug_ind
         self.debugStr = ''
 
-        # if ((self.debug_ind == 1) and
-        #    ((getattr(self, "logger", None)) is None)):#
-        #     log_fmt = '%(asctime)s - %(levelname)s - %(message)s'
-        #     logging.basicConfig(format=log_fmt, level=logging.DEBUG)
-        #     self.logger = logging.getLogger(__name__)
         self.logger = RpgLogging(logger_name=ctx.logger_name)
 
         y = getattr(self, "class_eval", None)
@@ -141,6 +137,16 @@ class Character(object):
                         series_id=series_id,
                         encounter_id=encounter_id
                         )
+
+    def add_method_last_call_audit(self, audit_obj):
+        self.method_last_call_audit[audit_obj['methodName']] = audit_obj
+
+    def get_method_last_call_audit(self, method_name='ALL'):
+        if method_name == 'ALL':
+            return_val = self.method_last_call_audit
+        else:
+            return_val = self.method_last_call_audit[method_name]
+        return return_val
 
     @ctx_decorator
     def init_stats(self, study_instance_id, series_id, encounter_id):
@@ -254,40 +260,28 @@ class Character(object):
         return 15
 
     @ctx_decorator
+    def set_movement(self, amount:int):
+        jdict = {
+            "from_movement": self.cur_movement,
+            "to_movement": amount,
+        }
+        self.cur_movement = amount
+        self.ctx.crumbs[-1].add_audit(json_dict=jdict)
+
     def zero_movement(self):
-        self.last_method_log = f'zero_movement()'
-        self.cur_movement = 0
-        msg = (f"{self.get_name()}: zero movement to " 
-               f"{self.cur_movement}")
-        self.logger.debug(msg=msg, ctx=self.ctx)
+        self.set_movement(0)
 
-    @ctx_decorator
     def half_movement(self):
-        self.last_method_log = f'half_movement()'
-        self.cur_movement = self.cur_movement // 2
-        msg = (f"{self.get_name()}: half movement to "
-               f"{self.cur_movement}")
-        self.logger.debug(msg=msg, ctx=self.ctx)
+        self.set_movement((self.cur_movement // 2))
 
-    @ctx_decorator
     def double_movement(self):
-        self.last_method_log = f'double_movement()'
-        self.cur_movement = self.get_base_movement() * 2
-        msg = (f"{self.get_name()}: double movement to "
-               f"{self.cur_movement}")
-        self.logger.debug(msg=msg, ctx=self.ctx)
+        self.set_movement(( self.cur_movement * 2))
 
-    @ctx_decorator
     def reset_movement(self):
-        self.last_method_log = f'reset_movement()'
-        self.cur_movement = self.get_base_movement()
-        msg = (f"{self.get_name()}: reset movement to "
-               f"{self.cur_movement}")
-        self.logger.debug(msg=msg, ctx=self.ctx)
+        self.set_movement( self.get_base_movement())
 
     @ctx_decorator
     def change_exhaustion_level(self, amount):
-        self.last_method_log = f'change_exhaustion_level({amount})'
         orig_level = self.exhaustion_level
         self.exhaustion_level += amount
 
@@ -313,9 +307,11 @@ class Character(object):
         if self.exhaustion_level >= 6:
             self.alive = False
 
-        msg = (f"{self.get_name()}: exhaustion level change to "
-               f"{self.exhaustion_level}")
-        self.logger.debug(msg=msg, ctx=self.ctx)
+        jdict = {
+            "from_exhaustion_level": orig_level,
+            "to_exhaustion_level": self.exhaustion_level
+        }
+        self.ctx.crumbs[-1].add_audit(json_dict=jdict)
 
     @ctx_decorator
     def get_ability_modifier(self, ability):
@@ -388,13 +384,16 @@ class Character(object):
 
         self.armor_class = base_ac + shield_bonus + dex_mod
 
-        msg = (f"{self.get_name()}: armorClass set to "
-               f"{self.armor_class}")
-        self.logger.debug(msg=msg, ctx=self.ctx)
+        jdict = {
+            "base_ac": base_ac,
+            "shield_bonus": shield_bonus,
+            "dex_mod": dex_mod,
+            "armor_class": self.armor_class
+        }
+        self.ctx.crumbs[-1].add_audit(json_dict=jdict)
 
     @ctx_decorator
     def contest_check(self, ability, vantage='Normal'):
-        self.last_method_log = f'contest_check({ability}, {vantage})'
         d = Die(ctx=self.ctx, sides=20)
         if vantage == 'Normal':
             r = d.roll()
@@ -407,18 +406,17 @@ class Character(object):
 
         ret_val = r + mod
 
-        msg = (f"{self.get_name()}: contest_check "
-               f"{ability} with {vantage} vantage returned {ret_val}")
-        self.logger.debug(msg=msg, ctx=self.ctx)
+        jdict = {
+            "roll_amount": r,
+            "modifier": mod
+        }
+        self.ctx.crumbs[-1].add_audit(json_dict=jdict)
 
         return ret_val
 
     @ctx_decorator
     def roll_for_initiative(self, vantage='Normal'):
         ret_val = self.contest_check(ability='Dexterity', vantage=vantage)
-        msg = (f"{self.get_name()}: roll_for_initiative "
-               f"with {vantage} vantage returned {ret_val}")
-        self.logger.debug(msg=msg, ctx=self.ctx)
         return ret_val
 
     def get_racial_traits(self):
@@ -426,7 +424,6 @@ class Character(object):
 
     @ctx_decorator
     def check_proficiency_skill(self, ability):
-        self.last_method_log = f'check_proficiency_skill({ability})'
         ret_val = False
         t = self.get_racial_traits()
         if t:
@@ -434,22 +431,33 @@ class Character(object):
                 if b.category == "Proficiency Skill":
                     if b.affected_name == ability:
                         ret_val = True
-        msg = (f"{self.get_name()}: Proficiency for "
-               f"with {ability} returned {ret_val}")
-        self.logger.debug(msg=msg, ctx=self.ctx)
-
         return ret_val
 
     @ctx_decorator
     def incr_death_save_failed_cnt(self, amount: int = 1):
+        from_value = self.death_save_failed_cnt
+        from_alive = self.alive
         self.death_save_failed_cnt += amount
         if self.death_save_failed_cnt >= 3:
             self.alive = False
-            self.logger.debug(msg=f'{self.get_name()}: Three failed death saves. '
-                              f'Character has died.', ctx=self.ctx)
+
+        jdict = {
+            "from_death_save_value": from_value,
+            "to_death_save_value": self.death_save_failed_cnt,
+            "from_alive": from_alive,
+            "to_alive": self.alive
+        }
+        self.ctx.crumbs[-1].add_audit(json_dict=jdict)
 
     @ctx_decorator
     def stabilize(self):
+        from_cur_hit_points = self.cur_hit_points
+        from_death_save_passed_cnt = self.death_save_passed_cnt
+        from_death_save_failed_cnt = self.death_save_failed_cnt
+        from_stabilized = self.stabilized
+        from_alive = self.alive
+        from_unconscious_ind = self.unconscious_ind
+
         if self.cur_hit_points < 1:
             self.cur_hit_points = 1
         self.death_save_passed_cnt = 0
@@ -457,48 +465,52 @@ class Character(object):
         self.stabilized = True
         self.alive = True
         self.unconscious_ind = False
-        self.logger.debug(msg=f'{self.get_name()}: Has stabilized.', ctx=self.ctx)
+
+        jdict = {
+            "from_cur_hit_points": from_cur_hit_points,
+            "to_cur_hit_points": self.cur_hit_points,
+            "from_death_save_passed_cnt": from_death_save_passed_cnt,
+            "to_death_save_passed_cnt": self.death_save_passed_cnt,
+            "from_death_save_failed_cnt": from_death_save_failed_cnt,
+            "to_death_save_failed_cnt": self.death_save_failed_cnt,
+            "from_stabilized": from_stabilized,
+            "to_stabilized": self.stabilized,
+            "from_alive": from_alive,
+            "to_alive": self.alive,
+            "from_unconscious_ind": from_unconscious_ind,
+            "to_unconscious_ind": self.unconscious_ind,
+        }
+        self.ctx.crumbs[-1].add_audit(json_dict=jdict)
 
     @ctx_decorator
     def death_save(self, vantage='Normal'):
-        self.last_method_log = f'death_save({vantage})'
-        tmp_str = 'Performs death save.'
+        from_death_save_passed_cnt = self.death_save_passed_cnt,
+        from_death_save_failed_cnt = self.death_save_failed_cnt
         res = self.contest_check(ability='Death', vantage=vantage)
         if res == 20:  # character is stablized
             self.stabilize()
-            tmp_str = f'{tmp_str}\nResult: Nat 20. Character Stabilized'
         elif res >= 10:  # normal pass
             self.death_save_passed_cnt += 1
-            tmp_str = (f'{tmp_str}\nPassed. Current counts: (P/F) ' 
-                       f'{self.death_save_passed_cnt}/' 
-                       f'{self.death_save_failed_cnt}')
         elif res == 1:   # crit fail
             self.incr_death_save_failed_cnt(amount=2)
-            tmp_str = (f'{tmp_str}\nCrit fail. Current counts: (P/F) ' 
-                       f'{self.death_save_passed_cnt}/' 
-                       f'{self.death_save_failed_cnt}')
         else:   # res < 10 -- normal fail
             self.incr_death_save_failed_cnt(amount=1)
-            tmp_str = (f'{tmp_str}\nFailed. Current counts: (P/F) ' 
-                       f'{self.death_save_passed_cnt}/' 
-                       f'{self.death_save_failed_cnt}')
 
         if self.death_save_passed_cnt >= 3:
             self.stabilize()
-            tmp_str = (f'{tmp_str}\nThree passed death saves. ' 
-                       f'Character Stabilized')
-        # elif self.death_save_failed_cnt >= 3:
-        #      self.alive = False
-        #     tmp_str = (f'{tmp_str}\nThree failed death saves. '
-        #                f'Character has died.')
 
-        msg = f"{self.get_name()}: {tmp_str}"
-        self.logger.debug(msg=msg, ctx=self.ctx)
+        jdict = {
+            "roll_value": res,
+            "from_death_save_passed_cnt": from_death_save_passed_cnt,
+            "to_death_save_passed_cnt": self.death_save_passed_cnt,
+            "from_death_save_failed_cnt": from_death_save_failed_cnt,
+            "to_death_save_failed_cnt": self.death_save_failed_cnt
+        }
+        self.ctx.crumbs[-1].add_audit(json_dict=jdict)
 
     @ctx_decorator
     def check(self, skill, vantage='Normal', dc=10):
-        self.last_method_log = f'check({skill}, {vantage}, {dc})'
-        tmp_str = ''
+        jdict = {"dc": dc}
         # Saving throw
         if (skill == 'Strength' or skill == 'Dexterity'
                 or skill == 'Constitution' or skill == 'Intelligence'
@@ -537,33 +549,34 @@ class Character(object):
             #       or skill == 'Persuasion'):
             else:
                 ability = 'Charisma'
-            tmp_str = f'{tmp_str}{skill} '
+            jdict['ability'] = ability
             # at exhaustion level 1 skills checks are affected
             if self.exhaustion_level >= 1:
                 if vantage == 'Advantage':
                     vantage = 'Normal'
                 else:
                     vantage = 'Disadvantage'
+            jdict['exhaustion_level'] = self.exhaustion_level
+            jdict['used_vantage'] = vantage
+
             adjusted_roll = self.contest_check(ability=ability, vantage=vantage)
 
+            jdict['ability_adjusted_roll'] = adjusted_roll
+
+            t_pb = 0
             if self.check_proficiency_skill(ability=skill):
-                adjusted_roll = adjusted_roll + int(self.proficiency_bonus)
-                tmp_str = f'{tmp_str} + Prof({self.proficiency_bonus}) '
+                t_pb = int(self.proficiency_bonus)
+                adjusted_roll = adjusted_roll + t_pb
+
+            jdict['added_proficiency_bonus'] = t_pb
+            jdict['used_adjusted_roll'] = adjusted_roll
 
         if adjusted_roll >= dc:
             res = True
         else:
             res = False
 
-        tmp_str = f'{tmp_str}{adjusted_roll} >= {dc} '
-        if res:
-            tmp_str = f'{tmp_str} (true)\n'
-        else:
-            tmp_str = f'{tmp_str} (false)\n'
-
-        msg = f"{self.get_name()}: {tmp_str}"
-        self.logger.debug(msg=msg, ctx=self.ctx)
-
+        self.ctx.crumbs[-1].add_audit(json_dict=jdict)
         return res
 
     def get_damage_generator(self):
@@ -571,50 +584,42 @@ class Character(object):
 
     @ctx_decorator
     def damage(self, amount, damage_type="Unknown"):
-        self.last_method_log = f'damage({amount}, {damage_type})'
 
         tmp_type = self.damage_adj[damage_type]
 
+        jdict = { "damage_adj": tmp_type }
         if tmp_type and tmp_type == 'resistant':
-            tmp_str = f'Originally, {amount} points of {damage_type} damage.\n'
             amount = amount // 2
-            tmp_str = f'{tmp_str}Reduced to {amount} points due to {damage_type} resistance.'
         elif tmp_type and tmp_type == 'vulnerable':
-            tmp_str = f'Originally, {amount} points of {damage_type} damage.'
             amount = amount * 2
-            tmp_str = f'{tmp_str}Increased to {amount} points due to {damage_type} vulnerability.'
-        else:
-            tmp_str = f'Suffers {amount} points of {damage_type} damage.'
+
+        jdict['used_amount'] = amount
+        jdict['from_unconscious'] = self.unconscious_ind
+        jdict['from_stabilized'] = self.stabilized
+        jdict['from_hit_points'] = self.cur_hit_points
 
         if amount >= self.cur_hit_points:
-            if self.unconscious_ind is False:
-                tmp_str = (f'{tmp_str}\n{amount} exceeds current hit points' 
-                           f'({self.cur_hit_points}): knocked unconsious')
-            else:
-                tmp_str = (f'{tmp_str}\n{amount} damage against unconscious target '
-                           f'({self.cur_hit_points})')
             self.unconscious_ind = True
             self.stabilized = False
+            jdict['to_unconscious'] = self.unconscious_ind
+            jdict['to_stabilized'] = self.stabilized
 
             # Instant Death?
             if (amount - self.cur_hit_points) >= self.hit_points:
-                tmp_str = (f'{tmp_str}\n{(amount - self.cur_hit_points)}' 
-                           f' exceeds hit points' 
-                           f'({self.hit_points}): Instant Death')
                 self.incr_death_save_failed_cnt(amount=3)
+                jdict['instant_death'] = True
+            else:
+                jdict['instant_death'] = False
 
             self.cur_hit_points = 0
         else:
             thp = self.cur_hit_points
             self.cur_hit_points -= amount
-            tmp_str = (f'{tmp_str}\nResulting in ({thp} - {amount}) ' 
-                       f'{self.cur_hit_points} points')
 
+        jdict['cur_hit_points']= self.cur_hit_points
         self.stats.inc_damage_taken(damage_type=damage_type, amount=amount)
 
-        #     for i in tmp_str.splitlines():
-        #         self.logger.debug(f"{self.get_name()}: {i}", self.ctx)
-        self.logger.debug(msg=f"{self.get_name()}: {tmp_str}", ctx=self.ctx)
+        self.ctx.crumbs[-1].add_audit(json_dict=jdict)
 
     def get_user_header(self):
         return f'{self.name}({self.cur_hit_points}/{self.hit_points})'
@@ -623,6 +628,14 @@ class Character(object):
     def get_action(self, dist_list):
         ret_val = "Done"
         op_dist = dist_list[0][0]
+        jdict = {
+            "character_alive": self.alive,
+            "character_stabilized": self.stabilized,
+            "combat_preference": self.combat_preference,
+            "cur_movement": self.cur_movement,
+            "opponent_distance": op_dist,
+            "ranged_weapon_range": self.get_ranged_range()
+        }
         if not self.alive:
             ret_val = "None"
         elif not self.stabilized:
@@ -635,13 +648,14 @@ class Character(object):
             elif op_dist <= 8:
                 ret_val = "Melee"
         else:
-            if op_dist > self.get_ranged_range:
+            if op_dist > self.get_ranged_range():
                 ret_val = "Movement"
             elif self.get_ranged_range >= op_dist > 8:
                 ret_val = "Ranged"
             elif op_dist <= 8:
                 ret_val = "Melee"
 
+        self.ctx.crumbs[-1].add_audit(json_dict=jdict)
         return ret_val
 
     def get_vantage(self):
@@ -655,6 +669,13 @@ class Character(object):
             self.finesse_ability_mod = 'Strength'
         else:
             self.finesse_ability_mod = 'Dexterity'
+
+        jdict = {
+            "strength_ability_mod": s,
+            "dexterity_ability_mod": d,
+            "finesse_ability_mod": self.finesse_ability_mod
+        }
+        self.ctx.crumbs[-1].add_audit(json_dict=jdict)
 
     @ctx_decorator
     def add_proficiency_bonus_for_attack(self, weapon_obj):
@@ -683,18 +704,21 @@ class Character(object):
         #     modifier = int(self.proficiency_bonus)
         # else:
         modifier = self.add_proficiency_bonus_for_attack(weapon_obj)
+        jdict = { "weapon_proficiency_bonus": modifier}
 
         modifier += self.get_ability_modifier('Dexterity')
         damage_modifier = self.get_ability_modifier('Dexterity')
+
+        jdict["attack_modifier"] = modifier
+        jdict["ability_damage_modifier"] = damage_modifier
 
         attempt = Attack(weapon_obj=weapon_obj, attack_modifier=modifier,
                          damage_modifier=damage_modifier,
                          versatile_use_2handed=False, vantage=vantage)
 
-        self.logger.debug(msg=f"{self.get_name()}: Ranged Attack Value: "
-                          f"{attempt.attack_value}", ctx=self.ctx)
-        self.logger.debug(msg=f"{self.get_name()}: Ranged Poss. damage: "
-                          f"{attempt.possible_damage}", ctx=self.ctx)
+        jdict['ranged_attack_value'] = attempt.attack_value
+        jdict['ranged_possible_damage'] = attempt.possible_damage
+        self.ctx.crumbs[-1].add_audit(json_dict=jdict)
 
     @ctx_decorator
     def is_not_using_shield(self):
@@ -713,6 +737,7 @@ class Character(object):
         # else:
         #     modifier = 0
         modifier = self.add_proficiency_bonus_for_attack(weapon_obj=weapon_obj)
+        jdict = { "weapon_proficiency_bonus": modifier}
         # damage_modifier = 0
         # 2)  Add the users Ability bonus, Strength for standard weapons
         #     or self.finesse_ability_mod for Finesse wepons
@@ -723,7 +748,13 @@ class Character(object):
             modifier += self.get_ability_modifier(ability='Strength')
             damage_modifier = self.get_ability_modifier(ability='Strength')
 
-        # if self.classObj.shield is None and weapon_obj.versatile_ind is True:
+        jdict["weapon"] = weapon_obj.name
+        jdict["finesse_ind"] = weapon_obj.finesse_ind
+        jdict["attack_modifier"] = modifier
+        jdict["ability_damage_modifier"] = damage_modifier
+        jdict["is_not_using_shield"] = self.is_not_using_shield()
+        jdict["versatile_weapon"] = weapon_obj.versatile_ind
+
         if self.is_not_using_shield() and weapon_obj.versatile_ind is True:
             v2h = True
         else:
@@ -734,6 +765,8 @@ class Character(object):
                          versatile_use_2handed=v2h, vantage=vantage)
         ret_val: tuple = (attempt.attack_value, attempt.possible_damage, attempt.damage_type)
 
+        jdict["roll_natural_value"] = attempt.natural_value
+        jdict["attack_value"] = attempt.attack_value
         self.attack_roll_count += 1
         if attempt.natural_value == 20:
             self.attack_roll_nat20_count += 1
@@ -742,20 +775,13 @@ class Character(object):
         attack_roll: tuple = (attempt.natural_value, attempt.attack_value)
         self.attack_rolls.append(attack_roll)
 
-        self.logger.debug(msg=f"{self.get_name()}: Melee Attack Value: "
-                          f"{attempt.attack_value}", ctx=self.ctx)
-        self.logger.debug(msg=f"{self.get_name()}: Melee Poss. damage: "
-                          f"{attempt.possible_damage}", ctx=self.ctx)
+        self.ctx.crumbs[-1].add_audit(json_dict=jdict)
+
         return ret_val
 
     @ctx_decorator
     def melee_defend(self, modifier=0, vantage='Normal',
                      possible_damage=0, damage_type='Unknown', attack_value=None):
-        self.last_method_log = (f'melee_defend({modifier}, ' 
-                                f'{vantage}, {possible_damage}, ' 
-                                f'{damage_type})')
-
-        self.logger.debug(msg=f"{self.get_name()} attempts to defend against melee.", ctx=self.ctx)
 
         d = Die(ctx=self.ctx, sides=20)
         if self.prone_ind:
@@ -763,6 +789,10 @@ class Character(object):
                 vantage = 'Normal'
             else:
                 vantage = 'Advantage'
+
+        jdict = { "prone_ind": self.prone_ind}
+        jdict["used_vantage"] = vantage
+
         if attack_value:
             value = attack_value
         else:
@@ -775,41 +805,34 @@ class Character(object):
 
             value = t_val + modifier
 
+        jdict['used_attack_value'] = value
+        jdict['armor_class'] = self.armor_class
+
         if value >= self.armor_class:
-            tmp_str = (f'Fails to defend against melee attack roll: ' 
-                       f'{value} >= {self.armor_class}')
             ret = False
             if self.cur_hit_points < 1:
                 self.incr_death_save_failed_cnt(amount=2)
-                self.logger.debug(msg=f"{self.get_name()}: attacked while unconscious. Incurs two failed Death Saves.",
-                                  ctx=self.ctx)
 
             if possible_damage > 0:
                 self.damage(amount=possible_damage, damage_type=damage_type)
         else:
-            tmp_str = (f'Successful defence against a melee attack roll: ' 
-                       f'{value} < {self.armor_class}')
             ret = True
 
-        # for i in tmp_str.splitlines():
-        #     self.logger.debug(f"{self.get_name()}: {i}", self.ctx)
-        # for i in tmp_str.splitlines():
-        self.logger.debug(msg=f"{self.get_name()}: {tmp_str}", ctx=self.ctx)
-
+        self.ctx.crumbs[-1].add_audit(json_dict=jdict)
         return ret
 
     @ctx_decorator
     def ranged_defend(self, modifier=0, vantage='Normal',
                       possible_damage=0, damage_type='Unknown'):
-        self.last_method_log = (f'ranged_defend({modifier}, ' 
-                                f'{vantage}, {possible_damage}' 
-                                f'{damage_type})')
         d = Die(ctx=self.ctx, sides=20)
         if self.prone_ind:
             if vantage == 'Advantage':
                 vantage = 'Normal'
             else:
                 vantage = 'Disadvantage'
+
+        jdict = { "prone_ind": self.prone_ind}
+        jdict["used_vantage"] = vantage
 
         if vantage == 'Disadvantage':
             t_val = d.roll_with_disadvantage()
@@ -820,50 +843,44 @@ class Character(object):
 
         value = t_val + modifier
 
+        jdict['used_attack_value'] = value
+        jdict['armor_class'] = self.armor_class
+
         if value >= self.armor_class:
-            tmp_str = (f'Fails to defend against a ranged attack roll: ' 
-                       f'{value} >= {self.armor_class}')
             ret = False
             if possible_damage > 0:
                 self.damage(possible_damage, damage_type)
         else:
-            tmp_str = (f'Successful defence against a ranged attack roll: ' 
-                       f'{value} < {self.armor_class}')
             ret = True
 
-        msg = f"{self.get_name()}: {tmp_str}"
-        self.logger.debug(msg=msg, ctx=self.ctx)
-
+        self.ctx.crumbs[-1].add_audit(json_dict=jdict)
         return ret
 
     @ctx_decorator
     def heal(self, amount):
-        self.last_method_log = f'heal({amount})'
-        tmp_str = f'Heals {amount} hit points.'
+        jdict = {"from_hit_points": self.cur_hit_points,
+                 "max_hit_points": self.hit_points,
+                 "character_alive": self.alive
+               }
         if self.cur_hit_points == 0 and self.alive:
             self.stabilize()
 
         if (self.cur_hit_points + amount) > self.hit_points:
             self.cur_hit_points = self.hit_points
-            tmp_str = f'{tmp_str}\nReturned to max {self.hit_points} points'
         else:
             thp = self.cur_hit_points
             self.cur_hit_points += amount
-            tmp_str = (f'{tmp_str}\nResulting in ({thp} + {amount}) ' 
-                       f'{self.cur_hit_points} points')
 
-        # for i in tmp_str.splitlines():
-        #    self.logger.debug(f"{self.get_name()}: {i}", self.ctx)
-        self.logger.debug(msg=f"{self.get_name()}: {tmp_str}", ctx=self.ctx)
+        jdict["to_hit_points"] = self.cur_hit_points
+        self.ctx.crumbs[-1].add_audit(json_dict=jdict)
 
     @ctx_decorator
     def revive(self):
-        self.last_method_log = f'revive()'
+        jdict = { "from_hit_points": self.cur_hit_points}
         self.stabilize()
         self.cur_hit_points = self.hit_points
-
-        msg = f"{self.get_name()}: Has been Revived."
-        self.logger.debug(msg=msg, ctx=self.ctx)
+        jdict["to_hit_points"] = self.cur_hit_points
+        self.ctx.crumbs[-1].add_audit(json_dict=jdict)
 
     @ctx_decorator
     def get_ranged_range(self):

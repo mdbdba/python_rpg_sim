@@ -1,3 +1,5 @@
+import sys
+import traceback
 
 from InvokePSQL import InvokePSQL
 from Character import Character
@@ -22,6 +24,8 @@ from WizardPCClass import WizardPCClass
 from Weapon import Weapon
 from Die import Die
 from Ctx import Ctx, ctx_decorator
+from Ctx import ctx_decorator
+from Ctx import RpgLogging
 
 
 class PlayerCharacter(Character):
@@ -96,8 +100,7 @@ class PlayerCharacter(Character):
         self.class_eval[-1]["abilityArray"] = (
             array_to_string(self.get_ability_array()))
 
-        for pi in self.__str__().splitlines():
-            self.logger.debug(msg=f"{self.get_name()}: {pi}", ctx=ctx)
+        self.logger.debug(msg="user_audit", json_dict=self.__dict__, ctx=ctx)
 
     @ctx_decorator
     def assign_race(self, race_candidate):
@@ -108,8 +111,8 @@ class PlayerCharacter(Character):
         else:
             race_to_use = race_candidate
 
-        if self.debug_ind == 1:
-            self.class_eval[-1]["RaceToUse"] = race_to_use
+        # if self.debug_ind == 1:
+        #     self.class_eval[-1]["RaceToUse"] = race_to_use
 
         return CharacterRace(db=self.db, ctx=self.ctx, race_candidate=race_to_use)
 
@@ -173,15 +176,15 @@ class PlayerCharacter(Character):
             # Add new hit points
             self.hit_points = self.add_hit_points(db=self.db, hit_die=self.get_hit_die(),
                                                   modifier=self.ability_modifier_array[2])
-            if self.debug_ind == 1:
-                hp_str = f"hitPoints_level_{level}"
-                self.class_eval[-1][hp_str] = self.hit_points
-                if level > 1:
-                    tl = level - 1
-                    tlstr = f"hitPoints_level_{tl}"
-                    tlhp = self.class_eval[-1][tlstr]
-                    dfstr = f"hpdiff_level_{level}"
-                    self.class_eval[-1][dfstr] = (self.hit_points - tlhp)
+            # if self.debug_ind == 1:
+            #     hp_str = f"hitPoints_level_{level}"
+            #     self.class_eval[-1][hp_str] = self.hit_points
+            #     if level > 1:
+            #         tl = level - 1
+            #         tlstr = f"hitPoints_level_{tl}"
+            #         tlhp = self.class_eval[-1][tlstr]
+            #         dfstr = f"hpdiff_level_{level}"
+            #         self.class_eval[-1][dfstr] = (self.hit_points - tlhp)
 
     @ctx_decorator
     def set_ability_modifier_array(self, db):
@@ -360,7 +363,10 @@ class PlayerCharacter(Character):
 #          return self.ability_array_obj.get_imp_array()
 
     def get_name(self):
-        return self.race_obj.name
+        try:
+            return self.race_obj.name
+        except AttributeError:
+            return "Not Assigned"
 
     def get_alignment_str(self):
         return self.race_obj.alignment.get('alignment')
@@ -477,9 +483,9 @@ class PlayerCharacter(Character):
         for row in rows:
             self.damage_adj[row[0]] = row[1]
 
-        if self.debug_ind == 1:
-            self.class_eval[-1]["damage Adjust"] = (
-                dict_to_string(self.damage_adj))
+        # if self.debug_ind == 1:
+        #     self.class_eval[-1]["damage Adjust"] = (
+        #         dict_to_string(self.damage_adj))
 
     @ctx_decorator
     def set_proficiency_bonus(self):
@@ -487,8 +493,8 @@ class PlayerCharacter(Character):
             if self.feature_obj[a][2] == 'proficiency_bonus':
                 self.proficiency_bonus = self.feature_obj[a][4]
 
-        if self.debug_ind == 1:
-            self.class_eval[-1]["Proficiency Bonus"] = self.proficiency_bonus
+    #     if self.debug_ind == 1:
+    #         self.class_eval[-1]["Proficiency Bonus"] = self.proficiency_bonus
 
     @ctx_decorator
     def is_not_using_shield(self):
@@ -696,43 +702,68 @@ class PlayerCharacter(Character):
 
 if __name__ == '__main__':
     db = InvokePSQL()
-    ctx = Ctx(app_username='playercharacter_class_init')
-    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate='Hill dwarf', level=10, debug_ind=1)
-    a2 = PlayerCharacter(db=db, ctx=ctx,
-                         ability_array_str='10,11,12,13,14,15',
-                         debug_ind=1)
-    print(a2)
-    a2.ability_array_obj.set_preference_array(pref_array=string_to_array(
-                                            '5,0,2,1,4,3'
-                                            ))
-    a5 = PlayerCharacter(db=db, ctx=ctx, race_candidate='Hill dwarf', level=10, debug_ind=1)
-    for i in range(len(a5.get_class_eval())):
-        for key, value in a5.get_class_eval()[i].items():
-            print(f"{i} -- {str(key).ljust(25)}: {value}")
-#
-    a6 = PlayerCharacter(db=db, ctx=ctx,
-                         ability_array_str="18,12,12,10,10,8",
-                         race_candidate="Mountain Dwarf",
-                         class_candidate="Barbarian",
-                         debug_ind=1)
+    logger_name = f'playercharacter_main'
+    ctx = Ctx(app_username='pc_class_init', logger_name=logger_name)
+    logger = RpgLogging(logger_name=logger_name, level_threshold='debug')
+    logger.setup_logging()
+    try:
 
-    a6.melee_defend(modifier=13, possible_damage=a6.hit_points,
-                    damage_type='Bludgeoning')
-    a6.heal(amount=10)
-    a6.melee_defend(modifier=13, possible_damage=(2 * a6.hit_points),
-                    damage_type='Bludgeoning')
-    a6.heal(amount=30)
-    t_a1 = a5.default_melee_attack()
-    a6.melee_defend(attack_value=t_a1[0], possible_damage=t_a1[1], damage_type=t_a1[2])
+        a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate='Hill dwarf', level=10, debug_ind=1)
+        a2 = PlayerCharacter(db=db, ctx=ctx,
+                             ability_array_str='10,11,12,13,14,15',
+                             debug_ind=1)
+        print(a2)
+        a2.ability_array_obj.set_preference_array(pref_array=string_to_array(
+                                                '5,0,2,1,4,3'
+                                                ))
+        a5 = PlayerCharacter(db=db, ctx=ctx, race_candidate='Hill dwarf', level=10, debug_ind=1)
+        for i in range(len(a5.get_class_eval())):
+            for key, value in a5.get_class_eval()[i].items():
+                print(f"{i} -- {str(key).ljust(25)}: {value}")
+    #
+        a6 = PlayerCharacter(db=db, ctx=ctx,
+                             ability_array_str="18,12,12,10,10,8",
+                             race_candidate="Mountain Dwarf",
+                             class_candidate="Barbarian",
+                             debug_ind=1)
 
-    a7 = PlayerCharacter(db=db, ctx=ctx,
-                         ability_array_str="6,6,6,6,6,6",
-                         race_candidate="Half-Orc",
-                         class_candidate="Barbarian",
-                         debug_ind=1)
+        a6.melee_defend(modifier=13, possible_damage=a6.hit_points,
+                        damage_type='Bludgeoning')
+        a6.heal(amount=10)
+        a6.melee_defend(modifier=13, possible_damage=(2 * a6.hit_points),
+                        damage_type='Bludgeoning')
+        a6.heal(amount=30)
+        t_a1 = a5.default_melee_attack()
+        a6.melee_defend(attack_value=t_a1[0], possible_damage=t_a1[1], damage_type=t_a1[2])
 
-    print(a1.__repr__())
-    print(a2.__repr__())
-    print(a5.__repr__())
-    print(a6.__repr__())
-    print(a7.__repr__())
+        a7 = PlayerCharacter(db=db, ctx=ctx,
+                             ability_array_str="6,6,6,6,6,6",
+                             race_candidate="Half-Orc",
+                             class_candidate="Barbarian",
+                             debug_ind=1)
+
+        print(a1.__repr__())
+        print(a2.__repr__())
+        print(a5.__repr__())
+        print(a6.__repr__())
+        print(a7.__repr__())
+
+    except Exception as error:
+        exc_type, exc_value, exc_traceback = sys.exc_info()
+        print(f'Context Information:\n\t'
+              f'App_username:      {ctx.app_username}\n\t'
+              f'Full Name:         {ctx.fullyqualified}\n\t'
+              f'Logger Name:       {ctx.logger_name}\n\t' 
+              f'Trace Id:          {ctx.trace_id}\n\t' 
+              f'Study Instance Id: {ctx.study_instance_id}\n\t' 
+              f'Study Name:        {ctx.study_name}\n\t' 
+              f'Series Id:         {ctx.series_id}\n\t' 
+              f'Encounter Id:      {ctx.encounter_id}\n\t' 
+              f'Round:             {ctx.round}\n\t' 
+              f'Turn:              {ctx.turn}\n')
+
+        for line in ctx.crumbs:
+            print(line)
+
+        for line in traceback.format_exception(exc_type, exc_value, exc_traceback):
+            print(line)
