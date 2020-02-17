@@ -2,20 +2,25 @@ from dataclasses import dataclass, field
 from typing import Dict, List   # Others: Dict, List, Set, Tuple, Optional
 from CommonFunctions import get_random_key
 
+
 def get_empty_list():
     return []
 
+
 def get_empty_dict():
     return {}
+
 
 @dataclass
 class PointInTime:
     round: int
     turn: int
 
+
 @dataclass
 class PointInTimeAmount(PointInTime):
     amount: int
+
 
 @dataclass
 class RollAmount:
@@ -25,7 +30,6 @@ class RollAmount:
     die_total_used: int = None
     base_roll: List[int] = field(default_factory=get_empty_list)
     adjustment_values: Dict = field(default_factory=get_empty_dict)
-
 
     def __repr__(self):
         out_str = (f'{{"die_used":  {self.die_used}, '
@@ -45,25 +49,28 @@ class RollAmount:
         return out_str
 
 
-
 @dataclass
 class DamageAmountPair(RollAmount):
     damage_type: str = None
     amount: int = None
 
+
 @dataclass
 class PointInTimeDamageAmount(PointInTimeAmount):
     damage_values: List[DamageAmountPair] = field(default_factory=get_empty_list)
+
 
 @dataclass
 class PointInTimeRollAmount(PointInTimeAmount):
     base_roll: int = None
     adjustment_values: Dict = field(default_factory=get_empty_dict)
 
+
 @dataclass
 class PointInTimeRollSuccess(PointInTimeRollAmount):
     comparison_value: int = None
     successful_result: bool = None
+
 
 if __name__ == '__main__':
     roll_details = RollAmount(die_used=6)

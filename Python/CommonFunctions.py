@@ -9,10 +9,12 @@ from os import urandom
 from random import randint
 from string import ascii_uppercase, digits
 
+
 # Masks for extracting the numbers we want from the maximum possible
 # length of `urandom_bytes`.
 bitmasks = [(0b111111 << (i * 6), i) for i in range(20)]
 allowed_chars = (ascii_uppercase + digits).encode() * 16  # 576 chars long
+
 
 def get_random_key():
     desired_length = randint(12, 20)
@@ -21,11 +23,12 @@ def get_random_key():
 
     candidate = bytes([
         allowed_chars[
-                (((urandom_bytes & bitmask) >> (i * 6)) + (0b111111 * i)) % 576 ]
+                (((urandom_bytes & bitmask) >> (i * 6)) + (0b111111 * i)) % 576]
         for bitmask, i in bitmasks
         ][:desired_length])
 
     return candidate.decode()
+
 
 def array_to_string(src_array):
     outstr = ""
@@ -100,9 +103,11 @@ def find_file(file_name: str) -> str:
         if fnmatch.fnmatch(file, file_name):
             return os.path.join(curpath, file)
 
+
 def fix_date_for_json(o):
     if isinstance(o, datetime.datetime):
         return o.__str__()
+
 
 def fix_dict_for_json(d):
     return json.loads(json.dumps(d, default=fix_date_for_json))

@@ -54,7 +54,6 @@ class Series(object):
               f"debug_ind={debug_ind}")
         self.run_series()
 
-
     def add_method_last_call_audit(self, audit_obj):
         self.method_last_call_audit[audit_obj['methodName']] = audit_obj
 
@@ -64,7 +63,6 @@ class Series(object):
         else:
             return_val = self.method_last_call_audit[method_name]
         return return_val
-
 
     @ctx_decorator
     def assign_encounter_params(self):
@@ -138,21 +136,21 @@ class Series(object):
                     print(f'{e.winning_list[i].get_name()}')
             print(f"Character damage info:")
             for Hero in heroes:
-                t_char_stats = CharacterStats(study_instance_id=self.study_instance_id,
-                                              series_id=self.series_id,
-                                              encounter_id=series_counter,
-                                              character_id=Hero.character_id,
-                                              character_name=Hero.get_name(),
-                                              character_class=Hero.get_class(),
-                                              character_race=Hero.get_race(),
-                                              character_level=Hero.level,
-                                              attack_rolls= Hero.attack_rolls,
-                                              attack_attempts=Hero.attack_roll_count,
-                                              attack_successes=Hero.attack_success_count,
-                                              attack_nat20_count=Hero.attack_roll_nat20_count,
-                                              attack_nat1_count=Hero.attack_roll_nat1_count,
-                                              damage_dealt_dict=Hero.get_damage_dealt(),
-                                              damage_taken_dict=Hero.get_damage_taken())
+                # t_char_stats = CharacterStats(study_instance_id=self.study_instance_id,
+                #                               series_id=self.series_id,
+                #                               encounter_id=series_counter,
+                #                               character_id=Hero.character_id,
+                #                               character_name=Hero.get_name(),
+                #                               character_class=Hero.get_class(),
+                #                               character_race=Hero.get_race(),
+                #                               character_level=Hero.level,
+                #                               attack_rolls= Hero.attack_rolls,
+                #                               attack_attempts=Hero.attack_roll_count,
+                #                               attack_successes=Hero.attack_success_count,
+                #                               attack_nat20_count=Hero.attack_roll_nat20_count,
+                #                               attack_nat1_count=Hero.attack_roll_nat1_count,
+                #                               damage_dealt_dict=Hero.get_damage_dealt(),
+                #                               damage_taken_dict=Hero.get_damage_taken())
 
                 # t_encounter_stats.heroes.append(t_char_stats)
                 t_dict = Hero.get_damage_dealt()
@@ -163,22 +161,22 @@ class Series(object):
                 t_dict = Hero.get_damage_taken()
                 print(f"  {Hero.get_name()} damage taken ({t_dict['Total']}): {Hero.get_damage_taken()}")
             for Opponent in opponents:
-                t_char_stats = CharacterStats(study_instance_id=self.study_instance_id,
-                                              series_id=self.series_id,
-                                              encounter_id=series_counter,
-                                              character_id=-1,
-                                              character_name=Opponent.get_name(),
-                                              character_class='Foe',
-                                              character_race=Opponent.get_race(),
-                                              character_level=Opponent.level,
-                                              attack_rolls=Opponent.attack_rolls,
-                                              attack_attempts=Opponent.attack_roll_count,
-                                              attack_successes=Opponent.attack_success_count,
-                                              attack_nat20_count=Opponent.attack_roll_nat20_count,
-                                              attack_nat1_count=Opponent.attack_roll_nat1_count,
-                                              damage_dealt_dict=Opponent.get_damage_dealt(),
-                                              damage_taken_dict=Opponent.get_damage_taken()
-                                              )
+                # t_char_stats = CharacterStats(study_instance_id=self.study_instance_id,
+                #                               series_id=self.series_id,
+                #                               encounter_id=series_counter,
+                #                               character_id=-1,
+                #                               character_name=Opponent.get_name(),
+                #                               character_class='Foe',
+                #                               character_race=Opponent.get_race(),
+                #                               character_level=Opponent.level,
+                #                               attack_rolls=Opponent.attack_rolls,
+                #                               attack_attempts=Opponent.attack_roll_count,
+                #                               attack_successes=Opponent.attack_success_count,
+                #                               attack_nat20_count=Opponent.attack_roll_nat20_count,
+                #                               attack_nat1_count=Opponent.attack_roll_nat1_count,
+                #                               damage_dealt_dict=Opponent.get_damage_dealt(),
+                #                               damage_taken_dict=Opponent.get_damage_taken()
+                #                               )
                 # t_encounter_stats.opponents.append(t_char_stats)
                 t_dict = Opponent.get_damage_dealt()
                 print(f"  {Opponent.get_name()} attacks: {Opponent.attack_success_count}/{Opponent.attack_roll_count}"
@@ -190,12 +188,12 @@ class Series(object):
 
             print(e.get_characters_stats())
             # self.stats.update_totals()
-            self.logger.debug(ctx=self.ctx,msg='character_stats',
+            self.logger.debug(ctx=self.ctx, msg='character_stats',
                               json_dict=fix_dict_for_json(e.get_characters_stats()))
 
-
         print(self.stats)
-        self.logger.debug(ctx=self.ctx,msg='series_stats', json_dict=fix_dict_for_json(self.stats.get_dict()))
+        self.logger.debug(ctx=self.ctx, msg='series_stats', json_dict=fix_dict_for_json(self.stats.get_dict()))
+
 
 if __name__ == '__main__':
     series_id = random.randrange(0, 100000, 2)

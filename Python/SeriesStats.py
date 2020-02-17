@@ -1,10 +1,12 @@
-from dataclasses import dataclass, field
-from typing import List   # Others: Dict, Set, Tuple, Optional
+from dataclasses import dataclass  # , field
+# from typing import List   # Others: Dict, Set, Tuple, Optional
 from EncounterStats import EncounterStats
 from datetime import datetime
 
+
 def get_empty_list():
     return []
+
 
 @dataclass
 class SeriesStats:
@@ -41,8 +43,8 @@ class SeriesStats:
         self.series_heroes_attack_successes += encounter_stats.heroes_attack_successes
         self.series_opponents_attack_attempts += encounter_stats.opponents_attack_attempts
         self.series_opponents_attack_successes += encounter_stats.opponents_attack_successes
-        self.series_total_attack_attempts +=  encounter_stats.heroes_attack_attempts
-        self.series_total_attack_attempts +=  encounter_stats.opponents_attack_attempts
+        self.series_total_attack_attempts += encounter_stats.heroes_attack_attempts
+        self.series_total_attack_attempts += encounter_stats.opponents_attack_attempts
         self.series_total_attack_successes += encounter_stats.heroes_attack_successes
         self.series_total_attack_successes += encounter_stats.opponents_attack_successes
 

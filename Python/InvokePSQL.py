@@ -72,6 +72,7 @@ class InvokePSQL(object):
     def __repr__(self):
         return self.db_id_str
 
+
 if __name__ == '__main__':
     a1 = InvokePSQL()
     print(a1.db_version)

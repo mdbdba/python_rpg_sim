@@ -5,10 +5,10 @@ from Ctx import ctx_decorator
 
 class BardPCClass(PlayerCharacterClass):
     @ctx_decorator
-    def __init__(self, db, ctx,
+    def __init__(self, db, ctx: Ctx,
                  character_altering_class_options=None):
-        PlayerCharacterClass.__init__(self, db=db, ctx=ctx, classCandidate="Bard",
-                                      characterAlteringClassOptions=character_altering_class_options)
+        PlayerCharacterClass.__init__(self, db=db, ctx=ctx, class_candidate="Bard",
+                                      character_altering_class_options=character_altering_class_options)
         self.archetype_label = "Bard College"
         self.ranged_weapon = "Dagger"
         self.melee_weapon = "Rapier"

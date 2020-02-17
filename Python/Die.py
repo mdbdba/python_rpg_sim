@@ -16,7 +16,7 @@ class Die(object):
         """
         self.sides = sides
         self.debug_ind = debug_ind
-        self.details = [] # holds rollAmount objs
+        self.details = []  # holds rollAmount objs
         self.method_last_call_audit = {}  # dict where method name key holds last crumb for that method
         self.logger = RpgLogging(logger_name=ctx.logger_name)
         self.ctx = ctx
@@ -123,7 +123,7 @@ class Die(object):
         Perform a single roll with advantage
 
         """
-        return self._perform_roll( rolls=2, dropvalue=True, dropfrom="Low")
+        return self._perform_roll(rolls=2, dropvalue=True, dropfrom="Low")
 
     @ctx_decorator
     def roll_with_disadvantage(self):
@@ -158,6 +158,6 @@ if __name__ == '__main__':
     print(f'get_sum: {d6.get_sum(startingval=3, multiplier=1)}')
 
     print(d6.get_method_last_call_audit())
-    # print(d6.get_last_detail())
-    # for each_roll in d6.details:
-    #     print(each_roll)
+    print(d6.get_last_detail())
+    for each_roll in d6.details:
+        print(each_roll)

@@ -13,13 +13,14 @@ import sys
 import traceback
 import os
 
+
 @wrapt.decorator
 def ctx_decorator(wrapped, instance, args, kwds):
     ctx = None
     if instance and (getattr(instance, 'ctx', 'NotThere') != 'NotThere'):
         ctx = instance.ctx
 
-    elif ('ctx' in kwds):
+    elif 'ctx' in kwds:
         ctx = kwds.get('ctx')
     if ctx is None:
         raise ValueError('ctx obj not found.')
@@ -30,7 +31,7 @@ def ctx_decorator(wrapped, instance, args, kwds):
         t = string_to_string_array(ctx.fullyqualified, '.')
         t_class = t[0]
         t_method = t[1]
-        if ( t_class in ['PlayerCharacter', 'Foe'] and t_method not in ['__init__']):
+        if t_class in ['PlayerCharacter', 'Foe'] and t_method not in ['__init__']:
             if instance.get_name() not in ['Generic Character', 'Not Assigned']:
                 username_to_use = instance.get_name()
         logger = RpgLogging(logger_name=ctx.logger_name)
@@ -51,20 +52,19 @@ def ctx_decorator(wrapped, instance, args, kwds):
                 if ctx.crumbs[-1].className == 'Die' and len(ctx.crumbs) > 1:
                     ctx.crumbs[-2].rollIds.extend(ctx.crumbs[-1].rollIds)
                 else:
-                    roll_ids = { 'used rolls': ctx.crumbs[-1].rollIds }
+                    roll_ids = {'used rolls': ctx.crumbs[-1].rollIds}
 
         except:
             print("Unexpected error:", sys.exc_info()[0])
             raise
         finally:
             end_time = datetime.now()
-            jdict = { 'Parent': tmp_parent_id,
-                      'Event': event_id,
-                      'start_time': str(start_time),
-                      'end_time': str(end_time),
-                      'duration': str(end_time - start_time),
-                      'returned': str(ret)
-                      }
+            jdict = {'Parent': tmp_parent_id,
+                     'Event': event_id,
+                     'start_time': str(start_time),
+                     'end_time': str(end_time),
+                     'duration': str(end_time - start_time),
+                     'returned': str(ret)}
             if len(roll_ids) > 0:
                 jdict['roll_ids'] = roll_ids
             logger.debug(msg='event_context_record', json_dict=jdict, ctx=ctx)
@@ -73,10 +73,9 @@ def ctx_decorator(wrapped, instance, args, kwds):
             except:
                 exc_type, exc_value, exc_traceback = sys.exc_info()
 
-                edict = { "className": ctx.crumbs[-1].className,
-                          "methodName": ctx.crumbs[-1].methodName,
-                          "error": traceback.format_exception(exc_type, exc_value, exc_traceback)
-                          }
+                edict = {"className": ctx.crumbs[-1].className,
+                         "methodName": ctx.crumbs[-1].methodName,
+                         "error": traceback.format_exception(exc_type, exc_value, exc_traceback)}
                 logger.warning(msg='method_last_call_audit_error', json_dict=edict, ctx=ctx)
 
         ctx.pop_crumb()
@@ -84,11 +83,14 @@ def ctx_decorator(wrapped, instance, args, kwds):
     else:
         return wrapped(*args, **kwds)
 
+
 def get_hide_arg_list():
     return ['db', 'ctx', 'tracer']
 
+
 def init_audit_json():
     return {}
+
 
 @dataclass
 class Crumb:
@@ -104,7 +106,6 @@ class Crumb:
     timestamp: datetime = datetime.now()
     # hide_arg_list: List = field(default_factory=set_hide_arg_list)
 
-
     def add_audit(self, json_dict: Dict):
         self.audit_json = {**self.audit_json, **json_dict}
 
@@ -115,17 +116,17 @@ class Crumb:
                    f'parent_id =  {self.parent_id}, '
                    f'event_id =  {self.event_id}, '
                    f'call_depth =  {self.call_depth}, '
-                   'method_params = {' )
+                   'method_params = {')
         for mhd in self.methodParams.keys():
             if mhd not in get_hide_arg_list():
                 if isinstance(self.methodParams[mhd], (str, bool)):
-                    out_str = (f'{out_str} {mhd} = \'{self.methodParams[mhd]}\', ')
+                    out_str = f'{out_str} {mhd} = \'{self.methodParams[mhd]}\', '
                 else:
-                    out_str = (f'{out_str} {mhd} = {self.methodParams[mhd]}, ')
+                    out_str = f'{out_str} {mhd} = {self.methodParams[mhd]}, '
         if out_str[-2:] == ', ':
-            out_str = (f'{out_str[:-2]}')
-        out_str = (f'{out_str}}}, roll_ids = {self.rollIds}, '
-                   f'timestamp = {str(self.timestamp)}')
+            out_str = f'{out_str[:-2]}'
+
+        out_str = f'{out_str}}}, roll_ids = {self.rollIds}, timestamp = {str(self.timestamp)}'
         return out_str
 
     def __repr__(self):
@@ -135,20 +136,20 @@ class Crumb:
                    f'"parent_id": "{self.parent_id}", '
                    f'"event_id": "{self.event_id}", '
                    f'"call_depth":  {self.call_depth}, '
-                   '"method_params": {' )
+                   '"method_params": {')
         for mhd in self.methodParams.keys():
             if mhd not in get_hide_arg_list():
                 if self.methodParams[mhd] is None:
-                    out_str = (f'{out_str} "{mhd}": "None", ')
+                    out_str = f'{out_str} "{mhd}": "None", '
                 elif isinstance(self.methodParams[mhd], (str, bool)):
-                    out_str = (f'{out_str} "{mhd}": "{self.methodParams[mhd]}", ')
+                    out_str = f'{out_str} "{mhd}": "{self.methodParams[mhd]}", '
                 else:
-                    out_str = (f'{out_str} "{mhd}": {self.methodParams[mhd]!r}, ')
+                    out_str = f'{out_str} "{mhd}": {self.methodParams[mhd]!r}, '
         if out_str[-2:] == ', ':
             out_str = out_str[:-2]
-        out_str = (f'{out_str}}}, "roll_ids": {self.rollIds}, '
-                   f'"timestamp": "{str(self.timestamp)}"}}')
+        out_str = f'{out_str}}}, "roll_ids": {self.rollIds}, "timestamp": "{str(self.timestamp)}"}}'
         return out_str
+
 
 def init_crumbs():
     return []
@@ -167,9 +168,8 @@ class Ctx:
     encounter_id: int = -1
     round: int = 0
     turn: int = 0
-    log_counter = itertools.count(1,1)
+    log_counter = itertools.count(1, 1)
     crumbs: List[Crumb] = field(default_factory=init_crumbs)
-
 
     def get_next_log_id(self):
         return next(self.log_counter)
@@ -237,7 +237,6 @@ class RpgLogging:
         self.logger_name = logger_name
         self.logger = structlog.get_logger(logger_name)
 
-
     def setup_logging(self):
         base_path = os.path.expanduser('~/rpg/logs')
         logging.basicConfig(
@@ -255,7 +254,7 @@ class RpgLogging:
                 structlog.processors.TimeStamper(fmt="iso"),
                 structlog.processors.StackInfoRenderer(),
                 structlog.processors.format_exc_info,
-                 structlog.processors.UnicodeDecoder(),
+                structlog.processors.UnicodeDecoder(),
                 structlog.stdlib.render_to_log_kwargs,
                 # structlog.processors.ExceptionPrettyPrinter(),
                 structlog.processors.JSONRenderer(indent=4),
@@ -276,7 +275,7 @@ class RpgLogging:
         self.logger.setLevel(self.log_level)
         # self.logger.info("logger configured")
 
-    def get_log_rec(self, ctx:Ctx, msg:str = None, json_dict:Dict = None, return_crumbs='None'):
+    def get_log_rec(self, ctx: Ctx, msg: str = None, json_dict: Dict = None, return_crumbs='None'):
         if msg is None and json_dict is None:
             raise ValueError("Either msg or json_dict is required.")
         crumb = []
@@ -330,12 +329,11 @@ class RpgLogging:
         self.logger.critical(self.get_log_rec(msg=msg, json_dict=json_dict, ctx=ctx, return_crumbs='All'))
 
 
-
 if __name__ == '__main__':
     ctx = Ctx(app_username='demo_user_1', encounter_id=123, round=0, turn=0)
-    ctx.add_crumb('bogus_class', 'a_method', {"ctx": ctx, "param1": "value1", "param2": 2}, 'PA1543','EX12345')
-    ctx.add_crumb('bogus_class', 'b_method', {"ctx": ctx, "param1": "value3", "param2": 4}, 'PA7654','EX23456')
-    ctx.add_crumb('bogus_class', 'c_method', {"ctx": ctx, "param1": "value5", "param2": 6}, 'PA0987','EX34567')
+    ctx.add_crumb('bogus_class', 'a_method', {"ctx": ctx, "param1": "value1", "param2": 2}, 'PA1543', 'EX12345')
+    ctx.add_crumb('bogus_class', 'b_method', {"ctx": ctx, "param1": "value3", "param2": 4}, 'PA7654', 'EX23456')
+    ctx.add_crumb('bogus_class', 'c_method', {"ctx": ctx, "param1": "value5", "param2": 6}, 'PA0987', 'EX34567')
     print(ctx.print_crumbs())
     print(ctx.get_last_crumb())
     ctx.pop_crumb()

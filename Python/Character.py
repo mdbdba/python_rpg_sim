@@ -260,7 +260,7 @@ class Character(object):
         return 15
 
     @ctx_decorator
-    def set_movement(self, amount:int):
+    def set_movement(self, amount: int):
         jdict = {
             "from_movement": self.cur_movement,
             "to_movement": amount,
@@ -275,10 +275,10 @@ class Character(object):
         self.set_movement((self.cur_movement // 2))
 
     def double_movement(self):
-        self.set_movement(( self.cur_movement * 2))
+        self.set_movement((self.cur_movement * 2))
 
     def reset_movement(self):
-        self.set_movement( self.get_base_movement())
+        self.set_movement(self.get_base_movement())
 
     @ctx_decorator
     def change_exhaustion_level(self, amount):
@@ -587,7 +587,7 @@ class Character(object):
 
         tmp_type = self.damage_adj[damage_type]
 
-        jdict = { "damage_adj": tmp_type }
+        jdict = {"damage_adj": tmp_type}
         if tmp_type and tmp_type == 'resistant':
             amount = amount // 2
         elif tmp_type and tmp_type == 'vulnerable':
@@ -613,16 +613,15 @@ class Character(object):
 
             self.cur_hit_points = 0
         else:
-            thp = self.cur_hit_points
             self.cur_hit_points -= amount
 
-        jdict['cur_hit_points']= self.cur_hit_points
+        jdict['cur_hit_points'] = self.cur_hit_points
         self.stats.inc_damage_taken(damage_type=damage_type, amount=amount)
 
         self.ctx.crumbs[-1].add_audit(json_dict=jdict)
 
     def get_user_header(self):
-        return f'{self.name}({self.cur_hit_points}/{self.hit_points})'
+        return f'{self.get_name()}({self.cur_hit_points}/{self.hit_points})'
 
     @ctx_decorator
     def get_action(self, dist_list):
@@ -704,7 +703,7 @@ class Character(object):
         #     modifier = int(self.proficiency_bonus)
         # else:
         modifier = self.add_proficiency_bonus_for_attack(weapon_obj)
-        jdict = { "weapon_proficiency_bonus": modifier}
+        jdict = {"weapon_proficiency_bonus": modifier}
 
         modifier += self.get_ability_modifier('Dexterity')
         damage_modifier = self.get_ability_modifier('Dexterity')
@@ -737,7 +736,7 @@ class Character(object):
         # else:
         #     modifier = 0
         modifier = self.add_proficiency_bonus_for_attack(weapon_obj=weapon_obj)
-        jdict = { "weapon_proficiency_bonus": modifier}
+        jdict = {"weapon_proficiency_bonus": modifier}
         # damage_modifier = 0
         # 2)  Add the users Ability bonus, Strength for standard weapons
         #     or self.finesse_ability_mod for Finesse wepons
@@ -790,8 +789,8 @@ class Character(object):
             else:
                 vantage = 'Advantage'
 
-        jdict = { "prone_ind": self.prone_ind}
-        jdict["used_vantage"] = vantage
+        jdict = {"prone_ind": self.prone_ind,
+                 "used_vantage": vantage}
 
         if attack_value:
             value = attack_value
@@ -831,8 +830,8 @@ class Character(object):
             else:
                 vantage = 'Disadvantage'
 
-        jdict = { "prone_ind": self.prone_ind}
-        jdict["used_vantage"] = vantage
+        jdict = {"prone_ind": self.prone_ind,
+                 "used_vantage": vantage}
 
         if vantage == 'Disadvantage':
             t_val = d.roll_with_disadvantage()
@@ -860,15 +859,13 @@ class Character(object):
     def heal(self, amount):
         jdict = {"from_hit_points": self.cur_hit_points,
                  "max_hit_points": self.hit_points,
-                 "character_alive": self.alive
-               }
+                 "character_alive": self.alive}
         if self.cur_hit_points == 0 and self.alive:
             self.stabilize()
 
         if (self.cur_hit_points + amount) > self.hit_points:
             self.cur_hit_points = self.hit_points
         else:
-            thp = self.cur_hit_points
             self.cur_hit_points += amount
 
         jdict["to_hit_points"] = self.cur_hit_points
@@ -876,7 +873,7 @@ class Character(object):
 
     @ctx_decorator
     def revive(self):
-        jdict = { "from_hit_points": self.cur_hit_points}
+        jdict = {"from_hit_points": self.cur_hit_points}
         self.stabilize()
         self.cur_hit_points = self.hit_points
         jdict["to_hit_points"] = self.cur_hit_points
@@ -884,20 +881,25 @@ class Character(object):
 
     @ctx_decorator
     def get_ranged_range(self):
+        jdict = {}
         if self.ranged_weapon:
+            jdict["ranged weapon"] = self.ranged_weapon
             sql = (f"select range_1 from lu_weapon "
-                   f"and name = '{self.ranged_weapon}' "
-                   f"where category like '%Ranged'")
+                   f"where category like '%Ranged'" 
+                   f"and name = '{self.ranged_weapon}' ")
             res = self.db.query(sql)
+            jdict["query_result"] = res[0][0]
+            self.ctx.crumbs[-1].add_audit(json_dict=jdict)
             ret_val = res[0][0]
         else:
             ret_val = -1
+
 
         return ret_val
 
 
 if __name__ == '__main__':
-    logger_name='character_main_test'
+    logger_name = 'character_main_test'
     ctx = Ctx(app_username='character_class_init', logger_name=logger_name)
     logger = RpgLogging(logger_name=logger_name, level_threshold='debug')
     logger.setup_logging()

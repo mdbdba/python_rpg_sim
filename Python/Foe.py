@@ -1,3 +1,5 @@
+import sys
+import traceback
 from InvokePSQL import InvokePSQL
 from Character import Character
 from Weapon import Weapon
@@ -122,7 +124,7 @@ class Foe(Character):
             raise ValueError(f'Could not find foe: {foe_candidate}')
 
     @ctx_decorator
-    def assign_hit_points(self ):
+    def assign_hit_points(self):
         if not self.hit_point_adjustment:
             self.hit_point_adjustment = 0
 

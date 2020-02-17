@@ -67,14 +67,14 @@ class Trait(object):
 
 
 class RacialTraits(object):
-    def __init__(self, db, race, incParentRace=None):
+    def __init__(self, db, race, inc_parent_race=None):
         self.traits = []
         self.proficient = []
         self.proficient_source = []
         self.rawtraits = None
-        self.populateTraits(db, race, incParentRace)
+        self.populate_traits(db, race, inc_parent_race)
 
-    def populateTraits(self, db, race, incParentRace):
+    def populate_traits(self, db, race, inc_parent_race):
         sql = (f"SELECT race, trait_name, trait_orderby, category, "
                f"affected_name, affected_multiplier, affected_die, "
                f"affected_adj, affect, recharge_on, "
@@ -82,9 +82,9 @@ class RacialTraits(object):
                f"variable_recharge_adj, description "
                f"FROM dnd_5e.v_racial_trait where "
                f"lower(race) = lower('{race}') ")
-        if incParentRace:
-            sql = (f"{sql} or lower(race) = lower('{incParentRace}') ")
-            sql = (f"{sql} order by trait_name, trait_orderby,category;")
+        if inc_parent_race:
+            sql = (f"{sql} or lower(race) = lower('{inc_parent_race}') "
+                   f"order by trait_name, trait_orderby,category;")
 
         self.rawtraits = db.query(sql)
 

@@ -4,11 +4,11 @@ import traceback
 from InvokePSQL import InvokePSQL
 from Character import Character
 from CommonFunctions import array_to_string
-from CommonFunctions import dict_to_string
+# from CommonFunctions import dict_to_string
 from CommonFunctions import string_to_array
 from CommonFunctions import inches_to_feet
 from CharacterRace import CharacterRace
-from PlayerCharacterClass import getRandomClassName
+from PlayerCharacterClass import get_random_class_name
 from BardPCClass import BardPCClass
 from BarbarianPCClass import BarbarianPCClass
 from ClericPCClass import ClericPCClass
@@ -23,7 +23,7 @@ from WarlockPCClass import WarlockPCClass
 from WizardPCClass import WizardPCClass
 from Weapon import Weapon
 from Die import Die
-from Ctx import Ctx, ctx_decorator
+from Ctx import Ctx
 from Ctx import ctx_decorator
 from Ctx import RpgLogging
 
@@ -261,10 +261,7 @@ class PlayerCharacter(Character):
 
     @ctx_decorator
     def valid_character_id(self, db, character_id):
-        self.last_method_log = (f'valid_character_id(db, '
-                              f'{character_id})')
-        sql = (f"select count(id) from dnd_5e.character where "
-               f"id = {character_id};")
+        sql = f"select count(id) from dnd_5e.character where id = {character_id};"
         results = db.query(sql)
         id_cnt = results[0][0]
         if id_cnt == 1:
@@ -274,8 +271,6 @@ class PlayerCharacter(Character):
 
     @ctx_decorator
     def get_character(self, db, character_id):
-        self.last_method_log = (f'get_character(db, '
-                              f'{character_id})')
         if self.valid_character_id(db=db, character_id=character_id):
             sql = (f"select name, gender, race, class, "
                    f"level, TTA, raw_ability_string, "
@@ -430,7 +425,7 @@ class PlayerCharacter(Character):
         self.last_method_log = f'assign_class(db, {class_candidate})'
 
         if class_candidate == "Random":
-            tmp_class = getRandomClassName(self.db)
+            tmp_class = get_random_class_name(self.db)
         else:
             tmp_class = class_candidate
         obj = self.class_subclass_switch(class_candidate=tmp_class)
@@ -465,7 +460,6 @@ class PlayerCharacter(Character):
 
     @ctx_decorator
     def set_damage_adjs(self, db):
-        self.last_method_log = (f'setDamagedAdjs(db)')
         sql = (f"select rt.affected_name, rt.affect "
                f"from lu_racial_trait as rt "
                f"join lu_race as r on (rt.race = r.race "
@@ -634,10 +628,10 @@ class PlayerCharacter(Character):
                   f'"Level": "{self.level}", '
                   f'"Hit Die": "{self.get_hit_die()}", ')
         if self.cur_hit_points:
-            outstr = (f'{outstr}"Hit Points": "{self.cur_hit_points}/'
-                      f'{self.hit_points}", ')
+            outstr = f'{outstr}"Hit Points": "{self.cur_hit_points}/{self.hit_points}", '
+
         if self.proficiency_bonus:
-            outstr = (f'{outstr}"Prof Bonus": "{self.proficiency_bonus}", ')
+            outstr = f'{outstr}"Prof Bonus": "{self.proficiency_bonus}", '
 
         outstr = (f'{outstr}'
                   f'"Height": "{inches_to_feet(self.get_height())}", '
@@ -697,7 +691,6 @@ class PlayerCharacter(Character):
             outstr = outstr[:-2]
         outstr = f'{outstr}}}}}'
         return outstr
-
 
 
 if __name__ == '__main__':

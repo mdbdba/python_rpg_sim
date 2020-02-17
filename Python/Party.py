@@ -8,6 +8,7 @@ from Ctx import Ctx
 from Ctx import ctx_decorator
 from Ctx import RpgLogging
 
+
 class Party(object):
     @ctx_decorator
     def __init__(self,
@@ -48,23 +49,20 @@ class Party(object):
                 for party_class in party_classes:
                     primary_race = self.get_primary_race(db=db, pclass=party_class[0])
                     print(f'create {primary_race} {party_class[0]}')
-                    tmppc = PlayerCharacter(db=db, ctx=ctx, class_candidate=party_class[0], race_candidate=primary_race,
-                                    gender_candidate=self.gender_candidate,
-                                    ability_array_str=self.ability_array_str,
-                                    debug_ind=self.debug_ind)
+                    tmppc = PlayerCharacter(db=db, ctx=ctx,
+                                            class_candidate=party_class[0], race_candidate=primary_race,
+                                            gender_candidate=self.gender_candidate,
+                                            ability_array_str=self.ability_array_str,
+                                            debug_ind=self.debug_ind)
                     self.character_ids.append(tmppc.character_id)
-
-                print(self.character_ids )
-
+                print(self.character_ids)
             else:
-                print( f'Creating {name}: a party consisting of '
-                       f'character ids: {character_id_str}')
+                print(f'Creating {name}: a party consisting of character ids: {character_id_str}')
                 self.character_ids = string_to_array(self.character_id_str)
 
             self.verify_character_id_list(db=db)
             self.create_party_in_db(db=db)
             self.character_list = self.build_character_list(db=db)
-
 
     def add_method_last_call_audit(self, audit_obj):
         self.method_last_call_audit[audit_obj['methodName']] = audit_obj
@@ -76,7 +74,6 @@ class Party(object):
             return_val = self.method_last_call_audit[method_name]
         return return_val
 
-
     def get_party_name(self):
         return self.name
 
@@ -85,7 +82,7 @@ class Party(object):
 
     @ctx_decorator
     def set_existing_characters(self, db):
-        sql=f"select character_id from dnd_5e.party where name = '{self.name}'"
+        sql = f"select character_id from dnd_5e.party where name = '{self.name}'"
         res = db.query(sql)
         for character_id in res:
             tmppc = PlayerCharacter(db=db, ctx=self.ctx, character_id=character_id[0], debug_ind=self.debug_ind)
@@ -102,8 +99,8 @@ class Party(object):
         return tmp_list
 
     @ctx_decorator
-    def get_primary_race(self,db, pclass):
-        sql=f"select primary_race_candidate from dnd_5e.lu_class where class = '{pclass}'"
+    def get_primary_race(self, db, pclass):
+        sql = f"select primary_race_candidate from dnd_5e.lu_class where class = '{pclass}'"
         res = db.query(sql)
         return res[0][0]
 
@@ -120,7 +117,7 @@ class Party(object):
             db.insert(sql)
 
     @ctx_decorator
-    def verify_character_id(self,db, character_id):
+    def verify_character_id(self, db, character_id):
         sql = f"select count(id) from dnd_5e.character where id={character_id};"
         res = db.query(sql)
         if res[0][0] == 1:
@@ -137,8 +134,8 @@ class Party(object):
             if not self.verify_character_id(db=db, character_id=character_id):
                 fail_str = f'{fail_str}{character_id}, '
         if len(fail_str) > 0:
-                fail_str = fail_str[:-2]
-                raise Exception(f"Character ids: {fail_str} do not exist")
+            fail_str = fail_str[:-2]
+            raise Exception(f"Character ids: {fail_str} do not exist")
 
     @ctx_decorator
     def party_name_exists(self, db):
@@ -162,6 +159,7 @@ class Party(object):
 
         return return_value
 
+
 if __name__ == '__main__':
     logger_name = 'encounter_main_test'
     ctx = Ctx(app_username='encounter_class_init', logger_name=logger_name)
@@ -184,11 +182,10 @@ if __name__ == '__main__':
               f'Series Id:         {ctx.series_id}\n\t' 
               f'Encounter Id:      {ctx.encounter_id}\n\t' 
               f'Round:             {ctx.round}\n\t' 
-              f'Turn:              {ctx.turn}\n' )
+              f'Turn:              {ctx.turn}\n')
 
         for line in ctx.crumbs:
             print(line)
 
         for line in traceback.format_exception(exc_type, exc_value, exc_traceback):
             print(line)
-

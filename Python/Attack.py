@@ -2,6 +2,7 @@ from Die import Die
 from Ctx import Ctx
 from Ctx import ctx_decorator
 
+
 class Attack(object):
     @ctx_decorator
     def __init__(self, ctx: Ctx, weapon_obj,
@@ -40,7 +41,7 @@ class Attack(object):
             return_val = self.method_last_call_audit
         else:
             return_val = self.method_last_call_audit[method_name]
-            return return_val
+        return return_val
 
         # print(self.possible_damage)
     def get_natural_value(self):

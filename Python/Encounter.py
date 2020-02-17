@@ -106,7 +106,6 @@ class Encounter(object):
             return_val = self.method_last_call_audit[method_name]
         return return_val
 
-
     def get_encounter_stats(self):
         return self.stats
 
@@ -115,16 +114,14 @@ class Encounter(object):
         characters_stats_dict = {'Heroes': [], 'Opponents': []}
 
         for hero in self.Heroes:
-            t_id = { "name": hero.get_name(),
-                     "side": "Heroes"
-                   }
+            t_id = {"name": hero.get_name(),
+                    "side": "Heroes"}
             t_stats = hero.get_character_stats()
             characters_stats_dict['Heroes'].append({**t_id, **t_stats})
 
         for opponent in self.Opponents:
-            t_id = { "name": opponent.get_name(),
-                     "side": "Opponents"
-                   }
+            t_id = {"name": opponent.get_name(),
+                    "side": "Opponents"}
             t_stats = opponent.get_character_stats()
             characters_stats_dict['Opponents'].append({**t_id, **t_stats})
 
@@ -189,6 +186,7 @@ class Encounter(object):
         self.field_map[leave_list_ind].leave_sector()
         self.field_map[occupy_list_ind].occupy_sector(identifier_name,
                                                       identifier_index)
+
     @ctx_decorator
     def get_target_distance_array(self, my_x, my_y, target_name):
         # with self.tracer.span(name='get_target_distance_array'):
@@ -281,17 +279,17 @@ class Encounter(object):
                             msg = (f"[{x}] [{a}][{b}] {self.field_map[x].occupied_by}"
                                    f"[{self.field_map[x].occupied_by_index}]")
                             self.logger.debug(msg=msg, ctx=self.ctx)
+
     @ctx_decorator
     def wrap_up(self):
         with self.tracer.span(name='wrap_up'):
             self.stats.winning_team = self.winning_list_name
             self.stats.duration_rds = self.round
-            jdict = {
-                "winner": self.winning_list_name,
-                "result_round": self.round,
-                "result_turn": self.last_turn,
-                "surviving_members": [],
-                "final_field_map": [] }
+            jdict = {"winner": self.winning_list_name,
+                     "result_round": self.round,
+                     "result_turn": self.last_turn,
+                     "surviving_members": [],
+                     "final_field_map": []}
             for i in range(len(self.winning_list)):
                 if self.winning_list[i].alive:
                     jdict["surviving_members"].append(self.winning_list[i].get_name())
@@ -299,7 +297,7 @@ class Encounter(object):
             for x in range(len(self.field_map)):
                 if self.field_map[x].occupied:
                     a, b = self.get_grid_position(x)
-                    occupied_loc = [ self.get_player(self.field_map[x].occupied_by,
+                    occupied_loc = [self.get_player(self.field_map[x].occupied_by,
                                     self.field_map[x].occupied_by_index).get_name(),
                                     self.field_map[x].occupied_by, x, a, b]
                     jdict["final_field_map"].append(occupied_loc)
@@ -334,7 +332,7 @@ class Encounter(object):
             self.logger.debug(msg=f"{player.get_name()} is dead. Removing them from melee and field list. ",
                               ctx=self.ctx)
 
-        xy_loc = self.get_player_location(list_name=list_name, list_index=list_index )
+        xy_loc = self.get_player_location(list_name=list_name, list_index=list_index)
         x_loc = int(xy_loc[0])
         y_loc = int(xy_loc[1])
         self.remove_all_from_melee_with(player=player)
@@ -378,7 +376,7 @@ class Encounter(object):
 
             if cur_active.alive and cur_active.cur_hit_points > 0:
 
-                dl = (self.get_target_distance_array( my_x=self.initiative[initiative_ind][4],
+                dl = (self.get_target_distance_array(my_x=self.initiative[initiative_ind][4],
                                                      my_y=self.initiative[initiative_ind][5],
                                                      target_name=target_array_name))
 
@@ -439,7 +437,7 @@ class Encounter(object):
                     avail_mvmt = cur_active.cur_movement / 5
                     avail_mvmt = self.movement(avail_movement=avail_mvmt,
                                                cur_active=cur_active,
-                                               cur_init=self.initiative[ initiative_ind],
+                                               cur_init=self.initiative[initiative_ind],
                                                dest_list=dl)
                     if self.debug_ind == 1:
                         for j in range(len(dl)):
@@ -558,6 +556,7 @@ class Encounter(object):
             else:
                 if self.debug_ind == 1:
                     self.logger.debug(msg=f"{cur_active.get_name()} is dead. Their turn is skipped. ", ctx=self.ctx)
+
     @ctx_decorator
     def remove_waiting_for(self, initiative_ind, waiting_for):
         # with self.tracer.span(name='remove_waiting_for'):
@@ -587,6 +586,7 @@ class Encounter(object):
                     waiting_for.remove(sublist)
 
             return ret_val
+
     @ctx_decorator
     def is_in_melee(self, player):
         if player.get_name() in self.melee_with.keys():
@@ -750,7 +750,7 @@ class Encounter(object):
 
 
 if __name__ == '__main__':
-    logger_name='encounter_main_test'
+    logger_name = 'encounter_main_test'
     ctx = Ctx(app_username='encounter_class_init', logger_name=logger_name)
     logger = RpgLogging(logger_name=logger_name, level_threshold='debug')
     logger.setup_logging()
@@ -782,7 +782,7 @@ if __name__ == '__main__':
               f'Series Id:         {ctx.series_id}\n\t' 
               f'Encounter Id:      {ctx.encounter_id}\n\t' 
               f'Round:             {ctx.round}\n\t' 
-              f'Turn:              {ctx.turn}\n' )
+              f'Turn:              {ctx.turn}\n')
 
         for line in ctx.crumbs:
             print(line)

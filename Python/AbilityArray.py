@@ -73,7 +73,6 @@ class AbilityArray(object):
                                 "debug_ind": debug_ind})
         self._populate()
 
-
     def add_method_last_call_audit(self, audit_obj):
         self.method_last_call_audit[audit_obj['methodName']] = audit_obj
 

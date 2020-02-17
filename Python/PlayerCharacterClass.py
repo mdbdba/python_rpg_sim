@@ -3,20 +3,20 @@ from Ctx import Ctx
 from Ctx import ctx_decorator
 
 
-def getRandomClassName(db):
+def get_random_class_name(db):
     sql = "select count(class) from dnd_5e.lu_class;"
 
     results = db.query(sql)
     result = results[0][0]
 
-    if (result > 1):
-        randNbr = random.randint(1, result)
+    if result > 1:
+        rand_nbr = random.randint(1, result)
     else:
-        randNbr = 1
+        rand_nbr = 1
     sql = ("with tb as (select class, row_number() over (order by class) "
            f"as orderBy from dnd_5e.lu_class ) "
            f"select class, orderby from tb "
-           f"where orderby = {randNbr};")
+           f"where orderby = {rand_nbr};")
     results = db.query(sql)
     return results[0][0]
 
@@ -25,9 +25,9 @@ class PlayerCharacterClass(object):
     @ctx_decorator
     def __init__(self,
                  db,
-                 ctx,
-                 classCandidate="Random",
-                 characterAlteringClassOptions=None):
+                 ctx: Ctx,
+                 class_candidate="Random",
+                 character_altering_class_options=None):
         self.name = ""
         self.subclass_of = ""
         self.ctx = ctx
@@ -52,19 +52,18 @@ class PlayerCharacterClass(object):
         self.ranged_ammunition_amt = 0
         self.armor = None
         self.shield = None
-        self.CACF_option_candidate_array = characterAlteringClassOptions
+        self.CACF_option_candidate_array = character_altering_class_options
         self.CACF_option_array = []
 
-        if classCandidate == "Random":
-            classCandidate = getRandomClassName(db)
+        if class_candidate == "Random":
+            class_candidate = get_random_class_name(db)
 
-        if self.validClassName(db=db, classCandidate=classCandidate):
-            self.populateDetails(db=db, classCandidate=classCandidate)
+        if self.valid_class_name(db=db, class_candidate=class_candidate):
+            self.populate_details(db=db, class_candidate=class_candidate)
         else:
-            raise Exception(f'Could not find class: {classCandidate}')
+            raise Exception(f'Could not find class: {class_candidate}')
 
         self.setCharacterAlteringClassFeatures(db=db)
-
 
     def add_method_last_call_audit(self, audit_obj):
         self.method_last_call_audit[audit_obj['methodName']] = audit_obj
@@ -76,29 +75,28 @@ class PlayerCharacterClass(object):
             return_val = self.method_last_call_audit[method_name]
         return return_val
 
-
     @ctx_decorator
-    def setArmorWeapons(self):
+    def set_armor_weapons(self):
         pass
 
     @ctx_decorator
-    def validClassName(self, classCandidate, db):
+    def valid_class_name(self, class_candidate, db):
         sql = (f"select count(class) from dnd_5e.lu_class where "
-               f"lower(class) = lower('{classCandidate}');")
+               f"lower(class) = lower('{class_candidate}');")
         results = db.query(sql)
-        classCnt = results[0][0]
-        if classCnt == 1:
+        class_cnt = results[0][0]
+        if class_cnt == 1:
             return True
         else:
             return False
 
     @ctx_decorator
-    def populateDetails(self, classCandidate, db):
+    def populate_details(self, class_candidate, db):
         sql = (f"SELECT class, hit_die, ability_pref_str, "
                f"source_material, source_credit_url, "
                f"source_credit_comment "
                f"FROM dnd_5e.lu_class where "
-               f"lower(class) = lower('{classCandidate}');")
+               f"lower(class) = lower('{class_candidate}');")
         results = db.query(sql)
         self.name = results[0][0] if results[0][0] else None
         self.hit_die = results[0][1] if results[0][1] else None
@@ -124,9 +122,9 @@ class PlayerCharacterClass(object):
                 else:
                     self.ability_sort_str_array[p] = 'Charisma'
 
-        self.setArmorWeapons()
+        self.set_armor_weapons()
 
-    def getClass(self):
+    def get_class(self):
         return self.name
 
     def getClassAbilitySortArray(self):

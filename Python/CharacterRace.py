@@ -5,6 +5,7 @@ from Die import Die
 from Ctx import Ctx
 from Ctx import ctx_decorator
 
+
 class CharacterRace(object):
     @ctx_decorator
     def __init__(self, db, ctx, race_candidate="Random", use_rasm_ind=True):
@@ -56,7 +57,6 @@ class CharacterRace(object):
             else:
                 raise Exception(f'Could not find race: {race_candidate}')
 
-
     def add_method_last_call_audit(self, audit_obj):
         self.method_last_call_audit[audit_obj['methodName']] = audit_obj
 
@@ -66,7 +66,6 @@ class CharacterRace(object):
         else:
             return_val = self.method_last_call_audit[method_name]
         return return_val
-
 
     @ctx_decorator
     def get_random_race_name(self, db, parent_race="None"):

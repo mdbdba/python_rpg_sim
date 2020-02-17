@@ -1,11 +1,11 @@
 import sys
-from Ctx import Ctx, ctx_decorator, RpgLogging
-
-ctx = Ctx(app_username='Study_class_init')
+from Ctx import ctx_decorator
+from Ctx import Ctx
+from Ctx import RpgLogging
 
 
 class Study:
-    @ctx_decorator(ctx)
+    @ctx_decorator()
     def __init__(self, ctx: Ctx, app_username: str, study_name: str,
                  study_instance_id: int = None, repetitions: int = None):
         self.ctx = ctx
@@ -41,19 +41,19 @@ class Study:
             return_val = self.method_last_call_audit[method_name]
         return return_val
 
-    @ctx_decorator(ctx)
+    @ctx_decorator()
     def test_method_a(self, id):
         self.log.debug("entering test method a", self.ctx)
         print(f"in test_method_a: {id}")
         self.test_method_b(id=2)
 
-    @ctx_decorator(ctx)
+    @ctx_decorator()
     def test_method_b(self, id):
         self.log.debug("entering test method b", self.ctx)
         print(f"in test_method_b: {id}")
         self.test_method_c(id=3)
 
-    @ctx_decorator(ctx)
+    @ctx_decorator()
     def test_method_c(self, id):
         self.log.debug("entering test method c", self.ctx)
         print(f"in test_method_c: {id}")
@@ -61,14 +61,12 @@ class Study:
 
 if __name__ == "__main__":
 
+    ctx = Ctx(app_username='series_class_init', logger_name='series')
     study = Study(app_username='Demo_user_1', study_name='Stats Compare', ctx=ctx)
     try:
         print(ctx.get_last_crumb())
         print(ctx.print_crumbs())
-        raise Exception("try/exception test")
     except Exception:
         study.log.critical("Unexpected Error Encountered", ctx)
         print(f'fallback for error stack: {sys.exc_info()}')
-    else:
-        print("No issues, chief.")
 

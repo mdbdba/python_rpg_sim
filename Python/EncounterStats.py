@@ -1,12 +1,15 @@
-from dataclasses import dataclass, field
+from dataclasses import dataclass  # , field
 from typing import List   # Others: Dict, Set, Tuple, Optional
-from CharacterStats import CharacterStats
+# from CharacterStats import CharacterStats
 from datetime import datetime
 
-VALID_ENCOUNTER_SIDES = { 'Heroes', 'Opponents'}
+
+VALID_ENCOUNTER_SIDES = {'Heroes', 'Opponents'}
+
 
 def init_char_stats():
     return []
+
 
 @dataclass
 class EncounterStats:
@@ -70,4 +73,3 @@ class EncounterStats:
         else:
             self.opponents_attack_successes += 1
         self.update_timestamp = datetime.now()
-
