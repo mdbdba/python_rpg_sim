@@ -468,113 +468,125 @@ class Encounter(object):
                     s1 = self.get_waiting_for(initiative_ind=initiative_ind, waiting_for=waiting_for)
                     t_cnt = 1
                     for waiting_action in s1:
-                        directed_user = self.get_player(waiting_action[0], waiting_action[1])
                         turn_audit["being_waited_for"] = True
+                        directed_user = self.get_player(waiting_action[0], waiting_action[1])
                         turn_audit[f"waited_for_by_{t_cnt}"] = directed_user.get_name()
+                        self.handle_turn_melee_action(turn_audit=turn_audit,
+                                                      attacker_side=waiting_action[0],
+                                                      attacker_index=waiting_action[1],
+                                                      target_side=self.initiative[initiative_ind][0],
+                                                      target_index= self.initiative[initiative_ind][1],
+                                                      audit_key_prefix="waiting_",
+                                                      audit_key_suffix=f"_{t_cnt}")
 
-                        if directed_user.cur_hit_points > 0:
-                            # save off vantage to reset it.
-                            t_vantage = directed_user.get_vantage()
-                            # if the cur_active user is unconscious then the attack
-                            # is at advantage and auto-crits on hit.
-                            # if cur_active.alive and cur_active.cur_hit_points < 1:
-                            if cur_active.unconscious_ind or cur_active.prone_ind:
-                                if t_vantage == 'Disadvantage':
-                                    t_vantage = 'Normal'
-                                else:
-                                    t_vantage = 'Advantage'
-                            else:
-                                t_vantage = 'Normal'
 
-                            directed_attack = directed_user.default_melee_attack(vantage=t_vantage)
+                        # if directed_user.cur_hit_points > 0:
+                        #     # save off vantage to reset it.
+                        #     t_vantage = directed_user.get_vantage()
+                        #     # if the cur_active user is unconscious then the attack
+                        #     # is at advantage and auto-crits on hit.
+                        #     # if cur_active.alive and cur_active.cur_hit_points < 1:
+                        #     if cur_active.unconscious_ind or cur_active.prone_ind:
+                        #         if t_vantage == 'Disadvantage':
+                        #             t_vantage = 'Normal'
+                        #         else:
+                        #             t_vantage = 'Advantage'
+                        #     else:
+                        #         t_vantage = 'Normal'
 
-                            turn_audit[f"melee_damage_type_{t_cnt}"] = directed_attack.damage_type
-                            turn_audit[f"melee_vantage_{t_cnt}"] = t_vantage
+                        #     directed_attack = directed_user.default_melee_attack(vantage=t_vantage)
 
-                            self.stats.inc_attack_attempts(waiting_action[0])
+                        #     turn_audit[f"melee_damage_type_{t_cnt}"] = directed_attack.damage_type
+                        #     turn_audit[f"melee_vantage_{t_cnt}"] = t_vantage
 
-                            log_if_unconscious = False
-                            if not cur_active.unconscious_ind:
-                                log_if_unconscious = True
+                        #     self.stats.inc_attack_attempts(waiting_action[0])
 
-                            hit_points_before = cur_active.cur_hit_points
-                            successful_defend = cur_active.melee_defend(attack_obj=directed_attack)
+                        #     log_if_unconscious = False
+                        #     if not cur_active.unconscious_ind:
+                        #         log_if_unconscious = True
 
-                            turn_audit[f"waiting_melee_defend_successful_{t_cnt}"] = successful_defend
+                        #     hit_points_before = cur_active.cur_hit_points
+                        #     successful_defend = cur_active.melee_defend(attack_obj=directed_attack)
 
-                            if not successful_defend:
-                                self.stats.inc_attack_successes(waiting_action[0])
-                                cur_active.inc_damage_dealt(damage_type=directed_attack.damage_type,
-                                                            amount=directed_attack.possible_damage)
-                                directed_user.stats.attack_successes += 1
-                                turn_audit[f"waiting_melee_damage_{t_cnt}"] = directed_attack.possible_damage
-                                turn_audit[f"waiting_hit_point_impact_{t_cnt}"] = (
-                                        hit_points_before - cur_active.cur_hit_points)
-                                turn_audit[f"waiting_hit_points_after_waiting_melee_{t_cnt}"] = cur_active.cur_hit_points
-                                if cur_active.unconscious_ind:
-                                    if log_if_unconscious:
-                                        p = PointInTime(self.ctx.round, self.ctx.turn)
-                                        cur_active.stats.unconscious_list.append(p)
-                                        turn_audit[f"waiting_knocked_unconscious_in_turn_{t_cnt}"] = True
-                                    else:
-                                        turn_audit[f"waiting_death_save_status_{t_cnt}"] = (
-                                            f"{cur_active.death_save_passed_cnt} / {cur_active.death_save_failed_cnt}")
+                        #     turn_audit[f"waiting_melee_defend_successful_{t_cnt}"] = successful_defend
 
-                            if not cur_active.alive:
-                                turn_audit[f"waiting_died_in_turn_{t_cnt}"] = True
-                                self.cleanup_dead_player(player=cur_active,
-                                                         list_name=self.initiative[initiative_ind][0],
-                                                         list_index=self.initiative[initiative_ind][1])
+                        #     if not successful_defend:
+                        #         self.stats.inc_attack_successes(waiting_action[0])
+                        #         cur_active.inc_damage_dealt(damage_type=directed_attack.damage_type,
+                        #                                     amount=directed_attack.possible_damage)
+                        #         directed_user.stats.attack_successes += 1
+                        #         turn_audit[f"waiting_melee_damage_{t_cnt}"] = directed_attack.possible_damage
+                        #         turn_audit[f"waiting_hit_point_impact_{t_cnt}"] = (
+                        #                 hit_points_before - cur_active.cur_hit_points)
+                        #         turn_audit[f"waiting_hit_points_after_waiting_melee_{t_cnt}"] = cur_active.cur_hit_points
+                        #         if cur_active.unconscious_ind:
+                        #             if log_if_unconscious:
+                        #                 p = PointInTime(self.ctx.round, self.ctx.turn)
+                        #                 cur_active.stats.unconscious_list.append(p)
+                        #                 turn_audit[f"waiting_knocked_unconscious_in_turn_{t_cnt}"] = True
+                        #             else:
+                        #                 turn_audit[f"waiting_death_save_status_{t_cnt}"] = (
+                        #                     f"{cur_active.death_save_passed_cnt} / {cur_active.death_save_failed_cnt}")
+
+                        #     if not cur_active.alive:
+                        #         turn_audit[f"waiting_died_in_turn_{t_cnt}"] = True
+                        #         self.cleanup_dead_player(player=cur_active,
+                        #                                  list_name=self.initiative[initiative_ind][0],
+                        #                                  list_index=self.initiative[initiative_ind][1])
                         t_cnt += 1
                     if cur_active.cur_hit_points > 0:
-                        target = self.get_player(dl[0][3], dl[0][4])
-                        turn_audit["target"] = target.get_name()
+                        self.handle_turn_melee_action(turn_audit=turn_audit,
+                                                      attacker_side=self.initiative[initiative_ind][0],
+                                                      attacker_index=self.initiative[initiative_ind][1],
+                                                      target_side=dl[0][3], target_index=dl[0][4])
+                        # target = self.get_player(dl[0][3], dl[0][4])
+                        # turn_audit["target"] = target.get_name()
 
-                        t_vantage = cur_active.get_vantage()
-                        # if the cur_active user is unconscious then the attack is at advantage
-                        # and auto-crits on hit.
-                        if target.unconscious_ind or target.prone_ind:
-                            if t_vantage == 'Disadvantage':
-                                t_vantage = 'Normal'
-                            else:
-                                t_vantage = 'Advantage'
-                        else:
-                            t_vantage = 'Normal'
+                        # t_vantage = cur_active.get_vantage()
+                        # # if the cur_active user is unconscious then the attack is at advantage
+                        # # and auto-crits on hit.
+                        # if target.unconscious_ind or target.prone_ind:
+                        #     if t_vantage == 'Disadvantage':
+                        #         t_vantage = 'Normal'
+                        #     else:
+                        #         t_vantage = 'Advantage'
+                        # else:
+                        #     t_vantage = 'Normal'
+#
+                        # active_attack = cur_active.default_melee_attack(vantage=t_vantage)
+                        # self.stats.inc_attack_attempts(self.initiative[initiative_ind][0])
 
-                        active_attack = cur_active.default_melee_attack(vantage=t_vantage)
-                        self.stats.inc_attack_attempts(self.initiative[initiative_ind][0])
+                        # log_if_unconscious = False
+                        # if not target.unconscious_ind:
+                        #     log_if_unconscious = True
 
-                        log_if_unconscious = False
-                        if not target.unconscious_ind:
-                            log_if_unconscious = True
+                        # hit_points_before = target.cur_hit_points
+                        # successful_defend = target.melee_defend(attack_obj=active_attack)
 
-                        hit_points_before = target.cur_hit_points
-                        successful_defend = target.melee_defend(attack_obj=active_attack)
+                        # turn_audit["melee_attack_defense_successful"] = successful_defend
 
-                        turn_audit["melee_attack_defense_successful"] = successful_defend
+                        # if not successful_defend:
+                        #     turn_audit["melee_attack_damage"] = active_attack.possible_damage
+                        #     turn_audit["hit_point_impact"] = (
+                        #             hit_points_before - target.cur_hit_points)
+                        #     turn_audit["hit_points_after_attack"] = target.cur_hit_points
+                        #     self.stats.inc_attack_successes(self.initiative[initiative_ind][0])
+                        #     cur_active.inc_damage_dealt(damage_type=active_attack.damage_type,
+                        #                                 amount=active_attack.possible_damage)
+                        #     cur_active.stats.attack_successes += 1
 
-                        if not successful_defend:
-                            turn_audit["melee_attack_damage"] = active_attack.possible_damage
-                            turn_audit["hit_point_impact"] = (
-                                    hit_points_before - target.cur_hit_points)
-                            turn_audit["hit_points_after_attack"] = target.cur_hit_points
-                            self.stats.inc_attack_successes(self.initiative[initiative_ind][0])
-                            cur_active.inc_damage_dealt(damage_type=active_attack.damage_type,
-                                                        amount=active_attack.possible_damage)
-                            cur_active.stats.attack_successes += 1
+                        # if target.unconscious_ind:
+                        #     if log_if_unconscious:
+                        #         p = PointInTime(self.ctx.round, self.ctx.turn)
+                        #         target.stats.unconscious_list.append(p)
+                        #         turn_audit["target_knocked_unconscious_in_turn"] = True
+                        #     else:
+                        #         turn_audit["death_save_status"] = (
+                        #             f"{cur_active.death_save_passed_cnt} / {cur_active.death_save_failed_cnt}")
 
-                        if target.unconscious_ind:
-                            if log_if_unconscious:
-                                p = PointInTime(self.ctx.round, self.ctx.turn)
-                                target.stats.unconscious_list.append(p)
-                                turn_audit["target_knocked_unconscious_in_turn"] = True
-                            else:
-                                turn_audit["death_save_status"] = (
-                                    f"{cur_active.death_save_passed_cnt} / {cur_active.death_save_failed_cnt}")
-
-                        if not target.alive:
-                            turn_audit["target_died_in_turn"] = True
-                            self.cleanup_dead_player(player=target, list_name=dl[0][3], list_index=dl[0][4])
+                        # if not target.alive:
+                        #     turn_audit["target_died_in_turn"] = True
+                        #     self.cleanup_dead_player(player=target, list_name=dl[0][3], list_index=dl[0][4])
 
             elif cur_active.alive:  # currently alive but less than 1 hit point
                 cur_active.death_save()
@@ -589,6 +601,59 @@ class Encounter(object):
                 turn_audit["died_before_turn"] = True
 
         return turn_audit
+
+    @ctx_decorator
+    def handle_turn_melee_action(self, turn_audit, attacker_side, attacker_index, target_side, target_index, audit_key_prefix="", audit_key_suffix=""):
+        attacker = self.get_player(attacker_side, attacker_index)
+        target = self.get_player(target_side, target_index)
+        if attacker.cur_hit_points > 0:
+            turn_audit[f"{audit_key_prefix}target{audit_key_suffix}"] = target.get_name()
+
+            t_vantage = attacker.get_vantage()
+            # if the cur_active user is unconscious then the attack is at advantage
+            # and auto-crits on hit.
+            if target.unconscious_ind or target.prone_ind:
+                if t_vantage == 'Disadvantage':
+                    t_vantage = 'Normal'
+                else:
+                    t_vantage = 'Advantage'
+            else:
+                t_vantage = 'Normal'
+
+            active_attack = attacker.default_melee_attack(vantage=t_vantage)
+            self.stats.inc_attack_attempts(attacker_side)
+
+            log_if_unconscious = False
+            if not target.unconscious_ind:
+                log_if_unconscious = True
+
+            hit_points_before = target.cur_hit_points
+            successful_defend = target.melee_defend(attack_obj=active_attack)
+
+            turn_audit[f"{audit_key_prefix}melee_attack_defense_successful{audit_key_suffix}"] = successful_defend
+
+            if not successful_defend:
+                turn_audit[f"{audit_key_prefix}melee_attack_damage{audit_key_suffix}"] = active_attack.possible_damage
+                turn_audit[f"{audit_key_prefix}hit_point_impact{audit_key_suffix}"] = (
+                        hit_points_before - target.cur_hit_points)
+                turn_audit[f"{audit_key_prefix}hit_points_after_attack{audit_key_suffix}"] = target.cur_hit_points
+                self.stats.inc_attack_successes(attacker_side)
+                attacker.inc_damage_dealt(damage_type=active_attack.damage_type,
+                                            amount=active_attack.possible_damage)
+                attacker.stats.attack_successes += 1
+
+            if target.unconscious_ind:
+                if log_if_unconscious:
+                    p = PointInTime(self.ctx.round, self.ctx.turn)
+                    target.stats.unconscious_list.append(p)
+                    turn_audit[f"{audit_key_prefix}target_knocked_unconscious_in_turn{audit_key_suffix}"] = True
+                else:
+                    turn_audit[f"{audit_key_prefix}death_save_status{audit_key_suffix}"] = (
+                        f"{target.death_save_passed_cnt} / {target.death_save_failed_cnt}")
+
+            if not target.alive:
+                turn_audit[f"{audit_key_prefix}target_died_in_turn{audit_key_suffix}"] = True
+                self.cleanup_dead_player(player=target, list_name=target_side, list_index=target_index)
 
     def remove_waiting_for(self, initiative_ind, waiting_for):
         # with self.tracer.span(name='remove_waiting_for'):
