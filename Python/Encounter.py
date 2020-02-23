@@ -262,9 +262,9 @@ class Encounter(object):
             with self.tracer.span(name='master_loop_iteration'):
                 for i in range(len(self.initiative)):
                     if self.active:
+                        self.ctx.turn = i
                         turn_audits.append(self.turn(initiative_ind=i, waiting_for=waiting_for))
                         self.active = self.still_active()
-                        self.ctx.turn = i
 
                 self.round_audits.append(turn_audits)
                 if self.active:
@@ -301,7 +301,6 @@ class Encounter(object):
                     jdict["final_field_map"].append(occupied_loc)
             self.logger.debug(msg='encounter_result', json_dict=jdict, ctx=self.ctx)
             self.logger.debug(msg='character_stats', json_dict=self.get_characters_stats(), ctx=self.ctx)
-
 
     @ctx_decorator
     def still_active(self):
@@ -350,7 +349,7 @@ class Encounter(object):
     @ctx_decorator
     def turn(self, initiative_ind, waiting_for):
         with self.tracer.span(name='turn'):
-            turn_audit = { "round": self.ctx.round, "turn": initiative_ind}
+            turn_audit = {"round": self.ctx.round, "turn": initiative_ind}
             cur_active = self.get_player(self.initiative[initiative_ind][0],
                                          self.initiative[initiative_ind][1])
             if self.initiative[initiative_ind][0] == "Heroes":
@@ -509,24 +508,24 @@ class Encounter(object):
                                                             amount=directed_attack.possible_damage)
                                 directed_user.stats.attack_successes += 1
                                 turn_audit[f"waiting_melee_damage_{t_cnt}"] = directed_attack.possible_damage
-                                turn_audit[f"hit_point_impact_{t_cnt}"] = (
+                                turn_audit[f"waiting_hit_point_impact_{t_cnt}"] = (
                                         hit_points_before - cur_active.cur_hit_points)
-                                turn_audit[f"hit_points_after_waiting_melee_{t_cnt}"] = cur_active.cur_hit_points
+                                turn_audit[f"waiting_hit_points_after_waiting_melee_{t_cnt}"] = cur_active.cur_hit_points
                                 if cur_active.unconscious_ind:
                                     if log_if_unconscious:
                                         p = PointInTime(self.ctx.round, self.ctx.turn)
                                         cur_active.stats.unconscious_list.append(p)
-                                        turn_audit["knocked_unconscious_in_turn"] = True
+                                        turn_audit[f"waiting_knocked_unconscious_in_turn_{t_cnt}"] = True
                                     else:
-                                        turn_audit["death_save_status"] = (
+                                        turn_audit[f"waiting_death_save_status_{t_cnt}"] = (
                                             f"{cur_active.death_save_passed_cnt} / {cur_active.death_save_failed_cnt}")
 
                             if not cur_active.alive:
-                                turn_audit["died_in_turn"] = True
+                                turn_audit[f"waiting_died_in_turn_{t_cnt}"] = True
                                 self.cleanup_dead_player(player=cur_active,
                                                          list_name=self.initiative[initiative_ind][0],
                                                          list_index=self.initiative[initiative_ind][1])
-                    t_cnt += 1
+                        t_cnt += 1
                     if cur_active.cur_hit_points > 0:
                         target = self.get_player(dl[0][3], dl[0][4])
                         turn_audit["target"] = target.get_name()
@@ -556,14 +555,13 @@ class Encounter(object):
 
                         if not successful_defend:
                             turn_audit["melee_attack_damage"] = active_attack.possible_damage
-                            turn_audit[f"hit_point_impact_{t_cnt}"] = (
+                            turn_audit["hit_point_impact"] = (
                                     hit_points_before - target.cur_hit_points)
                             turn_audit["hit_points_after_attack"] = target.cur_hit_points
                             self.stats.inc_attack_successes(self.initiative[initiative_ind][0])
                             cur_active.inc_damage_dealt(damage_type=active_attack.damage_type,
                                                         amount=active_attack.possible_damage)
                             cur_active.stats.attack_successes += 1
-
 
                         if target.unconscious_ind:
                             if log_if_unconscious:
@@ -581,8 +579,8 @@ class Encounter(object):
             elif cur_active.alive:  # currently alive but less than 1 hit point
                 cur_active.death_save()
                 turn_audit["performed_death_save_in_turn"] = True
-                turn_audit["death_save_successes"] = cur_active.death_save_passed_cnt
-                turn_audit["death_save_failures"] = cur_active.death_save_failed_cnt
+                turn_audit["death_save_status"] = (
+                    f"{cur_active.death_save_passed_cnt} / {cur_active.death_save_failed_cnt}")
                 if not cur_active.alive:
                     turn_audit["died_in_turn"] = True
                     self.cleanup_dead_player(player=cur_active, list_name=self.initiative[initiative_ind][0],
