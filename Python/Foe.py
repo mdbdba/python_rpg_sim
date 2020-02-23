@@ -20,9 +20,9 @@ class Foe(Character):
                  foe_candidate="Random",
                  challenge_level=".25",
                  damage_generator="Random",
-                 hit_point_generator="Max",
-                 debug_ind=0):
+                 hit_point_generator="Max"):
         gender_candidate = 'U'
+        self.character_id = -1
         self.ctx = ctx
         self.name = foe_name
         ability_array_str = 'Common'
@@ -33,8 +33,12 @@ class Foe(Character):
                            ability_array_str=ability_array_str,
                            damage_generator=damage_generator,
                            hit_point_generator=hit_point_generator,
-                           level=level, debug_ind=debug_ind)
+                           level=level)
         self.get_foe(db=db, foe_candidate=foe_candidate)
+        self.stats.character_id = self.character_id
+        self.stats.character_class = self.race    # this looks funky, but characterStats presentation for the foe race
+        self.stats.character_race = self.foe_type # is easier to compare using the class as "skeleton" and race as
+          # Undead.  Leaving that like that for it.  In all programmatic work the foe race and foe_type will be used.
 
         if self.melee_weapon is not None:
             self.melee_weapon_obj = Weapon(db=db, ctx=ctx, name=self.get_melee_weapon())
@@ -48,8 +52,8 @@ class Foe(Character):
                        "challenge_level": challenge_level,
                        "damage_generator": damage_generator,
                        "hit_point_generator": hit_point_generator,
-                       "level": level,
-                       "debug_ind": debug_ind})
+                       "level": level})
+        self.logger.debug(msg="user_audit", json_dict=self.__dict__, ctx=ctx)
 
     def get_melee_weapon(self):
         return self.melee_weapon
@@ -86,7 +90,7 @@ class Foe(Character):
 
         results = db.query(sql)
         try:
-            # results[0][0]     # id,
+            self.character_id = results[0][0]     # id,
             if self.name is None:
                 self.name = results[0][1]     # name,
             # if name is used for something specific (skeleton_1, or jimmyjam,
@@ -253,13 +257,14 @@ if __name__ == '__main__':
     logger = RpgLogging(logger_name=logger_name, level_threshold='debug')
     logger.setup_logging()
     try:
-        a1 = Foe(db=db, ctx=ctx, foe_candidate="Skeleton", debug_ind=1)
+        a1 = Foe(db=db, ctx=ctx, foe_candidate="Skeleton")
+        a2 = Foe(db=db, ctx=ctx, foe_candidate="Skeleton")
         print(a1)
-        a1.melee_defend(modifier=13, possible_damage=a1.hit_points,
-                        damage_type='Bludgeoning')
+        attack_obj = a2.default_melee_attack()
+        a1.melee_defend(attack_obj=attack_obj)
         a1.heal(amount=10)
-        a1.melee_defend(modifier=13, possible_damage=(2 * a1.hit_points),
-                        damage_type='Bludgeoning')
+        attack_obj = a2.default_melee_attack()
+        a1.melee_defend(attack_obj=attack_obj)
         print(a1.__repr__())
 
     except Exception as error:

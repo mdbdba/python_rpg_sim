@@ -1,24 +1,27 @@
 import sys
+import traceback
+import random
+from InvokePSQL import InvokePSQL
 from Ctx import ctx_decorator
 from Ctx import Ctx
 from Ctx import RpgLogging
+from TraceIt import TraceIt
 
 
 class Study:
     @ctx_decorator()
-    def __init__(self, ctx: Ctx, app_username: str, study_name: str,
+    def __init__(self, db, ctx: Ctx, tracer: TraceIt, app_username: str, study_name: str,
                  study_instance_id: int = None, repetitions: int = None):
         self.ctx = ctx
         self.method_last_call_audit = {}
         if self.ctx.app_username == "Unknown" or self.ctx.app_username == "Study_class_init":
             self.ctx.app_username = app_username
 
-        self.log = RpgLogging(logger_name='study_logger', level_threshold='debug')
-        self.app_username = app_username
+        self.logger = RpgLogging(logger_name=ctx.logger_name)
+        self.t = tracer
         self.study_name = study_name
         self.repititions = repetitions
         if study_instance_id is None:
-            self.log.debug("Setting up Study Instance", self.ctx)
             # ----- TODO  ----------------
             # Get study information from db and create a new record in the study_instance table
             # Pass the context,
@@ -60,13 +63,40 @@ class Study:
 
 
 if __name__ == "__main__":
-
-    ctx = Ctx(app_username='series_class_init', logger_name='series')
-    study = Study(app_username='Demo_user_1', study_name='Stats Compare', ctx=ctx)
+    study_id = random.randrange(0, 100000, 2)
+    logger_name = f'study_main_{study_id}'
+    ctx = Ctx(app_username='study_class_init', logger_name=logger_name)
+    logger = RpgLogging(logger_name=logger_name, level_threshold='debug')
+    logger.setup_logging()
     try:
-        print(ctx.get_last_crumb())
-        print(ctx.print_crumbs())
-    except Exception:
-        study.log.critical("Unexpected Error Encountered", ctx)
-        print(f'fallback for error stack: {sys.exc_info()}')
+        db = InvokePSQL()
+        # series_dict = {
+        #     "opponent_party_size": "4",
+        #     "opponent_candidate": "Skeleton",
+        #     "debug_ind": "1",
+        #     "party_name": "AvgJoes_5"
+        # }
 
+        t = TraceIt("study")
+
+        study = Study(db=db, ctx=ctx, app_username='Demo_user_1', study_name='Stats Compare', tracer=t)
+
+    except Exception as error:
+        exc_type, exc_value, exc_traceback = sys.exc_info()
+        print(f'Context Information:\n\t'
+              f'App_username:      {ctx.app_username}\n\t'
+              f'Full Name:         {ctx.fullyqualified}\n\t'
+              f'Logger Name:       {ctx.logger_name}\n\t'
+              f'Trace Id:          {ctx.trace_id}\n\t'
+              f'Study Instance Id: {ctx.study_instance_id}\n\t'
+              f'Study Name:        {ctx.study_name}\n\t'
+              f'Series Id:         {ctx.series_id}\n\t'
+              f'Encounter Id:      {ctx.encounter_id}\n\t'
+              f'Round:             {ctx.round}\n\t'
+              f'Turn:              {ctx.turn}\n')
+
+        for line in ctx.crumbs:
+            print(line)
+
+        for line in traceback.format_exception(exc_type, exc_value, exc_traceback):
+            print(line)

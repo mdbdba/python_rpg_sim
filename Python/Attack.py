@@ -80,3 +80,4 @@ class Attack(object):
                 self.die_used = value[2]
                 self.rolls_used = value[1]
         return total
+

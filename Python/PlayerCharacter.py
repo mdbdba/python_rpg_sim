@@ -40,14 +40,13 @@ class PlayerCharacter(Character):
                  ability_array_str="Common",
                  damage_generator="Random",
                  hit_point_generator="Max",
-                 level=1,
-                 debug_ind=0):
+                 level=1 ):
 
         Character.__init__(self, db=db, ctx=ctx, gender_candidate=gender_candidate,
                            ability_array_str=ability_array_str,
                            damage_generator=damage_generator,
                            hit_point_generator=hit_point_generator,
-                           level=level, debug_ind=debug_ind)
+                           level=level)
         if character_id == -1:
             new_character_ind = True
         else:
@@ -61,9 +60,9 @@ class PlayerCharacter(Character):
                        "ability_array_str": ability_array_str,
                        "damage_generator": damage_generator,
                        "hit_point_generator": hit_point_generator,
-                       "level": level,
-                       "debug_ind": debug_ind})
+                       "level": level})
 
+        self.character_id = -1
         if character_id == -1:
             self.create_character(db=db,
                                   race_candidate=race_candidate,
@@ -75,6 +74,10 @@ class PlayerCharacter(Character):
             self.character_id = character_id
             self.get_character(db=db, character_id=self.character_id)
 
+        self.stats.character_race = self.race_obj.race
+        self.stats.character_class = self.class_obj.name
+        self.stats.character_name = self.get_name()
+
         self.feature_obj = self.class_obj.getClassLevelFeature(level=self.level, db=db)
         self.reset_movement()
         self.set_finesse_ability()
@@ -85,6 +88,7 @@ class PlayerCharacter(Character):
         if character_id == -1:
             self.save_character(db=db)
 
+        self.stats.character_id = self.character_id
         self.class_eval[-1]["character_id"] = self.character_id
         self.class_eval[-1]["race"] = self.get_race()
         self.class_eval[-1]["class"] = self.get_class()
@@ -104,15 +108,11 @@ class PlayerCharacter(Character):
 
     @ctx_decorator
     def assign_race(self, race_candidate):
-        self.last_method_log = f'assign_race({race_candidate})'
         if race_candidate == "Random":
             rand_obj = CharacterRace(db=self.db, ctx=self.ctx, race_candidate=race_candidate)
             race_to_use = rand_obj.race
         else:
             race_to_use = race_candidate
-
-        # if self.debug_ind == 1:
-        #     self.class_eval[-1]["RaceToUse"] = race_to_use
 
         return CharacterRace(db=self.db, ctx=self.ctx, race_candidate=race_to_use)
 
@@ -701,15 +701,15 @@ if __name__ == '__main__':
     logger.setup_logging()
     try:
 
-        a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate='Hill dwarf', level=10, debug_ind=1)
+        a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate='Hill dwarf', level=10)
         a2 = PlayerCharacter(db=db, ctx=ctx,
-                             ability_array_str='10,11,12,13,14,15',
-                             debug_ind=1)
+                             ability_array_str='10,11,12,13,14,15'
+                             )
         print(a2)
         a2.ability_array_obj.set_preference_array(pref_array=string_to_array(
                                                 '5,0,2,1,4,3'
                                                 ))
-        a5 = PlayerCharacter(db=db, ctx=ctx, race_candidate='Hill dwarf', level=10, debug_ind=1)
+        a5 = PlayerCharacter(db=db, ctx=ctx, race_candidate='Hill dwarf', level=10)
         for i in range(len(a5.get_class_eval())):
             for key, value in a5.get_class_eval()[i].items():
                 print(f"{i} -- {str(key).ljust(25)}: {value}")
@@ -717,23 +717,21 @@ if __name__ == '__main__':
         a6 = PlayerCharacter(db=db, ctx=ctx,
                              ability_array_str="18,12,12,10,10,8",
                              race_candidate="Mountain Dwarf",
-                             class_candidate="Barbarian",
-                             debug_ind=1)
+                             class_candidate="Barbarian")
 
-        a6.melee_defend(modifier=13, possible_damage=a6.hit_points,
-                        damage_type='Bludgeoning')
+        attack_obj = a5.default_melee_attack()
+        a6.melee_defend(attack_obj=attack_obj)
         a6.heal(amount=10)
-        a6.melee_defend(modifier=13, possible_damage=(2 * a6.hit_points),
-                        damage_type='Bludgeoning')
+        attack_obj = a5.default_melee_attack()
+        a6.melee_defend(attack_obj=attack_obj)
         a6.heal(amount=30)
         t_a1 = a5.default_melee_attack()
-        a6.melee_defend(attack_value=t_a1[0], possible_damage=t_a1[1], damage_type=t_a1[2])
+        a6.melee_defend(attack_obj=t_a1)
 
         a7 = PlayerCharacter(db=db, ctx=ctx,
                              ability_array_str="6,6,6,6,6,6",
                              race_candidate="Half-Orc",
-                             class_candidate="Barbarian",
-                             debug_ind=1)
+                             class_candidate="Barbarian")
 
         print(a1.__repr__())
         print(a2.__repr__())

@@ -26,8 +26,7 @@ class AbilityArray(object):
                  raw_array=None,
                  pref_array=None,
                  racial_array=None,
-                 ignore_racial_bonus=False,
-                 debug_ind=False):
+                 ignore_racial_bonus=False):
         """
         Generate a list of values to serve as Ability Scores
 
@@ -36,7 +35,6 @@ class AbilityArray(object):
         :param pref_array: Array that defines how the rolls should be ordered.
         :param racial_array: Array of racial bonuses for the abilities
         :param ignore_racial_bonus: Ignore ability bonuses for races.
-        :param debug_ind: log to class_eval array? (default: False)
         """
         self.ctx = ctx
         self.method_last_call_audit = {}
@@ -62,15 +60,13 @@ class AbilityArray(object):
                             'Wisdom': "Awareness, intuition, insight",
                             'Charisma': "Confidence, eloquence, leadership"}
         self.class_eval = []
-        self.debug_ind = debug_ind
         if self.pref_array:
             ignore_pref_array = False
         else:
             ignore_pref_array = True
         self.class_eval.append({"array_type": array_type,
                                 "pref_array": pref_array,
-                                "ignore_pref_array": ignore_pref_array,
-                                "debug_ind": debug_ind})
+                                "ignore_pref_array": ignore_pref_array})
         self._populate()
 
     def add_method_last_call_audit(self, audit_obj):
@@ -119,8 +115,7 @@ class AbilityArray(object):
         # set the raw_array to whatever we started with for candidate values
         self.raw_array = self.candidate_array[:]
 
-        if self.debug_ind:
-            self.class_eval[-1]["raw_array"] = self.raw_array[:]
+        self.class_eval[-1]["raw_array"] = self.raw_array[:]
 
         self.set_ability_array()
 
@@ -180,7 +175,7 @@ class AbilityArray(object):
 
         self.pref_sorted_array = self.ability_array[:]
 
-        if self.debug_ind and "ability_base_array" in self.class_eval[-1]:
+        if "ability_base_array" in self.class_eval[-1]:
             self.class_eval.append({"call": "set_ability_preferences"})
 
         self.numerical_sorted_array = self.candidate_array[:]
@@ -292,8 +287,7 @@ if __name__ == '__main__':
 
     a = AbilityArray(ctx=ctx, array_type="Standard",
                      pref_array=string_to_array('5,0,2,1,4,3'),
-                     racial_array=string_to_array('0,0,0,0,1,2'),
-                     debug_ind=True)
+                     racial_array=string_to_array('0,0,0,0,1,2'))
     print(a.get_raw_array())
     print(a.get_pref_array())
     print(a.get_array())
@@ -303,8 +297,7 @@ if __name__ == '__main__':
         print(f"{str(key).ljust(25)}: {value}")
     print("end class eval")
     a2 = AbilityArray(ctx=ctx, array_type="Common",
-                      pref_array=string_to_array('1,2,5,0,4,3'),
-                      debug_ind=True)
+                      pref_array=string_to_array('1,2,5,0,4,3'))
     a2.set_racial_array(bonus_array=string_to_array('0,2,1,0,0,0'))
     print(a2.get_raw_array())
     print(a2.get_pref_array())
@@ -318,8 +311,7 @@ if __name__ == '__main__':
     b = AbilityArray(ctx=ctx, array_type="Strict",
                      pref_array=string_to_array('5,0,2,1,4,3'),
                      racial_array=string_to_array('0,0,0,0,1,2'),
-                     ignore_racial_bonus=True,
-                     debug_ind=True)
+                     ignore_racial_bonus=True)
     print(b.get_raw_array())
     print(b.get_pref_array())
     print(b.get_array())
@@ -333,8 +325,7 @@ if __name__ == '__main__':
                       raw_array=string_to_array('6,6,6,6,6,6'),
                       pref_array=string_to_array('5,0,2,1,4,3'),
                       racial_array=string_to_array('0,0,0,0,1,2'),
-                      ignore_racial_bonus=True,
-                      debug_ind=True)
+                      ignore_racial_bonus=True)
     print(b2.get_raw_array())
     print(b2.get_pref_array())
     print(b2.get_array())

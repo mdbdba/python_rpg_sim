@@ -20,8 +20,7 @@ class Party(object):
                  ability_array_str="10,10,10,10,10,10",
                  level=1,
                  gender_candidate="Random",
-                 overwrite_party=False,
-                 debug_ind=0):
+                 overwrite_party=False):
 
         self.ctx = ctx
         self.method_last_call_audit = {}
@@ -31,7 +30,6 @@ class Party(object):
         self.ability_array_str = ability_array_str
         self.level = level
         self.gender_candidate = gender_candidate
-        self.debug_ind = debug_ind
         self.character_ids = []
         self.character_list = []
 
@@ -52,8 +50,7 @@ class Party(object):
                     tmppc = PlayerCharacter(db=db, ctx=ctx,
                                             class_candidate=party_class[0], race_candidate=primary_race,
                                             gender_candidate=self.gender_candidate,
-                                            ability_array_str=self.ability_array_str,
-                                            debug_ind=self.debug_ind)
+                                            ability_array_str=self.ability_array_str)
                     self.character_ids.append(tmppc.character_id)
                 print(self.character_ids)
             else:
@@ -85,7 +82,7 @@ class Party(object):
         sql = f"select character_id from dnd_5e.party where name = '{self.name}'"
         res = db.query(sql)
         for character_id in res:
-            tmppc = PlayerCharacter(db=db, ctx=self.ctx, character_id=character_id[0], debug_ind=self.debug_ind)
+            tmppc = PlayerCharacter(db=db, ctx=self.ctx, character_id=character_id[0])
             self.character_ids.append(tmppc.character_id)
             self.character_list.append(tmppc)
 

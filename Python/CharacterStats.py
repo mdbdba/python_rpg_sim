@@ -35,19 +35,19 @@ class CharacterStats:
     character_race: str
     character_level: int
     attack_rolls: List[PointInTimeRollAmount] = field(default_factory=get_empty_list)
-    attack_attempts: int = None
-    attack_successes: int = None
-    attack_nat20_count: int = None
-    attack_nat1_count: int = None
+    attack_attempts: int = 0
+    attack_successes: int = 0
+    attack_nat20_count: int = 0
+    attack_nat1_count: int = 0
     healing_received: List[PointInTimeAmount] = field(default_factory=get_empty_list)
-    total_healing_received: int = None
+    total_healing_received: int = 0
     unconscious_list: List[PointInTime] = field(default_factory=get_empty_list)
     death_list: List[PointInTime] = field(default_factory=get_empty_list)
     defense_rolls: List[PointInTimeRollAmount] = field(default_factory=get_empty_list)
-    defense_attempts: int = None
-    defense_successes: int = None
-    defense_nat20_count: int = None
-    defense_nat1_count: int = None
+    defense_attempts: int = 0
+    defense_successes: int = 0
+    defense_nat20_count: int = 0
+    defense_nat1_count: int = 0
     damage_dealt_dict: Dict = field(default_factory=get_empty_damage_dict)
     damage_taken_dict: Dict = field(default_factory=get_empty_damage_dict)
 

@@ -31,7 +31,7 @@ def ctx_decorator(wrapped, instance, args, kwds):
         t = string_to_string_array(ctx.fullyqualified, '.')
         t_class = t[0]
         t_method = t[1]
-        if t_class in ['PlayerCharacter', 'Foe'] and t_method not in ['__init__']:
+        if t_class in ['PlayerCharacter', 'Foe', 'Character'] and t_method not in ['__init__']:
             if instance.get_name() not in ['Generic Character', 'Not Assigned']:
                 username_to_use = instance.get_name()
         logger = RpgLogging(logger_name=ctx.logger_name)
@@ -170,6 +170,15 @@ class Ctx:
     turn: int = 0
     log_counter = itertools.count(1, 1)
     crumbs: List[Crumb] = field(default_factory=init_crumbs)
+
+    def inc_round(self):
+        self.round += 1
+
+    def reset_turn(self):
+        self.turn = 0
+
+    def inc_turn(self):
+        self.turn += 1
 
     def get_next_log_id(self):
         return next(self.log_counter)
