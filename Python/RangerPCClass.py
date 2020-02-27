@@ -18,3 +18,4 @@ class RangerPCClass(PlayerCharacterClass):
         self.armor = "Leather"
         self.shield = None
         self.background = "Outlander"
+        self.combat_preference = "Mixed"

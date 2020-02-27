@@ -52,6 +52,7 @@ class PlayerCharacterClass(object):
         self.ranged_ammunition_amt = 0
         self.armor = None
         self.shield = None
+        self.combat_preference = None
         self.CACF_option_candidate_array = character_altering_class_options
         self.CACF_option_array = []
 

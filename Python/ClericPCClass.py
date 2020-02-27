@@ -17,3 +17,4 @@ class ClericPCClass(PlayerCharacterClass):
         self.armor = "Scale mail"
         self.shield = "Shield"
         self.background = "Acolyte"
+        self.combat_preference = "Mixed"

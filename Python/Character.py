@@ -55,19 +55,9 @@ class Character(object):
                        "pythonClass": "Character",
                        "gender_candidate": gender_candidate,
                        "ability_array_str": ability_array_str,
-                       "level": level })
+                       "level": level})
         self.ability_array_str = ability_array_str
         self.ability_modifier_array = [0, 0, 0, 0, 0, 0]
-        # self.damage_taken = dict(Acid=0, Bludgeoning=0, Cold=0,
-        #                          Fire=0, Force=0, Ligtning=0,
-        #                          Necrotic=0, Piercing=0, Poison=0,
-        #                          Psychic=0, Radiant=0, Slashing=0,
-        #                          Thunder=0, Total=0, Unknown=0)
-        # self.damage_dealt = dict(Acid=0, Bludgeoning=0, Cold=0,
-        #                          Fire=0, Force=0, Ligtning=0,
-        #                          Necrotic=0, Piercing=0, Poison=0,
-        #                          Psychic=0, Radiant=0, Slashing=0,
-        #                          Thunder=0, Total=0, Unknown=0)
         self.damage_adj = dict(Acid="", Bludgeoning="", Cold="", Fire="",
                                Force="", Ligtning="", Necrotic="", Piercing="",
                                Poison="", Psychic="", Radiant="", Slashing="",
@@ -87,7 +77,7 @@ class Character(object):
         self.death_save_passed_cnt = 0
         self.death_save_failed_cnt = 0
         self.tta = self.set_taliesin_temperament_archetype()
-        self.combat_preference = 'Melee'  # 'Melee' or Ranged'
+        self.combat_preference = 'Melee'  # 'Melee', 'Mixed', or Ranged'
         self.proficiency_bonus = 0
 
         self.last_method_log = ''
@@ -126,17 +116,8 @@ class Character(object):
         # 5   Speed reduced to 0
         # 6   Death
 
-        # self.attack_rolls = []
-        # self.attack_roll_count = 0
-        # self.attack_roll_nat20_count = 0
-        # self.attack_roll_nat1_count = 0
-        # self.attack_success_count = 0
         self.stats = None
         self.init_stats()
-                        # study_instance_id=study_instance_id,
-                        # series_id=series_id,
-                        # encounter_id=encounter_id
-                        # )
 
     def add_method_last_call_audit(self, audit_obj):
         self.method_last_call_audit[audit_obj['methodName']] = audit_obj
@@ -147,6 +128,9 @@ class Character(object):
         else:
             return_val = self.method_last_call_audit[method_name]
         return return_val
+
+    def get_combat_preference(self):
+        return self.combat_preference
 
     def init_stats(self):
         self.stats = CharacterStats(study_instance_id=self.ctx.study_instance_id,
@@ -628,9 +612,7 @@ class Character(object):
             "character_stabilized": self.stabilized,
             "combat_preference": self.combat_preference,
             "cur_movement": self.cur_movement,
-            "opponent_distance": op_dist,
-            "ranged_weapon_range": self.get_ranged_range()
-        }
+            "opponent_distance": op_dist}
         if not self.alive:
             ret_val = "None"
         elif not self.stabilized:
@@ -643,9 +625,11 @@ class Character(object):
             elif op_dist <= 8:
                 ret_val = "Melee"
         else:
-            if op_dist > self.get_ranged_range():
+            t_range = self.get_ranged_range()
+            jdict["ranged_weapon_range"] = t_range
+            if op_dist > t_range:
                 ret_val = "Movement"
-            elif self.get_ranged_range >= op_dist > 8:
+            elif t_range >= op_dist > 8:
                 ret_val = "Ranged"
             elif op_dist <= 8:
                 ret_val = "Melee"
@@ -714,10 +698,8 @@ class Character(object):
         jdict['ranged_attack_value'] = attempt.attack_value
         jdict['ranged_possible_damage'] = attempt.possible_damage
         if attempt.natural_value == 20:
-            # self.attack_roll_nat20_count += 1
             self.stats.attack_nat20_count += 1
         if attempt.natural_value == 1:
-            # self.attack_roll_nat1_count += 1
             self.stats.attack_nat1_count += 1
         attack_roll: tuple = (attempt.natural_value, {attempt.attack_modifier})
         self.stats.attack_rolls.append(attack_roll)
@@ -771,13 +753,10 @@ class Character(object):
 
         jdict["roll_natural_value"] = attempt.natural_value
         jdict["attack_value"] = attempt.attack_value
-        # self.attack_roll_count += 1
         self.stats.attack_attempts += 1
         if attempt.natural_value == 20:
-            # self.attack_roll_nat20_count += 1
             self.stats.attack_nat20_count += 1
         if attempt.natural_value == 1:
-            # self.attack_roll_nat1_count += 1
             self.stats.attack_nat1_count += 1
         attack_roll: tuple = (attempt.natural_value, {attempt.attack_modifier})
         self.stats.attack_rolls.append(attack_roll)
@@ -787,48 +766,25 @@ class Character(object):
         return attempt
 
     @ctx_decorator
-    def melee_defend(self, modifier=0, vantage='Normal',
-                     possible_damage=0, damage_type='Unknown', attack_obj=None):
+    def defend(self, attack_obj):
 
-        # d = Die(ctx=self.ctx, sides=20)
-        # if self.prone_ind:
-        #     if vantage == 'Disadvantage':
-        #         vantage = 'Normal'
-        #     else:
-        #         vantage = 'Advantage'
-
-        # jdict = {"prone_ind": self.prone_ind,
-        #          "used_vantage": vantage}
-
-        jdict = {}
-
-        #if attack_obj:
         value = attack_obj.attack_value
         defense_roll: tuple = (attack_obj.natural_value, attack_obj.attack_modifier)
-        damage_type = attack_obj.damage_type
-        # else:
-        #     if vantage == 'Disadvantage':
-        #         t_val = d.roll_with_disadvantage()
-        #     elif vantage == 'Advantage':
-        #         t_val = d.roll_with_advantage()
-        #     else:
-        #         t_val = d.roll()
-
-        #     value = t_val + modifier
-        #     defense_roll: tuple = (t_val, {modifier})
 
         self.stats.defense_rolls.append(defense_roll)
-
         self.stats.defense_attempts += 1
 
-
-        jdict['used_attack_value'] = value
-        jdict['armor_class'] = self.armor_class
+        jdict = {"used_attack_value": value,
+                 "armor_class": self.armor_class,
+                 "unconscious_damage_death_save_impact": False}
 
         if value >= self.armor_class:
             ret = False
             if self.cur_hit_points < 1:
+                jdict["unconscious_damage_death_save_impact"] = True
+                jdict["from_death_save_failed"] = self.death_save_failed_cnt
                 self.incr_death_save_failed_cnt(amount=2)
+                jdict["to_death_save_failed"] = self.death_save_failed_cnt
 
             if attack_obj.possible_damage > 0:
                 self.damage(amount=attack_obj.possible_damage, damage_type=attack_obj.damage_type)
@@ -839,45 +795,27 @@ class Character(object):
         self.ctx.crumbs[-1].add_audit(json_dict=jdict)
         return ret
 
-    @ctx_decorator
-    def ranged_defend(self, modifier=0, vantage='Normal',
-                      possible_damage=0, damage_type='Unknown'):
-        d = Die(ctx=self.ctx, sides=20)
-        if self.prone_ind:
-            if vantage == 'Advantage':
-                vantage = 'Normal'
-            else:
-                vantage = 'Disadvantage'
+#     @ctx_decorator
+#     def ranged_defend(self, attack_obj):
+#
+#         defense_roll: tuple = (t_val, {modifier})
+#
+#         self.stats.defense_rolls.append(defense_roll)
+#
+#         self.stats.defense_attempts += 1
+#         jdict['used_attack_value'] = value
+#         jdict['armor_class'] = self.armor_class
+#
+#         if value >= self.armor_class:
+#             ret = False
+#             if possible_damage > 0:
+#                 self.damage(possible_damage, damage_type)
+#         else:
+#             ret = True
+#             self.stats.defense_successes += 1
 
-        jdict = {"prone_ind": self.prone_ind,
-                 "used_vantage": vantage}
-
-        if vantage == 'Disadvantage':
-            t_val = d.roll_with_disadvantage()
-        elif vantage == 'Advantage':
-            t_val = d.roll_with_advantage()
-        else:
-            t_val = d.roll()
-
-        value = t_val + modifier
-        defense_roll: tuple = (t_val, {modifier})
-
-        self.stats.defense_rolls.append(defense_roll)
-
-        self.stats.defense_attempts += 1
-        jdict['used_attack_value'] = value
-        jdict['armor_class'] = self.armor_class
-
-        if value >= self.armor_class:
-            ret = False
-            if possible_damage > 0:
-                self.damage(possible_damage, damage_type)
-        else:
-            ret = True
-            self.stats.defense_successes += 1
-
-        self.ctx.crumbs[-1].add_audit(json_dict=jdict)
-        return ret
+#         self.ctx.crumbs[-1].add_audit(json_dict=jdict)
+#         return ret
 
     @ctx_decorator
     def heal(self, amount):

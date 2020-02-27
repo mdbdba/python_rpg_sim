@@ -397,7 +397,7 @@ class Encounter(object):
                 avail_mvmt = cur_active.cur_movement / 5
 
                 turn_audit["movement_available"] = avail_mvmt
-                turn_audit["combat_preference"] = cur_active.combat_preference
+                turn_audit["combat_preference"] = cur_active.get_combat_preference()
                 turn_audit["movement_starting_location"] = (
                     f"[{self.initiative[initiative_ind][4]}][{self.initiative[initiative_ind][5]}]")
 
@@ -411,9 +411,6 @@ class Encounter(object):
                     f"[{self.initiative[initiative_ind][4]}][{self.initiative[initiative_ind][5]}]")
                 turn_audit["movement_turn_end_location"] = (
                     f"[{self.initiative[initiative_ind][4]}][{self.initiative[initiative_ind][5]}]")
-
-                # for j in range(len(dl)):
-                #     self.logger.debug(msg=f"dist AFTER: {dl[j][0]} {dl[j][1]} {dl[j][2]}", ctx=self.ctx)
 
                 # Action (Bonus or standard)
                 # If they don't have a ranged weapon or spell attack
@@ -433,10 +430,6 @@ class Encounter(object):
                 turn_audit["died_before_turn"] = False
 
                 if cur_action == 'Movement':
-                    # if self.debug_ind == 1:
-                    #     msg = f"Using {cur_active.get_name()}'s Action for movement."
-                    #     self.logger.debug(msg=msg, ctx=self.ctx)
-
                     avail_mvmt = cur_active.cur_movement / 5
                     turn_audit["movement_as_action_available"] = avail_mvmt
                     avail_mvmt = self.movement(avail_movement=avail_mvmt,
@@ -449,10 +442,7 @@ class Encounter(object):
                         f"[{self.initiative[initiative_ind][4]}][{self.initiative[initiative_ind][5]}]")
                     turn_audit["movement_turn_end_location"] = (
                         f"[{self.initiative[initiative_ind][4]}][{self.initiative[initiative_ind][5]}]")
-                    # if self.debug_ind == 1:
-                    #     for j in range(len(dl)):
-                    #         self.logger.debug(msg=f"dist AFTER Action: "
-                    #                           f"{dl[j][0]} {dl[j][1]} {dl[j][2]}", ctx=self.ctx)
+
                 elif cur_action == 'Wait on Melee':
                     # If an enemy gets into melee range this round, ATTACK!
                     turn_audit["action_waiting"] = True
@@ -475,118 +465,15 @@ class Encounter(object):
                                                       attacker_side=waiting_action[0],
                                                       attacker_index=waiting_action[1],
                                                       target_side=self.initiative[initiative_ind][0],
-                                                      target_index= self.initiative[initiative_ind][1],
+                                                      target_index=self.initiative[initiative_ind][1],
                                                       audit_key_prefix="waiting_",
                                                       audit_key_suffix=f"_{t_cnt}")
-
-
-                        # if directed_user.cur_hit_points > 0:
-                        #     # save off vantage to reset it.
-                        #     t_vantage = directed_user.get_vantage()
-                        #     # if the cur_active user is unconscious then the attack
-                        #     # is at advantage and auto-crits on hit.
-                        #     # if cur_active.alive and cur_active.cur_hit_points < 1:
-                        #     if cur_active.unconscious_ind or cur_active.prone_ind:
-                        #         if t_vantage == 'Disadvantage':
-                        #             t_vantage = 'Normal'
-                        #         else:
-                        #             t_vantage = 'Advantage'
-                        #     else:
-                        #         t_vantage = 'Normal'
-
-                        #     directed_attack = directed_user.default_melee_attack(vantage=t_vantage)
-
-                        #     turn_audit[f"melee_damage_type_{t_cnt}"] = directed_attack.damage_type
-                        #     turn_audit[f"melee_vantage_{t_cnt}"] = t_vantage
-
-                        #     self.stats.inc_attack_attempts(waiting_action[0])
-
-                        #     log_if_unconscious = False
-                        #     if not cur_active.unconscious_ind:
-                        #         log_if_unconscious = True
-
-                        #     hit_points_before = cur_active.cur_hit_points
-                        #     successful_defend = cur_active.melee_defend(attack_obj=directed_attack)
-
-                        #     turn_audit[f"waiting_melee_defend_successful_{t_cnt}"] = successful_defend
-
-                        #     if not successful_defend:
-                        #         self.stats.inc_attack_successes(waiting_action[0])
-                        #         cur_active.inc_damage_dealt(damage_type=directed_attack.damage_type,
-                        #                                     amount=directed_attack.possible_damage)
-                        #         directed_user.stats.attack_successes += 1
-                        #         turn_audit[f"waiting_melee_damage_{t_cnt}"] = directed_attack.possible_damage
-                        #         turn_audit[f"waiting_hit_point_impact_{t_cnt}"] = (
-                        #                 hit_points_before - cur_active.cur_hit_points)
-                        #         turn_audit[f"waiting_hit_points_after_waiting_melee_{t_cnt}"] = cur_active.cur_hit_points
-                        #         if cur_active.unconscious_ind:
-                        #             if log_if_unconscious:
-                        #                 p = PointInTime(self.ctx.round, self.ctx.turn)
-                        #                 cur_active.stats.unconscious_list.append(p)
-                        #                 turn_audit[f"waiting_knocked_unconscious_in_turn_{t_cnt}"] = True
-                        #             else:
-                        #                 turn_audit[f"waiting_death_save_status_{t_cnt}"] = (
-                        #                     f"{cur_active.death_save_passed_cnt} / {cur_active.death_save_failed_cnt}")
-
-                        #     if not cur_active.alive:
-                        #         turn_audit[f"waiting_died_in_turn_{t_cnt}"] = True
-                        #         self.cleanup_dead_player(player=cur_active,
-                        #                                  list_name=self.initiative[initiative_ind][0],
-                        #                                  list_index=self.initiative[initiative_ind][1])
                         t_cnt += 1
                     if cur_active.cur_hit_points > 0:
                         self.handle_turn_melee_action(turn_audit=turn_audit,
                                                       attacker_side=self.initiative[initiative_ind][0],
                                                       attacker_index=self.initiative[initiative_ind][1],
                                                       target_side=dl[0][3], target_index=dl[0][4])
-                        # target = self.get_player(dl[0][3], dl[0][4])
-                        # turn_audit["target"] = target.get_name()
-
-                        # t_vantage = cur_active.get_vantage()
-                        # # if the cur_active user is unconscious then the attack is at advantage
-                        # # and auto-crits on hit.
-                        # if target.unconscious_ind or target.prone_ind:
-                        #     if t_vantage == 'Disadvantage':
-                        #         t_vantage = 'Normal'
-                        #     else:
-                        #         t_vantage = 'Advantage'
-                        # else:
-                        #     t_vantage = 'Normal'
-#
-                        # active_attack = cur_active.default_melee_attack(vantage=t_vantage)
-                        # self.stats.inc_attack_attempts(self.initiative[initiative_ind][0])
-
-                        # log_if_unconscious = False
-                        # if not target.unconscious_ind:
-                        #     log_if_unconscious = True
-
-                        # hit_points_before = target.cur_hit_points
-                        # successful_defend = target.melee_defend(attack_obj=active_attack)
-
-                        # turn_audit["melee_attack_defense_successful"] = successful_defend
-
-                        # if not successful_defend:
-                        #     turn_audit["melee_attack_damage"] = active_attack.possible_damage
-                        #     turn_audit["hit_point_impact"] = (
-                        #             hit_points_before - target.cur_hit_points)
-                        #     turn_audit["hit_points_after_attack"] = target.cur_hit_points
-                        #     self.stats.inc_attack_successes(self.initiative[initiative_ind][0])
-                        #     cur_active.inc_damage_dealt(damage_type=active_attack.damage_type,
-                        #                                 amount=active_attack.possible_damage)
-                        #     cur_active.stats.attack_successes += 1
-
-                        # if target.unconscious_ind:
-                        #     if log_if_unconscious:
-                        #         p = PointInTime(self.ctx.round, self.ctx.turn)
-                        #         target.stats.unconscious_list.append(p)
-                        #         turn_audit["target_knocked_unconscious_in_turn"] = True
-                        #     else:
-                        #         turn_audit["death_save_status"] = (
-                        #             f"{cur_active.death_save_passed_cnt} / {cur_active.death_save_failed_cnt}")
-
-                        # if not target.alive:
-                        #     turn_audit["target_died_in_turn"] = True
-                        #     self.cleanup_dead_player(player=target, list_name=dl[0][3], list_index=dl[0][4])
 
             elif cur_active.alive:  # currently alive but less than 1 hit point
                 cur_active.death_save()
@@ -603,7 +490,8 @@ class Encounter(object):
         return turn_audit
 
     @ctx_decorator
-    def handle_turn_melee_action(self, turn_audit, attacker_side, attacker_index, target_side, target_index, audit_key_prefix="", audit_key_suffix=""):
+    def handle_turn_melee_action(self, turn_audit, attacker_side, attacker_index, target_side,
+                                 target_index, audit_key_prefix="", audit_key_suffix=""):
         attacker = self.get_player(attacker_side, attacker_index)
         target = self.get_player(target_side, target_index)
         if attacker.cur_hit_points > 0:
@@ -628,7 +516,7 @@ class Encounter(object):
                 log_if_unconscious = True
 
             hit_points_before = target.cur_hit_points
-            successful_defend = target.melee_defend(attack_obj=active_attack)
+            successful_defend = target.defend(attack_obj=active_attack)
 
             turn_audit[f"{audit_key_prefix}melee_attack_defense_successful{audit_key_suffix}"] = successful_defend
 
@@ -639,7 +527,7 @@ class Encounter(object):
                 turn_audit[f"{audit_key_prefix}hit_points_after_attack{audit_key_suffix}"] = target.cur_hit_points
                 self.stats.inc_attack_successes(attacker_side)
                 attacker.inc_damage_dealt(damage_type=active_attack.damage_type,
-                                            amount=active_attack.possible_damage)
+                                          amount=active_attack.possible_damage)
                 attacker.stats.attack_successes += 1
 
             if target.unconscious_ind:
@@ -721,17 +609,59 @@ class Encounter(object):
 
     @ctx_decorator
     def movement(self, avail_movement, cur_active, cur_init, dest_list):
+        player_combat_preference = cur_active.get_combat_preference()
+
+        jdict = {"perception_check_passed": cur_init[2],
+                 "player_combat_preference": player_combat_preference}
         # with self.tracer.span(name='movement'):
         if cur_init[2]:     # if they've figured out what's going on.
-            if self.is_in_melee(player=cur_active):
+            op_dist = dest_list[0][0]
+            t_range = cur_active.get_ranged_range()
+            if cur_active.ranged_ammunition_amt is None:
+                ranged_ammunition_amt = 0
+            else:
+                ranged_ammunition_amt = cur_active.ranged_ammunition_amt
+
+            if (player_combat_preference == 'Mixed'
+                    and ( op_dist > t_range or ranged_ammunition_amt == 0)):
+                conditional_mvmt = True
+            else:
+                conditional_mvmt = False
+
+            if (player_combat_preference == 'Ranged'
+                    and op_dist <= t_range):
+                ranged_hold = True
+            else:
+                ranged_hold = False
+
+            jdict["opponent_distance"] = op_dist
+            jdict["ranged_range"] = t_range
+            jdict["ranged_ammunition_amt"] = ranged_ammunition_amt
+            jdict["conditional_mvmt"] = conditional_mvmt
+            jdict["ranged_hold"] = ranged_hold
+
+            player_in_melee = self.is_in_melee(player=cur_active)
+            jdict["player_in_melee"] = player_in_melee
+
+            if player_in_melee or ranged_hold:
                 pass
-            elif cur_active.combat_preference == 'Melee':
-                # run straight towards closest enemy
-                # set destination x and y
-                dest_x = int(dest_list[0][1])
-                dest_y = int(dest_list[0][2])
+            else:
                 cur_x = int(cur_init[4])
                 cur_y = int(cur_init[5])
+
+                if player_combat_preference == 'Melee' or conditional_mvmt:
+                    # run straight towards closest enemy
+                    # set destination x and y
+                    dest_x = int(dest_list[0][1])
+                    dest_y = int(dest_list[0][2])
+                else:
+                    # try to stay in ranged range distance.
+                    # set destination x and y
+                    t_x = int(dest_list[0][1])
+                    t_dist_x = t_x - cur_x
+                    t_dir_x = 1 if (t_dist_x >= 0) else -1
+                    dest_x = t_x + (t_dir_x * t_range)
+                    dest_y = int(dest_list[0][2])
 
                 if avail_movement > 0 and dest_list[0][0] > 5:
                     mvmt = True
@@ -820,6 +750,7 @@ class Encounter(object):
                         else:
                             mvmt = False
 
+        self.ctx.crumbs[-1].add_audit(json_dict=jdict)
         return avail_movement
 
 

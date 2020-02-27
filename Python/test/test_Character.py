@@ -199,8 +199,8 @@ def test_Character_Death():
     assert(a1.get_race() == "Mountain dwarf")
     assert(a1.get_class() == "Barbarian")
     assert(a1.class_obj.hit_die == 12)
-    a1.melee_defend(modifier=13, possible_damage=a1.hit_points,
-                    damage_type='Bludgeoning')
+    a1.defend(modifier=13, possible_damage=a1.hit_points,
+              damage_type='Bludgeoning')
 
     assert(a1.alive is True)
     assert(a1.stabilized is False)
@@ -208,8 +208,8 @@ def test_Character_Death():
     assert(a1.cur_hit_points == 11)
     assert(a1.alive is True)
     assert(a1.stabilized is True)
-    a1.melee_defend(modifier=13, possible_damage=(2 * a1.hit_points),
-                    damage_type='Bludgeoning')
+    a1.defend(modifier=13, possible_damage=(2 * a1.hit_points),
+              damage_type='Bludgeoning')
     assert(a1.alive is False)
 
 

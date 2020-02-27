@@ -17,3 +17,4 @@ class RoguePCClass(PlayerCharacterClass):
         self.ranged_ammunition_amt = 20
         self.armor = "Leather"
         self.background = "Charlatan"
+        self.combat_preference = "Mixed"

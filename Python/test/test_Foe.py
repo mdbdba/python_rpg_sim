@@ -91,8 +91,8 @@ def test_Foe_Gnoll_Death():
     a1 = Foe(db=db, ctx=ctx, foe_candidate='Gnoll', debug_ind=1)
     assert(a1)
     assert(a1.get_name() == 'Gnoll')
-    a1.melee_defend(modifier=15, possible_damage=a1.hit_points,
-                    damage_type='Bludgeoning')
+    a1.defend(modifier=15, possible_damage=a1.hit_points,
+              damage_type='Bludgeoning')
 
     assert(a1.alive is True)
     assert(a1.stabilized is False)
@@ -100,8 +100,8 @@ def test_Foe_Gnoll_Death():
     assert(a1.cur_hit_points == 11)
     assert(a1.alive is True)
     assert(a1.stabilized is True)
-    a1.melee_defend(modifier=15, possible_damage=(2 * a1.hit_points),
-                    damage_type='Bludgeoning')
+    a1.defend(modifier=15, possible_damage=(2 * a1.hit_points),
+              damage_type='Bludgeoning')
     assert(a1.alive is False)
     assert(a1.stabilized is False)
 

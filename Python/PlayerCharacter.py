@@ -336,6 +336,14 @@ class PlayerCharacter(Character):
                 print(tmp_str)
             self.set_armor_class()
 
+    def get_combat_preference(self):
+        if self.class_obj.combat_preference:
+            return_val = self.class_obj.combat_preference
+        else:
+            return_val = self.combat_preference
+
+        return return_val
+
     def get_ability_sort_array(self):
         return self.class_obj.ability_sort_array
 
@@ -720,13 +728,13 @@ if __name__ == '__main__':
                              class_candidate="Barbarian")
 
         attack_obj = a5.default_melee_attack()
-        a6.melee_defend(attack_obj=attack_obj)
+        a6.defend(attack_obj=attack_obj)
         a6.heal(amount=10)
         attack_obj = a5.default_melee_attack()
-        a6.melee_defend(attack_obj=attack_obj)
+        a6.defend(attack_obj=attack_obj)
         a6.heal(amount=30)
         t_a1 = a5.default_melee_attack()
-        a6.melee_defend(attack_obj=t_a1)
+        a6.defend(attack_obj=t_a1)
 
         a7 = PlayerCharacter(db=db, ctx=ctx,
                              ability_array_str="6,6,6,6,6,6",

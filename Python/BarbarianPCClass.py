@@ -17,3 +17,4 @@ class BarbarianPCClass(PlayerCharacterClass):
         self.armor = None
         self.shield = None
         self.background = "Outlander"
+        self.combat_preference = "Melee"

@@ -152,6 +152,15 @@ class Foe(Character):
 
         return ret_val
 
+    def get_combat_preference(self):
+        # TODO: Add a Ranged option
+        if self.ranged_weapon:
+            return_val = "Mixed"
+        else:
+            return_val = "Melee"
+
+        return return_val
+
     def get_racial_traits(self):
         return None
 
@@ -261,10 +270,10 @@ if __name__ == '__main__':
         a2 = Foe(db=db, ctx=ctx, foe_candidate="Skeleton")
         print(a1)
         attack_obj = a2.default_melee_attack()
-        a1.melee_defend(attack_obj=attack_obj)
+        a1.defend(attack_obj=attack_obj)
         a1.heal(amount=10)
         attack_obj = a2.default_melee_attack()
-        a1.melee_defend(attack_obj=attack_obj)
+        a1.defend(attack_obj=attack_obj)
         print(a1.__repr__())
 
     except Exception as error:
