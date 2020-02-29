@@ -45,6 +45,7 @@ class Foe(Character):
             self.melee_weapon_obj.setWeaponProficient()
         if self.ranged_weapon is not None:
             self.ranged_weapon_obj = Weapon(db=db, ctx=ctx, name=self.get_ranged_weapon())
+            self.melee_weapon_obj.setWeaponProficient()
 
         self.class_eval.append({
                        "pythonClass": "Foe",
@@ -64,6 +65,10 @@ class Foe(Character):
     @ctx_decorator
     def default_melee_attack(self, vantage='Normal'):
         return self.melee_attack(weapon_obj=self.melee_weapon_obj, vantage=vantage)
+
+    @ctx_decorator
+    def default_ranged_attack(self, vantage='Normal'):
+        return self.ranged_attack(weapon_obj=self.ranged_weapon_obj, vantage=vantage)
 
     @ctx_decorator
     def find_random(self, db, challenge_level):
@@ -169,6 +174,9 @@ class Foe(Character):
 
     def get_race(self):
         return self.race
+
+    def get_class(self):
+        return self.foe_type
 
     def get_alignment_str(self):
         return self.alignment

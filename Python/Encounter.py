@@ -74,17 +74,31 @@ class Encounter(object):
             self.melee_with = {}
             self.h_cnt = len(heroes)
 
+            self.logger.summary_entry(f"Let's get ready to rumble!")
+            self.logger.summary_entry(f"Encounter: {encounter_id}")
+            self.logger.summary_entry("Between:")
             with self.tracer.span(name='build_initiative_list'):
+                t_str = ''
+                self.h_cnt = len(heroes)
                 for position, Hero in enumerate(heroes):
                     self.add_to_initiative_list(src_single=Hero,
                                                 source_list_name='Heroes',
                                                 source_list_position=position)
+                    t_str = f'{t_str}, {position}) {Hero.get_name()}'
+                t_str = t_str[2:]
+                self.logger.summary_entry(f"\tHeroes ({self.h_cnt}): {t_str}")
 
+                t_str = ''
                 self.o_cnt = len(opponents)
                 for position, Opponent in enumerate(opponents):
                     self.add_to_initiative_list(src_single=Opponent,
                                                 source_list_name='Opponents',
                                                 source_list_position=position)
+                    t_str = f'{t_str}, {position}) {Opponent.get_name()}'
+
+                t_str = t_str[2:]
+                self.logger.summary_entry(f"\tOpponents ({self.o_cnt}): {t_str}")
+
                 self.initiative = sorted(self.initiative, reverse=True,
                                          key=itemgetter(3))
                 # init_dict = {}
@@ -191,16 +205,24 @@ class Encounter(object):
     def get_target_distance_array(self, my_x, my_y, target_name):
         # with self.tracer.span(name='get_target_distance_array'):
         dist_list = []
+        jdict = {"starting_point": f"[{my_x}][{my_y}"}
+        t_cnt = 1
         for fx in range(len(self.field_map)):
             if self.field_map[fx].occupied and self.field_map[fx].occupied_by == target_name:
                 tmp_player = self.get_player(self.field_map[fx].occupied_by,
                                              self.field_map[fx].occupied_by_index)
+                t_namestr = (f"{tmp_player.get_name()} {self.field_map[fx].occupied_by}"
+                             f" {self.field_map[fx].occupied_by_index}")
+                jdict[f"occupied_by_{t_cnt}"] = t_namestr
                 if tmp_player.alive:
                     fa, fb = self.get_grid_position(fx)
                     dist = calculate_distance(my_x, my_y, fa, fb)
+                    jdict[f"point_{t_cnt}"] = f"[{fa}][{fb}]"
+                    jdict[f"distance_{t_cnt}"] = dist
                     dist_list.append([dist, fa, fb, self.field_map[fx].occupied_by,
                                       self.field_map[fx].occupied_by_index])
         dist_list = sorted(dist_list, reverse=False, key=itemgetter(0))
+        self.ctx.crumbs[-1].add_audit(json_dict=jdict)
         return dist_list
 
     @ctx_decorator
@@ -258,6 +280,7 @@ class Encounter(object):
         waiting_for = []
 
         while self.active:
+            self.logger.summary_entry(f"\n* * * * R O U N D  {self.ctx.round} * * * * *")
             turn_audits = []
             with self.tracer.span(name='master_loop_iteration'):
                 for i in range(len(self.initiative)):
@@ -346,12 +369,22 @@ class Encounter(object):
                 if len(initiative_rec) > 3:
                     del initiative_rec[4]
 
+    def get_name_str(self, side_array_name, side_array_index):
+        return (f"{self.get_player(side_array_name, side_array_index).get_name()} "
+                f"{side_array_name[0]}{side_array_index}")
+
     @ctx_decorator
     def turn(self, initiative_ind, waiting_for):
         with self.tracer.span(name='turn'):
+            self.logger.summary_entry(f"\n  T U R N  {self.ctx.turn}")
+            summary_indent = "    "
             turn_audit = {"round": self.ctx.round, "turn": initiative_ind}
             cur_active = self.get_player(self.initiative[initiative_ind][0],
                                          self.initiative[initiative_ind][1])
+            # cur_active_name_str = (f"{cur_active.get_name()} {(self.initiative[initiative_ind][0])[0]}"
+            #                        f"{self.initiative[initiative_ind][1]}")
+            cur_active_name_str = self.get_name_str(self.initiative[initiative_ind][0],
+                                                    self.initiative[initiative_ind][1])
             if self.initiative[initiative_ind][0] == "Heroes":
                 target_array_name = "Opponents"
             else:
@@ -378,9 +411,13 @@ class Encounter(object):
                 #     self.logger.debug(msg=f"dist: {dl[j][0]} {dl[j][1]} {dl[j][2]}", ctx=self.ctx)
 
                 turn_audit["closest_opponent_distance"] = dl[0][0]
-                turn_audit["target_x_location"] = dl[0][1]
-                turn_audit["target_y_location"] = dl[0][2]
-                turn_audit["target_name"] = self.get_player(dl[0][3], dl[0][4]).get_name()
+                turn_audit["target_location"] = f"[{dl[0][1]}][{dl[0][2]}]"
+                t_tmp = self.get_player(dl[0][3], dl[0][4])
+                turn_audit["target_name"] = t_tmp.get_name()
+                target_name_str = self.get_name_str(dl[0][3], dl[0][4])
+                msg = (f"{summary_indent}{cur_active_name_str} targeted {target_name_str}"
+                       f" {turn_audit['target_location']}, distance: {turn_audit['closest_opponent_distance']}")
+                self.logger.summary_entry(msg)
 
                 turn_audit["passed_perception_test"] = self.initiative[initiative_ind][2]
                 # Do they know why they are there?
@@ -388,6 +425,10 @@ class Encounter(object):
                     # bonusaction_used = True
                     self.initiative[initiative_ind][2] = cur_active.check(skill='Perception',
                                                                           vantage='Normal', dc=10)
+                    msg = (f"{summary_indent}{cur_active_name_str} used their bonus action to attempt"
+                           f" the perception check needed to participate. "
+                           f"(Passed: {self.initiative[initiative_ind][2]})")
+                    self.logger.summary_entry(msg)
                 # Move
                 # Define an obj for the current active combatant
                 #    0 - How many sectors can they move
@@ -406,6 +447,9 @@ class Encounter(object):
                                            cur_init=self.initiative[initiative_ind],
                                            dest_list=dl)
 
+                msg = (f"{summary_indent}{cur_active_name_str} moved from {turn_audit['movement_starting_location']}"
+                       f" to [{self.initiative[initiative_ind][4]}][{self.initiative[initiative_ind][5]}]")
+                self.logger.summary_entry(msg)
                 turn_audit["movement_left"] = avail_mvmt
                 turn_audit["movement_end_location"] = (
                     f"[{self.initiative[initiative_ind][4]}][{self.initiative[initiative_ind][5]}]")
@@ -432,11 +476,18 @@ class Encounter(object):
                 if cur_action == 'Movement':
                     avail_mvmt = cur_active.cur_movement / 5
                     turn_audit["movement_as_action_available"] = avail_mvmt
+
+                    mvmt_from = f"[{self.initiative[initiative_ind][4]}][{self.initiative[initiative_ind][5]}]"
+
                     avail_mvmt = self.movement(avail_movement=avail_mvmt,
                                                cur_active=cur_active,
                                                cur_init=self.initiative[initiative_ind],
                                                dest_list=dl)
 
+                    msg = (f"{summary_indent}{cur_active_name_str} chose movement as their action. "
+                           f"Moving from {mvmt_from} to "
+                           f"[{self.initiative[initiative_ind][4]}][{self.initiative[initiative_ind][5]}]")
+                    self.logger.summary_entry(msg)
                     turn_audit["movement_as_action_left"] = avail_mvmt
                     turn_audit["movement_as_action_end_location"] = (
                         f"[{self.initiative[initiative_ind][4]}][{self.initiative[initiative_ind][5]}]")
@@ -445,6 +496,10 @@ class Encounter(object):
 
                 elif cur_action == 'Wait on Melee':
                     # If an enemy gets into melee range this round, ATTACK!
+                    t_player_name_str = self.get_name_str(dl[0][3], dl[0][4])
+                    msg = (f"{summary_indent}{cur_active_name_str} chose to attack "
+                           f"{t_player_name_str} if they come into range later this round.")
+                    self.logger.summary_entry(msg)
                     turn_audit["action_waiting"] = True
                     turn_audit["action_waiting_on"] = self.get_player(dl[0][3], dl[0][4]).get_name()
 
@@ -461,39 +516,72 @@ class Encounter(object):
                         turn_audit["being_waited_for"] = True
                         directed_user = self.get_player(waiting_action[0], waiting_action[1])
                         turn_audit[f"waited_for_by_{t_cnt}"] = directed_user.get_name()
-                        self.handle_turn_melee_action(turn_audit=turn_audit,
-                                                      attacker_side=waiting_action[0],
-                                                      attacker_index=waiting_action[1],
-                                                      target_side=self.initiative[initiative_ind][0],
-                                                      target_index=self.initiative[initiative_ind][1],
-                                                      audit_key_prefix="waiting_",
-                                                      audit_key_suffix=f"_{t_cnt}")
+                        attacker_name_str = self.get_name_str(waiting_action[0], waiting_action[2])
+                        target_name_str = self.get_name_str(self.initiative[initiative_ind][0],
+                                                            self.initiative[initiative_ind][1])
+                        msg = (f"{summary_indent}{attacker_name_str} was waiting for {target_name_str}")
+                        self.logger.summary_entry(msg)
+                        self.handle_turn_attack_action(turn_audit=turn_audit,
+                                                       attacker_side=waiting_action[0],
+                                                       attacker_index=waiting_action[1],
+                                                       attack_type='Melee',
+                                                       target_side=self.initiative[initiative_ind][0],
+                                                       target_index=self.initiative[initiative_ind][1],
+                                                       audit_key_prefix="waiting_",
+                                                       audit_key_suffix=f"_{t_cnt}")
                         t_cnt += 1
                     if cur_active.cur_hit_points > 0:
-                        self.handle_turn_melee_action(turn_audit=turn_audit,
-                                                      attacker_side=self.initiative[initiative_ind][0],
-                                                      attacker_index=self.initiative[initiative_ind][1],
-                                                      target_side=dl[0][3], target_index=dl[0][4])
+                        self.handle_turn_attack_action(turn_audit=turn_audit,
+                                                       attacker_side=self.initiative[initiative_ind][0],
+                                                       attacker_index=self.initiative[initiative_ind][1],
+                                                       attack_type='Melee',
+                                                       target_side=dl[0][3], target_index=dl[0][4])
+                elif cur_action == 'Ranged':
+                    turn_audit["ranged_attack"] = True
+                    turn_audit["targeting"] = self.get_player(dl[0][3], dl[0][4]).get_name()
+                    if cur_active.cur_hit_points > 0:
+                        self.handle_turn_attack_action(turn_audit=turn_audit,
+                                                       attacker_side=self.initiative[initiative_ind][0],
+                                                       attacker_index=self.initiative[initiative_ind][1],
+                                                       attack_type='Ranged',
+                                                       target_side=dl[0][3], target_index=dl[0][4])
 
             elif cur_active.alive:  # currently alive but less than 1 hit point
+                t_death_save_passed_cnt = cur_active.death_save_passed_cnt
                 cur_active.death_save()
                 turn_audit["performed_death_save_in_turn"] = True
-                turn_audit["death_save_status"] = (
-                    f"{cur_active.death_save_passed_cnt} / {cur_active.death_save_failed_cnt}")
+                msg = f"{summary_indent}{cur_active_name_str} performed a death save "
+                if (t_death_save_passed_cnt > cur_active.death_save_passed_cnt
+                        and not cur_active.unconscious_ind):
+                    turn_audit["death_save_status"] = "Character Stabilized by death save success."
+                    msg = f"{msg} and was stabilized by death save success."
+                else:
+                    ds_status_str = f"({cur_active.death_save_passed_cnt} / {cur_active.death_save_failed_cnt})"
+                    turn_audit["death_save_status"] = ds_status_str
+                    msg = f"{msg} {ds_status_str}"
+                self.logger.summary_entry(msg)
+
                 if not cur_active.alive:
                     turn_audit["died_in_turn"] = True
                     self.cleanup_dead_player(player=cur_active, list_name=self.initiative[initiative_ind][0],
                                              list_index=self.initiative[initiative_ind][1])
+                    msg = (f"{summary_indent}{cur_active_name_str} died.")
+                    self.logger.summary_entry(msg)
             else:
                 turn_audit["died_before_turn"] = True
+                msg = (f"{summary_indent}{cur_active_name_str} died earlier.")
+                self.logger.summary_entry(msg)
 
         return turn_audit
 
     @ctx_decorator
-    def handle_turn_melee_action(self, turn_audit, attacker_side, attacker_index, target_side,
-                                 target_index, audit_key_prefix="", audit_key_suffix=""):
+    def handle_turn_attack_action(self, turn_audit, attacker_side, attacker_index, target_side,
+                                  target_index, attack_type, audit_key_prefix="", audit_key_suffix=""):
         attacker = self.get_player(attacker_side, attacker_index)
+        attacker_name_str = self.get_name_str(attacker_side, attacker_index)
         target = self.get_player(target_side, target_index)
+        target_name_str = self.get_name_str(target_side, target_index)
+        summary_indent = "    "
         if attacker.cur_hit_points > 0:
             turn_audit[f"{audit_key_prefix}target{audit_key_suffix}"] = target.get_name()
 
@@ -508,7 +596,13 @@ class Encounter(object):
             else:
                 t_vantage = 'Normal'
 
-            active_attack = attacker.default_melee_attack(vantage=t_vantage)
+            if attack_type == 'Melee':
+                active_attack = attacker.default_melee_attack(vantage=t_vantage)
+            else:  # attack_type == 'Ranged':
+                active_attack = attacker.default_ranged_attack(vantage=t_vantage)
+
+            msg = (f"with a {attack_type} attack on "
+                   f"{target_name_str} using a {active_attack.weapon_name}")
             self.stats.inc_attack_attempts(attacker_side)
 
             log_if_unconscious = False
@@ -518,12 +612,18 @@ class Encounter(object):
             hit_points_before = target.cur_hit_points
             successful_defend = target.defend(attack_obj=active_attack)
 
+            if successful_defend:  # successful defend means the attack failed...
+                t_suc = "failed "
+            else:
+                t_suc = "succeeded "
+            msg = f"{summary_indent}{attacker_name_str} {t_suc}{msg}"
+
             turn_audit[f"{audit_key_prefix}melee_attack_defense_successful{audit_key_suffix}"] = successful_defend
 
+            hp_impact = (hit_points_before - target.cur_hit_points)
             if not successful_defend:
                 turn_audit[f"{audit_key_prefix}melee_attack_damage{audit_key_suffix}"] = active_attack.possible_damage
-                turn_audit[f"{audit_key_prefix}hit_point_impact{audit_key_suffix}"] = (
-                        hit_points_before - target.cur_hit_points)
+                turn_audit[f"{audit_key_prefix}hit_point_impact{audit_key_suffix}"] = hp_impact
                 turn_audit[f"{audit_key_prefix}hit_points_after_attack{audit_key_suffix}"] = target.cur_hit_points
                 self.stats.inc_attack_successes(attacker_side)
                 attacker.inc_damage_dealt(damage_type=active_attack.damage_type,
@@ -532,16 +632,32 @@ class Encounter(object):
 
             if target.unconscious_ind:
                 if log_if_unconscious:
+                    msg = (f"{msg} knocking them unconcious")
                     p = PointInTime(self.ctx.round, self.ctx.turn)
                     target.stats.unconscious_list.append(p)
                     turn_audit[f"{audit_key_prefix}target_knocked_unconscious_in_turn{audit_key_suffix}"] = True
                 else:
+                    msg = (f"{msg} inflicting two failed death saves")
                     turn_audit[f"{audit_key_prefix}death_save_status{audit_key_suffix}"] = (
                         f"{target.death_save_passed_cnt} / {target.death_save_failed_cnt}")
+            else:
+                if not successful_defend:
+                    msg = (f"{msg} for relative damage {hp_impact} HP leaving {target.cur_hit_points} HP")
 
             if not target.alive:
+
+                msg = (f"{msg} killing them")
                 turn_audit[f"{audit_key_prefix}target_died_in_turn{audit_key_suffix}"] = True
                 self.cleanup_dead_player(player=target, list_name=target_side, list_index=target_index)
+        elif target.unconscious_ind:
+            msg = (f"{summary_indent}{attacker_name_str} is unconscious. Death saves: " 
+                   f"({target.death_save_passed_cnt} / {target.death_save_failed_cnt})")
+            turn_audit[f"{audit_key_prefix}death_save_status{audit_key_suffix}"] = (
+                f"{target.death_save_passed_cnt} / {target.death_save_failed_cnt}")
+        else:
+            msg = f"{summary_indent}{attacker_name_str} died earlier"
+
+        self.logger.summary_entry(msg)
 
     def remove_waiting_for(self, initiative_ind, waiting_for):
         # with self.tracer.span(name='remove_waiting_for'):
@@ -611,7 +727,9 @@ class Encounter(object):
     def movement(self, avail_movement, cur_active, cur_init, dest_list):
         player_combat_preference = cur_active.get_combat_preference()
 
-        jdict = {"perception_check_passed": cur_init[2],
+        jdict = {"character": cur_active.get_name(),
+                 "class": cur_active.get_class(),
+                 "perception_check_passed": cur_init[2],
                  "player_combat_preference": player_combat_preference}
         # with self.tracer.span(name='movement'):
         if cur_init[2]:     # if they've figured out what's going on.
@@ -623,12 +741,12 @@ class Encounter(object):
                 ranged_ammunition_amt = cur_active.ranged_ammunition_amt
 
             if (player_combat_preference == 'Mixed'
-                    and ( op_dist > t_range or ranged_ammunition_amt == 0)):
+                    and (op_dist > t_range or ranged_ammunition_amt == 0)):
                 conditional_mvmt = True
             else:
                 conditional_mvmt = False
 
-            if (player_combat_preference == 'Ranged'
+            if (player_combat_preference != 'Melee'
                     and op_dist <= t_range):
                 ranged_hold = True
             else:
@@ -659,8 +777,12 @@ class Encounter(object):
                     # set destination x and y
                     t_x = int(dest_list[0][1])
                     t_dist_x = t_x - cur_x
-                    t_dir_x = 1 if (t_dist_x >= 0) else -1
-                    dest_x = t_x + (t_dir_x * t_range)
+                    abs_t_dist_x = abs(t_dist_x)
+                    if abs_t_dist_x < 12:
+                        dest_x = int(dest_list[0][1])
+                    else:
+                        t_dir_x = 1 if (t_dist_x >= 0) else -1
+                        dest_x = t_x + (t_dir_x * t_range)
                     dest_y = int(dest_list[0][2])
 
                 if avail_movement > 0 and dest_list[0][0] > 5:

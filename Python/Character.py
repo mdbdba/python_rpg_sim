@@ -610,14 +610,14 @@ class Character(object):
         jdict = {
             "character_alive": self.alive,
             "character_stabilized": self.stabilized,
-            "combat_preference": self.combat_preference,
+            "combat_preference": self.get_combat_preference(),
             "cur_movement": self.cur_movement,
             "opponent_distance": op_dist}
         if not self.alive:
             ret_val = "None"
         elif not self.stabilized:
             ret_val = "Death Save"
-        elif self.combat_preference == 'Melee':
+        elif self.get_combat_preference() == 'Melee':
             if op_dist > self.cur_movement:
                 ret_val = "Movement"
             elif self.cur_movement >= op_dist > 8:
@@ -691,7 +691,7 @@ class Character(object):
         jdict["attack_modifier"] = modifier
         jdict["ability_damage_modifier"] = damage_modifier
 
-        attempt = Attack(weapon_obj=weapon_obj, attack_modifier=modifier,
+        attempt = Attack(ctx=self.ctx, weapon_obj=weapon_obj, attack_modifier=modifier,
                          damage_modifier=damage_modifier,
                          versatile_use_2handed=False, vantage=vantage)
         self.stats.attack_attempts += 1
@@ -705,6 +705,11 @@ class Character(object):
         self.stats.attack_rolls.append(attack_roll)
 
         self.ctx.crumbs[-1].add_audit(json_dict=jdict)
+
+        return attempt
+
+    def get_class(self):
+        return "Undefined"
 
     @ctx_decorator
     def is_not_using_shield(self):
@@ -845,7 +850,7 @@ class Character(object):
 
     @ctx_decorator
     def get_ranged_range(self):
-        jdict = {}
+        jdict = {"character_class": self.get_class()}
         if self.ranged_weapon:
             jdict["ranged weapon"] = self.ranged_weapon
             sql = (f"select range_1 from lu_weapon "
@@ -853,12 +858,12 @@ class Character(object):
                    f"and name = '{self.ranged_weapon}' ")
             res = self.db.query(sql)
             jdict["query_result"] = res[0][0]
-            self.ctx.crumbs[-1].add_audit(json_dict=jdict)
             ret_val = res[0][0]
         else:
+            jdict["ranged weapon"] = "NotDefined"
             ret_val = -1
 
-
+        self.ctx.crumbs[-1].add_audit(json_dict=jdict)
         return ret_val
 
 

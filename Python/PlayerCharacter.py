@@ -506,8 +506,14 @@ class PlayerCharacter(Character):
             ret_val = False
         return ret_val
 
+    @ctx_decorator
     def default_melee_attack(self, vantage='Normal'):
         return self.melee_attack(weapon_obj=self.melee_weapon_obj, vantage=vantage)
+
+    @ctx_decorator
+    def default_ranged_attack(self, vantage='Normal'):
+        return self.ranged_attack(weapon_obj=self.ranged_weapon_obj, vantage=vantage)
+
 
     def __str__(self):
         outstr = (f'{self.__class__.__name__}\n'

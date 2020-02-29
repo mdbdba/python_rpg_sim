@@ -245,10 +245,15 @@ class RpgLogging:
         self.log_level = switcher.get(level_threshold, logging.WARNING)
         self.logger_name = logger_name
         self.logger = structlog.get_logger(logger_name)
+        self.round_summary_name = f"{logger_name}_round_summary"
+        self.round_summary = logging.getLogger(self.round_summary_name)
 
     def setup_logging(self):
+        self.logger = structlog.get_logger(self.logger_name)
+        self.round_summary = logging.getLogger(self.round_summary_name)
         base_path = os.path.expanduser('~/rpg/logs')
         logging.basicConfig(
+        # self.logger.basicConfig(
             format="%(message)s",
             level=self.log_level,
             filename=f'{base_path}/{self.logger_name}.log',
@@ -273,15 +278,22 @@ class RpgLogging:
             wrapper_class=structlog.stdlib.BoundLogger,
             cache_logger_on_first_use=True,
         )
+        summary_handler = logging.FileHandler(filename=f'{base_path}/{self.round_summary_name}.log', mode='w')
+        summary_format = logging.Formatter( '%(message)s')
+        summary_handler.setFormatter(summary_format)
+
+        self.round_summary.addHandler(summary_handler)
+
         # formatter = structlog.stdlib.ProcessorFormatter(
         #     # processor=structlog.dev.ConsoleRenderer()
         #     processor=structlog.processors.JSONRenderer()
         # )
         # handler = logging.StreamHandler(sys.stdout)
         # handler.setFormatter(formatter)
-        self.logger = structlog.get_logger(self.logger_name)
+        #####   self.logger = structlog.get_logger(self.logger_name)
         # self.logger.addHandler(handler)
         self.logger.setLevel(self.log_level)
+        self.round_summary.setLevel(self.log_level)
         # self.logger.info("logger configured")
 
     def get_log_rec(self, ctx: Ctx, msg: str = None, json_dict: Dict = None, return_crumbs='None'):
@@ -318,6 +330,9 @@ class RpgLogging:
         #     return_dict = tmp_dict
 
         return tmp_dict
+
+    def summary_entry(self, msg):
+        self.round_summary.info(msg)
 
     def notset(self, ctx, msg=None, json_dict=None):
         self.logger.notset(self.get_log_rec(msg=msg, json_dict=json_dict, ctx=ctx))

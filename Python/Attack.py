@@ -13,6 +13,7 @@ class Attack(object):
         self.ctx = ctx
         self.method_last_call_audit = {}
         self.weapon_obj = weapon_obj
+        self.weapon_name = weapon_obj.name
         self.damage_type = weapon_obj.default_damage_type
         self.attack_modifier = attack_modifier
         self.damage_modifier = damage_modifier
@@ -81,3 +82,17 @@ class Attack(object):
                 self.rolls_used = value[1]
         return total
 
+    def __repr__(self):
+        return (f'"method_last_call_audit": {self.method_last_call_audit}, ' 
+                f'"weapon_obj": {self.weapon_obj}, ' 
+                f'"damage_type":{self.damage_type}, ' 
+                f'"attack_modifier":{self.attack_modifier}, ' 
+                f'"damage_modifier":{self.damage_modifier}, ' 
+                f'"vantage":{self.vantage}, ' 
+                f'"versatile_use_2handed":{self.versatile_use_2handed}, ' 
+                f'"rolls_used":{self.rolls_used}, ' 
+                f'"die_used":{self.die_used}, ' 
+                f'"possible_damage":{self.possible_damage}, ' 
+                f'"natural_value":{self.natural_value}, ' 
+                f'"possible_damage":{self.possible_damage}, ' 
+                f'"attack_value":{self.attack_value}, ')
