@@ -47,6 +47,8 @@ class Foe(Character):
             self.ranged_weapon_obj = Weapon(db=db, ctx=ctx, name=self.get_ranged_weapon())
             self.melee_weapon_obj.setWeaponProficient()
 
+        self.set_damage_adjs(db=db)
+
         self.class_eval.append({
                        "pythonClass": "Foe",
                        "foe_candidate": foe_candidate,
@@ -136,6 +138,24 @@ class Foe(Character):
             self.temp_hit_points = 0
         except IndexError:
             raise ValueError(f'Could not find foe: {foe_candidate}')
+
+    @ctx_decorator
+    def set_damage_adjs(self, db):
+        sql = (f"select rt.affected_name, rt.affect "
+               f"from lu_foe_trait as rt "
+               f"join foe as r on rt.foe = r.name "
+               f"where rt.category = 'Damage Received' "
+               f"and rt.affect is not null "
+               f"and rt.affected_name in ('Acid', 'Bludgeoning', "
+               f"'Cold', 'Fire', 'Force', 'Ligtning', 'Necrotic',"
+               f"'Piercing', 'Poison', 'Psychic', 'Radiant',"
+               f"'Slashing', 'Thunder')"
+               f"and r.name = '{self.get_race()}' ")
+
+        rows = db.query(sql)
+        for row in rows:
+            self.damage_adj[row[0]] = row[1]
+
 
     @ctx_decorator
     def assign_hit_points(self):

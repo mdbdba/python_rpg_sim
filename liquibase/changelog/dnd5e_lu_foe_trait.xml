@@ -45,5 +45,22 @@
             referencedTableName="lu_recharge_on"/>
 
     </changeSet>
+    <changeSet author="mdbdba" id="lu_foe_trait_2">
+        <insert schemaName="dnd_5e" tableName="lu_foe_trait">
+            <column name="foe" value="Skeleton"/>
+            <column name="name" value="Bludgeoning Vulnerable"/>
+            <column name="category" value="Damage Received"/>
+            <column name="affected_name" value="Bludgeoning"/>
+            <column name="affect" value="vulnerable"/>
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_foe_trait">
+            <column name="foe" value="Skeleton"/>
+            <column name="name" value="Poison Immune"/>
+            <column name="category" value="Damage Received"/>
+            <column name="affected_name" value="Poison"/>
+            <column name="affect" value="immune"/>
+        </insert>
+    </changeSet>
 </databaseChangeLog>
 

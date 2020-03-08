@@ -562,11 +562,18 @@ class Character(object):
 
         tmp_type = self.damage_adj[damage_type]
 
-        jdict = {"damage_adj": tmp_type}
+        jdict = {"damage_adj": tmp_type,
+                 "modification_due_to_damage_type": "None"}
         if tmp_type and tmp_type == 'resistant':
             amount = amount // 2
+            jdict['modification_due_to_damage_type'] = "resistant"
         elif tmp_type and tmp_type == 'vulnerable':
             amount = amount * 2
+            jdict['modification_due_to_damage_type'] = "vulnerable"
+        elif tmp_type and tmp_type == 'immune':
+            amount = 0
+            jdict['modification_due_to_damage_type'] = "immune"
+
 
         jdict['used_amount'] = amount
         jdict['from_unconscious'] = self.unconscious_ind
