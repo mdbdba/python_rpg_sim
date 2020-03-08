@@ -60,7 +60,11 @@ class Foe(Character):
         return self.melee_weapon
 
     def get_ranged_weapon(self):
-        return self.ranged_weapon
+        if self.ranged_weapon:
+            return_val = self.ranged_weapon
+        else:
+            return_val = "Not_Defined"
+        return return_val
 
     @ctx_decorator
     def default_melee_attack(self, vantage='Normal'):
@@ -68,6 +72,7 @@ class Foe(Character):
 
     @ctx_decorator
     def default_ranged_attack(self, vantage='Normal'):
+        self.stats.ranged_attack_attempts +=1
         return self.ranged_attack(weapon_obj=self.ranged_weapon_obj, vantage=vantage)
 
     @ctx_decorator

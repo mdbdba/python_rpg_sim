@@ -247,10 +247,13 @@ class RpgLogging:
         self.logger = structlog.get_logger(logger_name)
         self.round_summary_name = f"{logger_name}_round_summary"
         self.round_summary = logging.getLogger(self.round_summary_name)
+        # self.field_snap_name = f"{logger_name}_field_snap"
+        # self.field_snap = logging.getLogger(self.field_snap_name)
 
     def setup_logging(self):
         self.logger = structlog.get_logger(self.logger_name)
         self.round_summary = logging.getLogger(self.round_summary_name)
+        # self.field_snap = logging.getLogger(self.field_snap_name)
         base_path = os.path.expanduser('~/rpg/logs')
         logging.basicConfig(
         # self.logger.basicConfig(
@@ -284,6 +287,11 @@ class RpgLogging:
 
         self.round_summary.addHandler(summary_handler)
 
+        # field_handler = logging.FileHandler(filename=f'{base_path}/{self.field_snap_name}.log', mode='w')
+        # field_format = logging.Formatter( '%(message)s')
+        # field_handler.setFormatter(field_format)
+
+        # self.field_snap.addHandler(field_handler)
         # formatter = structlog.stdlib.ProcessorFormatter(
         #     # processor=structlog.dev.ConsoleRenderer()
         #     processor=structlog.processors.JSONRenderer()
@@ -293,7 +301,8 @@ class RpgLogging:
         #####   self.logger = structlog.get_logger(self.logger_name)
         # self.logger.addHandler(handler)
         self.logger.setLevel(self.log_level)
-        self.round_summary.setLevel(self.log_level)
+        self.round_summary.setLevel(logging.INFO)
+        # self.field_snap.setLevel(logging.INFO)
         # self.logger.info("logger configured")
 
     def get_log_rec(self, ctx: Ctx, msg: str = None, json_dict: Dict = None, return_crumbs='None'):
@@ -333,6 +342,10 @@ class RpgLogging:
 
     def summary_entry(self, msg):
         self.round_summary.info(msg)
+
+    # def field_snap(self, msg):
+    #     print(msg)
+    #     #self.field_snap.info(msg)
 
     def notset(self, ctx, msg=None, json_dict=None):
         self.logger.notset(self.get_log_rec(msg=msg, json_dict=json_dict, ctx=ctx))

@@ -35,6 +35,7 @@ class CharacterStats:
     character_race: str
     character_level: int
     attack_rolls: List[PointInTimeRollAmount] = field(default_factory=get_empty_list)
+    ranged_attack_attempts: int = 0
     attack_attempts: int = 0
     attack_successes: int = 0
     attack_nat20_count: int = 0

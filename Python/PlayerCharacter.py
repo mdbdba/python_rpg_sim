@@ -89,6 +89,8 @@ class PlayerCharacter(Character):
             self.save_character(db=db)
 
         self.stats.character_id = self.character_id
+        self.ranged_ammunition_type = self.class_obj.ranged_ammunition_type
+        self.ranged_ammunition_amt = self.class_obj.ranged_ammunition_amt
         self.class_eval[-1]["character_id"] = self.character_id
         self.class_eval[-1]["race"] = self.get_race()
         self.class_eval[-1]["class"] = self.get_class()
@@ -147,6 +149,7 @@ class PlayerCharacter(Character):
             self.melee_weapon_obj.setWeaponProficient()
         if self.class_obj.ranged_weapon is not None:
             self.ranged_weapon_obj = Weapon(db=db, ctx=self.ctx, name=self.get_ranged_weapon())
+            self.ranged_weapon_obj.setWeaponProficient()
 
         self.hit_points = 0
         self.adjust_for_levels(db=db)
@@ -405,7 +408,11 @@ class PlayerCharacter(Character):
         return self.class_obj.hit_die
 
     def get_ranged_weapon(self):
-        return self.class_obj.ranged_weapon
+        if self.class_obj.ranged_weapon:
+            return_val = self.class_obj.ranged_weapon
+        else:
+            return_val = "NotDefined"
+        return return_val
 
     def get_melee_weapon(self):
         return self.class_obj.melee_weapon
@@ -512,6 +519,7 @@ class PlayerCharacter(Character):
 
     @ctx_decorator
     def default_ranged_attack(self, vantage='Normal'):
+        self.stats.ranged_attack_attempts += 1
         return self.ranged_attack(weapon_obj=self.ranged_weapon_obj, vantage=vantage)
 
 

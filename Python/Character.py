@@ -24,12 +24,7 @@ class Character(object):
                  ability_array_str="Common",
                  damage_generator="Random",
                  hit_point_generator="Max",
-                 level=1 #,
-                 # debug_ind=0,
-                 # study_instance_id=-1,
-                 # series_id=-1,
-                 # encounter_id=-1,
-                 # **kwargs
+                 level=1
                  ):
 
         # raise Exception("test error")
@@ -604,8 +599,8 @@ class Character(object):
         return f'{self.get_name()}({self.cur_hit_points}/{self.hit_points})'
 
     @ctx_decorator
-    def get_action(self, dist_list):
-        ret_val = "Done"
+    def get_action(self, dist_list, melee_list, ranged_list):
+        ret_val = "Undecided"
         op_dist = dist_list[0][0]
         jdict = {
             "character_alive": self.alive,
@@ -620,17 +615,42 @@ class Character(object):
         elif self.get_combat_preference() == 'Melee':
             if op_dist > self.cur_movement:
                 ret_val = "Movement"
-            elif self.cur_movement >= op_dist > 8:
+            elif (self.cur_movement >= op_dist > 8
+                  and not ranged_list[0]):
                 ret_val = "Wait on Melee"
             elif op_dist <= 8:
                 ret_val = "Melee"
         else:
             t_range = self.get_ranged_range()
             jdict["ranged_weapon_range"] = t_range
-            if op_dist > t_range:
+            jdict["ranged_weapon_ammo"] = self.ranged_ammunition_amt
+            op_dist2 = 1000  # the if statement below checks this value.  Needs to
+            # be > weapon range for movement to be called. Setting
+            # to 1000 so that when no suitable target exists, this
+            # triggers movement.
+
+            m_cnt = 0
+            working_ranged_index = None
+            for m in melee_list:
+                if (op_dist >= 8 and
+                        working_ranged_index is None and
+                        m is False and
+                        (t_range >= dist_list[m_cnt][0] > 8) and
+                        self.ranged_ammunition_amt > 0):
+                    working_ranged_index = m_cnt
+                    op_dist2 = dist_list[m_cnt][0]
+                m_cnt += 1
+
+            if op_dist > t_range and op_dist2 > t_range:
                 ret_val = "Movement"
-            elif t_range >= op_dist > 8:
+            elif working_ranged_index is None and op_dist >= 8:
+                ret_val = "Movement"
+            elif op_dist >= 8 and self.ranged_ammunition_amt < 1:
+                ret_val = "Movement"
+            elif working_ranged_index is not None:
                 ret_val = "Ranged"
+                jdict["Ranged_target_change_team"] = dist_list[working_ranged_index][1]
+                jdict["Ranged_target_change_index"] = dist_list[working_ranged_index][2]
             elif op_dist <= 8:
                 ret_val = "Melee"
 
@@ -695,6 +715,7 @@ class Character(object):
                          damage_modifier=damage_modifier,
                          versatile_use_2handed=False, vantage=vantage)
         self.stats.attack_attempts += 1
+        self.ranged_ammunition_amt -= 1
         jdict['ranged_attack_value'] = attempt.attack_value
         jdict['ranged_possible_damage'] = attempt.possible_damage
         if attempt.natural_value == 20:
@@ -800,28 +821,6 @@ class Character(object):
         self.ctx.crumbs[-1].add_audit(json_dict=jdict)
         return ret
 
-#     @ctx_decorator
-#     def ranged_defend(self, attack_obj):
-#
-#         defense_roll: tuple = (t_val, {modifier})
-#
-#         self.stats.defense_rolls.append(defense_roll)
-#
-#         self.stats.defense_attempts += 1
-#         jdict['used_attack_value'] = value
-#         jdict['armor_class'] = self.armor_class
-#
-#         if value >= self.armor_class:
-#             ret = False
-#             if possible_damage > 0:
-#                 self.damage(possible_damage, damage_type)
-#         else:
-#             ret = True
-#             self.stats.defense_successes += 1
-
-#         self.ctx.crumbs[-1].add_audit(json_dict=jdict)
-#         return ret
-
     @ctx_decorator
     def heal(self, amount):
         jdict = {"from_hit_points": self.cur_hit_points,
@@ -848,19 +847,28 @@ class Character(object):
         jdict["to_hit_points"] = self.cur_hit_points
         self.ctx.crumbs[-1].add_audit(json_dict=jdict)
 
+    def get_ranged_weapon(self):
+        return "NotDefined"
+
     @ctx_decorator
     def get_ranged_range(self):
         jdict = {"character_class": self.get_class()}
-        if self.ranged_weapon:
-            jdict["ranged weapon"] = self.ranged_weapon
-            sql = (f"select range_1 from lu_weapon "
-                   f"where category like '%Ranged'" 
-                   f"and name = '{self.ranged_weapon}' ")
+        t_rw = self.get_ranged_weapon()
+        jdict["ranged weapon"] = t_rw
+        if t_rw != "NotDefined":
+            sql = ("select range_1 from lu_weapon "
+                   f"where name = '{t_rw}' " 
+                   "and (category like '%Ranged'"
+                   "  or  (category like '%Melee' and range_1 is not null))")
             res = self.db.query(sql)
-            jdict["query_result"] = res[0][0]
-            ret_val = res[0][0]
+            if res is not None:
+                jdict["query_result"] = res[0][0]
+                ret_val = res[0][0]
+            else:
+                jdict["query_result"] = "NotDefined"
+                ret_val = None
+
         else:
-            jdict["ranged weapon"] = "NotDefined"
             ret_val = -1
 
         self.ctx.crumbs[-1].add_audit(json_dict=jdict)
