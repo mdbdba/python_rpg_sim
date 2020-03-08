@@ -36,9 +36,9 @@ class Foe(Character):
                            level=level)
         self.get_foe(db=db, foe_candidate=foe_candidate)
         self.stats.character_id = self.character_id
-        self.stats.character_class = self.race    # this looks funky, but characterStats presentation for the foe race
-        self.stats.character_race = self.foe_type # is easier to compare using the class as "skeleton" and race as
-          # Undead.  Leaving that like that for it.  In all programmatic work the foe race and foe_type will be used.
+        self.stats.character_class = self.race     # this looks funky, but characterStats presentation for the foe race
+        self.stats.character_race = self.foe_type  # is easier to compare using the class as "skeleton" and race as
+        # Undead.  Leaving that like that for it.  In all programmatic work the foe race and foe_type will be used.
 
         if self.melee_weapon is not None:
             self.melee_weapon_obj = Weapon(db=db, ctx=ctx, name=self.get_melee_weapon())
@@ -74,7 +74,7 @@ class Foe(Character):
 
     @ctx_decorator
     def default_ranged_attack(self, vantage='Normal'):
-        self.stats.ranged_attack_attempts +=1
+        self.stats.ranged_attack_attempts += 1
         return self.ranged_attack(weapon_obj=self.ranged_weapon_obj, vantage=vantage)
 
     @ctx_decorator
@@ -155,7 +155,6 @@ class Foe(Character):
         rows = db.query(sql)
         for row in rows:
             self.damage_adj[row[0]] = row[1]
-
 
     @ctx_decorator
     def assign_hit_points(self):
