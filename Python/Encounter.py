@@ -1,6 +1,7 @@
 import sys
 import traceback
-# import json
+import random
+import os
 
 from operator import itemgetter
 
@@ -55,6 +56,8 @@ class Encounter(object):
 
         with self.tracer.span(name='encounter'):
             # self.debug_ind = debug_ind
+            self.round_summary_filename = f'{ctx.log_file_dir}/{ctx.logger_name}_round_summary.log'
+            self.round_summary_file = open(self.round_summary_filename, 'w')
             self.round_audits = []  # keep list with all the activity for the encounter by round.
             self.method_last_call_audit = {}
             self.Heroes = heroes
@@ -74,9 +77,9 @@ class Encounter(object):
             self.melee_with = {}
             self.h_cnt = len(heroes)
 
-            self.logger.summary_entry(f"Let's get ready to rumble!")
-            self.logger.summary_entry(f"Encounter: {encounter_id}")
-            self.logger.summary_entry("Between:")
+            self.summary_entry(f"Let's get ready to rumble!")
+            self.summary_entry(f"Encounter: {encounter_id}")
+            self.summary_entry("Between:")
             with self.tracer.span(name='build_initiative_list'):
                 t_str = ''
                 self.h_cnt = len(heroes)
@@ -86,7 +89,7 @@ class Encounter(object):
                                                 source_list_position=position)
                     t_str = f'{t_str}, {position}) {Hero.get_name()}'
                 t_str = t_str[2:]
-                self.logger.summary_entry(f"\tHeroes ({self.h_cnt}): {t_str}")
+                self.summary_entry(f"\tHeroes ({self.h_cnt}): {t_str}")
 
                 t_str = ''
                 self.o_cnt = len(opponents)
@@ -97,7 +100,7 @@ class Encounter(object):
                     t_str = f'{t_str}, {position}) {Opponent.get_name()}'
 
                 t_str = t_str[2:]
-                self.logger.summary_entry(f"\tOpponents ({self.o_cnt}): {t_str}")
+                self.summary_entry(f"\tOpponents ({self.o_cnt}): {t_str}")
 
                 self.initiative = sorted(self.initiative, reverse=True,
                                          key=itemgetter(3))
@@ -106,9 +109,14 @@ class Encounter(object):
                 # for item in self.initiative:
                 #     init_dict[item_count] = self.initiative[item_count]
 
-            self.logger.debug(msg="initiative_array", json_dict=self.initiative, ctx=ctx)
+            self.logger.info(msg="initiative_array", json_dict=self.initiative, ctx=ctx)
 
-            self.master_loop()
+            try:
+                self.master_loop()
+            except:
+                raise
+            finally:
+                self.round_summary_file.close()
 
     def add_method_last_call_audit(self, audit_obj):
         self.method_last_call_audit[audit_obj['methodName']] = audit_obj
@@ -182,10 +190,8 @@ class Encounter(object):
             bounds_dict['min_y'] = y_loc
 
     def field_snapshot(self):
-        # self.logger.field_snap(msg=f"\nfield_snapshot: Round {self.ctx.round}\n")
-        # print(f"\nfield_snapshot: Round {self.ctx.round}\n")
         divider = "\n---------------------------------------------------------------"
-        self.logger.summary_entry(divider)
+        self.summary_entry(divider)
         display_range_dict = {
             'h': {
                 'min_x': self.field_size,
@@ -290,9 +296,7 @@ class Encounter(object):
                 si = f"{i} |"
             x_header = f"{x_header}{si}"
 
-        # print(x_header)
-        self.logger.summary_entry(x_header)
-        #  self.logger.field_snap(msg=x_header)
+        self.summary_entry(x_header)
         # y range
 
         if display_range_dict['t']['min_y'] < 5:
@@ -306,8 +310,7 @@ class Encounter(object):
             t_max = display_range_dict['t']['max_y'] + 3
 
         if t_max != 99:
-            self.logger.summary_entry("|...|")
-            # print(f"|...|")
+            self.summary_entry("|...|")
         for y in range(t_max, t_min, -1):
             if y < 10:
                 si = f"|0{y} |"
@@ -325,18 +328,13 @@ class Encounter(object):
                 if not found:
                     si = f"{si}   |"
 
-            # print(f"{si}")
-            self.logger.summary_entry(si)
-            # self.logger.field_snap(msg=si)
+            self.summary_entry(si)
 
-    @ctx_decorator
     def sector_is_unoccupied(self, px: int, py: int) -> bool:
         # with self.tracer.span(name='sector_is_unoccupied'):
         list_index: int = self.get_array_index(px, py)
         ret_val: bool = not self.field_map[list_index].occupied
 
-        # msg = f"Is [{px}][{py}] field_map[{list_index}] available: {ret_val}"
-        # self.logger.debug(msg=msg, ctx=self.ctx)
         if not ret_val:
             jdict = {"field_location": f"[{px}][{py}]",
                      "occupied_by":  self.get_player(self.field_map[list_index].occupied_by,
@@ -344,18 +342,11 @@ class Encounter(object):
             self.ctx.crumbs[-1].add_audit(json_dict=jdict)
         return ret_val
 
-    @ctx_decorator
     def move(self, identifier_name, identifier_index,
              leave_x, leave_y,
              occupy_x, occupy_y):
-        # with self.tracer.span(name='move'):
         leave_list_ind = self.get_array_index(leave_x, leave_y)
         occupy_list_ind = self.get_array_index(occupy_x, occupy_y)
-        # if self.debug_ind == 1:
-        #     msg = (f"moving {identifier_name}[{identifier_index}] from "
-        #            f"[{leave_x}][{leave_y}] ({leave_list_ind}) to "
-        #            f"[{occupy_x}][{occupy_y}] ({occupy_list_ind})")
-        #     self.logger.debug(msg=msg, ctx=self.ctx)
         self.field_map[leave_list_ind].leave_sector()
         self.field_map[occupy_list_ind].occupy_sector(identifier_name,
                                                       identifier_index)
@@ -433,6 +424,10 @@ class Encounter(object):
         loc = self.get_array_index(x_loc, y_loc)
         self.field_map[loc].leave_sector()
 
+    def summary_entry(self, msg):
+        self.round_summary_file.write(msg)
+        self.round_summary_file.write('\n')
+
     @ctx_decorator
     def master_loop(self):
         self.ctx.round = 1
@@ -440,7 +435,7 @@ class Encounter(object):
         waiting_for = []
 
         while self.active:
-            self.logger.summary_entry(f"\n* * * * R O U N D  {self.ctx.round} * * * * *")
+            self.summary_entry(f"\n* * * * R O U N D  {self.ctx.round} * * * * *")
             turn_audits = []
             with self.tracer.span(name='master_loop_iteration'):
                 for i in range(len(self.initiative)):
@@ -459,13 +454,13 @@ class Encounter(object):
 
                 if self.ctx.round > 59:
                     self.active = False
-                    self.logger.debug(msg="last_round_audit", json_dict=turn_audits, ctx=self.ctx)
-                    self.logger.debug(msg="round_limit_reached.", ctx=self.ctx)
+                    self.logger.info(msg="last_round_audit", json_dict=turn_audits, ctx=self.ctx)
+                    self.logger.info(msg="round_limit_reached.", ctx=self.ctx)
 
     @ctx_decorator
     def wrap_up(self):
         with self.tracer.span(name='wrap_up'):
-            self.logger.debug(msg='round_audits', json_dict=self.round_audits, ctx=self.ctx)
+            self.logger.info(msg='round_audits', json_dict=self.round_audits, ctx=self.ctx)
             self.stats.winning_team = self.winning_list_name
             self.stats.duration_rds = self.ctx.round
             jdict = {"winner": self.winning_list_name,
@@ -484,8 +479,8 @@ class Encounter(object):
                                     self.field_map[x].occupied_by_index).get_name(),
                                     self.field_map[x].occupied_by, x, a, b]
                     jdict["final_field_map"].append(occupied_loc)
-            self.logger.debug(msg='encounter_result', json_dict=jdict, ctx=self.ctx)
-            self.logger.debug(msg='character_stats', json_dict=self.get_characters_stats(), ctx=self.ctx)
+            self.logger.info(msg='encounter_result', json_dict=jdict, ctx=self.ctx)
+            self.logger.info(msg='character_stats', json_dict=self.get_characters_stats(), ctx=self.ctx)
 
     @ctx_decorator
     def still_active(self):
@@ -512,10 +507,6 @@ class Encounter(object):
 
     @ctx_decorator
     def cleanup_dead_player(self, player, list_name: str, list_index: int):
-        # if self.debug_ind == 1:
-        #     self.logger.debug(msg=f"{player.get_name()} is dead. Removing them from melee and field list. ",
-        #                       ctx=self.ctx)
-        # print(f"{player.get_name()} is dead. Removing them from melee and field list.")
         death_rec = PointInTime(self.ctx.round, self.ctx.turn)
         player.stats.death_list.append(death_rec)
         xy_loc = self.get_player_location(list_name=list_name, list_index=list_index)
@@ -538,7 +529,7 @@ class Encounter(object):
     @ctx_decorator
     def turn(self, initiative_ind, waiting_for):
         with self.tracer.span(name='turn'):
-            self.logger.summary_entry(f"\n  T U R N  {self.ctx.turn}")
+            self.summary_entry(f"\n  T U R N  {self.ctx.turn}")
             summary_indent = "    "
             turn_audit = {"round": self.ctx.round, "turn": initiative_ind}
             cur_active = self.get_player(self.initiative[initiative_ind][0],
@@ -569,9 +560,6 @@ class Encounter(object):
                                                      my_y=self.initiative[initiative_ind][5],
                                                      target_name=target_array_name))
 
-                # for j in range(len(dl)):
-                #     self.logger.debug(msg=f"dist: {dl[j][0]} {dl[j][1]} {dl[j][2]}", ctx=self.ctx)
-
                 turn_audit["closest_opponent_distance"] = dl[0][0]
                 turn_audit["target_location"] = f"[{dl[0][1]}][{dl[0][2]}]"
                 t_tmp = self.get_player(dl[0][3], dl[0][4])
@@ -579,7 +567,7 @@ class Encounter(object):
                 target_name_str = self.get_name_str(dl[0][3], dl[0][4])
                 msg = (f"{summary_indent}{cur_active_name_str} targeted {target_name_str}"
                        f" {turn_audit['target_location']}, distance: {turn_audit['closest_opponent_distance']}")
-                self.logger.summary_entry(msg)
+                self.summary_entry(msg)
 
                 turn_audit["passed_perception_test"] = self.initiative[initiative_ind][2]
                 # Do they know why they are there?
@@ -590,7 +578,7 @@ class Encounter(object):
                     msg = (f"{summary_indent}{cur_active_name_str} used their bonus action to attempt"
                            f" the perception check needed to participate. "
                            f"(Passed: {self.initiative[initiative_ind][2]})")
-                    self.logger.summary_entry(msg)
+                    self.summary_entry(msg)
                 # Move
                 # Define an obj for the current active combatant
                 #    0 - How many sectors can they move
@@ -604,28 +592,6 @@ class Encounter(object):
                 turn_audit["movement_starting_location"] = (
                     f"[{self.initiative[initiative_ind][4]}][{self.initiative[initiative_ind][5]}]")
 
-                avail_mvmt = self.movement(avail_movement=avail_mvmt,
-                                           cur_active=cur_active,
-                                           cur_init=self.initiative[initiative_ind],
-                                           dest_list=dl)
-                if turn_audit["movement_available"] != avail_mvmt:
-                    msg = (f"{summary_indent}{cur_active_name_str} moved from "
-                           f"{turn_audit['movement_starting_location']} to "
-                           f"[{self.initiative[initiative_ind][4]}][{self.initiative[initiative_ind][5]}]")
-                else:
-                    msg = (f"{summary_indent}{cur_active_name_str} did not move from "
-                           f"{turn_audit['movement_starting_location']}")
-                self.logger.summary_entry(msg)
-                turn_audit["movement_left"] = avail_mvmt
-                turn_audit["movement_end_location"] = (
-                    f"[{self.initiative[initiative_ind][4]}][{self.initiative[initiative_ind][5]}]")
-                turn_audit["movement_turn_end_location"] = (
-                    f"[{self.initiative[initiative_ind][4]}][{self.initiative[initiative_ind][5]}]")
-
-                # Action (Bonus or standard)
-                # If they don't have a ranged weapon or spell attack
-                # they must be a melee fighter.  When not in melee range
-                # use action for movement.
                 dl_in_melee = []
                 for p in dl:
                     if self.is_in_melee(self.get_player(p[3], p[4])):
@@ -640,6 +606,30 @@ class Encounter(object):
                     else:
                         q = False
                     dl_in_ranged.append(q)
+
+                avail_mvmt = self.movement(avail_movement=avail_mvmt,
+                                           cur_active=cur_active,
+                                           cur_init=self.initiative[initiative_ind],
+                                           dest_list=dl,
+                                           melee_list = dl_in_melee)
+                if turn_audit["movement_available"] != avail_mvmt:
+                    msg = (f"{summary_indent}{cur_active_name_str} moved from "
+                           f"{turn_audit['movement_starting_location']} to "
+                           f"[{self.initiative[initiative_ind][4]}][{self.initiative[initiative_ind][5]}]")
+                else:
+                    msg = (f"{summary_indent}{cur_active_name_str} did not move from "
+                           f"{turn_audit['movement_starting_location']}")
+                self.summary_entry(msg)
+                turn_audit["movement_left"] = avail_mvmt
+                turn_audit["movement_end_location"] = (
+                    f"[{self.initiative[initiative_ind][4]}][{self.initiative[initiative_ind][5]}]")
+                turn_audit["movement_turn_end_location"] = (
+                    f"[{self.initiative[initiative_ind][4]}][{self.initiative[initiative_ind][5]}]")
+
+                # Action (Bonus or standard)
+                # If they don't have a ranged weapon or spell attack
+                # they must be a melee fighter.  When not in melee range
+                # use action for movement.
                 cur_action = cur_active.get_action(dist_list=dl,
                                                    melee_list=dl_in_melee,
                                                    ranged_list=dl_in_ranged)
@@ -664,12 +654,13 @@ class Encounter(object):
                     avail_mvmt = self.movement(avail_movement=avail_mvmt,
                                                cur_active=cur_active,
                                                cur_init=self.initiative[initiative_ind],
-                                               dest_list=dl)
+                                               dest_list=dl,
+                                               melee_list = dl_in_melee)
 
                     msg = (f"{summary_indent}{cur_active_name_str} chose movement as their action. "
                            f"Moving from {mvmt_from} to "
                            f"[{self.initiative[initiative_ind][4]}][{self.initiative[initiative_ind][5]}]")
-                    self.logger.summary_entry(msg)
+                    self.summary_entry(msg)
                     turn_audit["movement_as_action_left"] = avail_mvmt
                     turn_audit["movement_as_action_end_location"] = (
                         f"[{self.initiative[initiative_ind][4]}][{self.initiative[initiative_ind][5]}]")
@@ -681,7 +672,7 @@ class Encounter(object):
                     t_player_name_str = self.get_name_str(dl[0][3], dl[0][4])
                     msg = (f"{summary_indent}{cur_active_name_str} chose to attack "
                            f"{t_player_name_str} if they come into range later this round.")
-                    self.logger.summary_entry(msg)
+                    self.summary_entry(msg)
                     turn_audit["action_waiting"] = True
                     turn_audit["action_waiting_on"] = self.get_player(dl[0][3], dl[0][4]).get_name()
 
@@ -720,7 +711,7 @@ class Encounter(object):
                             msg = f"{msg}, but they were not in range: {waiting_dist}"
                             turn_audit[f"waiting_missed_max_distance_{t_cnt}"] = waiting_dist
 
-                        self.logger.summary_entry(msg)
+                        self.summary_entry(msg)
                         t_cnt += 1
                     if cur_active.cur_hit_points > 0:
                         self.handle_turn_attack_action(turn_audit=turn_audit,
@@ -762,18 +753,18 @@ class Encounter(object):
                     ds_status_str = f"({cur_active.death_save_passed_cnt} / {cur_active.death_save_failed_cnt})"
                     turn_audit["death_save_status"] = ds_status_str
                     msg = f"{msg} {ds_status_str}"
-                self.logger.summary_entry(msg)
+                self.summary_entry(msg)
 
                 if not cur_active.alive:
                     turn_audit["died_in_turn"] = True
                     self.cleanup_dead_player(player=cur_active, list_name=self.initiative[initiative_ind][0],
                                              list_index=self.initiative[initiative_ind][1])
                     msg = f"{summary_indent}{cur_active_name_str} died."
-                    self.logger.summary_entry(msg)
+                    self.summary_entry(msg)
             else:
                 turn_audit["died_before_turn"] = True
                 msg = f"{summary_indent}{cur_active_name_str} died earlier."
-                self.logger.summary_entry(msg)
+                self.summary_entry(msg)
 
         return turn_audit
 
@@ -815,17 +806,31 @@ class Encounter(object):
             hit_points_before = target.cur_hit_points
             successful_defend = target.defend(attack_obj=active_attack)
 
+            random_choice = random.randint(1, 3)  # randomly make the choice to use luck.  1/3 chance
+            if (successful_defend and
+                    active_attack.natural_value < 20 and  # if a crit failed, there's no way luck would help.
+                    attacker.lucky_uses_available > 0 and  # if the attacker has luck, they could try again.
+                    random_choice == 1):
+                attacker.lucky_uses_available -= 1
+                turn_audit[f"{audit_key_prefix}luck_was_used{audit_key_suffix}"] = True
+                msg = f"{msg} failed, but lucky caused a retry which"
+                if attack_type == 'Melee':
+                    active_attack = attacker.default_melee_attack(vantage=t_vantage, luck_retry=True)
+                else:  # attack_type == 'Ranged':
+                    active_attack = attacker.default_ranged_attack(vantage=t_vantage, luck_retry=True)
+                successful_defend = target.defend(attack_obj=active_attack)
+
             if successful_defend:  # successful defend means the attack failed...
                 t_suc = "failed "
             else:
                 t_suc = "succeeded "
             msg = f"{summary_indent}{attacker_name_str} {t_suc}{msg}"
 
-            turn_audit[f"{audit_key_prefix}melee_attack_defense_successful{audit_key_suffix}"] = successful_defend
+            turn_audit[f"{audit_key_prefix}{attack_type}_attack_defense_successful{audit_key_suffix}"] = successful_defend
 
             hp_impact = (hit_points_before - target.cur_hit_points)
             if not successful_defend:
-                turn_audit[f"{audit_key_prefix}melee_attack_damage{audit_key_suffix}"] = active_attack.possible_damage
+                turn_audit[f"{audit_key_prefix}{attack_type}_attack_damage{audit_key_suffix}"] = active_attack.possible_damage
                 turn_audit[f"{audit_key_prefix}hit_point_impact{audit_key_suffix}"] = hp_impact
                 turn_audit[f"{audit_key_prefix}hit_points_after_attack{audit_key_suffix}"] = target.cur_hit_points
                 self.stats.inc_attack_successes(attacker_side)
@@ -860,7 +865,7 @@ class Encounter(object):
         else:
             msg = f"{summary_indent}{attacker_name_str} died earlier"
 
-        self.logger.summary_entry(msg)
+        self.summary_entry(msg)
 
     def remove_waiting_for(self, initiative_ind, waiting_for):
         # with self.tracer.span(name='remove_waiting_for'):
@@ -927,7 +932,7 @@ class Encounter(object):
                 self.melee_with[the_target_player.get_name()].remove(player.get_name())
 
     @ctx_decorator
-    def movement(self, avail_movement, cur_active, cur_init, dest_list):
+    def movement(self, avail_movement, cur_active, cur_init, dest_list, melee_list):
         player_combat_preference = cur_active.get_combat_preference()
 
         jdict = {"character": cur_active.get_name(),
@@ -944,7 +949,9 @@ class Encounter(object):
                 ranged_ammunition_amt = cur_active.ranged_ammunition_amt
 
             if (player_combat_preference == 'Mixed'
-                    and (op_dist > t_range or ranged_ammunition_amt == 0)):
+                    and (op_dist > t_range or
+                         ranged_ammunition_amt == 0 or
+                         all(melee_list) is True)):  # if all opponents are in melee, move.
                 conditional_mvmt = True
             else:
                 conditional_mvmt = False
@@ -1115,15 +1122,15 @@ class Encounter(object):
 if __name__ == '__main__':
     logger_name = 'encounter_main_test'
     ctx = Ctx(app_username='encounter_class_init', logger_name=logger_name)
-    logger = RpgLogging(logger_name=logger_name, level_threshold='debug')
-    logger.setup_logging()
+    ctx.log_file_dir = os.path.expanduser('~/rpg/logs')
+    logger = RpgLogging(logger_name=logger_name, level_threshold='info')
+    logger.setup_logging(log_dir=ctx.log_file_dir)
     try:
         db = InvokePSQL()
         Heroes = []
         Opponents = []
-        Heroes.append(PlayerCharacter(db=db, ctx=ctx))
-        Heroes.append(PlayerCharacter(db=db, ctx=ctx))
-        Heroes.append(PlayerCharacter(db=db, ctx=ctx, class_candidate='Rogue'))
+        Heroes.append(PlayerCharacter(db=db, ctx=ctx, race_candidate='Half-orc'))
+        # Heroes.append(PlayerCharacter(db=db, ctx=ctx, class_candidate='Rogue'))
         Heroes.append(PlayerCharacter(db=db, ctx=ctx, class_candidate='Ranger'))
         Opponents.append(Foe(db=db, ctx=ctx, foe_candidate='Skeleton'))
         Opponents.append(Foe(db=db, ctx=ctx, foe_candidate='Skeleton'))

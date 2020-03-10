@@ -101,3 +101,8 @@ if __name__ == '__main__':
     a1 = RacialTraits(db, "Mountain dwarf", "Dwarf")
     for b in a1.traits:
         print(b)
+    b1 = RacialTraits(db, "Half-orc")
+    for b in b1.traits:
+        print(b)
+    for c in b1.rawtraits:
+        print(c)

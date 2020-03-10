@@ -103,6 +103,11 @@ class Character(object):
         self.shield = None
         self.set_finesse_ability()
 
+        self.relentless_uses_available = 0
+        self.lucky_uses_available = 0
+        self.savage_attack_crit_bonus = False
+        self.nimble_escape_bonus = False
+
         self.exhaustion_level = 0
         # 1   Disadvantage on Ability Checks
         # 2   Speed halved
@@ -156,7 +161,6 @@ class Character(object):
     def inc_damage_dealt(self, damage_type, amount):
         return self.stats.inc_damage_dealt(damage_type=damage_type, amount=amount)
 
-    @ctx_decorator
     def assign_gender(self):
         self.last_method_log = f"assign_gender(db)"
         d = Die(ctx=self.ctx, sides=100)
@@ -216,7 +220,6 @@ class Character(object):
     def get_ability_improvement_array(self):
         return self.ability_array_obj.get_imp_array()
 
-    @ctx_decorator
     def set_taliesin_temperament_archetype(self):
         self.last_method_log = f'assignTaliesinTemperamentArchetype()'
         align_array = ['Bashful', 'Doc', 'Grumpy', 'Happy', 'Sneezy', 'Sleepy', 'Dopey']
@@ -581,19 +584,24 @@ class Character(object):
         jdict['from_hit_points'] = self.cur_hit_points
 
         if amount >= self.cur_hit_points:
-            self.unconscious_ind = True
-            self.stabilized = False
-            jdict['to_unconscious'] = self.unconscious_ind
-            jdict['to_stabilized'] = self.stabilized
-
-            # Instant Death?
-            if (amount - self.cur_hit_points) >= self.hit_points:
-                self.incr_death_save_failed_cnt(amount=3)
-                jdict['instant_death'] = True
+            if self.relentless_uses_available > 0:
+                self.relentless_uses_available -= 1
+                self.cur_hit_points = 1
+                jdict['used_relentless_to_avoid_unconsciousness'] = "True"
             else:
-                jdict['instant_death'] = False
+                self.unconscious_ind = True
+                self.stabilized = False
+                jdict['to_unconscious'] = self.unconscious_ind
+                jdict['to_stabilized'] = self.stabilized
 
-            self.cur_hit_points = 0
+                # Instant Death?
+                if (amount - self.cur_hit_points) >= self.hit_points:
+                    self.incr_death_save_failed_cnt(amount=3)
+                    jdict['instant_death'] = True
+                else:
+                    jdict['instant_death'] = False
+
+                self.cur_hit_points = 0
         else:
             self.cur_hit_points -= amount
 
@@ -699,7 +707,7 @@ class Character(object):
         return ret_val
 
     @ctx_decorator
-    def ranged_attack(self, weapon_obj, vantage='Normal'):
+    def ranged_attack(self, weapon_obj, vantage='Normal', luck_retry=False):
         # determine modifier
         # 1)  is this a martial weapon that needs specific proficiency
         #     if it is and the character has that, or the weapon is a standard
@@ -710,7 +718,8 @@ class Character(object):
         #     modifier = int(self.proficiency_bonus)
         # else:
         modifier = self.add_proficiency_bonus_for_attack(weapon_obj)
-        jdict = {"weapon_proficiency_bonus": modifier}
+        jdict = {"weapon_proficiency_bonus": modifier,
+                 "luck_retry": luck_retry}
 
         modifier += self.get_ability_modifier('Dexterity')
         damage_modifier = self.get_ability_modifier('Dexterity')
@@ -721,10 +730,11 @@ class Character(object):
         attempt = Attack(ctx=self.ctx, weapon_obj=weapon_obj, attack_modifier=modifier,
                          damage_modifier=damage_modifier,
                          versatile_use_2handed=False, vantage=vantage)
-        self.stats.attack_attempts += 1
-        self.ranged_ammunition_amt -= 1
         jdict['ranged_attack_value'] = attempt.attack_value
         jdict['ranged_possible_damage'] = attempt.possible_damage
+        if not luck_retry:
+            self.stats.attack_attempts += 1
+            self.ranged_ammunition_amt -= 1
         if attempt.natural_value == 20:
             self.stats.attack_nat20_count += 1
         if attempt.natural_value == 1:
@@ -744,7 +754,7 @@ class Character(object):
         return False
 
     @ctx_decorator
-    def melee_attack(self, weapon_obj, vantage='Normal') -> Attack:
+    def melee_attack(self, weapon_obj, vantage='Normal', luck_retry=False) -> Attack:
         # determine modifier
         # 1)  is this a martial weapon that needs specific proficiency
         #     if it is and the character has that, or the weapon is a standard
@@ -756,7 +766,8 @@ class Character(object):
         # else:
         #     modifier = 0
         modifier = self.add_proficiency_bonus_for_attack(weapon_obj=weapon_obj)
-        jdict = {"weapon_proficiency_bonus": modifier}
+        jdict = {"weapon_proficiency_bonus": modifier,
+                 "luck_retry": luck_retry}
         # damage_modifier = 0
         # 2)  Add the users Ability bonus, Strength for standard weapons
         #     or self.finesse_ability_mod for Finesse wepons
@@ -786,11 +797,12 @@ class Character(object):
 
         jdict["roll_natural_value"] = attempt.natural_value
         jdict["attack_value"] = attempt.attack_value
-        self.stats.attack_attempts += 1
-        if attempt.natural_value == 20:
-            self.stats.attack_nat20_count += 1
+        if not luck_retry:
+            self.stats.attack_attempts += 1
         if attempt.natural_value == 1:
             self.stats.attack_nat1_count += 1
+        if attempt.natural_value == 20:
+            self.stats.attack_nat20_count += 1
         attack_roll: tuple = (attempt.natural_value, {attempt.attack_modifier})
         self.stats.attack_rolls.append(attack_roll)
 

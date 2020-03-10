@@ -11,7 +11,7 @@ import structlog
 import itertools
 import sys
 import traceback
-import os
+# import os
 
 
 @wrapt.decorator
@@ -55,6 +55,7 @@ def ctx_decorator(wrapped, instance, args, kwds):
                     roll_ids = {'used rolls': ctx.crumbs[-1].rollIds}
 
         except:
+            logging.exception("Unexpected error:")
             print("Unexpected error:", sys.exc_info()[0])
             raise
         finally:
@@ -67,7 +68,7 @@ def ctx_decorator(wrapped, instance, args, kwds):
                      'returned': str(ret)}
             if len(roll_ids) > 0:
                 jdict['roll_ids'] = roll_ids
-            logger.debug(msg='event_context_record', json_dict=jdict, ctx=ctx)
+            logger.info(msg='event_context_record', json_dict=jdict, ctx=ctx)
             try:
                 instance.add_method_last_call_audit({**ctx.crumbs[-1].__dict__, **jdict})
             except:
@@ -160,6 +161,7 @@ class Ctx:
     app_username: str = "Unknown"
     fullyqualified: str = ""
     logger_name: str = fullyqualified
+    log_file_dir: str = ""
     trace_id: str = ""
     request_type = "Standard"   # or "Trace"
     study_instance_id: int = -1
@@ -244,22 +246,19 @@ class RpgLogging:
         }
         self.log_level = switcher.get(level_threshold, logging.WARNING)
         self.logger_name = logger_name
+        self.std_logger = logging.getLogger(logger_name)
         self.logger = structlog.get_logger(logger_name)
-        self.round_summary_name = f"{logger_name}_round_summary"
-        self.round_summary = logging.getLogger(self.round_summary_name)
-        # self.field_snap_name = f"{logger_name}_field_snap"
-        # self.field_snap = logging.getLogger(self.field_snap_name)
+        # self.round_summary_name = f"{logger_name}_round_summary"
+        # self.round_summary = logging.getLogger(self.round_summary_name)
 
-    def setup_logging(self):
+    def setup_logging(self, log_dir):
         self.logger = structlog.get_logger(self.logger_name)
-        self.round_summary = logging.getLogger(self.round_summary_name)
-        # self.field_snap = logging.getLogger(self.field_snap_name)
-        base_path = os.path.expanduser('~/rpg/logs')
+        # self.round_summary = logging.getLogger(self.round_summary_name)
+        # base_path = os.path.expanduser('~/rpg/logs')
         logging.basicConfig(
-        # self.logger.basicConfig(
             format="%(message)s",
-            level=self.log_level,
-            filename=f'{base_path}/{self.logger_name}.log',
+            level=logging.INFO,
+            filename=f'{log_dir}/{self.logger_name}.log',
             filemode='w'
         )
         structlog.configure(
@@ -281,29 +280,19 @@ class RpgLogging:
             wrapper_class=structlog.stdlib.BoundLogger,
             cache_logger_on_first_use=True,
         )
-        summary_handler = logging.FileHandler(filename=f'{base_path}/{self.round_summary_name}.log', mode='w')
-        summary_format = logging.Formatter( '%(message)s')
-        summary_handler.setFormatter(summary_format)
+        # handler = logging.FileHandler(filename=f'{log_dir}/{self.logger_name}.log', mode='w')
+        # handler.setLevel(logging.INFO)
+        # summary_handler = logging.FileHandler(filename=f'{base_path}/{self.round_summary_name}.log', mode='w')
+        # summary_handler.setLevel(logging.DEBUG)
+        # summary_format = logging.Formatter('%(message)s')
+        # summary_handler.setFormatter(summary_format)
 
-        self.round_summary.addHandler(summary_handler)
+        # self.round_summary.addHandler(summary_handler)
 
-        # field_handler = logging.FileHandler(filename=f'{base_path}/{self.field_snap_name}.log', mode='w')
-        # field_format = logging.Formatter( '%(message)s')
-        # field_handler.setFormatter(field_format)
-
-        # self.field_snap.addHandler(field_handler)
-        # formatter = structlog.stdlib.ProcessorFormatter(
-        #     # processor=structlog.dev.ConsoleRenderer()
-        #     processor=structlog.processors.JSONRenderer()
-        # )
-        # handler = logging.StreamHandler(sys.stdout)
-        # handler.setFormatter(formatter)
-        #####   self.logger = structlog.get_logger(self.logger_name)
+        # self.logger.setLevel(logging.INFO)
         # self.logger.addHandler(handler)
-        self.logger.setLevel(self.log_level)
-        self.round_summary.setLevel(logging.INFO)
-        # self.field_snap.setLevel(logging.INFO)
-        # self.logger.info("logger configured")
+        # self.logger.addHandler(summary_handler)
+        # self.round_summary.setLevel(logging.INFO)
 
     def get_log_rec(self, ctx: Ctx, msg: str = None, json_dict: Dict = None, return_crumbs='None'):
         if msg is None and json_dict is None:
@@ -334,14 +323,11 @@ class RpgLogging:
 
         if json_dict is not None and len(json_dict) > 0:
             tmp_dict['_json'] = json_dict
-        #     return_dict = { **tmp_dict, **json_dict}
-        # else:
-        #     return_dict = tmp_dict
 
         return tmp_dict
 
     def summary_entry(self, msg):
-        self.round_summary.info(msg)
+        self.std_logger.debug(msg)
 
     # def field_snap(self, msg):
     #     print(msg)

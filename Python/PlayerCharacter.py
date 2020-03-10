@@ -82,6 +82,7 @@ class PlayerCharacter(Character):
         self.reset_movement()
         self.set_finesse_ability()
         self.set_proficiency_bonus()
+        self.apply_traits()
         self.set_damage_adjs(db=db)
         self.set_armor_class()
 
@@ -339,6 +340,30 @@ class PlayerCharacter(Character):
                 print(tmp_str)
             self.set_armor_class()
 
+    @ctx_decorator
+    def apply_traits(self):
+        for i in self.race_obj.traitContainer.rawtraits:
+            if i[7]:
+                value = i[7]
+            else:
+                value = True
+            if i[1] == 'Relentless':
+                self.relentless_uses_available = value
+            if i[1] == 'Lucky':
+                self.lucky_uses_available = 3
+            if i[1] == 'Savage Attacks':
+                self.savage_attack_crit_bonus = value
+            if i[1] == 'Nimble Escape':
+                self.nimble_escape_bonus = value
+
+            jdict = {
+                "relentless_uses_available":  self.relentless_uses_available,
+                "lucky_uses_available": self.lucky_uses_available,
+                "savage_attack_crit_bonus": self.savage_attack_crit_bonus,
+                "nimble_escape_bonus": self.nimble_escape_bonus
+            }
+            self.ctx.crumbs[-1].add_audit(json_dict=jdict)
+
     def get_combat_preference(self):
         if self.class_obj.combat_preference:
             return_val = self.class_obj.combat_preference
@@ -350,7 +375,6 @@ class PlayerCharacter(Character):
     def get_ability_sort_array(self):
         return self.class_obj.ability_sort_array
 
-    @ctx_decorator
     def set_preference_array(self, pref_array_str):
         tmp_array = string_to_array(pref_array_str)
         self.ability_array_obj.set_preference_array(pref_array=tmp_array)
@@ -514,13 +538,13 @@ class PlayerCharacter(Character):
         return ret_val
 
     @ctx_decorator
-    def default_melee_attack(self, vantage='Normal'):
-        return self.melee_attack(weapon_obj=self.melee_weapon_obj, vantage=vantage)
+    def default_melee_attack(self, vantage='Normal', luck_retry=False):
+        return self.melee_attack(weapon_obj=self.melee_weapon_obj, vantage=vantage, luck_retry=luck_retry)
 
     @ctx_decorator
-    def default_ranged_attack(self, vantage='Normal'):
+    def default_ranged_attack(self, vantage='Normal', luck_retry=False):
         self.stats.ranged_attack_attempts += 1
-        return self.ranged_attack(weapon_obj=self.ranged_weapon_obj, vantage=vantage)
+        return self.ranged_attack(weapon_obj=self.ranged_weapon_obj, vantage=vantage, luck_retry=luck_retry)
 
 
     def __str__(self):
