@@ -956,8 +956,10 @@ class Encounter(object):
             else:
                 conditional_mvmt = False
 
-            if (player_combat_preference != 'Melee'
-                    and op_dist <= t_range):
+            if (player_combat_preference != 'Melee' and
+                    op_dist <= t_range and
+                    ranged_ammunition_amt > 0 and
+                    not all(melee_list)): # not all opponents are in melee.
                 ranged_hold = True
             else:
                 ranged_hold = False
