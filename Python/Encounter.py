@@ -17,6 +17,8 @@ from Ctx import RpgLogging
 from Ctx import Ctx
 from Ctx import ctx_decorator
 from PointInTimeAmount import PointInTime
+from distanceFromPlayer import distanceTarget
+from distanceFromPlayer import distanceFromPlayer
 
 
 class Encounter(object):
@@ -352,28 +354,104 @@ class Encounter(object):
                                                       identifier_index)
 
     @ctx_decorator
-    def get_target_distance_array(self, my_x, my_y, target_name):
+    def get_target_distance_array(self, player_initiative_record, target_name):
         # with self.tracer.span(name='get_target_distance_array'):
-        dist_list = []
-        jdict = {"starting_point": f"[{my_x}][{my_y}]"}
+        cur_active = self.get_player(player_initiative_record[0], player_initiative_record[1])
+        distance_from_player = distanceFromPlayer(player_name=cur_active.get_name(),
+                                              player_group=player_initiative_record[0],
+                                              player_index=player_initiative_record[1],
+                                              x=player_initiative_record[4],
+                                              y=player_initiative_record[5])
+        jdict = {"player_name": {distance_from_player.player_name},
+                 "starting_point": f"[{distance_from_player.x}][{distance_from_player.y}]"}
         t_cnt = 1
         for fx in range(len(self.field_map)):
-            if self.field_map[fx].occupied and self.field_map[fx].occupied_by == target_name:
+            if self.field_map[fx].occupied:
                 tmp_player = self.get_player(self.field_map[fx].occupied_by,
                                              self.field_map[fx].occupied_by_index)
-                t_namestr = (f"{tmp_player.get_name()} {self.field_map[fx].occupied_by}"
-                             f" {self.field_map[fx].occupied_by_index}")
-                jdict[f"occupied_by_{t_cnt}"] = t_namestr
+                t_hp_pct = (tmp_player.cur_hit_points / tmp_player.hit_points)
+                in_need = False
+                in_melee = False
+                used_ranged = False
                 if tmp_player.alive:
+                    if t_hp_pct < 66:
+                        in_need = True
+                    in_melee = self.is_in_melee(tmp_player),
+                    used_ranged = self.has_used_ranged_weapons(tmp_player),
+
+                if self.field_map[fx].occupied_by == target_name and tmp_player.alive:
+                    t_namestr = (f"{tmp_player.get_name()} {self.field_map[fx].occupied_by}"
+                                 f" {self.field_map[fx].occupied_by_index}")
+                    jdict[f"occupied_by_{t_cnt}"] = t_namestr
                     fa, fb = self.get_grid_position(fx)
-                    dist = calculate_distance(my_x, my_y, fa, fb)
+                    dist = calculate_distance(distance_from_player.x, distance_from_player.y, fa, fb)
                     jdict[f"point_{t_cnt}"] = f"[{fa}][{fb}]"
                     jdict[f"distance_{t_cnt}"] = dist
-                    dist_list.append([dist, fa, fb, self.field_map[fx].occupied_by,
-                                      self.field_map[fx].occupied_by_index])
-        dist_list = sorted(dist_list, reverse=False, key=itemgetter(0))
+                    t_fm = self.field_map[fx]
+                    t_list = distance_from_player.targets
+                    t_list.append(distanceTarget(distance=dist, x=fa, y=fb,
+                                                 occupied_by_group=t_fm.occupied_by,
+                                                 occupied_by_index=t_fm.occupied_by_index,
+                                                 in_melee=in_melee,
+                                                 used_ranged=used_ranged,
+                                                 in_need=in_need))
+                    if dist == 5:
+                        jdict[f"added_to_touch_range_targets_{t_cnt}"] = "True"
+                        t_list = distance_from_player.touch_range_targets
+                        t_list.append(distanceTarget(distance=dist, x=fa, y=fb,
+                                                     occupied_by_group=t_fm.occupied_by,
+                                                     occupied_by_index=t_fm.occupied_by_index,
+                                                     in_melee=in_melee,
+                                                     used_ranged=used_ranged,
+                                                     in_need=in_need))
+                    elif dist >= 8 and not in_melee:
+                        jdict[f"added_to_ranged_targets_{t_cnt}"] = "True"
+                        t_list = distance_from_player.ranged_targets
+                        t_list.append(distanceTarget(distance=dist, x=fa, y=fb,
+                                                     occupied_by_group=t_fm.occupied_by,
+                                                     occupied_by_index=t_fm.occupied_by_index,
+                                                     in_melee=in_melee,
+                                                     used_ranged=used_ranged,
+                                                     in_need=in_need))
+                elif tmp_player.alive:  # these are our chums
+                    t_namestr = (f"{tmp_player.get_name()} {self.field_map[fx].occupied_by}"
+                                 f" {self.field_map[fx].occupied_by_index}")
+                    jdict[f"occupied_by_{t_cnt}"] = t_namestr
+                    fa, fb = self.get_grid_position(fx)
+                    dist = calculate_distance(distance_from_player.x, distance_from_player.y, fa, fb)
+                    jdict[f"point_{t_cnt}"] = f"[{fa}][{fb}]"
+                    jdict[f"distance_{t_cnt}"] = dist
+                    t_fm = self.field_map[fx]
+                    distance_from_player.chums.append(distanceTarget(distance=dist, x=fa, y=fb,
+                                                                 occupied_by_group=t_fm.occupied_by,
+                                                                 occupied_by_index=t_fm.occupied_by_index,
+                                                                 in_melee=in_melee,
+                                                                 used_ranged=used_ranged,
+                                                                 in_need=in_need))
+                    if dist == 5:
+                        jdict[f"added_to_touch_range_chums_{t_cnt}"] = "True"
+                        t_list = distance_from_player.touch_range_chums
+                        t_list.append(distanceTarget(distance=dist, x=fa, y=fb,
+                                                     occupied_by_group=t_fm.occupied_by,
+                                                     occupied_by_index=t_fm.occupied_by_index,
+                                                     in_melee=in_melee,
+                                                     used_ranged=used_ranged,
+                                                     in_need=in_need))
+                        if in_need:
+                            jdict[f"added_to_touch_range_chums_in_need_{t_cnt}"] = "True"
+                            jdict[f"hit_point_pct_{t_cnt}"] = t_hp_pct
+                            t_list = distance_from_player.touch_range_chums_in_need
+                            t_list.append(distanceTarget(distance=dist, x=fa, y=fb,
+                                                         occupied_by_group=t_fm.occupied_by,
+                                                         occupied_by_index=t_fm.occupied_by_index,
+                                                         in_melee=in_melee,
+                                                         used_ranged=used_ranged,
+                                                         in_need=in_need))
+        distance_from_player.targets.sort(key=lambda x: getattr(x, 'distance'))
+        distance_from_player.ranged_targets.sort(key=lambda  x: getattr(x, 'distance'))
+        distance_from_player.chums.sort(key=lambda x: getattr(x, 'distance'))
         self.ctx.crumbs[-1].add_audit(json_dict=jdict)
-        return dist_list
+        return distance_from_player
 
     @ctx_decorator
     def add_to_initiative_list(self, src_single, source_list_name: str,
@@ -556,15 +634,18 @@ class Encounter(object):
 
             if cur_active.alive and cur_active.cur_hit_points > 0:
 
-                dl = (self.get_target_distance_array(my_x=self.initiative[initiative_ind][4],
-                                                     my_y=self.initiative[initiative_ind][5],
+                # dl = (self.get_target_distance_array(my_x=self.initiative[initiative_ind][4],
+                #                                      my_y=self.initiative[initiative_ind][5],
+                #                                      target_name=target_array_name))
+
+                dl = (self.get_target_distance_array(player_initiative_record=self.initiative[initiative_ind],
                                                      target_name=target_array_name))
 
-                turn_audit["closest_opponent_distance"] = dl[0][0]
-                turn_audit["target_location"] = f"[{dl[0][1]}][{dl[0][2]}]"
-                t_tmp = self.get_player(dl[0][3], dl[0][4])
+                turn_audit["closest_opponent_distance"] = dl.targets[0].distance
+                turn_audit["target_location"] = f"[{dl.targets[0].x}][{dl.targets[0].y}]"
+                t_tmp = self.get_player(dl.targets[0].occupied_by_group, dl.targets[0].occupied_by_index)
                 turn_audit["target_name"] = t_tmp.get_name()
-                target_name_str = self.get_name_str(dl[0][3], dl[0][4])
+                target_name_str = self.get_name_str(dl.targets[0].occupied_by_group, dl.targets[0].occupied_by_index)
                 msg = (f"{summary_indent}{cur_active_name_str} targeted {target_name_str}"
                        f" {turn_audit['target_location']}, distance: {turn_audit['closest_opponent_distance']}")
                 self.summary_entry(msg)
@@ -592,26 +673,25 @@ class Encounter(object):
                 turn_audit["movement_starting_location"] = (
                     f"[{self.initiative[initiative_ind][4]}][{self.initiative[initiative_ind][5]}]")
 
-                dl_in_melee = []
-                for p in dl:
-                    if self.is_in_melee(self.get_player(p[3], p[4])):
-                        q = True
-                    else:
-                        q = False
-                    dl_in_melee.append(q)
-                dl_in_ranged = []
-                for p in dl:
-                    if self.get_player(p[3], p[4]).stats.ranged_attack_attempts > 0:
-                        q = True
-                    else:
-                        q = False
-                    dl_in_ranged.append(q)
+                # dl_in_melee = []
+                # for p in dl:
+                #     if self.is_in_melee(self.get_player(p[3], p[4])):
+                #         q = True
+                #     else:
+                #         q = False
+                #     dl_in_melee.append(q)
+                # dl_in_ranged = []
+                # for p in dl:
+                #     if self.get_player(p[3], p[4]).stats.ranged_attack_attempts > 0:
+                #         q = True
+                #     else:
+                #         q = False
+                #     dl_in_ranged.append(q)
 
                 avail_mvmt = self.movement(avail_movement=avail_mvmt,
                                            cur_active=cur_active,
                                            cur_init=self.initiative[initiative_ind],
-                                           dest_list=dl,
-                                           melee_list = dl_in_melee)
+                                           distance_from_player=dl)
                 if turn_audit["movement_available"] != avail_mvmt:
                     msg = (f"{summary_indent}{cur_active_name_str} moved from "
                            f"{turn_audit['movement_starting_location']} to "
@@ -630,9 +710,7 @@ class Encounter(object):
                 # If they don't have a ranged weapon or spell attack
                 # they must be a melee fighter.  When not in melee range
                 # use action for movement.
-                cur_action = cur_active.get_action(dist_list=dl,
-                                                   melee_list=dl_in_melee,
-                                                   ranged_list=dl_in_ranged)
+                cur_action = cur_active.get_action(distance_from_player=dl)
 
                 turn_audit['action'] = cur_action
                 turn_audit["action_waiting"] = False
@@ -654,8 +732,7 @@ class Encounter(object):
                     avail_mvmt = self.movement(avail_movement=avail_mvmt,
                                                cur_active=cur_active,
                                                cur_init=self.initiative[initiative_ind],
-                                               dest_list=dl,
-                                               melee_list = dl_in_melee)
+                                               distance_from_player=dl)
 
                     msg = (f"{summary_indent}{cur_active_name_str} chose movement as their action. "
                            f"Moving from {mvmt_from} to "
@@ -681,7 +758,8 @@ class Encounter(object):
                                         dl[0][3], dl[0][4]])
                 elif cur_action == 'Melee':
                     turn_audit["in_melee"] = True
-                    turn_audit["in_melee_with"] = self.get_player(dl[0][3], dl[0][4]).get_name()
+                    turn_audit["in_melee_with"] = self.get_player(dl.targets[0].occupied_by_group,
+                                                                  dl.targets[0].occupied_by_index).get_name()
                     # do any superseding actions
                     s1 = self.get_waiting_for(initiative_ind=initiative_ind, waiting_for=waiting_for)
                     t_cnt = 1
@@ -718,27 +796,29 @@ class Encounter(object):
                                                        attacker_side=self.initiative[initiative_ind][0],
                                                        attacker_index=self.initiative[initiative_ind][1],
                                                        attack_type='Melee',
-                                                       target_side=dl[0][3], target_index=dl[0][4])
+                                                       target_side=dl.targets[0].occupied_by_group,
+                                                       target_index=dl.targets[0].occupied_by_index)
                 elif cur_action == 'Ranged':
                     t_range = cur_active.get_ranged_range()
                     turn_audit["ranged_attack"] = True
                     if cur_active.cur_hit_points > 0:
                         m_cnt = 0
                         working_ranged_index = None
-                        for m in dl_in_melee:
+                        for m in dl.ranged_targets:
                             if (working_ranged_index is None and
                                     m is False and
-                                    (t_range >= dl[m_cnt][0] > 8)):
+                                    (t_range >= dl.ranged_targets[m_cnt].distance > 8)):
                                 working_ranged_index = m_cnt
                             m_cnt += 1
-                        turn_audit["targeting"] = self.get_player(dl[working_ranged_index][3],
-                                                                  dl[working_ranged_index][4]).get_name()
+                        t_tgt = dl.ranged_targets[working_ranged_index]
+                        turn_audit["targeting"] = self.get_player(t_tgt.occupied_by_group,
+                                                                  t_tgt.occupied_by_index).get_name()
                         self.handle_turn_attack_action(turn_audit=turn_audit,
                                                        attacker_side=self.initiative[initiative_ind][0],
                                                        attacker_index=self.initiative[initiative_ind][1],
                                                        attack_type='Ranged',
-                                                       target_side=dl[working_ranged_index][3],
-                                                       target_index=dl[working_ranged_index][4])
+                                                       target_side=t_tgt.occupied_by_group,
+                                                       target_index=t_tgt.occupied_by_index)
 
             elif cur_active.alive:  # currently alive but less than 1 hit point
                 t_death_save_passed_cnt = cur_active.death_save_passed_cnt
@@ -826,12 +906,15 @@ class Encounter(object):
                 t_suc = "succeeded "
             msg = f"{summary_indent}{attacker_name_str} {t_suc}{msg}"
 
-            turn_audit[f"{audit_key_prefix}{attack_type}_attack_defense_successful{audit_key_suffix}"] = successful_defend
+            t_key = f"{audit_key_prefix}{attack_type}_attack_defense_successful{audit_key_suffix}"
+            turn_audit[t_key] = successful_defend
 
             hp_impact = (hit_points_before - target.cur_hit_points)
             if not successful_defend:
-                turn_audit[f"{audit_key_prefix}{attack_type}_attack_damage{audit_key_suffix}"] = active_attack.possible_damage
-                turn_audit[f"{audit_key_prefix}hit_point_impact{audit_key_suffix}"] = hp_impact
+                t_key = f"{audit_key_prefix}{attack_type}_attack_damage{audit_key_suffix}"
+                turn_audit[t_key] = active_attack.possible_damage
+                t_key = f"{audit_key_prefix}hit_point_impact{audit_key_suffix}"
+                turn_audit[t_key] = hp_impact
                 turn_audit[f"{audit_key_prefix}hit_points_after_attack{audit_key_suffix}"] = target.cur_hit_points
                 self.stats.inc_attack_successes(attacker_side)
                 attacker.inc_damage_dealt(damage_type=active_attack.damage_type,
@@ -897,6 +980,13 @@ class Encounter(object):
     def get_melee_with(self, player):
         return self.melee_with[player.get_name()]
 
+    def has_used_ranged_weapons(self, player):
+        if player.stats.ranged_attack_attempts > 0:
+            return_value = True
+        else:
+            return_value = False
+        return return_value
+
     @ctx_decorator
     def add_to_melee_with(self, player, the_target_player):
         if player.get_name() in self.melee_with.keys():
@@ -932,7 +1022,7 @@ class Encounter(object):
                 self.melee_with[the_target_player.get_name()].remove(player.get_name())
 
     @ctx_decorator
-    def movement(self, avail_movement, cur_active, cur_init, dest_list, melee_list):
+    def movement(self, avail_movement, cur_active, cur_init, distance_from_player):
         player_combat_preference = cur_active.get_combat_preference()
 
         jdict = {"character": cur_active.get_name(),
@@ -941,7 +1031,7 @@ class Encounter(object):
                  "player_combat_preference": player_combat_preference}
         # with self.tracer.span(name='movement'):
         if cur_init[2]:     # if they've figured out what's going on.
-            op_dist = dest_list[0][0]
+            op_dist = distance_from_player.targets[0].distance
             t_range = cur_active.get_ranged_range()
             if cur_active.ranged_ammunition_amt is None:
                 ranged_ammunition_amt = 0
@@ -951,7 +1041,7 @@ class Encounter(object):
             if (player_combat_preference == 'Mixed'
                     and (op_dist > t_range or
                          ranged_ammunition_amt == 0 or
-                         all(melee_list) is True)):  # if all opponents are in melee, move.
+                         distance_from_player.are_all_targets_in_melee() is True)):  # if all opps are in melee, move.
                 conditional_mvmt = True
             else:
                 conditional_mvmt = False
@@ -959,7 +1049,7 @@ class Encounter(object):
             if (player_combat_preference != 'Melee' and
                     op_dist <= t_range and
                     ranged_ammunition_amt > 0 and
-                    not all(melee_list)): # not all opponents are in melee.
+                    not distance_from_player.are_all_targets_in_melee()):  # not all opponents are in melee.
                 ranged_hold = True
             else:
                 ranged_hold = False
@@ -976,11 +1066,11 @@ class Encounter(object):
             if player_in_melee or ranged_hold:
                 # if the character is diagonally positioned,
                 # move them so that they are square to the target
-                if 10 > dest_list[0][0] > 5:
+                if 10 > distance_from_player.targets[0].distance > 5:
                     cur_x = int(cur_init[4])
                     cur_y = int(cur_init[5])
-                    tgt_x = int(dest_list[0][1])
-                    tgt_y = int(dest_list[0][2])
+                    tgt_x = int(distance_from_player.targets[0].x)
+                    tgt_y = int(distance_from_player.targets[0].y)
                     # to be lined up, either the x or y point need to match
                     # and the other would be different by 1.
                     # since we know these are diagonal, swapping x or y
@@ -1000,13 +1090,14 @@ class Encounter(object):
                         cur_x = coordinates_to_use[0]
                         cur_y = coordinates_to_use[1]
                         avail_movement -= 1
-                        dest_list[0][0] = calculate_distance(
+                        distance_from_player.targets[0].distance = calculate_distance(
                             cur_x, cur_y, tgt_x, tgt_y)
                         cur_init[4] = cur_x
                         cur_init[5] = cur_y
+                        t_tgt = distance_from_player.targets[0]
                         self.add_to_melee_with(player=cur_active,
-                                               the_target_player=self.get_player(dest_list[0][3],
-                                                                                 dest_list[0][4]))
+                                               the_target_player=self.get_player(t_tgt.occupied_by_group,
+                                                                                 t_tgt.occupied_by_index))
 
             else:
                 cur_x = int(cur_init[4])
@@ -1015,22 +1106,22 @@ class Encounter(object):
                 if player_combat_preference == 'Melee' or conditional_mvmt:
                     # run straight towards closest enemy
                     # set destination x and y
-                    dest_x = int(dest_list[0][1])
-                    dest_y = int(dest_list[0][2])
+                    dest_x = int(distance_from_player.targets[0].x)
+                    dest_y = int(distance_from_player.targets[0].y)
                 else:
                     # try to stay in ranged range distance.
                     # set destination x and y
-                    t_x = int(dest_list[0][1])
+                    t_x = int(distance_from_player.targets[0].x)
                     t_dist_x = t_x - cur_x
                     abs_t_dist_x = abs(t_dist_x)
                     if abs_t_dist_x < 12:
-                        dest_x = int(dest_list[0][1])
+                        dest_x = t_x
                     else:
                         t_dir_x = 1 if (t_dist_x >= 0) else -1
                         dest_x = t_x + (t_dir_x * t_range)
-                    dest_y = int(dest_list[0][2])
+                    dest_y = int(distance_from_player.targets[0].y)
 
-                if avail_movement > 0 and dest_list[0][0] > 5:
+                if avail_movement > 0 and distance_from_player.targets[0].distance > 5:
                     mvmt = True
                 else:
                     mvmt = False
@@ -1050,8 +1141,10 @@ class Encounter(object):
                     if dist_x == 0 and dist_y == 0:
                         mvmt = False
                     elif abs_dist_x <= 1 and abs_dist_y <= 1:
+                        t_tgt = distance_from_player.targets[0]
                         self.add_to_melee_with(player=cur_active,
-                                               the_target_player=self.get_player(dest_list[0][3], dest_list[0][4]))
+                                               the_target_player=self.get_player(t_tgt.occupied_by_group,
+                                                                                 t_tgt.occupied_by_index))
                         mvmt = False
                     elif abs_dist_x > abs_dist_y:
                         pref_ang_axis = 'Y'
@@ -1106,7 +1199,7 @@ class Encounter(object):
                                 cur_y = tl_y[pi]
                                 avail_movement -= 1
                                 mvmt = False if (avail_movement == 0) else True
-                                dest_list[0][0] = calculate_distance(
+                                distance_from_player.targets[0].distance = calculate_distance(
                                                     cur_x, cur_y, dest_x, dest_y)
                                 move_success = True
                                 break

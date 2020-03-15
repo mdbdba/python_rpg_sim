@@ -102,6 +102,7 @@ class Character(object):
         self.armor = None
         self.shield = None
         self.set_finesse_ability()
+        self.ranged_weapon_range_dict = {}
 
         self.relentless_uses_available = 0
         self.lucky_uses_available = 0
@@ -577,7 +578,6 @@ class Character(object):
             amount = 0
             jdict['modification_due_to_damage_type'] = "immune"
 
-
         jdict['used_amount'] = amount
         jdict['from_unconscious'] = self.unconscious_ind
         jdict['from_stabilized'] = self.stabilized
@@ -614,9 +614,9 @@ class Character(object):
         return f'{self.get_name()}({self.cur_hit_points}/{self.hit_points})'
 
     @ctx_decorator
-    def get_action(self, dist_list, melee_list, ranged_list):
+    def get_action(self, distance_from_player):
         ret_val = "Undecided"
-        op_dist = dist_list[0][0]
+        op_dist = distance_from_player.targets[0].distance
         jdict = {
             "character_alive": self.alive,
             "character_stabilized": self.stabilized,
@@ -631,7 +631,7 @@ class Character(object):
             if op_dist > self.cur_movement:
                 ret_val = "Movement"
             elif (self.cur_movement >= op_dist > 8
-                  and not ranged_list[0]):
+                  and not distance_from_player.target[0].used_range):
                 ret_val = "Wait on Melee"
             elif op_dist <= 8:
                 ret_val = "Melee"
@@ -646,14 +646,14 @@ class Character(object):
 
             m_cnt = 0
             working_ranged_index = None
-            for m in melee_list:
+            for m in distance_from_player.ranged_targets:
                 if (op_dist >= 8 and
                         working_ranged_index is None and
                         m is False and
-                        (t_range >= dist_list[m_cnt][0] > 8) and
+                        (t_range >= m.distance > 8) and
                         self.ranged_ammunition_amt > 0):
                     working_ranged_index = m_cnt
-                    op_dist2 = dist_list[m_cnt][0]
+                    op_dist2 = m.distance
                 m_cnt += 1
 
             if op_dist > t_range and op_dist2 > t_range:
@@ -664,8 +664,10 @@ class Character(object):
                 ret_val = "Movement"
             elif working_ranged_index is not None:
                 ret_val = "Ranged"
-                jdict["Ranged_target_change_team"] = dist_list[working_ranged_index][1]
-                jdict["Ranged_target_change_index"] = dist_list[working_ranged_index][2]
+
+                t_tgt = distance_from_player.ranged_targets[working_ranged_index]
+                jdict["Ranged_target_change_team"] = t_tgt.occupied_by_group
+                jdict["Ranged_target_change_index"] = t_tgt.occupied_by_index
             elif op_dist <= 8:
                 ret_val = "Melee"
 
@@ -875,17 +877,22 @@ class Character(object):
         t_rw = self.get_ranged_weapon()
         jdict["ranged weapon"] = t_rw
         if t_rw != "NotDefined":
-            sql = ("select range_1 from lu_weapon "
-                   f"where name = '{t_rw}' " 
-                   "and (category like '%Ranged'"
-                   "  or  (category like '%Melee' and range_1 is not null))")
-            res = self.db.query(sql)
-            if res is not None:
-                jdict["query_result"] = res[0][0]
-                ret_val = res[0][0]
+            if t_rw in self.ranged_weapon_range_dict.keys():
+                ret_val = self.ranged_weapon_range_dict[t_rw]
+                jdict["using_cached_result"] = self.ranged_weapon_range_dict[t_rw]
             else:
-                jdict["query_result"] = "NotDefined"
-                ret_val = None
+                sql = ("select range_1 from lu_weapon "
+                       f"where name = '{t_rw}' " 
+                       "and (category like '%Ranged'"
+                       "  or  (category like '%Melee' and range_1 is not null))")
+                res = self.db.query(sql)
+                if res is not None:
+                    jdict["query_result"] = res[0][0]
+                    self.ranged_weapon_range_dict[t_rw] = res[0][0]
+                    ret_val = res[0][0]
+                else:
+                    jdict["query_result"] = "NotDefined"
+                    ret_val = None
 
         else:
             ret_val = -1
