@@ -649,7 +649,7 @@ class Character(object):
             for m in distance_from_player.ranged_targets:
                 if (op_dist >= 8 and
                         working_ranged_index is None and
-                        m is False and
+                        m.in_melee is False and
                         (t_range >= m.distance > 8) and
                         self.ranged_ammunition_amt > 0):
                     working_ranged_index = m_cnt

@@ -358,97 +358,62 @@ class Encounter(object):
         # with self.tracer.span(name='get_target_distance_array'):
         cur_active = self.get_player(player_initiative_record[0], player_initiative_record[1])
         distance_from_player = distanceFromPlayer(player_name=cur_active.get_name(),
-                                              player_group=player_initiative_record[0],
-                                              player_index=player_initiative_record[1],
-                                              x=player_initiative_record[4],
-                                              y=player_initiative_record[5])
-        jdict = {"player_name": {distance_from_player.player_name},
+                                                  player_group=player_initiative_record[0],
+                                                  player_index=player_initiative_record[1],
+                                                  x=player_initiative_record[4],
+                                                  y=player_initiative_record[5])
+        jdict = {"player_name": {cur_active.get_name()},
                  "starting_point": f"[{distance_from_player.x}][{distance_from_player.y}]"}
         t_cnt = 1
         for fx in range(len(self.field_map)):
             if self.field_map[fx].occupied:
                 tmp_player = self.get_player(self.field_map[fx].occupied_by,
                                              self.field_map[fx].occupied_by_index)
-                t_hp_pct = (tmp_player.cur_hit_points / tmp_player.hit_points)
-                in_need = False
-                in_melee = False
-                used_ranged = False
                 if tmp_player.alive:
-                    if t_hp_pct < 66:
+                    t_hp_pct = float(tmp_player.cur_hit_points / tmp_player.hit_points)
+                    in_need = False
+                    if t_hp_pct < 0.66:
                         in_need = True
-                    in_melee = self.is_in_melee(tmp_player),
-                    used_ranged = self.has_used_ranged_weapons(tmp_player),
+                    in_melee = self.is_in_melee(tmp_player)
+                    used_ranged = self.has_used_ranged_weapons(tmp_player)
 
-                if self.field_map[fx].occupied_by == target_name and tmp_player.alive:
                     t_namestr = (f"{tmp_player.get_name()} {self.field_map[fx].occupied_by}"
                                  f" {self.field_map[fx].occupied_by_index}")
-                    jdict[f"occupied_by_{t_cnt}"] = t_namestr
                     fa, fb = self.get_grid_position(fx)
                     dist = calculate_distance(distance_from_player.x, distance_from_player.y, fa, fb)
                     jdict[f"point_{t_cnt}"] = f"[{fa}][{fb}]"
                     jdict[f"distance_{t_cnt}"] = dist
-                    t_fm = self.field_map[fx]
-                    t_list = distance_from_player.targets
-                    t_list.append(distanceTarget(distance=dist, x=fa, y=fb,
-                                                 occupied_by_group=t_fm.occupied_by,
-                                                 occupied_by_index=t_fm.occupied_by_index,
-                                                 in_melee=in_melee,
-                                                 used_ranged=used_ranged,
-                                                 in_need=in_need))
-                    if dist == 5:
-                        jdict[f"added_to_touch_range_targets_{t_cnt}"] = "True"
-                        t_list = distance_from_player.touch_range_targets
-                        t_list.append(distanceTarget(distance=dist, x=fa, y=fb,
-                                                     occupied_by_group=t_fm.occupied_by,
-                                                     occupied_by_index=t_fm.occupied_by_index,
-                                                     in_melee=in_melee,
-                                                     used_ranged=used_ranged,
-                                                     in_need=in_need))
-                    elif dist >= 8 and not in_melee:
-                        jdict[f"added_to_ranged_targets_{t_cnt}"] = "True"
-                        t_list = distance_from_player.ranged_targets
-                        t_list.append(distanceTarget(distance=dist, x=fa, y=fb,
-                                                     occupied_by_group=t_fm.occupied_by,
-                                                     occupied_by_index=t_fm.occupied_by_index,
-                                                     in_melee=in_melee,
-                                                     used_ranged=used_ranged,
-                                                     in_need=in_need))
-                elif tmp_player.alive:  # these are our chums
-                    t_namestr = (f"{tmp_player.get_name()} {self.field_map[fx].occupied_by}"
-                                 f" {self.field_map[fx].occupied_by_index}")
                     jdict[f"occupied_by_{t_cnt}"] = t_namestr
-                    fa, fb = self.get_grid_position(fx)
-                    dist = calculate_distance(distance_from_player.x, distance_from_player.y, fa, fb)
-                    jdict[f"point_{t_cnt}"] = f"[{fa}][{fb}]"
-                    jdict[f"distance_{t_cnt}"] = dist
                     t_fm = self.field_map[fx]
-                    distance_from_player.chums.append(distanceTarget(distance=dist, x=fa, y=fb,
-                                                                 occupied_by_group=t_fm.occupied_by,
-                                                                 occupied_by_index=t_fm.occupied_by_index,
-                                                                 in_melee=in_melee,
-                                                                 used_ranged=used_ranged,
-                                                                 in_need=in_need))
-                    if dist == 5:
-                        jdict[f"added_to_touch_range_chums_{t_cnt}"] = "True"
-                        t_list = distance_from_player.touch_range_chums
-                        t_list.append(distanceTarget(distance=dist, x=fa, y=fb,
-                                                     occupied_by_group=t_fm.occupied_by,
-                                                     occupied_by_index=t_fm.occupied_by_index,
-                                                     in_melee=in_melee,
-                                                     used_ranged=used_ranged,
-                                                     in_need=in_need))
-                        if in_need:
-                            jdict[f"added_to_touch_range_chums_in_need_{t_cnt}"] = "True"
-                            jdict[f"hit_point_pct_{t_cnt}"] = t_hp_pct
-                            t_list = distance_from_player.touch_range_chums_in_need
-                            t_list.append(distanceTarget(distance=dist, x=fa, y=fb,
-                                                         occupied_by_group=t_fm.occupied_by,
-                                                         occupied_by_index=t_fm.occupied_by_index,
-                                                         in_melee=in_melee,
-                                                         used_ranged=used_ranged,
-                                                         in_need=in_need))
+                    t_obj = distanceTarget(distance=dist, x=fa, y=fb,
+                                           occupied_by_group=t_fm.occupied_by,
+                                           occupied_by_index=t_fm.occupied_by_index,
+                                           in_melee=in_melee,
+                                           used_ranged=used_ranged,
+                                           in_need=in_need)
+
+                    if self.field_map[fx].occupied_by == target_name:
+                        distance_from_player.targets.append(t_obj)
+
+                        if dist == 5:
+                            jdict[f"added_to_touch_range_targets_{t_cnt}"] = "True"
+                            distance_from_player.touch_range_targets.append(t_obj)
+                        elif dist >= 8 and not in_melee:
+                            jdict[f"added_to_ranged_targets_{t_cnt}"] = "True"
+                            distance_from_player.ranged_targets.append(t_obj)
+                    else:  # these are our chums
+                        distance_from_player.chums.append(t_obj)
+                        if dist == 5 or dist == 0:
+                            jdict[f"added_to_touch_range_chums_{t_cnt}"] = "True"
+                            distance_from_player.touch_range_chums.append(t_obj)
+                            if in_need:
+                                jdict[f"added_to_touch_range_chums_in_need_{t_cnt}"] = "True"
+                                jdict[f"hit_point_pct_{t_cnt}"] = t_hp_pct
+                                distance_from_player.touch_range_chums_in_need.append(t_obj)
+                    t_cnt += 1
+
         distance_from_player.targets.sort(key=lambda x: getattr(x, 'distance'))
-        distance_from_player.ranged_targets.sort(key=lambda  x: getattr(x, 'distance'))
+        distance_from_player.ranged_targets.sort(key=lambda x: getattr(x, 'distance'))
         distance_from_player.chums.sort(key=lambda x: getattr(x, 'distance'))
         self.ctx.crumbs[-1].add_audit(json_dict=jdict)
         return distance_from_player
@@ -806,7 +771,7 @@ class Encounter(object):
                         working_ranged_index = None
                         for m in dl.ranged_targets:
                             if (working_ranged_index is None and
-                                    m is False and
+                                    m.in_melee is False and
                                     (t_range >= dl.ranged_targets[m_cnt].distance > 8)):
                                 working_ranged_index = m_cnt
                             m_cnt += 1
@@ -1007,8 +972,9 @@ class Encounter(object):
         # remove all references for this player from melee_with.  Whether key or value
         self.melee_with[player.get_name()] = []
         for subname in self.melee_with.keys():
-            if any(player.get_name() in sublist for sublist in self.melee_with[subname]):
-                self.melee_with[subname].remove(player.get_name())
+            for sublist in self.melee_with[subname]:
+                if player.get_name() in sublist:
+                    self.melee_with[subname].remove(player.get_name())
 
     def remove_from_melee_with(self, player, the_target_player):
         if player.get_name() in self.melee_with.keys():
@@ -1020,6 +986,7 @@ class Encounter(object):
             if (any(player.get_name() in sublist
                     for sublist in self.melee_with[the_target_player.get_name()])):
                 self.melee_with[the_target_player.get_name()].remove(player.get_name())
+
 
     @ctx_decorator
     def movement(self, avail_movement, cur_active, cur_init, distance_from_player):
