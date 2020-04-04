@@ -25,9 +25,44 @@
             referencedTableName="character"/>
 
     </changeSet>
-        <changeSet author="mdbdba" id="party_2">
+    <changeSet author="mdbdba" id="party_2">
         <sql splitStatements="true"
              stripComments="true">grant insert, update, delete on "party" to app;
+        </sql>
+    </changeSet>
+    <changeSet author="mdbdba" id="party_3">
+        <createView
+            replaceIfExists="true"
+            schemaName="dnd_5e"
+            viewName="v_party_summary">
+            with tb as ( select distinct name from party order by name), tb2 as (select 	name, character_id,
+				rank() over (partition by name order by character_id) as orderby
+		from party)
+select tb.name, r.race ||' '|| r.class as character_desc_1,
+        r1.race ||' '|| r1.class as character_desc_2,
+        r2.race ||' '|| r2.class as character_desc_3,
+        r3.race ||' '|| r3.class as character_desc_4,
+        r4.race ||' '|| r4.class as character_desc_5,
+        r5.race ||' '|| r5.class as character_desc_6,
+        r6.race ||' '|| r6.class as character_desc_7
+        from tb
+        join tb2 as a on tb.name = a.name and a.orderby =1
+        left join character as r on a.character_id = r.id
+        left join tb2 as b on tb.name = b.name and b.orderby =2
+        left join character as r1 on b.character_id = r1.id
+        left join tb2 as c on tb.name = c.name and c.orderby =3
+        left join character as r2 on c.character_id = r2.id
+        left join tb2 as d on tb.name = d.name and d.orderby =4
+        left join character as r3 on d.character_id = r3.id
+        left join tb2 as e on tb.name = e.name and e.orderby =5
+        left join character as r4 on e.character_id = r4.id
+        left join tb2 as f on tb.name = f.name and f.orderby =6
+        left join character as r5 on f.character_id = r5.id
+        left join tb2 as g on tb.name = g.name and g.orderby =7
+        left join character as r6 on g.character_id = r6.id
+        </createView>
+        <sql splitStatements="true"
+             stripComments="true">grant select on "v_party_summary" to app;
         </sql>
     </changeSet>
 </databaseChangeLog>

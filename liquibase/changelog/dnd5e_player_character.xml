@@ -42,4 +42,18 @@
             tableName="player_character"/>
 
     </changeSet>
+    <changeSet author="mdbdba" id="player_character_2">
+            <addColumn
+                    schemaName="dnd_5e"
+                    tableName="player_character">
+                    <column name="created_by_webuser" type="varchar(64)"/>
+            </addColumn>
+            <addDefaultValue
+                columnDataType="varchar(64)"
+                columnName="created_by_webuser"
+                defaultValue="Default"
+                schemaName="dnd_5e"
+                tableName="player_character"/>
+
+    </changeSet>
 </databaseChangeLog>

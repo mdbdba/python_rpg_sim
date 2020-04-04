@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet author="mdbdba" id="character_request_1">
+        <createTable
+                schemaName="dnd_5e"
+                tableName="character_request">
+            <column name="id" type="bigint" autoIncrement="true" startWith="1"/>
+            <column name="name" type="varchar(132)"/>
+            <column name="gender" type="varchar(2)"/>
+            <column name="race" type="varchar(64)"/>
+            <column name="class" type="varchar(64)"/>
+            <column name="level" type="int"/>
+            <column name="TTA" type="varchar(32)"/>
+            <column name="raw_ability_string" type="varchar(32)"/>
+            <column name="height" type="int"/>
+            <column name="weight" type="int"/>
+            <column name="alignment_abbrev" type="varchar(32)"/>
+            <column name="skin_tone" type="varchar(32)"/>
+            <column name="hair_color" type="varchar(32)"/>
+            <column name="hair_type" type="varchar(32)"/>
+            <column name="eye_color" type="varchar(32)"/>
+            <column name="ranged_weapon" type="varchar(64)"/>
+            <column name="melee_weapon" type="varchar(64)"/>
+            <column name="ranged_ammunition_type" type="varchar(64)"/>
+            <column name="ranged_ammunition_amt" type="int"/>
+            <column name="armor" type="varchar(64)"/>
+            <column name="shield" type="varchar(64)"/>
+            <column name="request_datetime" type="timestamp"/>
+            <column name="request_status" type="varchar(16)"/>
+            <column name="complete_datetime" type="timestamp"/>
+            <column name="character_id" type="bigint"/>
+        </createTable>
+        <addPrimaryKey
+            columnNames="id"
+            constraintName="character_request_pk"
+            schemaName="dnd_5e"
+            tableName="character_request"/>
+        <addDefaultValue
+                columnDataType="timestamp"
+                columnName="request_datetime"
+                defaultValue="now()"
+                schemaName="dnd_5e"
+                tableName="character_request"/>
+        <addDefaultValue
+                columnDataType="varchar(16)"
+                columnName="request_status"
+                defaultValue="new"
+                schemaName="dnd_5e"
+                tableName="character_request"/>
+
+        <rollback>
+            drop table dnd_5e.character_request cascade;
+        </rollback>
+    </changeSet>
+    <changeSet author="mdbdba" id="character_request_2">
+        <sql splitStatements="true"
+             stripComments="true">grant insert, update, delete on "character_request" to app;
+GRANT USAGE, SELECT ON SEQUENCE character_request_id_seq TO app;
+        </sql>
+    </changeSet>
+    <changeSet author="mdbdba" id="character_request_3">
+        <renameColumn schemaName="dnd_5e" tableName="character_request"
+                      oldColumnName="race" newColumnName="race_candidate" />
+        <renameColumn schemaName="dnd_5e" tableName="character_request"
+                      oldColumnName="class" newColumnName="class_candidate" />
+    </changeSet>
+    <changeSet author="mdbdba" id="character_request_4">
+        <renameColumn schemaName="dnd_5e" tableName="character_request"
+                      oldColumnName="raw_ability_string" newColumnName="ability_array_str" />
+        <addDefaultValue
+                columnDataType="varchar(132)"
+                columnName="name"
+                defaultValue="Random"
+                schemaName="dnd_5e"
+                tableName="character_request"/>
+        <addDefaultValue
+                columnDataType="varchar(2)"
+                columnName="gender"
+                defaultValue="Random"
+                schemaName="dnd_5e"
+                tableName="character_request"/>
+        <addDefaultValue
+                columnDataType="varchar(64)"
+                columnName="race_candidate"
+                defaultValue="Random"
+                schemaName="dnd_5e"
+                tableName="character_request"/>
+        <addDefaultValue
+                columnDataType="varchar(64)"
+                columnName="class_candidate"
+                defaultValue="Random"
+                schemaName="dnd_5e"
+                tableName="character_request"/>
+        <addDefaultValue
+                columnDataType="int"
+                columnName="level"
+                defaultValue="1"
+                schemaName="dnd_5e"
+                tableName="character_request"/>
+        <addDefaultValue
+                columnDataType="varchar(32)"
+                columnName="TTA"
+                defaultValue="Random"
+                schemaName="dnd_5e"
+                tableName="character_request"/>
+        <addDefaultValue
+                columnDataType="varchar(32)"
+                columnName="ability_array_str"
+                defaultValue="Common"
+                schemaName="dnd_5e"
+                tableName="character_request"/>
+        <addDefaultValue
+                columnDataType="int"
+                columnName="height"
+                defaultValue="-1"
+                schemaName="dnd_5e"
+                tableName="character_request"/>
+        <addDefaultValue
+                columnDataType="int"
+                columnName="weight"
+                defaultValue="-1"
+                schemaName="dnd_5e"
+                tableName="character_request"/>
+        <addDefaultValue
+                columnDataType="varchar(32)"
+                columnName="alignment_abbrev"
+                defaultValue="Random"
+                schemaName="dnd_5e"
+                tableName="character_request"/>
+        <addDefaultValue
+                columnDataType="varchar(32)"
+                columnName="skin_tone"
+                defaultValue="Random"
+                schemaName="dnd_5e"
+                tableName="character_request"/>
+        <addDefaultValue
+                columnDataType="varchar(32)"
+                columnName="hair_color"
+                defaultValue="Random"
+                schemaName="dnd_5e"
+                tableName="character_request"/>
+        <addDefaultValue
+                columnDataType="varchar(32)"
+                columnName="hair_type"
+                defaultValue="Random"
+                schemaName="dnd_5e"
+                tableName="character_request"/>
+        <addDefaultValue
+                columnDataType="varchar(32)"
+                columnName="eye_color"
+                defaultValue="Random"
+                schemaName="dnd_5e"
+                tableName="character_request"/>
+        <addDefaultValue
+                columnDataType="varchar(64)"
+                columnName="ranged_weapon"
+                defaultValue="Default"
+                schemaName="dnd_5e"
+                tableName="character_request"/>
+        <addDefaultValue
+                columnDataType="varchar(64)"
+                columnName="melee_weapon"
+                defaultValue="Default"
+                schemaName="dnd_5e"
+                tableName="character_request"/>
+        <addDefaultValue
+                columnDataType="varchar(64)"
+                columnName="ranged_ammunition_type"
+                defaultValue="Default"
+                schemaName="dnd_5e"
+                tableName="character_request"/>
+        <addDefaultValue
+                columnDataType="int"
+                columnName="ranged_ammunition_amt"
+                defaultValue="-1"
+                schemaName="dnd_5e"
+                tableName="character_request"/>
+        <addDefaultValue
+                columnDataType="varchar(64)"
+                columnName="armor"
+                defaultValue="Random"
+                schemaName="dnd_5e"
+                tableName="character_request"/>
+    </changeSet>
+    <changeSet author="mdbdba" id="character_request_5">
+        <renameColumn schemaName="dnd_5e" tableName="character_request"
+                      oldColumnName="name" newColumnName="character_name" />
+    </changeSet>
+    <changeSet author="mdbdba" id="character_request_6">
+            <addColumn
+                    schemaName="dnd_5e"
+                    tableName="character_request">
+                    <column name="created_by_webuser" type="varchar(64)"/>
+            </addColumn>
+            <addDefaultValue
+                columnDataType="varchar(64)"
+                columnName="created_by_webuser"
+                defaultValue="Default"
+                schemaName="dnd_5e"
+                tableName="character_request"/>
+
+    </changeSet>
+
+</databaseChangeLog>

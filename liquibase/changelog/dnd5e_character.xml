@@ -50,5 +50,19 @@
 GRANT USAGE, SELECT ON SEQUENCE character_id_seq TO app;
         </sql>
     </changeSet>
+    <changeSet author="mdbdba" id="character_3">
+            <addColumn
+                    schemaName="dnd_5e"
+                    tableName="character">
+                    <column name="created_by_webuser" type="varchar(64)"/>
+            </addColumn>
+            <addDefaultValue
+                columnDataType="varchar(64)"
+                columnName="created_by_webuser"
+                defaultValue="Default"
+                schemaName="dnd_5e"
+                tableName="character"/>
+
+    </changeSet>
 
 </databaseChangeLog>
