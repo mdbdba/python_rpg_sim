@@ -176,7 +176,7 @@ class Series(object):
                 # t_dict = Opponent.get_damage_taken()
                 # print(f"  {Opponent.get_name()} damage taken ({t_dict['Total']}): {Opponent.get_damage_taken()}")
                 print(fix_dict_for_json(Opponent.stats.__dict__))
-            #print(e.get_characters_stats())
+            # print(e.get_characters_stats())
             # self.stats.update_totals()
             self.logger.debug(ctx=self.ctx, msg='character_stats',
                               json_dict=fix_dict_for_json(e.get_characters_stats()))

@@ -18,6 +18,14 @@ class PointInTime:
 
 
 @dataclass
+class PointInTimeAttackRoll(PointInTime):
+    attacker_name: str
+    target_name: str
+    attack_type: str
+    base_roll: int
+    adjustment_values: Dict = field(default_factory=get_empty_dict)
+
+@dataclass
 class PointInTimeAmount(PointInTime):
     amount: int
 

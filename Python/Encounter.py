@@ -151,6 +151,75 @@ class Encounter(object):
 
         return characters_stats_dict
 
+    def print_characters_stats(self):
+        party_dict = self.get_characters_stats()
+        for p in ['Heroes', 'Opponents']:
+            print(f'{p}:')
+            for c in party_dict[p]:
+                header = (f"study_instance_id: {c['study_instance_id']} |"
+                          f" series_id: {c['series_id']} |"
+                          f" encounter_id: {c['encounter_id']} |"
+                          f" side: {c['side']}")
+                print(header)
+                print(f"character_name: {c['character_name']} character_id: {c['character_id']}")
+                t_msg = (f"character_race: {c['character_race']} character_class: {c['character_class']} "
+                         f"lvl: {c['character_level']}")
+                print(t_msg)
+                print(f"ranged_attack_attempts: {c['ranged_attack_attempts']}")
+                print(f"attacks: {c['attack_successes']}/{c['attack_attempts']}")
+                for u in c['attack_rolls']:
+                    print(f"\trd: {u.round}, turn: {u.turn}, type: {u.attack_type}, attacker: {u.attacker_name}, " 
+                          f"target: {u.target_name}, base_roll: {u.base_roll}, adjustments: {u.adjustment_values}")
+
+                print(f"attack_nat20_count: {c['attack_nat20_count']} attack_nat1_count: {c['attack_nat1_count']}")
+                print(f"total_healing_received: {c['total_healing_received']} {c['healing_received']}")
+                print(f"defense: {c['defense_successes']} / {c['defense_attempts']} {c['defense_rolls']}")
+                print(f"defense_nat20_count: {c['defense_nat20_count']}")
+                print(f"defense_nat1_count: {c['defense_nat1_count']}")
+                tmp_str = ''
+                for u in c['unconscious_list']:
+                    tmp_str = f'{tmp_str}(rd {u.round}, turn: {u.turn}), '
+
+                if len(tmp_str) > 2:
+                    tmp_str = tmp_str[:-2]
+                print(f'knocked_unconscious: {tmp_str}')
+                # 'unconscious_list': [PointInTime(round=6, turn=1)],
+                tmp_str = ''
+                for u in c['death_list']:
+                    tmp_str = f'{tmp_str}(rd {u.round}, turn: {u.turn}), '
+
+                if len(tmp_str) > 2:
+                    tmp_str = tmp_str[:-2]
+                print(f'died: {tmp_str}')
+                # 'death_list': [PointInTime(round=7, turn=1)],
+                tmp_str = ''
+                lu_value = 'damage_dealt_dict'
+                for u in c[lu_value].keys():
+                    if c[lu_value][u] > 0:
+                        tmp_str = f"{tmp_str} {u}: {c[lu_value][u]}, "
+
+                if len(tmp_str) > 2:
+                    tmp_str = tmp_str[:-2]
+                print(f'{lu_value}: {tmp_str}')
+                # 'damage_dealt_dict': {'Acid': 0, 'Bludgeoning': 0, 'Cold': 0, 'Fire': 0, 'Force': 0, 'Ligtning': 0,
+                #  'Necrotic': 0,
+                #             'Piercing': 0, 'Poison': 0, 'Psychic': 0, 'Radiant': 0, 'Slashing': 0, 'Thunder': 0,
+                #             'Total': 0, 'Unknown': 0},
+                tmp_str = ''
+                lu_value = 'damage_taken_dict'
+                for u in c[lu_value].keys():
+                    if c[lu_value][u] > 0:
+                        tmp_str = f"{tmp_str} {u}: {c[lu_value][u]}, "
+
+                if len(tmp_str) > 2:
+                    tmp_str = tmp_str[:-2]
+                print(f'{lu_value}: {tmp_str}')
+                # 'damage_taken_dict': {'Acid': 0, 'Bludgeoning': 0, 'Cold': 0, 'Fire': 0, 'Force': 0, 'Ligtning': 0,
+                # 'Necrotic': 0,
+                #             'Piercing': 30, 'Poison': 0, 'Psychic': 0, 'Radiant': 0, 'Slashing': 0, 'Thunder': 0,
+                #             'Total': 30, 'Unknown': 0},
+                print(' ')
+
     def get_hero_count(self):
         return self.h_cnt
 
@@ -836,9 +905,13 @@ class Encounter(object):
                 t_vantage = 'Normal'
 
             if attack_type == 'Melee':
-                active_attack = attacker.default_melee_attack(vantage=t_vantage)
+                active_attack = attacker.default_melee_attack(vantage=t_vantage, target_name=target_name_str,
+                                                              encounter_round=self.ctx.round,
+                                                              encounter_turn=self.ctx.turn)
             else:  # attack_type == 'Ranged':
-                active_attack = attacker.default_ranged_attack(vantage=t_vantage)
+                active_attack = attacker.default_ranged_attack(vantage=t_vantage, target_name=target_name_str,
+                                                               encounter_round=self.ctx.round,
+                                                               encounter_turn=self.ctx.turn)
 
             msg = (f"with a {attack_type} attack on "
                    f"{target_name_str} using a {active_attack.weapon_name}")
@@ -860,9 +933,13 @@ class Encounter(object):
                 turn_audit[f"{audit_key_prefix}luck_was_used{audit_key_suffix}"] = True
                 msg = f"{msg} failed, but lucky caused a retry which"
                 if attack_type == 'Melee':
-                    active_attack = attacker.default_melee_attack(vantage=t_vantage, luck_retry=True)
+                    active_attack = attacker.default_melee_attack(vantage=t_vantage, target_name=target_name_str,
+                                                                  encounter_round=self.ctx.round,
+                                                                  encounter_turn=self.ctx.turn, luck_retry=True)
                 else:  # attack_type == 'Ranged':
-                    active_attack = attacker.default_ranged_attack(vantage=t_vantage, luck_retry=True)
+                    active_attack = attacker.default_ranged_attack(vantage=t_vantage, target_name=target_name_str,
+                                                                   encounter_round=self.ctx.round,
+                                                                   encounter_turn=self.ctx.turn, luck_retry=True)
                 successful_defend = target.defend(attack_obj=active_attack)
 
             if successful_defend:  # successful defend means the attack failed...
@@ -986,7 +1063,6 @@ class Encounter(object):
             if (any(player.get_name() in sublist
                     for sublist in self.melee_with[the_target_player.get_name()])):
                 self.melee_with[the_target_player.get_name()].remove(player.get_name())
-
 
     @ctx_decorator
     def movement(self, avail_movement, cur_active, cur_init, distance_from_player):
@@ -1202,6 +1278,9 @@ if __name__ == '__main__':
         for i in range(len(e1.winning_list)):
             if e1.winning_list[i].alive:
                 print(f'{e1.winning_list[i].get_name()}')
+        print(e1.print_characters_stats())
+
+        print(e1.stats)
 
     except Exception as error:
         exc_type, exc_value, exc_traceback = sys.exc_info()

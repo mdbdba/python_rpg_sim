@@ -69,13 +69,19 @@ class Foe(Character):
         return return_val
 
     @ctx_decorator
-    def default_melee_attack(self, vantage='Normal'):
-        return self.melee_attack(weapon_obj=self.melee_weapon_obj, vantage=vantage)
+    def default_melee_attack(self, target_name, encounter_round=-1, encounter_turn=-1,
+                             vantage='Normal', luck_retry=False):
+        return self.melee_attack(weapon_obj=self.melee_weapon_obj, target_name=target_name,
+                                 encounter_round=encounter_round, encounter_turn=encounter_turn,
+                                 vantage=vantage)
 
     @ctx_decorator
-    def default_ranged_attack(self, vantage='Normal'):
+    def default_ranged_attack(self, target_name, encounter_round=-1, encounter_turn=-1,
+                             vantage='Normal', luck_retry=False):
         self.stats.ranged_attack_attempts += 1
-        return self.ranged_attack(weapon_obj=self.ranged_weapon_obj, vantage=vantage)
+        return self.ranged_attack(weapon_obj=self.ranged_weapon_obj, target_name=target_name,
+                                 encounter_round=encounter_round, encounter_turn=encounter_turn,
+                                  vantage=vantage)
 
     @ctx_decorator
     def find_random(self, db, challenge_level):

@@ -5,8 +5,11 @@ from Attack import Attack
 from Die import Die
 from CharacterStats import CharacterStats
 from Ctx import RpgLogging
-from Ctx import Ctx, ctx_decorator
+from Ctx import Ctx
+from Ctx import ctx_decorator
+from PointInTimeAmount import PointInTimeAttackRoll
 
+import os
 import random
 import sys
 import traceback
@@ -709,7 +712,8 @@ class Character(object):
         return ret_val
 
     @ctx_decorator
-    def ranged_attack(self, weapon_obj, vantage='Normal', luck_retry=False):
+    def ranged_attack(self, weapon_obj, target_name, encounter_round=-1, encounter_turn=-1,
+                      vantage='Normal', luck_retry=False):
         # determine modifier
         # 1)  is this a martial weapon that needs specific proficiency
         #     if it is and the character has that, or the weapon is a standard
@@ -731,6 +735,10 @@ class Character(object):
 
         attempt = Attack(ctx=self.ctx, weapon_obj=weapon_obj, attack_modifier=modifier,
                          damage_modifier=damage_modifier,
+                         encounter_round=encounter_round,
+                         encounter_turn=encounter_turn,
+                         attack_type='Ranged',
+                         attacker_name=self.get_name(), target_name=target_name,
                          versatile_use_2handed=False, vantage=vantage)
         jdict['ranged_attack_value'] = attempt.attack_value
         jdict['ranged_possible_damage'] = attempt.possible_damage
@@ -741,7 +749,15 @@ class Character(object):
             self.stats.attack_nat20_count += 1
         if attempt.natural_value == 1:
             self.stats.attack_nat1_count += 1
-        attack_roll: tuple = (attempt.natural_value, {attempt.attack_modifier})
+        # attack_roll: tuple = (attempt.natural_value, {attempt.attack_modifier})
+        attack_roll = PointInTimeAttackRoll(round=attempt.encounter_round,
+                                            turn=attempt.encounter_turn,
+                                            attacker_name=attempt.attacker_name,
+                                            target_name=attempt.target_name,
+                                            attack_type=attempt.attack_type,
+                                            base_roll=attempt.natural_value,
+                                            adjustment_values={'attack_mod': attempt.attack_modifier,
+                                                               'luck_retry': luck_retry})
         self.stats.attack_rolls.append(attack_roll)
 
         self.ctx.crumbs[-1].add_audit(json_dict=jdict)
@@ -756,7 +772,8 @@ class Character(object):
         return False
 
     @ctx_decorator
-    def melee_attack(self, weapon_obj, vantage='Normal', luck_retry=False) -> Attack:
+    def melee_attack(self, weapon_obj, target_name, encounter_round=-1, encounter_turn=-1,
+                     vantage='Normal', luck_retry=False) -> Attack:
         # determine modifier
         # 1)  is this a martial weapon that needs specific proficiency
         #     if it is and the character has that, or the weapon is a standard
@@ -794,6 +811,10 @@ class Character(object):
 
         attempt = Attack(ctx=self.ctx, weapon_obj=weapon_obj,
                          attack_modifier=modifier, damage_modifier=damage_modifier,
+                         encounter_round=encounter_round,
+                         encounter_turn=encounter_turn,
+                         attacker_name=self.get_name(), target_name=target_name,
+                         attack_type='Melee',
                          versatile_use_2handed=v2h, vantage=vantage)
         # ret_val: tuple = (attempt.attack_value, attempt.possible_damage, attempt.damage_type)
 
@@ -805,7 +826,15 @@ class Character(object):
             self.stats.attack_nat1_count += 1
         if attempt.natural_value == 20:
             self.stats.attack_nat20_count += 1
-        attack_roll: tuple = (attempt.natural_value, {attempt.attack_modifier})
+        # attack_roll: tuple = (attempt.natural_value, {attempt.attack_modifier})
+        attack_roll = PointInTimeAttackRoll(round=attempt.encounter_round,
+                                            turn=attempt.encounter_turn,
+                                            attacker_name=attempt.attacker_name,
+                                            target_name=attempt.target_name,
+                                            attack_type=attempt.attack_type,
+                                            base_roll=attempt.natural_value,
+                                            adjustment_values={'attack_mod': attempt.attack_modifier,
+                                                               'luck_retry': luck_retry})
         self.stats.attack_rolls.append(attack_roll)
 
         self.ctx.crumbs[-1].add_audit(json_dict=jdict)
@@ -904,8 +933,9 @@ class Character(object):
 if __name__ == '__main__':
     logger_name = 'character_main_test'
     ctx = Ctx(app_username='character_class_init', logger_name=logger_name)
+    ctx.log_file_dir = os.path.expanduser('~/rpg/logs')
     logger = RpgLogging(logger_name=logger_name, level_threshold='debug')
-    logger.setup_logging()
+    logger.setup_logging(log_dir=ctx.log_file_dir)
     try:
         db = InvokePSQL()
         a1 = Character(db=db, ctx=ctx)
