@@ -8,6 +8,7 @@ from Ctx import RpgLogging
 from Ctx import Ctx
 from Ctx import ctx_decorator
 from PointInTimeAmount import PointInTimeAttackRoll
+from PointInTimeAmount import PointInTimeDefense
 
 import os
 import random
@@ -613,6 +614,8 @@ class Character(object):
 
         self.ctx.crumbs[-1].add_audit(json_dict=jdict)
 
+        return amount
+
     def get_user_header(self):
         return f'{self.get_name()}({self.cur_hit_points}/{self.hit_points})'
 
@@ -712,7 +715,7 @@ class Character(object):
         return ret_val
 
     @ctx_decorator
-    def ranged_attack(self, weapon_obj, target_name, encounter_round=-1, encounter_turn=-1,
+    def ranged_attack(self, weapon_obj, target_name, attacker_id='unknown', encounter_round=-1, encounter_turn=-1,
                       vantage='Normal', luck_retry=False):
         # determine modifier
         # 1)  is this a martial weapon that needs specific proficiency
@@ -738,12 +741,13 @@ class Character(object):
                          encounter_round=encounter_round,
                          encounter_turn=encounter_turn,
                          attack_type='Ranged',
-                         attacker_name=self.get_name(), target_name=target_name,
+                         attacker_name=f'{self.get_name()} {attacker_id}', target_name=target_name,
                          versatile_use_2handed=False, vantage=vantage)
         jdict['ranged_attack_value'] = attempt.attack_value
         jdict['ranged_possible_damage'] = attempt.possible_damage
+        self.stats.attack_attempts += 1
+
         if not luck_retry:
-            self.stats.attack_attempts += 1
             self.ranged_ammunition_amt -= 1
         if attempt.natural_value == 20:
             self.stats.attack_nat20_count += 1
@@ -772,7 +776,7 @@ class Character(object):
         return False
 
     @ctx_decorator
-    def melee_attack(self, weapon_obj, target_name, encounter_round=-1, encounter_turn=-1,
+    def melee_attack(self, weapon_obj, target_name, attacker_id='unknown', encounter_round=-1, encounter_turn=-1,
                      vantage='Normal', luck_retry=False) -> Attack:
         # determine modifier
         # 1)  is this a martial weapon that needs specific proficiency
@@ -813,15 +817,14 @@ class Character(object):
                          attack_modifier=modifier, damage_modifier=damage_modifier,
                          encounter_round=encounter_round,
                          encounter_turn=encounter_turn,
-                         attacker_name=self.get_name(), target_name=target_name,
+                         attacker_name=f'{self.get_name()} {attacker_id}', target_name=target_name,
                          attack_type='Melee',
                          versatile_use_2handed=v2h, vantage=vantage)
         # ret_val: tuple = (attempt.attack_value, attempt.possible_damage, attempt.damage_type)
 
         jdict["roll_natural_value"] = attempt.natural_value
         jdict["attack_value"] = attempt.attack_value
-        if not luck_retry:
-            self.stats.attack_attempts += 1
+        self.stats.attack_attempts += 1
         if attempt.natural_value == 1:
             self.stats.attack_nat1_count += 1
         if attempt.natural_value == 20:
@@ -845,17 +848,15 @@ class Character(object):
     def defend(self, attack_obj):
 
         value = attack_obj.attack_value
-        defense_roll: tuple = (attack_obj.natural_value, attack_obj.attack_modifier)
-
-        self.stats.defense_rolls.append(defense_roll)
-        self.stats.defense_attempts += 1
 
         jdict = {"used_attack_value": value,
                  "armor_class": self.armor_class,
                  "unconscious_damage_death_save_impact": False}
-
+        tmp_damage = 0
+        attack_obj.defence_value = self.armor_class
         if value >= self.armor_class:
             ret = False
+            attack_obj.attack_success = True
             if self.cur_hit_points < 1:
                 jdict["unconscious_damage_death_save_impact"] = True
                 jdict["from_death_save_failed"] = self.death_save_failed_cnt
@@ -863,10 +864,24 @@ class Character(object):
                 jdict["to_death_save_failed"] = self.death_save_failed_cnt
 
             if attack_obj.possible_damage > 0:
-                self.damage(amount=attack_obj.possible_damage, damage_type=attack_obj.damage_type)
+                tmp_damage = self.damage(amount=attack_obj.possible_damage, damage_type=attack_obj.damage_type)
         else:
             ret = True
+            attack_obj.attack_success = False
             self.stats.defense_successes += 1
+
+        # defense_roll: tuple = (attack_obj.natural_value, attack_obj.attack_modifier)
+        defense_roll = PointInTimeDefense(round=attack_obj.encounter_round,
+                                             turn=attack_obj.encounter_turn,
+                                             attacker_name=attack_obj.attacker_name,
+                                             target_name=attack_obj.target_name,
+                                             attack_type=attack_obj.attack_type,
+                                             attack_value=attack_obj.attack_value,
+                                             armor_class=self.armor_class,
+                                             damage=tmp_damage)
+
+        self.stats.defense_rolls.append(defense_roll)
+        self.stats.defense_attempts += 1
 
         self.ctx.crumbs[-1].add_audit(json_dict=jdict)
         return ret

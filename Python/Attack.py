@@ -43,6 +43,8 @@ class Attack(object):
             self.possible_damage = self.possible_damage * 2
         self.possible_damage += self.damage_modifier
         self.attack_value = self.natural_value + self.attack_modifier
+        self.defence_value = 0
+        self.attack_success = None
 
     def add_method_last_call_audit(self, audit_obj):
         self.method_last_call_audit[audit_obj['methodName']] = audit_obj

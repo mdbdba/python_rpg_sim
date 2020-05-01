@@ -26,6 +26,15 @@ class PointInTimeAttackRoll(PointInTime):
     adjustment_values: Dict = field(default_factory=get_empty_dict)
 
 @dataclass
+class PointInTimeDefense(PointInTime):
+    attacker_name: str
+    target_name: str
+    attack_type: str
+    attack_value: int
+    armor_class: int
+    damage: int
+
+@dataclass
 class PointInTimeAmount(PointInTime):
     amount: int
 
