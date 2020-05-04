@@ -102,56 +102,73 @@ class CharacterStats:
     def get_dict(self):
         return self.__dict__
 
-    def print_character_stats(self):
-        header = (f"study_instance_id: {self.study_instance_id} |"
-                  f" series_id: {self.series_id} |"
-                  f" encounter_id: {self.encounter_id} |"
-                  f" side: {self.side}")
+    def print_character_stats(self, primary_delimiter=": ", secondary_delimiter=", "):
+        length_to_strip = (len(secondary_delimiter) * -1)
+        header = (f"study_instance_id{primary_delimiter}{self.study_instance_id}{secondary_delimiter}"
+                  f" series_id{primary_delimiter}{self.series_id}{secondary_delimiter}"
+                  f" encounter_id{primary_delimiter}{self.encounter_id}{secondary_delimiter}"
+                  f" side{primary_delimiter}{self.side}")
         print(header)
-        print(f"character_name: {self.character_name} character_id: {self.character_id}")
-        t_msg = (f"character_race: {self.character_race} character_class: {self.character_class} "
-                 f"lvl: {self.character_level}")
+        print(f"character_name{primary_delimiter}{self.character_name}{secondary_delimiter}"
+              f"character_id{primary_delimiter}{self.character_id}")
+        t_msg = (f"character_race{primary_delimiter}{self.character_race}{secondary_delimiter}"
+                 f"character_class{primary_delimiter}: {self.character_class}{secondary_delimiter}"
+                 f"lvl{primary_delimiter}{self.character_level}")
         print(t_msg)
-        print(f"ranged_attack_attempts: {self.ranged_attack_attempts}")
-        print(f"attacks: {self.attack_successes}/{self.attack_attempts}")
+        print(f"ranged_attack_attempts{primary_delimiter}{self.ranged_attack_attempts}")
+        print(f"attacks{primary_delimiter}{self.attack_successes} / {self.attack_attempts}")
         for u in self.attack_rolls:
-            print(f"\trd: {u.round}, turn: {u.turn}, type: {u.attack_type}, attacker: {u.attacker_name}, "
-                  f"target: {u.target_name}, base_roll: {u.base_roll}, adjustments: {u.adjustment_values}")
+            print(f"\trd{primary_delimiter}{u.round}{secondary_delimiter}"
+                  f"turn{primary_delimiter}{u.turn}{secondary_delimiter}"
+                  f"type{primary_delimiter}{u.attack_type}{secondary_delimiter}"
+                  f"attacker{primary_delimiter}{u.attacker_name}{secondary_delimiter}"
+                  f"target{primary_delimiter}{u.target_name}{secondary_delimiter}"
+                  f"base_roll{primary_delimiter}{u.base_roll}{secondary_delimiter}"
+                  f"adjustments{primary_delimiter}{u.adjustment_values}")
 
-        print(f"attack_nat20_count: {self.attack_nat20_count} attack_nat1_count: {self.attack_nat1_count}")
-        print(f"total_healing_received: {self.total_healing_received} {self.healing_received}")
-        print(f"defense: {self.defense_successes} / {self.defense_attempts}")
+        print(f"attack_nat20_count{primary_delimiter}{self.attack_nat20_count}{secondary_delimiter}"
+              f"attack_nat1_count{primary_delimiter}{self.attack_nat1_count}")
+        print(f"total_healing_received{primary_delimiter}{self.total_healing_received}"
+              f"{secondary_delimiter}{self.healing_received}")
+        print(f"defense{primary_delimiter}{self.defense_successes} / {self.defense_attempts}")
         for u in self.defense_rolls:
-            print(f"\trd: {u.round}, turn: {u.turn}, type: {u.attack_type}, attacker: {u.attacker_name}, "
-                  f"target: {u.target_name}, attack_value: {u.attack_value}, armor_class: {u.armor_class} "
-                  f"damage: {u.damage}")
+            print(f"\trd{primary_delimiter}{u.round}{secondary_delimiter}"
+                  f"turn{primary_delimiter}{u.turn}{secondary_delimiter}"
+                  f"type{primary_delimiter}{u.attack_type}{secondary_delimiter}"
+                  f"attacker{primary_delimiter}{u.attacker_name}{secondary_delimiter}"
+                  f"target{primary_delimiter}{u.target_name}{secondary_delimiter}"
+                  f"attack_value{primary_delimiter}{u.attack_value}{secondary_delimiter}"
+                  f"armor_class{primary_delimiter}{u.armor_class}{secondary_delimiter}"
+                  f"damage{primary_delimiter}{u.damage}")
 
-        print(f"defense_nat20_count: {self.defense_nat20_count}")
-        print(f"defense_nat1_count: {self.defense_nat1_count}")
+        print(f"defense_nat20_count{primary_delimiter}{self.defense_nat20_count}{secondary_delimiter}" 
+              f"defense_nat1_count{primary_delimiter}{self.defense_nat1_count}")
         tmp_str = ''
         for u in self.unconscious_list:
-            tmp_str = f'{tmp_str}(rd {u.round}, turn: {u.turn}), '
+            tmp_str = (f'{tmp_str}(rd{primary_delimiter}{u.round}{secondary_delimiter}' 
+                       f'turn{primary_delimiter}{u.turn}){secondary_delimiter}')
 
         if len(tmp_str) > 2:
-            tmp_str = tmp_str[:-2]
-        print(f'knocked_unconscious: {tmp_str}')
+            tmp_str = tmp_str[:length_to_strip]
+        print(f'knocked_unconscious{primary_delimiter}{tmp_str}')
         # 'unconscious_list': [PointInTime(round=6, turn=1)],
         tmp_str = ''
         for u in self.death_list:
-            tmp_str = f'{tmp_str}(rd {u.round}, turn: {u.turn}), '
+            tmp_str = (f'{tmp_str}(rd{primary_delimiter}{u.round}{secondary_delimiter}'
+                       f'turn{primary_delimiter}{u.turn}){secondary_delimiter}')
 
         if len(tmp_str) > 2:
-            tmp_str = tmp_str[:-2]
-        print(f'died: {tmp_str}')
+            tmp_str = tmp_str[:length_to_strip]
+        print(f'died{primary_delimiter}{tmp_str}')
         # 'death_list': [PointInTime(round=7, turn=1)],
         tmp_str = ''
         for u in self.damage_dealt_dict.keys():
             if self.damage_dealt_dict[u] > 0:
-                tmp_str = f"{tmp_str} {u}: {self.damage_dealt_dict[u]}, "
+                tmp_str = f"{tmp_str} {u}{primary_delimiter}{self.damage_dealt_dict[u]}{secondary_delimiter}"
 
         if len(tmp_str) > 2:
-            tmp_str = tmp_str[:-2]
-        print(f'damage_dealt: {tmp_str}')
+            tmp_str = tmp_str[:length_to_strip]
+        print(f'damage_dealt{primary_delimiter}{tmp_str}')
         # 'damage_dealt_dict': {'Acid': 0, 'Bludgeoning': 0, 'Cold': 0, 'Fire': 0, 'Force': 0, 'Ligtning': 0,
         #  'Necrotic': 0,
         #             'Piercing': 0, 'Poison': 0, 'Psychic': 0, 'Radiant': 0, 'Slashing': 0, 'Thunder': 0,
@@ -159,11 +176,11 @@ class CharacterStats:
         tmp_str = ''
         for u in self.damage_taken_dict.keys():
             if self.damage_taken_dict[u] > 0:
-                tmp_str = f"{tmp_str} {u}: {self.damage_taken_dict[u]}, "
+                tmp_str = f"{tmp_str} {u}{primary_delimiter}{self.damage_taken_dict[u]}{secondary_delimiter}"
 
         if len(tmp_str) > 2:
-            tmp_str = tmp_str[:-2]
-        print(f'damage_taken: {tmp_str}')
+            tmp_str = tmp_str[:length_to_strip]
+        print(f'damage_taken{primary_delimiter}{tmp_str}')
         # 'damage_taken_dict': {'Acid': 0, 'Bludgeoning': 0, 'Cold': 0, 'Fire': 0, 'Force': 0, 'Ligtning': 0,
         # 'Necrotic': 0,
         #             'Piercing': 30, 'Poison': 0, 'Psychic': 0, 'Radiant': 0, 'Slashing': 0, 'Thunder': 0,

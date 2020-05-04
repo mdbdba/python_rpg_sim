@@ -6,4 +6,4 @@ db = InvokePSQL()
 
 a = WizardPCClass(db)
 print(a)
-print(a.getCharacterAlteringClassFeatures())
+print(a.get_character_altering_class_features())

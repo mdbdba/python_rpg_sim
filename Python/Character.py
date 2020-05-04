@@ -107,11 +107,13 @@ class Character(object):
         self.shield = None
         self.set_finesse_ability()
         self.ranged_weapon_range_dict = {}
+        self.feature_list = []
+        self.feature_counts = {}  # dictionary of feature and available use counts
 
-        self.relentless_uses_available = 0
-        self.lucky_uses_available = 0
-        self.savage_attack_crit_bonus = False
-        self.nimble_escape_bonus = False
+        # self.relentless_uses_available = 0
+        # self.lucky_uses_available = 0
+        # self.savage_attack_crit_bonus = False
+        # self.nimble_escape_bonus = False
 
         self.exhaustion_level = 0
         # 1   Disadvantage on Ability Checks
@@ -588,8 +590,8 @@ class Character(object):
         jdict['from_hit_points'] = self.cur_hit_points
 
         if amount >= self.cur_hit_points:
-            if self.relentless_uses_available > 0:
-                self.relentless_uses_available -= 1
+            if 'Relentless' in self.feature_counts and self.feature_counts['Relentless'] > 0:
+                self.feature_counts['Relentless'] -= 1
                 self.cur_hit_points = 1
                 jdict['used_relentless_to_avoid_unconsciousness'] = "True"
             else:

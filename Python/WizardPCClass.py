@@ -12,3 +12,4 @@ class WizardPCClass(PlayerCharacterClass):
         self.archetype_label = "Arcane Tradition"
         self.melee_weapon = "Dagger"
         self.background = "Sage"
+        self.feature_list = ['Spellcasting']

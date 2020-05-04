@@ -18,3 +18,4 @@ class RoguePCClass(PlayerCharacterClass):
         self.armor = "Leather"
         self.background = "Charlatan"
         self.combat_preference = "Mixed"
+        self.feature_list = ['Sneak Attack', 'Cunning Action']

@@ -14,3 +14,4 @@ class DruidPCClass(PlayerCharacterClass):
         self.armor = "Leather"
         self.shield = "Shield"
         self.background = "Hermit"
+        self.feature_list = ['Spellcasting', 'Wild Shape']

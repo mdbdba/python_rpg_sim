@@ -55,6 +55,8 @@ class PlayerCharacterClass(object):
         self.combat_preference = None
         self.CACF_option_candidate_array = character_altering_class_options
         self.CACF_option_array = []
+        self.feature_list = []
+
 
         if class_candidate == "Random":
             class_candidate = get_random_class_name(db)
@@ -64,7 +66,7 @@ class PlayerCharacterClass(object):
         else:
             raise Exception(f'Could not find class: {class_candidate}')
 
-        self.setCharacterAlteringClassFeatures(db=db)
+        self.set_character_altering_class_features(db=db)
 
     def add_method_last_call_audit(self, audit_obj):
         self.method_last_call_audit[audit_obj['methodName']] = audit_obj
@@ -128,11 +130,11 @@ class PlayerCharacterClass(object):
     def get_class(self):
         return self.name
 
-    def getClassAbilitySortArray(self):
+    def get_class_ability_sort_array(self):
         return self.ability_sort_array
 
     @ctx_decorator
-    def setCharacterAlteringClassFeatures(self, db):
+    def set_character_altering_class_features(self, db):
         """ If an array of dictionaries was not passed as the
             characterAlteringClassOptions arg, randomly select the
             options for the character. """
@@ -155,30 +157,30 @@ class PlayerCharacterClass(object):
             if results is not None:
                 for p in range(len(results)):
                     if results[p] is not None:
-                        tmpDict = {
+                        tmp_dict = {
                             "class": results[p][1],
                             "feature_order_by": results[p][3],
                             "feature_string": results[p][5],
                             "option_value": results[p][6]
                         }
-                        ret_array.append(tmpDict)
+                        ret_array.append(tmp_dict)
             self.CACF_option_array = ret_array
         else:
             self.CACF_option_array = self.CACF_option_candidate_array
 
-    def getCharacterAlteringClassFeatures(self):
+    def get_character_altering_class_features(self):
         return self.CACF_option_array
 
     @ctx_decorator
-    def getClassLevelFeature(self, level, db):
+    def get_class_level_feature(self, level, db):
         sql = (f"SELECT class, level, feature, label_1, value_1, "
                f"label_2, value_2, label_3, value_3, label_4, value_4 "
                f"from dnd_5e.lu_class_level_feature "
                f"where class = '{self.name}' "
                f"and (( level <= {level} "
                f"  and feature not in ('proficiency_bonus', "
-               f"'Spellcasting')) or (level = {level} "
-               f"and feature in ('proficiency_bonus', 'Spellcasting'))) "
+               f"'Spellcasting', 'Rage')) or (level = {level} "
+               f"and feature in ('proficiency_bonus', 'Spellcasting', 'Rage'))) "
                f"order by level desc, feature;")
 
         return db.query(sql)
@@ -207,15 +209,14 @@ class PlayerCharacterClass(object):
                       f'{self.ranged_ammunition_amt}')
 
         if self.ability_sort_array is not None:
-            outstr = (f'{outstr},\n   ability_sort_array:         [')
+            outstr = f'{outstr},\n   ability_sort_array:         ['
             for p in range(len(self.ability_sort_array)):
-                outstr = (f'{outstr}{self.ability_sort_array[p]}, ')
+                outstr = f'{outstr}{self.ability_sort_array[p]}, '
 
-            outstr = (f'{outstr[:-2]}],\n   ability_sort_str_array      [')
+            outstr = f'{outstr[:-2]}],\n   ability_sort_str_array      ['
             for p in range(len(self.ability_sort_str_array)):
-                outstr = (f'{outstr}{self.ability_sort_str_array[p]}, ')
-            outstr = (f'{outstr[:-2]}]')
+                outstr = f'{outstr}{self.ability_sort_str_array[p]}, '
+            outstr = f'{outstr[:-2]}]'
 
-        outstr = (f'{outstr}\n)\n')
+        outstr = f'{outstr}\n)\n'
         return outstr
-

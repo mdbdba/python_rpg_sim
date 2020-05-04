@@ -14,3 +14,4 @@ class MonkPCClass(PlayerCharacterClass):
         self.ranged_ammunition_type = "Dart"
         self.ranged_ammunition_amt = 10
         self.background = "Hermit"
+        self.feature_list = ['Key Points']

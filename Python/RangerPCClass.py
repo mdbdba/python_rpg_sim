@@ -19,3 +19,4 @@ class RangerPCClass(PlayerCharacterClass):
         self.shield = None
         self.background = "Outlander"
         self.combat_preference = "Mixed"
+        self.feature_list = ['Spellcasting']

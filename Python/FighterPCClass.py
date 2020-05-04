@@ -16,3 +16,4 @@ class FighterPCClass(PlayerCharacterClass):
         self.ranged_ammunition_amt = 20
         self.armor = "Chain mail"
         self.background = "Soldier"
+        self.feature_list = ['Second Wind', 'Action Surge', 'Indomitable']

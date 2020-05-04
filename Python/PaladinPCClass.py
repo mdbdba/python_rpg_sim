@@ -16,3 +16,4 @@ class PaladinPCClass(PlayerCharacterClass):
         self.ranged_ammunition_amt = 5
         self.armor = "Chain mail"
         self.background = "Noble"
+        self.feature_list = ['Lay on Hands','Divine Smite', 'Spellcasting', 'Channel Divinity']

@@ -27,6 +27,8 @@ from Ctx import Ctx
 from Ctx import ctx_decorator
 from Ctx import RpgLogging
 
+import os
+
 
 class PlayerCharacter(Character):
     @ctx_decorator
@@ -78,7 +80,7 @@ class PlayerCharacter(Character):
         self.stats.character_class = self.class_obj.name
         self.stats.character_name = self.get_name()
 
-        self.feature_obj = self.class_obj.getClassLevelFeature(level=self.level, db=db)
+        self.feature_obj = self.class_obj.get_class_level_feature(level=self.level, db=db)
         self.reset_movement()
         self.set_finesse_ability()
         self.set_proficiency_bonus()
@@ -92,6 +94,9 @@ class PlayerCharacter(Character):
         self.stats.character_id = self.character_id
         self.ranged_ammunition_type = self.class_obj.ranged_ammunition_type
         self.ranged_ammunition_amt = self.class_obj.ranged_ammunition_amt
+        self.set_feature_list(db=db)
+        self.add_class_feature_counts()
+
         self.class_eval[-1]["character_id"] = self.character_id
         self.class_eval[-1]["race"] = self.get_race()
         self.class_eval[-1]["class"] = self.get_class()
@@ -157,6 +162,30 @@ class PlayerCharacter(Character):
         self.set_armor_class()
         self.cur_hit_points = self.hit_points
         self.temp_hit_points = 0
+
+    @ctx_decorator
+    def set_feature_list(self, db):
+        self.feature_list.extend(self.class_obj.feature_list)
+
+        sql = (f"select distinct lrt.name " 
+               f"from lu_racial_trait lrt " 
+               f"join lu_race as r on (lrt.race = r.race or lrt.race = r.subrace_of)"
+               f"where category in ('Feat', 'Vision', 'Armor Class') "
+               f"and coalesce(description, '') not in ('targetAffect:Smell') "
+               f"and name not like '% Build' "
+               f"and name is not null " 
+               f"and (r.race = '{self.get_race()}' or r.subrace_of = '{self.get_race()}')")
+
+        results = db.query(sql)
+        for result in results:
+            self.feature_list.append(result[0])
+
+    def add_class_feature_counts(self):
+        for a in range(len(self.feature_obj)):
+            if self.feature_obj[a][2] == 'Rage':
+                self.feature_counts['Rage'] = { 'Rages Available': self.feature_obj[a][4],
+                                                'Rage Damage': self.feature_obj[a][6]}
+
 
     @ctx_decorator
     def adjust_for_levels(self, db):
@@ -313,7 +342,7 @@ class PlayerCharacter(Character):
             self.class_obj.armor = results[0][26]
             self.class_obj.shield = results[0][27]
 
-            self.assign_ability_array(sort_array=self.class_obj.getClassAbilitySortArray())
+            self.assign_ability_array(sort_array=self.class_obj.get_class_ability_sort_array())
             self.ability_array_obj.set_racial_array(bonus_array=self.race_obj.ability_bonuses)
             self.hit_points = 0
             self.adjust_for_levels(db=db)
@@ -342,26 +371,25 @@ class PlayerCharacter(Character):
 
     @ctx_decorator
     def apply_traits(self):
+        jdict = {}
         for i in self.race_obj.traitContainer.rawtraits:
             if i[7]:
                 value = i[7]
             else:
                 value = True
             if i[1] == 'Relentless':
-                self.relentless_uses_available = value
+                self.feature_counts['Relentless'] = value
+                jdict['relentless_uses_available'] = self.feature_counts['Relentless']
             if i[1] == 'Lucky':
-                self.lucky_uses_available = 3
+                self.feature_counts['Lucky'] = 3
+                jdict['lucky_uses_available'] = self.feature_counts['Lucky']
             if i[1] == 'Savage Attacks':
-                self.savage_attack_crit_bonus = value
+                self.feature_counts['Savage Attacks'] = value
+                jdict['savage_attack_crit_bonus'] = self.feature_counts['Savage Attacks']
             if i[1] == 'Nimble Escape':
-                self.nimble_escape_bonus = value
+                self.feature_counts['Nimble Escape'] = value
+                jdict['nimble_escape_bonus'] = self.feature_counts['Nimble Escape']
 
-            jdict = {
-                "relentless_uses_available":  self.relentless_uses_available,
-                "lucky_uses_available": self.lucky_uses_available,
-                "savage_attack_crit_bonus": self.savage_attack_crit_bonus,
-                "nimble_escape_bonus": self.nimble_escape_bonus
-            }
             self.ctx.crumbs[-1].add_audit(json_dict=jdict)
 
     def get_combat_preference(self):
@@ -749,8 +777,9 @@ if __name__ == '__main__':
     db = InvokePSQL()
     logger_name = f'playercharacter_main'
     ctx = Ctx(app_username='pc_class_init', logger_name=logger_name)
+    ctx.log_file_dir = os.path.expanduser('~/rpg/logs')
     logger = RpgLogging(logger_name=logger_name, level_threshold='debug')
-    logger.setup_logging()
+    logger.setup_logging(log_dir=ctx.log_file_dir)
     try:
 
         a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate='Hill dwarf', level=10)
@@ -771,13 +800,13 @@ if __name__ == '__main__':
                              race_candidate="Mountain Dwarf",
                              class_candidate="Barbarian")
 
-        attack_obj = a5.default_melee_attack()
+        attack_obj = a5.default_melee_attack(target_name=a6.get_name())
         a6.defend(attack_obj=attack_obj)
         a6.heal(amount=10)
-        attack_obj = a5.default_melee_attack()
+        attack_obj = a5.default_melee_attack(target_name=a6.get_name())
         a6.defend(attack_obj=attack_obj)
         a6.heal(amount=30)
-        t_a1 = a5.default_melee_attack()
+        t_a1 = a5.default_melee_attack(a6.get_name())
         a6.defend(attack_obj=t_a1)
 
         a7 = PlayerCharacter(db=db, ctx=ctx,
@@ -786,10 +815,20 @@ if __name__ == '__main__':
                              class_candidate="Barbarian")
 
         print(a1.__repr__())
+        print(a1.feature_list)
+        print(a1.feature_counts)
         print(a2.__repr__())
+        print(a2.feature_list)
+        print(a2.feature_counts)
         print(a5.__repr__())
+        print(a5.feature_list)
+        print(a5.feature_counts)
         print(a6.__repr__())
+        print(a6.feature_list)
+        print(a6.feature_counts)
         print(a7.__repr__())
+        print(a7.feature_list)
+        print(a7.feature_counts)
 
     except Exception as error:
         exc_type, exc_value, exc_traceback = sys.exc_info()

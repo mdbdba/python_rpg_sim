@@ -854,9 +854,11 @@ class Encounter(object):
             random_choice = random.randint(1, 3)  # randomly make the choice to use luck.  1/3 chance
             if (successful_defend and
                     active_attack.natural_value < 20 and  # if a crit failed, there's no way luck would help.
-                    attacker.lucky_uses_available > 0 and  # if the attacker has luck, they could try again.
+                    # if the attacker has luck, they could try again.
+                    ( 'Lucky' in attacker.feature_counts and attacker.feature_counts['Lucky'] > 0 ) and
                     random_choice == 1):
-                attacker.lucky_uses_available -= 1
+                attacker.feature_counts['Lucky'] -= 1
+
                 turn_audit[f"{audit_key_prefix}luck_was_used{audit_key_suffix}"] = True
                 msg = f"{msg} failed, but lucky caused a retry which"
                 if attack_type == 'Melee':

@@ -18,3 +18,4 @@ class ClericPCClass(PlayerCharacterClass):
         self.shield = "Shield"
         self.background = "Acolyte"
         self.combat_preference = "Mixed"
+        self.feature_list = ['Spellcasting', 'Channel Divinity']

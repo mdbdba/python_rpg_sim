@@ -18,3 +18,4 @@ class BarbarianPCClass(PlayerCharacterClass):
         self.shield = None
         self.background = "Outlander"
         self.combat_preference = "Melee"
+        self.feature_list = ['Rage']

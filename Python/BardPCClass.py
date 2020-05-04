@@ -17,3 +17,4 @@ class BardPCClass(PlayerCharacterClass):
         self.armor = "Leather"
         self.shield = None
         self.background = "Entertainer"
+        self.feature_list = ['Bardic Inspiration','Spellcasting']

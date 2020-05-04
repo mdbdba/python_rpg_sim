@@ -16,3 +16,4 @@ class SorcererPCClass(PlayerCharacterClass):
         self.ranged_ammunition_type = "Bolt"
         self.ranged_ammunition_amt = 20
         self.background = "Hermit"
+        self.feature_list = ['Spellcasting', 'Sorcery Points', 'Sorcereric Inspiration']

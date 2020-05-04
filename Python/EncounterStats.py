@@ -60,16 +60,16 @@ class EncounterStats:
             self.opponents_attack_successes += 1
         self.update_timestamp = datetime.now()
 
-    def print_encounter_stats(self):
-        header = (f"study_instance_id: {self.study_instance_id} |"
-                  f" series_id: {self.series_id} |"
-                  f" encounter_id: {self.encounter_id} ")
+    def print_encounter_stats(self, primary_delimiter=": ", secondary_delimiter=", "):
+        header = (f"study_instance_id{primary_delimiter}{self.study_instance_id}{secondary_delimiter}"
+                  f" series_id{primary_delimiter}{self.series_id}{secondary_delimiter}"
+                  f" encounter_id{primary_delimiter}{self.encounter_id}")
         print(header)
-        print(f'winning_team: {self.winning_team}')
-        print(f'duration_rds: {self.duration_rds}')
-        print(f'starting_timestamp: {self.starting_timestamp}')
-        print(f'update_timestamp: {self.update_timestamp}')
-        print(f'heroes_attack_attempts: {self.heroes_attack_attempts}')
-        print(f'heroes_attack_successes: {self.heroes_attack_successes}')
-        print(f'opponents_attack_attempts: {self.opponents_attack_attempts}')
-        print(f'opponents_attack_successes: {self.opponents_attack_successes}')
+        print(f'winning_team{primary_delimiter}{self.winning_team}')
+        print(f'duration_rds{primary_delimiter}{self.duration_rds}')
+        print(f'starting_timestamp{primary_delimiter}{self.starting_timestamp}')
+        print(f'update_timestamp{primary_delimiter}{self.update_timestamp}')
+        print(f'heroes_attack_attempts{primary_delimiter}{self.heroes_attack_attempts}')
+        print(f'heroes_attack_successes{primary_delimiter}{self.heroes_attack_successes}')
+        print(f'opponents_attack_attempts{primary_delimiter}{self.opponents_attack_attempts}')
+        print(f'opponents_attack_successes{primary_delimiter}{self.opponents_attack_successes}')

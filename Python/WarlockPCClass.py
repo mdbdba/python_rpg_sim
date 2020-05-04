@@ -17,4 +17,5 @@ class WarlockPCClass(PlayerCharacterClass):
         self.ranged_ammunition_amt = 20
         self.armor = "Leather"
         self.background = "Charlatan"
+        self.feature_list = ['Spellcasting', 'Eldritch Invocations']
 
