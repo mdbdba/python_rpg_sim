@@ -109,6 +109,7 @@ class Character(object):
         self.ranged_weapon_range_dict = {}
         self.feature_list = []
         self.feature_counts = {}  # dictionary of feature and available use counts
+        self.spell_list = {}
 
         # self.relentless_uses_available = 0
         # self.lucky_uses_available = 0
@@ -874,13 +875,13 @@ class Character(object):
 
         # defense_roll: tuple = (attack_obj.natural_value, attack_obj.attack_modifier)
         defense_roll = PointInTimeDefense(round=attack_obj.encounter_round,
-                                             turn=attack_obj.encounter_turn,
-                                             attacker_name=attack_obj.attacker_name,
-                                             target_name=attack_obj.target_name,
-                                             attack_type=attack_obj.attack_type,
-                                             attack_value=attack_obj.attack_value,
-                                             armor_class=self.armor_class,
-                                             damage=tmp_damage)
+                                          turn=attack_obj.encounter_turn,
+                                          attacker_name=attack_obj.attacker_name,
+                                          target_name=attack_obj.target_name,
+                                          attack_type=attack_obj.attack_type,
+                                          attack_value=attack_obj.attack_value,
+                                          armor_class=self.armor_class,
+                                          damage=tmp_damage)
 
         self.stats.defense_rolls.append(defense_roll)
         self.stats.defense_attempts += 1

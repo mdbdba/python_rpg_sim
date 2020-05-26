@@ -226,4 +226,26 @@
             <column name="value" value="Red"/>
         </insert>
     </changeSet>
+    <changeSet author="mdbdba" id="lu_racial_skin_tone_2">
+        <insert schemaName="dnd_5e" tableName="lu_racial_skin_tone">
+            <column name="race" value="Black dragonborn"/><column name="value" value="Black scales"/></insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_skin_tone">
+            <column name="race" value="Blue dragonborn"/><column name="value" value="Blue scales"/></insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_skin_tone">
+            <column name="race" value="Brass dragonborn"/><column name="value" value="Brass scales"/></insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_skin_tone">
+            <column name="race" value="Bronze dragonborn"/><column name="value" value="Bronze scales"/></insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_skin_tone">
+            <column name="race" value="Copper dragonborn"/><column name="value" value="Copper scales"/></insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_skin_tone">
+            <column name="race" value="Gold dragonborn"/><column name="value" value="Gold scales"/></insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_skin_tone">
+            <column name="race" value="Green dragonborn"/><column name="value" value="Green scales"/></insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_skin_tone">
+            <column name="race" value="Red dragonborn"/><column name="value" value="Red scales"/></insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_skin_tone">
+            <column name="race" value="Silver dragonborn"/><column name="value" value="Silver scales"/></insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_skin_tone">
+            <column name="race" value="White dragonborn"/><column name="value" value="White scales"/></insert>
+    </changeSet>
 </databaseChangeLog>

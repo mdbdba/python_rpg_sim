@@ -42,7 +42,7 @@ class PlayerCharacter(Character):
                  ability_array_str="Common",
                  damage_generator="Random",
                  hit_point_generator="Max",
-                 level=1 ):
+                 level=1):
 
         Character.__init__(self, db=db, ctx=ctx, gender_candidate=gender_candidate,
                            ability_array_str=ability_array_str,
@@ -96,6 +96,7 @@ class PlayerCharacter(Character):
         self.ranged_ammunition_amt = self.class_obj.ranged_ammunition_amt
         self.set_feature_list(db=db)
         self.add_class_feature_counts()
+        self.set_spell_list(db=db)
 
         self.class_eval[-1]["character_id"] = self.character_id
         self.class_eval[-1]["race"] = self.get_race()
@@ -183,9 +184,51 @@ class PlayerCharacter(Character):
     def add_class_feature_counts(self):
         for a in range(len(self.feature_obj)):
             if self.feature_obj[a][2] == 'Rage':
-                self.feature_counts['Rage'] = { 'Rages Available': self.feature_obj[a][4],
-                                                'Rage Damage': self.feature_obj[a][6]}
+                self.feature_counts['Rage'] = {'Rages Available': int(self.feature_obj[a][4]),
+                                               'Rage Damage': int(self.feature_obj[a][6])}
 
+    @ctx_decorator
+    def set_spell_list(self, db):
+
+        sql = (f"select distinct lrt.affected_name "
+               f"from lu_racial_trait lrt "
+               f"join lu_race as r on (lrt.race = r.race or lrt.race = r.subrace_of)"
+               f"where category in ('Spell') "
+               f"and name is not null "
+               f"and (r.race = '{self.get_race()}' or r.subrace_of = '{self.get_race()}')")
+
+        results = db.query(sql)
+        search_str = "'No Spells', "
+        for result in results:
+            if search_str == "'No Spells', ":  # if there are no results query will run with 'No Spells'
+                search_str = ""                # otherwise, we're going to build the search string.
+            # if 'dragonborn' in self.get_race() and result[0] == 'Draconic Ancestry':
+            #     search_str = f"{search_str}'Dragonborn Breath Weapon - {self.get_race().split(' ', 1)[0]}', "
+            # else:
+            search_str = f"{search_str}'{result[0]}', "
+
+        search_str = search_str[0:-2]
+        sql2 = (f"select name, level, save, casting_time_uom, range_amt, range_uom, range_aoe, "
+                f"duration_amt, duration_uom, concentration_ind, higher_level_cast "
+                f"from lu_spell ls "
+                f"where name in ({search_str})")
+        spell_results = db.query(sql2)
+        if spell_results:
+            for spell in spell_results:
+                # TODO -> build the actual spell class.
+
+                # Hardcoding dict reference for now.
+
+                spell_ref_dict = {"category": "damage",
+                                  "min_level": spell[1],
+                                  "max_impact": 12,
+                                  "range_amt": spell[4],
+                                  "range_aoe": spell[6],
+                                  "casting_uom": spell[3],
+                                  "available_count": 1
+                                  }
+
+                self.spell_list[spell[0]] = spell_ref_dict
 
     @ctx_decorator
     def adjust_for_levels(self, db):
@@ -580,7 +623,6 @@ class PlayerCharacter(Character):
                                   encounter_round=encounter_round, encounter_turn=encounter_turn,
                                   vantage=vantage, luck_retry=luck_retry)
 
-
     def __str__(self):
         outstr = (f'{self.__class__.__name__}\n'
                   f'Name:         {self.get_name()}\n'
@@ -769,7 +811,36 @@ class PlayerCharacter(Character):
                 outstr = f'{outstr}"{pkey}": "{pvalue}", '
         if outstr[-2:] == ', ':
             outstr = outstr[:-2]
-        outstr = f'{outstr}}}}}'
+        outstr = f'{outstr}}}, '
+
+        if self.feature_list:
+            outstr = f'{outstr}"feature list": {{'
+            for f in self.feature_list:
+                outstr = f'{outstr} "{f}", '
+            if outstr[-2:] == ', ':
+                outstr = outstr[:-2]
+            outstr = f'{outstr}}}, '
+
+        if self.feature_counts:
+            outstr = f'{outstr}"feature counts": {{'
+            for k in self.feature_counts.keys():
+                outstr = f'{outstr} "{k}: {self.feature_counts[k]}", '
+            if outstr[-2:] == ', ':
+                outstr = outstr[:-2]
+            outstr = f'{outstr}}}, '
+
+        if self.spell_list:
+            outstr = f'{outstr}"spell list": {{'
+            for k in self.spell_list.keys():
+                outstr = f'{outstr} "{k}: {{ '
+                for l in self.spell_list[k].keys():
+                    outstr = f'{outstr} "{l}: {self.spell_list[k][l]}", '
+                if outstr[-2:] == ', ':
+                    outstr = f'{outstr[:-2]}}}, '
+            if outstr[-2:] == ', ':
+                outstr = outstr[:-2]
+            outstr = f'{outstr}}}}}'
+
         return outstr
 
 
@@ -782,53 +853,44 @@ if __name__ == '__main__':
     logger.setup_logging(log_dir=ctx.log_file_dir)
     try:
 
-        a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate='Hill dwarf', level=10)
-        a2 = PlayerCharacter(db=db, ctx=ctx,
-                             ability_array_str='10,11,12,13,14,15'
-                             )
-        print(a2)
-        a2.ability_array_obj.set_preference_array(pref_array=string_to_array(
-                                                '5,0,2,1,4,3'
-                                                ))
-        a5 = PlayerCharacter(db=db, ctx=ctx, race_candidate='Hill dwarf', level=10)
-        for i in range(len(a5.get_class_eval())):
-            for key, value in a5.get_class_eval()[i].items():
-                print(f"{i} -- {str(key).ljust(25)}: {value}")
+        # a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate='Hill dwarf', level=10)
+        # a2 = PlayerCharacter(db=db, ctx=ctx,
+        #                     ability_array_str='10,11,12,13,14,15'
+        #                     )
+        # print(a2)
+        # a2.ability_array_obj.set_preference_array(pref_array=string_to_array(
+        #                                        '5,0,2,1,4,3'
+        #                                        ))
+        # a5 = PlayerCharacter(db=db, ctx=ctx, race_candidate='Hill dwarf', level=10)
+        # for i in range(len(a5.get_class_eval())):
+        #     for key, value in a5.get_class_eval()[i].items():
+        #         print(f"{i} -- {str(key).ljust(25)}: {value}")
     #
-        a6 = PlayerCharacter(db=db, ctx=ctx,
+        # a6 = PlayerCharacter(db=db, ctx=ctx,
+        #                      ability_array_str="18,12,12,10,10,8",
+        #                      race_candidate="Mountain Dwarf",
+        #                      class_candidate="Barbarian")
+
+        # attack_obj = a5.default_melee_attack(target_name=a6.get_name())
+        # a6.defend(attack_obj=attack_obj)
+        # a6.heal(amount=10)
+        # attack_obj = a5.default_melee_attack(target_name=a6.get_name())
+        # a6.defend(attack_obj=attack_obj)
+        # a6.heal(amount=30)
+        # t_a1 = a5.default_melee_attack(a6.get_name())
+        # a6.defend(attack_obj=t_a1)
+
+        # a7 = PlayerCharacter(db=db, ctx=ctx,
+        #                      ability_array_str="6,6,6,6,6,6",
+        #                      race_candidate="Half-Orc",
+        #                      class_candidate="Barbarian")
+
+        a8 = PlayerCharacter(db=db, ctx=ctx,
                              ability_array_str="18,12,12,10,10,8",
-                             race_candidate="Mountain Dwarf",
+                             race_candidate="Copper dragonborn",
                              class_candidate="Barbarian")
 
-        attack_obj = a5.default_melee_attack(target_name=a6.get_name())
-        a6.defend(attack_obj=attack_obj)
-        a6.heal(amount=10)
-        attack_obj = a5.default_melee_attack(target_name=a6.get_name())
-        a6.defend(attack_obj=attack_obj)
-        a6.heal(amount=30)
-        t_a1 = a5.default_melee_attack(a6.get_name())
-        a6.defend(attack_obj=t_a1)
-
-        a7 = PlayerCharacter(db=db, ctx=ctx,
-                             ability_array_str="6,6,6,6,6,6",
-                             race_candidate="Half-Orc",
-                             class_candidate="Barbarian")
-
-        print(a1.__repr__())
-        print(a1.feature_list)
-        print(a1.feature_counts)
-        print(a2.__repr__())
-        print(a2.feature_list)
-        print(a2.feature_counts)
-        print(a5.__repr__())
-        print(a5.feature_list)
-        print(a5.feature_counts)
-        print(a6.__repr__())
-        print(a6.feature_list)
-        print(a6.feature_counts)
-        print(a7.__repr__())
-        print(a7.feature_list)
-        print(a7.feature_counts)
+        print(a8.__repr__)
 
     except Exception as error:
         exc_type, exc_value, exc_traceback = sys.exc_info()
