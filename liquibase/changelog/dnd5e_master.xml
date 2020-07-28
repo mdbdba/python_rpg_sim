@@ -3,6 +3,8 @@
     
     <include file="dnd5e_lu_alignment.xml"/>
     <include file="dnd5e_lu_spell.xml"/>
+    <include file="dnd5e_lu_spell_effect.xml"/>
+    <include file="dnd5e_lu_spell_save_outcome.xml"/>
     <include file="dnd5e_lu_ability.xml"/>
     <include file="dnd5e_lu_recharge_on.xml"/>
     <include file="dnd5e_lu_size.xml"/>

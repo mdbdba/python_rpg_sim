@@ -378,6 +378,34 @@
         </insert>
 
     </changeSet>
-
-
+    <changeSet author="mdbdba" id="lu_spell_3">
+        <addColumn
+            schemaName="dnd_5e"
+            tableName="lu_spell">
+		    <column afterColumn="range_aoe"
+                name="attack_roll_required_ind"
+			    type="boolean"/>
+	    </addColumn>
+        <addDefaultValue
+            columnDataType="boolean"
+            columnName="attack_roll_required_ind"
+            defaultValueBoolean="false"
+            schemaName="dnd_5e"
+            tableName="lu_spell"/>
+    </changeSet>
+    <changeSet author="mdbdba" id="lu_spell_4">
+        <addColumn
+            schemaName="dnd_5e"
+            tableName="lu_spell">
+		    <column
+                name="save_outcome"
+			    type="varchar(16)"/>
+	    </addColumn>
+    </changeSet>
+    <changeSet author="mdbdba" id="lu_spell_5">
+        <sql splitStatements="true"
+             stripComments="true">update dnd_5e.lu_spell set save_outcome = 'HalfPossible'
+ where id in (362, 363, 364, 365, 366, 367, 368, 369, 370, 371);
+        </sql>
+    </changeSet>
 </databaseChangeLog>

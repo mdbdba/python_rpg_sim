@@ -1,0 +1,424 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet author="mdbdba" id="lu_spell_effect_1">
+        <createTable
+                schemaName="dnd_5e"
+                tableName="lu_spell_effect">
+            <column name="id" type="int" autoIncrement="true" />
+            <column name="spell_id" type="int"/>
+            <column name="spell_name" type="varchar(128)"/>
+            <column name="effect_category" type="varchar(128)"/>
+            <column name="level" type="smallint"/>
+            <column name="effect_type" type="varchar(128)"/>
+            <column name="effect_modifier" type="smallint"/>
+            <column name="effect_die" type="smallint"/>
+        </createTable>
+        <addPrimaryKey
+            columnNames="id"
+            constraintName="lu_spell_effect_pk"
+            schemaName="dnd_5e"
+            tableName="lu_spell_effect"/>
+    </changeSet>
+    <changeSet author="mdbdba" id="lu_spell_effect_2">
+        <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="362"/>
+            <column name="spell_name" value="Dragonborn Breath Weapon - Black"/>
+            <column name="effect_category" value="damage"/>
+            <column name="level" value="1" />
+            <column name="effect_type" value="Acid"/>
+            <column name="effect_modifier" value="2"/>
+            <column name="effect_die" value="6"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="362"/>
+            <column name="spell_name" value="Dragonborn Breath Weapon - Black"/>
+            <column name="effect_category" value="damage"/>
+            <column name="level" value="6" />
+            <column name="effect_type" value="Acid"/>
+            <column name="effect_modifier" value="3"/>
+            <column name="effect_die" value="6"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="362"/>
+            <column name="spell_name" value="Dragonborn Breath Weapon - Black"/>
+            <column name="effect_category" value="damage"/>
+            <column name="level" value="11" />
+            <column name="effect_type" value="Acid"/>
+            <column name="effect_modifier" value="4"/>
+            <column name="effect_die" value="6"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="362"/>
+            <column name="spell_name" value="Dragonborn Breath Weapon - Black"/>
+            <column name="effect_category" value="damage"/>
+            <column name="level" value="16" />
+            <column name="effect_type" value="Acid"/>
+            <column name="effect_modifier" value="5"/>
+            <column name="effect_die" value="6"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="363"/>
+            <column name="spell_name" value="Dragonborn Breath Weapon - Blue"/>
+            <column name="effect_category" value="damage"/>
+            <column name="level" value="1" />
+            <column name="effect_type" value="Lightning"/>
+            <column name="effect_modifier" value="2"/>
+            <column name="effect_die" value="6"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="363"/>
+            <column name="spell_name" value="Dragonborn Breath Weapon - Blue"/>
+            <column name="effect_category" value="damage"/>
+            <column name="level" value="6" />
+            <column name="effect_type" value="Lightning"/>
+            <column name="effect_modifier" value="3"/>
+            <column name="effect_die" value="6"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="363"/>
+            <column name="spell_name" value="Dragonborn Breath Weapon - Blue"/>
+            <column name="effect_category" value="damage"/>
+            <column name="level" value="11" />
+            <column name="effect_type" value="Lightning"/>
+            <column name="effect_modifier" value="4"/>
+            <column name="effect_die" value="6"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="363"/>
+            <column name="spell_name" value="Dragonborn Breath Weapon - Blue"/>
+            <column name="effect_category" value="damage"/>
+            <column name="level" value="16" />
+            <column name="effect_type" value="Lightning"/>
+            <column name="effect_modifier" value="5"/>
+            <column name="effect_die" value="6"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="364"/>
+            <column name="spell_name" value="Dragonborn Breath Weapon - Brass"/>
+            <column name="effect_category" value="damage"/>
+            <column name="level" value="1" />
+            <column name="effect_type" value="Fire"/>
+            <column name="effect_modifier" value="2"/>
+            <column name="effect_die" value="6"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="364"/>
+            <column name="spell_name" value="Dragonborn Breath Weapon - Brass"/>
+            <column name="effect_category" value="damage"/>
+            <column name="level" value="6" />
+            <column name="effect_type" value="Fire"/>
+            <column name="effect_modifier" value="3"/>
+            <column name="effect_die" value="6"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="364"/>
+            <column name="spell_name" value="Dragonborn Breath Weapon - Brass"/>
+            <column name="effect_category" value="damage"/>
+            <column name="level" value="11" />
+            <column name="effect_type" value="Fire"/>
+            <column name="effect_modifier" value="4"/>
+            <column name="effect_die" value="6"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="364"/>
+            <column name="spell_name" value="Dragonborn Breath Weapon - Brass"/>
+            <column name="effect_category" value="damage"/>
+            <column name="level" value="16" />
+            <column name="effect_type" value="Fire"/>
+            <column name="effect_modifier" value="5"/>
+            <column name="effect_die" value="6"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="365"/>
+            <column name="spell_name" value="Dragonborn Breath Weapon - Bronze"/>
+            <column name="effect_category" value="damage"/>
+            <column name="level" value="1" />
+            <column name="effect_type" value="Lightning"/>
+            <column name="effect_modifier" value="2"/>
+            <column name="effect_die" value="6"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="365"/>
+            <column name="spell_name" value="Dragonborn Breath Weapon - Bronze"/>
+            <column name="effect_category" value="damage"/>
+            <column name="level" value="6" />
+            <column name="effect_type" value="Lightning"/>
+            <column name="effect_modifier" value="3"/>
+            <column name="effect_die" value="6"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="365"/>
+            <column name="spell_name" value="Dragonborn Breath Weapon - Bronze"/>
+            <column name="effect_category" value="damage"/>
+            <column name="level" value="11" />
+            <column name="effect_type" value="Lightning"/>
+            <column name="effect_modifier" value="4"/>
+            <column name="effect_die" value="6"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="365"/>
+            <column name="spell_name" value="Dragonborn Breath Weapon - Bronze"/>
+            <column name="effect_category" value="damage"/>
+            <column name="level" value="16" />
+            <column name="effect_type" value="Lightning"/>
+            <column name="effect_modifier" value="5"/>
+            <column name="effect_die" value="6"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="366"/>
+            <column name="spell_name" value="Dragonborn Breath Weapon - Copper"/>
+            <column name="effect_category" value="damage"/>
+            <column name="level" value="1" />
+            <column name="effect_type" value="Acid"/>
+            <column name="effect_modifier" value="2"/>
+            <column name="effect_die" value="6"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="366"/>
+            <column name="spell_name" value="Dragonborn Breath Weapon - Copper"/>
+            <column name="effect_category" value="damage"/>
+            <column name="level" value="6" />
+            <column name="effect_type" value="Acid"/>
+            <column name="effect_modifier" value="3"/>
+            <column name="effect_die" value="6"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="366"/>
+            <column name="spell_name" value="Dragonborn Breath Weapon - Copper"/>
+            <column name="effect_category" value="damage"/>
+            <column name="level" value="11" />
+            <column name="effect_type" value="Acid"/>
+            <column name="effect_modifier" value="4"/>
+            <column name="effect_die" value="6"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="366"/>
+            <column name="spell_name" value="Dragonborn Breath Weapon - Copper"/>
+            <column name="effect_category" value="damage"/>
+            <column name="level" value="16" />
+            <column name="effect_type" value="Acid"/>
+            <column name="effect_modifier" value="5"/>
+            <column name="effect_die" value="6"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="367"/>
+            <column name="spell_name" value="Dragonborn Breath Weapon - Gold"/>
+            <column name="effect_category" value="damage"/>
+            <column name="level" value="1" />
+            <column name="effect_type" value="Fire"/>
+            <column name="effect_modifier" value="2"/>
+            <column name="effect_die" value="6"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="367"/>
+            <column name="spell_name" value="Dragonborn Breath Weapon - Gold"/>
+            <column name="effect_category" value="damage"/>
+            <column name="level" value="6" />
+            <column name="effect_type" value="Fire"/>
+            <column name="effect_modifier" value="3"/>
+            <column name="effect_die" value="6"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="367"/>
+            <column name="spell_name" value="Dragonborn Breath Weapon - Gold"/>
+            <column name="effect_category" value="damage"/>
+            <column name="level" value="11" />
+            <column name="effect_type" value="Fire"/>
+            <column name="effect_modifier" value="4"/>
+            <column name="effect_die" value="6"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="367"/>
+            <column name="spell_name" value="Dragonborn Breath Weapon - Gold"/>
+            <column name="effect_category" value="damage"/>
+            <column name="level" value="16" />
+            <column name="effect_type" value="Fire"/>
+            <column name="effect_modifier" value="5"/>
+            <column name="effect_die" value="6"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="368"/>
+            <column name="spell_name" value="Dragonborn Breath Weapon - Green"/>
+            <column name="effect_category" value="damage"/>
+            <column name="level" value="1" />
+            <column name="effect_type" value="Poison"/>
+            <column name="effect_modifier" value="2"/>
+            <column name="effect_die" value="6"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="368"/>
+            <column name="spell_name" value="Dragonborn Breath Weapon - Green"/>
+            <column name="effect_category" value="damage"/>
+            <column name="level" value="6" />
+            <column name="effect_type" value="Poison"/>
+            <column name="effect_modifier" value="3"/>
+            <column name="effect_die" value="6"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="368"/>
+            <column name="spell_name" value="Dragonborn Breath Weapon - Green"/>
+            <column name="effect_category" value="damage"/>
+            <column name="level" value="11" />
+            <column name="effect_type" value="Poison"/>
+            <column name="effect_modifier" value="4"/>
+            <column name="effect_die" value="6"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="368"/>
+            <column name="spell_name" value="Dragonborn Breath Weapon - Green"/>
+            <column name="effect_category" value="damage"/>
+            <column name="level" value="16" />
+            <column name="effect_type" value="Poison"/>
+            <column name="effect_modifier" value="5"/>
+            <column name="effect_die" value="6"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="369"/>
+            <column name="spell_name" value="Dragonborn Breath Weapon - Red"/>
+            <column name="effect_category" value="damage"/>
+            <column name="level" value="1" />
+            <column name="effect_type" value="Fire"/>
+            <column name="effect_modifier" value="2"/>
+            <column name="effect_die" value="6"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="369"/>
+            <column name="spell_name" value="Dragonborn Breath Weapon - Red"/>
+            <column name="effect_category" value="damage"/>
+            <column name="level" value="6" />
+            <column name="effect_type" value="Fire"/>
+            <column name="effect_modifier" value="3"/>
+            <column name="effect_die" value="6"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="369"/>
+            <column name="spell_name" value="Dragonborn Breath Weapon - Red"/>
+            <column name="effect_category" value="damage"/>
+            <column name="level" value="11" />
+            <column name="effect_type" value="Fire"/>
+            <column name="effect_modifier" value="4"/>
+            <column name="effect_die" value="6"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="369"/>
+            <column name="spell_name" value="Dragonborn Breath Weapon - Red"/>
+            <column name="effect_category" value="damage"/>
+            <column name="level" value="16" />
+            <column name="effect_type" value="Fire"/>
+            <column name="effect_modifier" value="5"/>
+            <column name="effect_die" value="6"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="370"/>
+            <column name="spell_name" value="Dragonborn Breath Weapon - Silver"/>
+            <column name="effect_category" value="damage"/>
+            <column name="level" value="1" />
+            <column name="effect_type" value="Cold"/>
+            <column name="effect_modifier" value="2"/>
+            <column name="effect_die" value="6"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="370"/>
+            <column name="spell_name" value="Dragonborn Breath Weapon - Silver"/>
+            <column name="effect_category" value="damage"/>
+            <column name="level" value="6" />
+            <column name="effect_type" value="Cold"/>
+            <column name="effect_modifier" value="3"/>
+            <column name="effect_die" value="6"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="370"/>
+            <column name="spell_name" value="Dragonborn Breath Weapon - Silver"/>
+            <column name="effect_category" value="damage"/>
+            <column name="level" value="11" />
+            <column name="effect_type" value="Cold"/>
+            <column name="effect_modifier" value="4"/>
+            <column name="effect_die" value="6"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="370"/>
+            <column name="spell_name" value="Dragonborn Breath Weapon - Silver"/>
+            <column name="effect_category" value="damage"/>
+            <column name="level" value="16" />
+            <column name="effect_type" value="Cold"/>
+            <column name="effect_modifier" value="5"/>
+            <column name="effect_die" value="6"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="371"/>
+            <column name="spell_name" value="Dragonborn Breath Weapon - White"/>
+            <column name="effect_category" value="damage"/>
+            <column name="level" value="1" />
+            <column name="effect_type" value="Cold"/>
+            <column name="effect_modifier" value="2"/>
+            <column name="effect_die" value="6"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="371"/>
+            <column name="spell_name" value="Dragonborn Breath Weapon - White"/>
+            <column name="effect_category" value="damage"/>
+            <column name="level" value="6" />
+            <column name="effect_type" value="Cold"/>
+            <column name="effect_modifier" value="3"/>
+            <column name="effect_die" value="6"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="371"/>
+            <column name="spell_name" value="Dragonborn Breath Weapon - White"/>
+            <column name="effect_category" value="damage"/>
+            <column name="level" value="11" />
+            <column name="effect_type" value="Cold"/>
+            <column name="effect_modifier" value="4"/>
+            <column name="effect_die" value="6"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="371"/>
+            <column name="spell_name" value="Dragonborn Breath Weapon - White"/>
+            <column name="effect_category" value="damage"/>
+            <column name="level" value="16" />
+            <column name="effect_type" value="Cold"/>
+            <column name="effect_modifier" value="5"/>
+            <column name="effect_die" value="6"/>
+        </insert>
+
+    </changeSet>
+    <changeSet author="mdbdba" id="lu_spell_effect_3">
+        <createView replaceIfExists="true"
+            schemaName="dnd_5e"
+            viewName="v_spell_damage_level">with tb as ( SELECT a.id, a.spell_id, a.spell_name, a.effect_category,
+                            a.effect_type, a.effect_modifier, a.effect_die, a.level,
+             row_number() over (partition by a.spell_name, a.effect_type order by level desc) as order_by
+        from lu_spell_effect as a
+        where a.effect_category = 'damage' )
+        select b.id, b.spell_id, b.spell_name, b.effect_category,
+               b.effect_type, b.effect_modifier, b.effect_die,
+               b.level as lower_level,
+               coalesce(c.level, 21) - 1 as upper_level
+        from tb b
+        left join tb c on b.spell_id = c.spell_id
+           and b.spell_name = c.spell_name
+           and b.effect_type = c.effect_type
+           and c.order_by = b.order_by - 1
+        </createView>
+    </changeSet>
+    <changeSet author="mdbdba" id="lu_spell_effect_4">
+        <dropView  schemaName="dnd_5e"  viewName="v_spell_damage_level"/>
+        <createView replaceIfExists="true"
+            schemaName="dnd_5e"
+            viewName="v_spell_effect_by_level">with tb as ( SELECT a.id, a.spell_id, a.spell_name, a.effect_category,
+                            a.effect_type, a.effect_modifier, a.effect_die, a.level,
+             row_number() over (partition by a.spell_name, a.effect_type order by level desc) as order_by
+        from lu_spell_effect as a
+        where a.effect_category = 'damage' )
+        select b.id, b.spell_id, b.spell_name, b.effect_category,
+               b.effect_type, b.effect_modifier, b.effect_die,
+               b.level as lower_level,
+               coalesce(c.level, 21) - 1 as upper_level
+        from tb b
+        left join tb c on b.spell_id = c.spell_id
+           and b.spell_name = c.spell_name
+           and b.effect_type = c.effect_type
+           and c.order_by = b.order_by - 1
+        </createView>
+    </changeSet>
+</databaseChangeLog>

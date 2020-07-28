@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet author="mdbdba" id="lu_spell_save_outcome_1">
+        <createTable
+                schemaName="dnd_5e"
+                tableName="lu_spell_save_outcome">
+            <column name="value" type="varchar(16)"/>
+        </createTable>
+        <addPrimaryKey
+            columnNames="value"
+            constraintName="pk_lu_spell_save_outcome"
+            schemaName="dnd_5e"
+            tableName="lu_spell_save_outcome"/>
+        <insert schemaName="dnd_5e" tableName="lu_spell_save_outcome">
+            <column name="value" value="HalfPossible"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell_save_outcome">
+            <column name="value" value="ReducedToZero"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>

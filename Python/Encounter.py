@@ -580,6 +580,14 @@ class Encounter(object):
         return (f"{self.get_player(side_array_name, side_array_index).get_name()} "
                 f"{self.get_array_id_string(side_array_name, side_array_index)}")
 
+    def perform_spell(self, caster, spell_name, targets):
+        # look up spell to get spell obj
+        if spell_type = "Damage":
+
+        # do SpellAttack
+        # for each of the targets
+        pass
+
     @ctx_decorator
     def turn(self, initiative_ind, waiting_for):
         with self.tracer.span(name='turn'):
@@ -667,7 +675,8 @@ class Encounter(object):
                 # If they don't have a ranged weapon or spell attack
                 # they must be a melee fighter.  When not in melee range
                 # use action for movement.
-                cur_action = cur_active.get_action(distance_from_player=dl)
+                cur_action_dict = cur_active.get_action(distance_from_player=dl)
+                cur_action = cur_action_dict["Action"]
 
                 turn_audit['action'] = cur_action
                 turn_audit["action_waiting"] = False
@@ -700,7 +709,6 @@ class Encounter(object):
                         f"[{self.initiative[initiative_ind][4]}][{self.initiative[initiative_ind][5]}]")
                     turn_audit["movement_turn_end_location"] = (
                         f"[{self.initiative[initiative_ind][4]}][{self.initiative[initiative_ind][5]}]")
-
                 elif cur_action == 'Wait on Melee':
                     # If an enemy gets into melee range this round, ATTACK!
                     t_player_name_str = self.get_name_str(dl[0][3], dl[0][4])
@@ -713,6 +721,13 @@ class Encounter(object):
                     waiting_for.append([self.initiative[initiative_ind][0],
                                         self.initiative[initiative_ind][1],
                                         dl[0][3], dl[0][4]])
+                elif cur_action == 'Spell':
+                    tmp_targets = []
+                    for t in cur_action_dict["Targets"]:
+                        tmp_targets.append(self.get_player(t.player_group, t.player_index))
+                    self.perform_spell(caster=cur_active,
+                                       spell_name=cur_action_dict["Specific_Name"],
+                                       targets=tmp_targets)
                 elif cur_action == 'Melee':
                     turn_audit["in_melee"] = True
                     turn_audit["in_melee_with"] = self.get_player(dl.targets[0].occupied_by_group,

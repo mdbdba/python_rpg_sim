@@ -80,8 +80,8 @@ class Attack(object):
     @ctx_decorator
     def set_possible_damage(self):
         total = 0
-        # print(self.weapon_obj.damage_dict.items())
-        for key, value in self.weapon_obj.damage_dict.items():
+        # print(self.weapon_obj.effect_obj.items())
+        for key, value in self.weapon_obj.effect_obj.items():
             if value[0] == 1 and self.versatile_use_2handed is True:
                 d = Die(ctx=self.ctx, sides=self.weapon_obj.versatile_2hnd_die)
                 self.die_used = self.weapon_obj.versatile_2hnd_die
