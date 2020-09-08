@@ -42,10 +42,10 @@ class Foe(Character):
 
         if self.melee_weapon is not None:
             self.melee_weapon_obj = Weapon(db=db, ctx=ctx, name=self.get_melee_weapon())
-            self.melee_weapon_obj.setWeaponProficient()
+            self.melee_weapon_obj.set_weapon_proficient()
         if self.ranged_weapon is not None:
             self.ranged_weapon_obj = Weapon(db=db, ctx=ctx, name=self.get_ranged_weapon())
-            self.melee_weapon_obj.setWeaponProficient()
+            self.melee_weapon_obj.set_weapon_proficient()
 
         self.set_damage_adjs(db=db)
 
@@ -79,8 +79,8 @@ class Foe(Character):
     def default_ranged_attack(self, target_name, attacker_id='unknown', encounter_round=-1, encounter_turn=-1,
                              vantage='Normal', luck_retry=False):
         self.stats.ranged_attack_attempts += 1
-        return self.ranged_attack(weapon_obj=self.ranged_weapon_obj, attacker_id=attacker_id, target_name=target_name,
-                                 encounter_round=encounter_round, encounter_turn=encounter_turn,
+        return self.ranged_attack(weapon_obj=self.ranged_weapon_obj, attacker_id=attacker_id, target_name_str=target_name,
+                                  encounter_round=encounter_round, encounter_turn=encounter_turn,
                                   vantage=vantage, luck_retry=luck_retry)
 
     @ctx_decorator

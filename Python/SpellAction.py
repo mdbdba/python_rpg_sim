@@ -14,8 +14,6 @@ class SpellAction(object):
     def __init__(self, ctx: Ctx, spell_obj,
                  attack_modifier,  # bonus to the toHit
                  damage_modifier,
-                 encounter_round,
-                 encounter_turn,
                  caster_name,
                  targets,
                  save_dc=None,
@@ -25,8 +23,8 @@ class SpellAction(object):
         self.spell_obj = spell_obj
         self.spell_name = spell_obj.name
         self.effect_obj = spell_obj.effect_obj  # could be damage or healing
-        self.encounter_round = encounter_round
-        self.encounter_turn = encounter_turn
+        self.encounter_round = self.ctx.round
+        self.encounter_turn = self.ctx.turn
         self.caster_name = caster_name
         self.targets = targets
         self.attack_modifier = attack_modifier
@@ -181,8 +179,6 @@ if __name__ == '__main__':
                          spell_obj=s1,
                          attack_modifier=0,
                          damage_modifier=0,
-                         encounter_round=13,
-                         encounter_turn=5,
                          caster_name='Bob',
                          save_dc=14,
                          targets=f1,

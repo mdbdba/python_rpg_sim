@@ -408,4 +408,133 @@
  where id in (362, 363, 364, 365, 366, 367, 368, 369, 370, 371);
         </sql>
     </changeSet>
+    <changeSet author="mdbdba" id="lu_spell_6">
+        <addColumn
+            schemaName="dnd_5e"
+            tableName="lu_spell">
+		    <column
+                name="explicit_targets"
+			    type="smallint"/>
+	    </addColumn>
+        <addDefaultValue
+                columnDataType="smallint"
+                columnName="explicit_targets"
+                defaultValue="-1"
+                schemaName="dnd_5e"
+                tableName="lu_spell"/>
+    </changeSet>
+    <changeSet author="mdbdba" id="lu_spell_7">
+        <sql splitStatements="true"
+             stripComments="true">update dnd_5e.lu_spell set explicit_targets = -1
+ where id in (362, 363, 364, 365, 366, 367, 368, 369, 370, 371);
+        </sql>
+    </changeSet>
+    <changeSet author="mdbdba" id="lu_spell_8">
+                <insert schemaName="dnd_5e" tableName="lu_spell">
+            <column name="id" value="372"/>
+            <column name="name" value="Toll the Dead"/>
+            <column name="level" value="0"/>
+            <column name="school" value="Necromancy" />
+            <column name="casting_time_amt" value="1"/>
+            <column name="casting_time_uom" value="Action"/>
+            <column name="range_amt" value="1"/>
+            <column name="range_uom" value="Sight"/>
+            <column name="range_aoe" value=""/>
+            <column name="verbal_component_ind" value="true"/>
+            <column name="somatic_component_ind" value="true"/>
+            <column name="material_component_ind" value="false"/>
+            <column name="duration_amt" value="1"/>
+            <column name="duration_uom" value="Instantaneous"/>
+            <column name="concentration_ind" value="false"/>
+            <column name="description" value="You point at one creature you can see within range, and the sound of a dolorous bell fills the air around it for a moment. If the target has already taken damage, this damage increases."/>
+            <column name="higher_level_cast" value="level:1,type:Necrotic,damage:1D8or1D12|level:5,type:Necrotic,damage:2D8or2D12|level:11,type:Necrotic,damage:3D8or3D12|level:17,type:Necrotic,damage:4D8or4D12"/>
+            <column name="save" value="Wisdom"/>
+            <column name="attack_roll_required_ind" value="false" />
+            <column name="save_outcome" value="ReducedToZero" />
+            <column name="explicit_targets" value="1" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell">
+            <column name="id" value="373"/>
+            <column name="name" value="Chill Touch"/>
+            <column name="level" value="0"/>
+            <column name="school" value="Necromancy" />
+            <column name="casting_time_amt" value="1"/>
+            <column name="casting_time_uom" value="Action"/>
+            <column name="range_amt" value="120"/>
+            <column name="range_uom" value="Feet"/>
+            <column name="range_aoe" value=""/>
+            <column name="verbal_component_ind" value="true"/>
+            <column name="somatic_component_ind" value="true"/>
+            <column name="material_component_ind" value="false"/>
+            <column name="duration_amt" value="1"/>
+            <column name="duration_uom" value="Round(s)"/>
+            <column name="concentration_ind" value="false"/>
+            <column name="description" value="You create a ghostly, skeletal hand in the space of a creature within range. Make a ranged spell Attack against the creature to assail it with the chill of the grave. If you hit an Undead target, it also has disadvantage on Attack rolls against you until the end of your next turn."/>
+            <column name="higher_level_cast" value="level:1,type:Necrotic,damage:1D8or1D12|level:5,type:Necrotic,damage:2D8or2D12|level:11,type:Necrotic,damage:3D8or3D12|level:17,type:Necrotic,damage:4D8or4D12"/>
+            <column name="attack_roll_required_ind" value="true" />
+            <column name="save_outcome" value="NoSave" />
+            <column name="explicit_targets" value="1" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell">
+            <column name="id" value="374"/>
+            <column name="name" value="Fire Bolt"/>
+            <column name="level" value="0"/>
+            <column name="school" value="Evocation" />
+            <column name="casting_time_amt" value="1"/>
+            <column name="casting_time_uom" value="Action"/>
+            <column name="range_amt" value="120"/>
+            <column name="range_uom" value="Feet"/>
+            <column name="range_aoe" value=""/>
+            <column name="verbal_component_ind" value="true"/>
+            <column name="somatic_component_ind" value="true"/>
+            <column name="material_component_ind" value="false"/>
+            <column name="duration_amt" value="1"/>
+            <column name="duration_uom" value="Instantaneous"/>
+            <column name="concentration_ind" value="false"/>
+            <column name="description" value="You hurl a mote of fire at a creature or object within range. Make a ranged spell attack against the target."/>
+            <column name="higher_level_cast" value="level:1,type:Fire,damage:1D10|level:5,type:Fire,damage:2D10|level:11,type:Fire,damage:3D10|level:17,type:Fire,damage:4D10"/>
+            <column name="attack_roll_required_ind" value="true" />
+            <column name="save_outcome" value="NoSave" />
+            <column name="explicit_targets" value="1" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell">
+            <column name="id" value="375"/>
+            <column name="name" value="Magic Missile"/>
+            <column name="level" value="1"/>
+            <column name="school" value="Evocation" />
+            <column name="casting_time_amt" value="1"/>
+            <column name="casting_time_uom" value="Action"/>
+            <column name="range_amt" value="120"/>
+            <column name="range_uom" value="Feet"/>
+            <column name="range_aoe" value=""/>
+            <column name="verbal_component_ind" value="true"/>
+            <column name="somatic_component_ind" value="true"/>
+            <column name="material_component_ind" value="false"/>
+            <column name="duration_amt" value="1"/>
+            <column name="duration_uom" value="Instantaneous"/>
+            <column name="concentration_ind" value="false"/>
+            <column name="description" value="You create three glowing darts of magical force. Each dart hits a creature of your choice that you can see within range. A dart deals 1d4+1 force damage to its target. The darts all strike simultaneously and you can direct them to hit one creature or several."/>
+            <column name="higher_level_cast" value="level:1,type:Fire,damage:1D4+1,targets:3|level:2,type:Fire,damage:1D4+1,targets:4|level:3,type:Fire,damage:1D4+1,targets:5|level:4,type:Fire,damage:1D4+1,targets:6|level:5,type:Fire,damage:1D4+1,targets:7|level:6,type:Fire,damage:1D4+1,targets:8|level:7,type:Fire,damage:1D4+1,targets:9|level:8,type:Fire,damage:1D4+1,targets:10|level:9,type:Fire,damage:1D4+1,targets:11"/>
+            <column name="attack_roll_required_ind" value="true" />
+            <column name="save_outcome" value="NoSave" />
+            <column name="explicit_targets" value="3" />
+        </insert>
+    </changeSet>
+    <changeSet author="mdbdba" id="lu_spell_9">
+        <dropColumn
+                schemaName="dnd_5e"
+                tableName="lu_spell">
+            <column
+                    name="explicit_targets" />
+        </dropColumn>
+    </changeSet>
+    <changeSet author="mdbdba" id="lu_spell_10">
+        <insert schemaName="dnd_5e" tableName="lu_range_aoe"><column name="value" value="Person"/></insert>
+    </changeSet>
+    <changeSet author="mdbdba" id="lu_spell_11">
+        <sql splitStatements="true"
+             stripComments="true">update dnd_5e.lu_spell set range_aoe = 'Person'
+ where range_aoe = ''
+        </sql>
+    </changeSet>
 </databaseChangeLog>

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    
+    <changeSet author="mdbdba" id="lu_racial_spell_choice_defaults_1">
+        <createTable 
+                schemaName="dnd_5e"
+                tableName="lu_racial_spell_choice_defaults">
+            <column name="race" type="varchar(32)"/>
+            <column name="spell_list" type="varchar(32)"/>
+            <column name="spell_name" type="varchar(64)"/>
+            <column name="spell_level" type="smallint"/>
+            <column name="casting_ability" type="varchar(16)"/>
+            <column name="recharge_on" type="varchar(16)"/>
+            <column name="order_by"  type="smallint"/>
+        </createTable>
+        <addPrimaryKey 
+            columnNames="race,spell_level,order_by"
+            constraintName="pk_lu_racial_spell_choice_defaults"
+            schemaName="dnd_5e"
+            tableName="lu_racial_spell_choice_defaults"/>
+        <addForeignKeyConstraint baseColumnNames="race"
+            baseTableName="lu_racial_spell_choice_defaults"
+            constraintName="fk_lu_racial_spell_choice_defaults_race"
+            deferrable="true"
+            initiallyDeferred="true"
+            onDelete="CASCADE"
+            onUpdate="RESTRICT"
+            referencedColumnNames="race"
+            referencedTableName="lu_race"/>
+        <addForeignKeyConstraint baseColumnNames="casting_ability"
+                                 baseTableName="lu_racial_spell_choice_defaults"
+                                 constraintName="fk_lu_racial_spell_choice_defaults_casting_ability"
+                                 deferrable="true"
+                                 initiallyDeferred="true"
+                                 onDelete="CASCADE"
+                                 onUpdate="RESTRICT"
+                                 referencedColumnNames="name"
+                                 referencedTableName="lu_ability"/>
+    </changeSet>
+    <changeSet author="mdbdba" id="lu_racial_spell_choice_defaults_2">
+        <insert schemaName="dnd_5e" tableName="lu_racial_spell_choice_defaults">
+            <column name="race" value="High elf"/>
+            <column name="spell_list" value="Wizard"/>
+            <column name="spell_name" value="Toll the Dead"/>
+            <column name="spell_level" value="0"/>
+            <column name="casting_ability" value="Intelligence"/>
+            <column name="recharge_on" value="Long Rest"/>
+            <column name="order_by"  value="1"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_spell_choice_defaults">
+        <column name="race" value="Loredrake kobold"/>
+        <column name="spell_list" value="Sorcerer"/>
+        <column name="spell_name" value="Chill Touch"/>
+        <column name="spell_level" value="0"/>
+        <column name="casting_ability" value="Charisma"/>
+        <column name="recharge_on" value="Long Rest"/>
+        <column name="order_by"  value="1"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_spell_choice_defaults">
+            <column name="race" value="Loredrake kobold"/>
+            <column name="spell_list" value="Sorcerer"/>
+            <column name="spell_name" value="Fire Bolt"/>
+            <column name="spell_level" value="0"/>
+            <column name="casting_ability" value="Charisma"/>
+            <column name="recharge_on" value="Long Rest"/>
+            <column name="order_by"  value="2"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_racial_spell_choice_defaults">
+            <column name="race" value="Loredrake kobold"/>
+            <column name="spell_list" value="Sorcerer"/>
+            <column name="spell_name" value="Magic Missile"/>
+            <column name="spell_level" value="1"/>
+            <column name="casting_ability" value="Charisma"/>
+            <column name="recharge_on" value="Long Rest"/>
+            <column name="order_by"  value="1"/>
+        </insert>
+    </changeSet>
+    <changeSet author="mdbdba" id="lu_racial_spell_choice_defaults_3">
+        <sql splitStatements="true"
+             stripComments="true">update dnd_5e.lu_racial_spell_choice_defaults set recharge_on = null
+ where spell_name != 'Magic Missile'
+        </sql>
+    </changeSet>
+</databaseChangeLog>

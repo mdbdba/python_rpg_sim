@@ -95,4 +95,18 @@
            <column name="description" value="Cost:Movement(15feet);Range:60feet"/>
         </insert>
     </changeSet>
+    <changeSet author="mdbdba" id="my_lu_racial_trait_2">
+        <update schemaName="dnd_5e"
+            tableName="lu_racial_trait">
+          <column name="affected_name" value="Tree Stride"/>
+            <where> name = 'Forest Step' and race = 'Dryad'</where>
+        </update>
+    </changeSet>
+    <changeSet author="mdbdba" id="my_lu_racial_trait_3">
+        <update schemaName="dnd_5e"
+            tableName="lu_racial_trait">
+          <column name="description" value="Cost:Movement(15feet),Range:60feet"/>
+            <where> name = 'Forest Step' and race = 'Dryad'</where>
+        </update>
+    </changeSet>
 </databaseChangeLog>

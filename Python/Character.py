@@ -496,7 +496,7 @@ class Character(object):
         self.ctx.crumbs[-1].add_audit(json_dict=jdict)
 
     @ctx_decorator
-    def get_spell_saving_throw_dc(self, ability ):
+    def get_spell_saving_throw_dc(self, ability):
         ability_mod = self.get_ability_modifier(ability=ability)
         prof_bonus = self.proficiency_bonus
         dc = 8 + ability_mod + prof_bonus
@@ -612,6 +612,7 @@ class Character(object):
                 jdict['used_relentless_to_avoid_unconsciousness'] = "True"
             else:
                 self.unconscious_ind = True
+                self.prone_ind = True
                 self.stabilized = False
                 jdict['to_unconscious'] = self.unconscious_ind
                 jdict['to_stabilized'] = self.stabilized
@@ -637,21 +638,19 @@ class Character(object):
     def get_user_header(self):
         return f'{self.get_name()}({self.cur_hit_points}/{self.hit_points})'
 
-
-
     @ctx_decorator
     def get_range_targets(self, range, distance_from_targets, area_of_effect="player", if_only_group="None"):
-        # if the area of effect is player, use the closest player.  For now,
+        # if the area of effect is player, use the closest target.  For now,
         # This should change when the caster can realize where the spell will have the most effect or
         # when they can realize if there is a magic user in the opposing party.  They will be targeted then.
         return_array = []
-        if area_of_effect == "player":
+        if area_of_effect == "Person":
             return_array.append(distance_from_targets.targets[0])
         else:
-            mapped_area_of_effect = calculate_area_of_effect(player_location_x,
-                                                             player_location_y,
-                                                             range = range,
-                                                             aoe_type = area_of_effect)
+            mapped_area_of_effect = calculate_area_of_effect(player_location_x=distance_from_targets.chums[0].x,
+                                                             player_location_y=distance_from_targets.chums[0].y,
+                                                             range=range,
+                                                             aoe_type=area_of_effect)
             if len(mapped_area_of_effect) > 0:
                 if if_only_group != "None":
                     if if_only_group == "chums":
@@ -660,18 +659,23 @@ class Character(object):
                         group_to_compare = distance_from_targets.chums
                     for c in group_to_compare:
                         for map_point in mapped_area_of_effect:
-                           if c.x == map_point[0] and c.y == map_point[1]:
-                               return []
+                            if c.x == map_point[0] and c.y == map_point[1]:
+                                return []
                 for map_point in mapped_area_of_effect:
-                    for g in [ distance_from_targets.target, distance_from_targets.chums]:
+                    for g in [distance_from_targets.target, distance_from_targets.chums]:
                         for p in g:
                             if p.x == map_point[0] and p.y == map_point[1]:
                                 return_array.append(p)
         return return_array
 
+    def use_spell(self, spell_name):
+        # for spells that are managed by uses:
+        if self.spell_list[spell_name].available_count > 0:
+            self.spell_list[spell_name].available_count -= 1
+
     @ctx_decorator
     def get_action(self, distance_from_player):
-        ret_val = { "Action": "Undecided" }
+        ret_val = {"Action": "Undecided"}
         op_dist = distance_from_player.targets[0].distance
         jdict = {
             "character_alive": self.alive,
@@ -682,37 +686,38 @@ class Character(object):
         spell_targets = []
         spell_name = "None"
         if not self.alive:
-            ret_val = { "Action": "None" }
+            ret_val = {"Action": "None"}
         elif not self.stabilized:
-            ret_val = { "Action": "Death Save" }
+            ret_val = {"Action": "Death Save"}
         elif self.get_combat_preference() == 'Melee':
             # Yeah, this player want's to bash heads, but if they have a spell that they could take advantage of,
             #  they will.
-            if len(self.spell_list) > 0:
+            if len(self.spell_list) > 0 and op_dist >= 10:
                 max_damage_value = 0
+                # cycle through their spells and look for one that has targets in range and does the most damage.
                 for x in self.spell_list.keys():
                     y = self.spell_list[x]
-                    if y.available_count > 0:
-                        spell_targets = self.get_range_targets(range=x.range_amt,
-                                                               distance_from_player=distance_from_player,
-                                                               area_of_effect=x.range_aoe,
-                                                               only_group="targets")
-                        if len(spell_targets) > 0 and max_damage_value < y.max_impact:
-                            max_damage_value = y.max_impact
+                    if ( y['available_count'] != 0):
+                        spell_targets = self.get_range_targets(range=y['range_amt'],
+                                                               distance_from_targets=distance_from_player,
+                                                               area_of_effect=y['range_aoe'],
+                                                               if_only_group="targets")
+                        if len(spell_targets) > 0 and max_damage_value < y['max_impact']:
+                            max_damage_value = y['max_impact']
                             spell_name = x
 
             if spell_name != "None":
-                ret_val = { "Action": "Spell",
-                            "Specific_Name": spell_name,
-                            "Targets": spell_targets }
+                ret_val = {"Action": "Spell",
+                           "Specific_Name": spell_name,
+                           "Targets": spell_targets}
             elif op_dist > self.cur_movement:
-                ret_val = { "Action": "Movement" }
+                ret_val = {"Action": "Movement"}
             elif (self.cur_movement >= op_dist > 8
-                  and not distance_from_player.target[0].used_range):
-                ret_val = { "Action": "Wait on Melee" }
+                  and not distance_from_player.targets[0].used_ranged):
+                ret_val = {"Action": "Wait on Melee"}
             elif op_dist <= 8:
-                ret_val = { "Action": "Melee",
-                            "Targets": [distance_from_player.target[0]] }
+                ret_val = {"Action": "Melee",
+                           "Targets": [distance_from_player.targets[0]]}
         else:
             t_range = self.get_ranged_range()
             jdict["ranged_weapon_range"] = t_range
@@ -735,19 +740,21 @@ class Character(object):
                 m_cnt += 1
 
             if op_dist > t_range and op_dist2 > t_range:
-                ret_val = { "Action": "Movement" }
+                ret_val = {"Action": "Movement"}
             elif working_ranged_index is None and op_dist >= 8:
-                ret_val = { "Action": "Movement" }
+                ret_val = {"Action": "Movement"}
             elif op_dist >= 8 and self.ranged_ammunition_amt < 1:
-                ret_val = { "Action": "Movement" }
+                ret_val = {"Action": "Movement"}
             elif working_ranged_index is not None:
-                ret_val = { "Action": "Ranged" }
 
                 t_tgt = distance_from_player.ranged_targets[working_ranged_index]
+                ret_val = {"Action": "Ranged",
+                           "Targets": [t_tgt]}
                 jdict["Ranged_target_change_team"] = t_tgt.occupied_by_group
                 jdict["Ranged_target_change_index"] = t_tgt.occupied_by_index
             elif op_dist <= 8:
-                ret_val = { "Action": "Melee" }
+                ret_val = {"Action": "Melee",
+                           "Targets": [distance_from_player.target[0]]}
 
         self.ctx.crumbs[-1].add_audit(json_dict=jdict)
         return ret_val
@@ -787,7 +794,7 @@ class Character(object):
         return ret_val
 
     @ctx_decorator
-    def ranged_attack(self, weapon_obj, target_name, attacker_id='unknown', encounter_round=-1, encounter_turn=-1,
+    def ranged_attack(self, ctx, weapon_obj, target_name_str, target, attacker_id='unknown',
                       vantage='Normal', luck_retry=False):
         # determine modifier
         # 1)  is this a martial weapon that needs specific proficiency
@@ -808,13 +815,11 @@ class Character(object):
         jdict["attack_modifier"] = modifier
         jdict["ability_damage_modifier"] = damage_modifier
 
-        attempt = Attack(ctx=self.ctx, weapon_obj=weapon_obj, attack_modifier=modifier,
+        attempt = Attack(ctx=ctx, weapon_obj=weapon_obj, attack_modifier=modifier,
                          damage_modifier=damage_modifier,
-                         encounter_round=encounter_round,
-                         encounter_turn=encounter_turn,
                          attack_type='Ranged',
-                         attacker_name=f'{self.get_name()} {attacker_id}', target_name=target_name,
-                         versatile_use_2handed=False, vantage=vantage)
+                         attacker_name_str=f'{self.get_name()} {attacker_id}', target_name=target_name_str,
+                         target=target, versatile_use_2handed=False, vantage=vantage)
         jdict['ranged_attack_value'] = attempt.attack_value
         jdict['ranged_possible_damage'] = attempt.possible_damage
         self.stats.attack_attempts += 1
@@ -828,8 +833,8 @@ class Character(object):
         # attack_roll: tuple = (attempt.natural_value, {attempt.attack_modifier})
         attack_roll = PointInTimeAttackRoll(round=attempt.encounter_round,
                                             turn=attempt.encounter_turn,
-                                            attacker_name=attempt.attacker_name,
-                                            target_name=attempt.target_name,
+                                            attacker_name=attempt.attacker_name_str,
+                                            target_name=attempt.target_name_str,
                                             attack_type=attempt.attack_type,
                                             base_roll=attempt.natural_value,
                                             adjustment_values={'attack_mod': attempt.attack_modifier,
@@ -848,7 +853,7 @@ class Character(object):
         return False
 
     @ctx_decorator
-    def melee_attack(self, weapon_obj, target_name, attacker_id='unknown', encounter_round=-1, encounter_turn=-1,
+    def melee_attack(self, ctx, weapon_obj, target_name_str, target, attacker_id='unknown',
                      vantage='Normal', luck_retry=False) -> Attack:
         # determine modifier
         # 1)  is this a martial weapon that needs specific proficiency
@@ -885,12 +890,10 @@ class Character(object):
         else:
             v2h = False
 
-        attempt = Attack(ctx=self.ctx, weapon_obj=weapon_obj,
+        attempt = Attack(ctx=ctx, weapon_obj=weapon_obj,
                          attack_modifier=modifier, damage_modifier=damage_modifier,
-                         encounter_round=encounter_round,
-                         encounter_turn=encounter_turn,
-                         attacker_name=f'{self.get_name()} {attacker_id}', target_name=target_name,
-                         attack_type='Melee',
+                         attacker_name_str=f'{self.get_name()} {attacker_id}', target_name_str=target_name_str,
+                         target=target, attack_type='Melee',
                          versatile_use_2handed=v2h, vantage=vantage)
         # ret_val: tuple = (attempt.attack_value, attempt.possible_damage, attempt.damage_type)
 
@@ -904,8 +907,8 @@ class Character(object):
         # attack_roll: tuple = (attempt.natural_value, {attempt.attack_modifier})
         attack_roll = PointInTimeAttackRoll(round=attempt.encounter_round,
                                             turn=attempt.encounter_turn,
-                                            attacker_name=attempt.attacker_name,
-                                            target_name=attempt.target_name,
+                                            attacker_name=attempt.attacker_name_str,
+                                            target_name=attempt.target_name_str,
                                             attack_type=attempt.attack_type,
                                             base_roll=attempt.natural_value,
                                             adjustment_values={'attack_mod': attempt.attack_modifier,
@@ -945,8 +948,8 @@ class Character(object):
         # defense_roll: tuple = (attack_obj.natural_value, attack_obj.attack_modifier)
         defense_roll = PointInTimeDefense(round=attack_obj.encounter_round,
                                           turn=attack_obj.encounter_turn,
-                                          attacker_name=attack_obj.attacker_name,
-                                          target_name=attack_obj.target_name,
+                                          attacker_name=attack_obj.attacker_name_str,
+                                          target_name=attack_obj.target_name_str,
                                           attack_type=attack_obj.attack_type,
                                           attack_value=attack_obj.attack_value,
                                           armor_class=self.armor_class,

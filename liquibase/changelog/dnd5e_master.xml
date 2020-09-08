@@ -51,6 +51,7 @@
     <include file="dnd5e_lu_study_size.xml"/>
     <include file="dnd5e_study.xml"/>
     <include file="dnd5e_character_request.xml"/>
+    <include file="dnd5e_lu_racial_spell_choice_defaults.xml"/>
     <includeAll path="licensedContent/"/>
     <includeAll path="myContent/"/>
 </databaseChangeLog>

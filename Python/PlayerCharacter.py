@@ -153,10 +153,10 @@ class PlayerCharacter(Character):
         # mod changes from level to level the hit points will reflect that.
         if self.class_obj.melee_weapon is not None:
             self.melee_weapon_obj = Weapon(db=db, ctx=self.ctx, name=self.get_melee_weapon())
-            self.melee_weapon_obj.setWeaponProficient()
+            self.melee_weapon_obj.set_weapon_proficient()
         if self.class_obj.ranged_weapon is not None:
             self.ranged_weapon_obj = Weapon(db=db, ctx=self.ctx, name=self.get_ranged_weapon())
-            self.ranged_weapon_obj.setWeaponProficient()
+            self.ranged_weapon_obj.set_weapon_proficient()
 
         self.hit_points = 0
         self.adjust_for_levels(db=db)
@@ -190,22 +190,48 @@ class PlayerCharacter(Character):
     @ctx_decorator
     def set_spell_list(self, db):
 
-        sql = (f"select distinct lrt.affected_name "
-               f"from lu_racial_trait lrt "
-               f"join lu_race as r on (lrt.race = r.race or lrt.race = r.subrace_of)"
-               f"where category in ('Spell') "
+        sql = (f"select lrt.affected_name, lrt.race, lrt.name, lrt.affected_adj, lrt.recharge_on, lrt.description " 
+               f"from lu_racial_trait lrt " 
+               f"join lu_race as r on (lrt.race = r.race or lrt.race = r.subrace_of) " 
+               f"where category in ('Spell') " 
+               f"and affected_name != 'Cantrip' " 
+               f"and affected_name not like 'level:%' " 
                f"and name is not null "
-               f"and (r.race = '{self.get_race()}' or r.subrace_of = '{self.get_race()}')")
+               f"and (r.race = '{self.get_race()}' or r.subrace_of = '{self.get_race()}')" 
+               f"union all " 
+               f"select lrscd.spell_name as affected_name, lrscd.race, " 
+               f"'Racial Choice ' || ((spell_level * 10) + order_by) as name, " 
+               f"null as affected_adj, lrscd.recharge_on, null as description " 
+               f"from lu_racial_spell_choice_defaults lrscd " 
+               f"where race = '{self.get_race()}'")
 
         results = db.query(sql)
         search_str = "'No Spells', "
+        lrt_dict = {}
         for result in results:
-            if search_str == "'No Spells', ":  # if there are no results query will run with 'No Spells'
+            if search_str == "'No Spells', ":  # if there are no results the search string will equal 'No Spells'
                 search_str = ""                # otherwise, we're going to build the search string.
-            # if 'dragonborn' in self.get_race() and result[0] == 'Draconic Ancestry':
-            #     search_str = f"{search_str}'Dragonborn Breath Weapon - {self.get_race().split(' ', 1)[0]}', "
-            # else:
-            search_str = f"{search_str}'{result[0]}', "
+
+            if result[4] and (result[4] == 'Long Rest' or result[4] == 'Sunrise'):
+                available_count = 1
+            else:
+                available_count = -1
+
+            tmp_dict = {"available_count": available_count}
+            no_level_restriction = True
+            if result[5]:
+                # split by , and then :   -- examples: onLevel:3,spellLevel:2  Cost:Movement(15feet);Range:60feet
+                category_array = result[5].split(',')
+                for cat in category_array:
+                    tmp_record = cat.split(':')
+                    if tmp_record[0] == 'onLevel' and self.level < int(tmp_record[1]):
+                        no_level_restriction = False
+                    else:
+                        tmp_dict[tmp_record[0]] = tmp_record[1]
+
+            if no_level_restriction:
+                lrt_dict[result[0]] = tmp_dict
+                search_str = f"{search_str}'{result[0]}', "
 
         search_str = search_str[0:-2]
         sql2 = (f"select name, level, save, casting_time_uom, range_amt, range_uom, range_aoe, "
@@ -215,25 +241,53 @@ class PlayerCharacter(Character):
         spell_results = db.query(sql2)
         if spell_results:
             for spell in spell_results:
-                # TODO -> build the actual spell class.
+                effect_sql = (f"select spell_id, effect_category, effect_type, "
+                              f"effect_modifier, effect_die, effect_adj, explicit_targets " 
+                              f"from v_spell_effect_by_level " 
+                              f"where spell_name = '{spell[0]}' " 
+                              f"and {self.level} between lower_level and upper_level")
+                effect_results = db.query(effect_sql)
 
-                # Hardcoding dict reference for now.
+                if effect_results[0][3]:
+                    effect_modifier = effect_results[0][3]
+                else:
+                    effect_modifier = 0
+
+                if effect_results[0][4]:
+                    effect_die = effect_results[0][4]
+                else:
+                    effect_die = 0
+
+                if effect_results[0][5]:
+                    effect_adj = effect_results[0][5]
+                else:
+                    effect_adj = 0
+
+                if effect_results[0][6]:
+                    explicit_targets = effect_results[0][6]
+                else:
+                    explicit_targets = 1
+
+                max_impact = ((effect_modifier*effect_die)+effect_adj)*explicit_targets
 
                 spell_ref_dict = {"category": "damage",
                                   "min_level": spell[1],
-                                  "max_impact": 12,
+                                  "max_impact": max_impact,
                                   "range_amt": spell[4],
                                   "range_aoe": spell[6],
                                   "casting_uom": spell[3],
-                                  "available_count": 1
+                                  "available_count": lrt_dict[spell[0]]['available_count']
                                   }
-
+                if 'spellLevel' in lrt_dict[spell[0]].keys():
+                    spell_ref_dict['cast_at_level'] = lrt_dict[spell[0]]['spellLevel']
+                if 'castAbility' in lrt_dict[spell[0]].keys():
+                    spell_ref_dict['cast_with_ability'] = lrt_dict[spell[0]]['castAbility']
                 self.spell_list[spell[0]] = spell_ref_dict
 
     @ctx_decorator
     def adjust_for_levels(self, db):
-        for l in range(self.level):
-            level = l + 1  # range indexes start at 0.
+        for adj_level in range(self.level):
+            level = adj_level + 1  # range indexes start at 0.
             # if there's ability change for this level make that change
             sql = (f"select count(level) "
                    f"from dnd_5e.lu_class_level_feature "
@@ -252,15 +306,6 @@ class PlayerCharacter(Character):
             # Add new hit points
             self.hit_points = self.add_hit_points(db=self.db, hit_die=self.get_hit_die(),
                                                   modifier=self.ability_modifier_array[2])
-            # if self.debug_ind == 1:
-            #     hp_str = f"hitPoints_level_{level}"
-            #     self.class_eval[-1][hp_str] = self.hit_points
-            #     if level > 1:
-            #         tl = level - 1
-            #         tlstr = f"hitPoints_level_{tl}"
-            #         tlhp = self.class_eval[-1][tlstr]
-            #         dfstr = f"hpdiff_level_{level}"
-            #         self.class_eval[-1][dfstr] = (self.hit_points - tlhp)
 
     @ctx_decorator
     def set_ability_modifier_array(self, db):
@@ -398,7 +443,7 @@ class PlayerCharacter(Character):
             # mod changes from level to level the hit points will reflect that.
             if self.class_obj.melee_weapon is not None:
                 self.melee_weapon_obj = Weapon(db=db, ctx=self.ctx, name=self.get_melee_weapon())
-                self.melee_weapon_obj.setWeaponProficient()
+                self.melee_weapon_obj.set_weapon_proficient()
             if self.class_obj.ranged_weapon is not None:
                 self.ranged_weapon_obj = Weapon(db=db, ctx=self.ctx, name=self.get_ranged_weapon())
 
@@ -609,18 +654,17 @@ class PlayerCharacter(Character):
         return ret_val
 
     @ctx_decorator
-    def default_melee_attack(self, target_name, attacker_id='unknown', encounter_round=-1, encounter_turn=-1,
-                             vantage='Normal', luck_retry=False):
-        return self.melee_attack(weapon_obj=self.melee_weapon_obj, attacker_id=attacker_id, target_name=target_name,
-                                 encounter_round=encounter_round, encounter_turn=encounter_turn,
+    def default_melee_attack(self, ctx, target_name, target, attacker_id='unknown', vantage='Normal', luck_retry=False):
+        return self.melee_attack(ctx=ctx, weapon_obj=self.melee_weapon_obj,
+                                 attacker_id=attacker_id, target_name=target_name, target=target,
                                  vantage=vantage, luck_retry=luck_retry)
 
     @ctx_decorator
-    def default_ranged_attack(self, target_name, attacker_id='unknown', encounter_round=-1, encounter_turn=-1,
-                              vantage='Normal', luck_retry=False):
+    def default_ranged_attack(self, ctx, target_name, target,
+                              attacker_id='unknown', vantage='Normal', luck_retry=False):
         self.stats.ranged_attack_attempts += 1
-        return self.ranged_attack(weapon_obj=self.ranged_weapon_obj, attacker_id=attacker_id, target_name=target_name,
-                                  encounter_round=encounter_round, encounter_turn=encounter_turn,
+        return self.ranged_attack(ctx=ctx, weapon_obj=self.ranged_weapon_obj,
+                                  attacker_id=attacker_id, target_name_str=target_name, target=target,
                                   vantage=vantage, luck_retry=luck_retry)
 
     def __str__(self):
@@ -703,8 +747,8 @@ class PlayerCharacter(Character):
 
         if self.race_obj.languages:
             outstr = f'{outstr}\n\nLanguages:'
-            for l in self.race_obj.languages:
-                outstr = f'{outstr}\n   {l}'
+            for lang in self.race_obj.languages:
+                outstr = f'{outstr}\n   {lang}'
 
         if self.race_obj.traitContainer.proficient:
             outstr = f'{outstr}\n\nProficiencies:'
@@ -798,8 +842,8 @@ class PlayerCharacter(Character):
 
         if self.race_obj.languages:
             outstr = f'{outstr}"Languages": ['
-            for l in self.race_obj.languages:
-                outstr = f'{outstr} "{l}", '
+            for obj_lang in self.race_obj.languages:
+                outstr = f'{outstr} "{obj_lang}", '
             if outstr[-2:] == ', ':
                 outstr = outstr[:-2]
             outstr = f'{outstr}], '
@@ -831,10 +875,10 @@ class PlayerCharacter(Character):
 
         if self.spell_list:
             outstr = f'{outstr}"spell list": {{'
-            for k in self.spell_list.keys():
-                outstr = f'{outstr} "{k}: {{ '
-                for l in self.spell_list[k].keys():
-                    outstr = f'{outstr} "{l}: {self.spell_list[k][l]}", '
+            for key in self.spell_list.keys():
+                outstr = f'{outstr} "{key}: {{ '
+                for spell_name in self.spell_list[key].keys():
+                    outstr = f'{outstr} "{spell_name}: {self.spell_list[key][spell_name]}", '
                 if outstr[-2:] == ', ':
                     outstr = f'{outstr[:-2]}}}, '
             if outstr[-2:] == ', ':
@@ -865,16 +909,16 @@ if __name__ == '__main__':
         # for i in range(len(a5.get_class_eval())):
         #     for key, value in a5.get_class_eval()[i].items():
         #         print(f"{i} -- {str(key).ljust(25)}: {value}")
-    #
+        #
         # a6 = PlayerCharacter(db=db, ctx=ctx,
         #                      ability_array_str="18,12,12,10,10,8",
         #                      race_candidate="Mountain Dwarf",
         #                      class_candidate="Barbarian")
 
-        # attack_obj = a5.default_melee_attack(target_name=a6.get_name())
+        # attack_obj = a5.default_melee_attack(target_name_str=a6.get_name())
         # a6.defend(attack_obj=attack_obj)
         # a6.heal(amount=10)
-        # attack_obj = a5.default_melee_attack(target_name=a6.get_name())
+        # attack_obj = a5.default_melee_attack(target_name_str=a6.get_name())
         # a6.defend(attack_obj=attack_obj)
         # a6.heal(amount=30)
         # t_a1 = a5.default_melee_attack(a6.get_name())
@@ -889,8 +933,19 @@ if __name__ == '__main__':
                              ability_array_str="18,12,12,10,10,8",
                              race_candidate="Copper dragonborn",
                              class_candidate="Barbarian")
-
         print(a8.__repr__)
+
+        a9 = PlayerCharacter(db=db, ctx=ctx,
+                             ability_array_str="18,12,12,10,10,8",
+                             race_candidate="High elf",
+                             class_candidate="Sorcerer")
+        print(a9.__repr__)
+
+        a10 = PlayerCharacter(db=db, ctx=ctx,
+                              ability_array_str="18,12,12,10,10,8",
+                              race_candidate="Loredrake kobold",
+                              class_candidate="Rogue")
+        print(a10.__repr__)
 
     except Exception as error:
         exc_type, exc_value, exc_traceback = sys.exc_info()

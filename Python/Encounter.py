@@ -1,6 +1,6 @@
 import sys
 import traceback
-import random
+# import random
 import os
 
 from operator import itemgetter
@@ -19,6 +19,8 @@ from Ctx import ctx_decorator
 from PointInTimeAmount import PointInTime
 from distanceFromPlayer import distanceTarget
 from distanceFromPlayer import distanceFromPlayer
+from Spell import Spell
+from SpellAction import SpellAction
 
 
 class Encounter(object):
@@ -35,6 +37,7 @@ class Encounter(object):
 
     def __init__(self,
                  ctx: Ctx,
+                 db: InvokePSQL,
                  heroes,
                  opponents,
                  field_size=100,
@@ -45,6 +48,7 @@ class Encounter(object):
                  ):
 
         self.ctx = ctx
+        self.db = db
         self.ctx.encounter_id = encounter_id
         self.stats = EncounterStats(study_instance_id=self.ctx.study_instance_id,
                                     series_id=self.ctx.series_id,
@@ -580,13 +584,19 @@ class Encounter(object):
         return (f"{self.get_player(side_array_name, side_array_index).get_name()} "
                 f"{self.get_array_id_string(side_array_name, side_array_index)}")
 
-    def perform_spell(self, caster, spell_name, targets):
+    @ctx_decorator
+    def perform_spell(self, caster, caster_name_str, spell_name, targets, cast_at_level=None, vantage='Normal'):
         # look up spell to get spell obj
-        if spell_type = "Damage":
-
-        # do SpellAttack
-        # for each of the targets
-        pass
+        s1 = Spell(db=self.db, ctx=self.ctx, name=spell_name, cast_at_level=cast_at_level)
+        dc = caster.get_spell_saving_throw_dc(s1.save)
+        caster.use_spell(spell_name)
+        return SpellAction(ctx=self.ctx, spell_obj=s1,
+                           attack_modifier=0,
+                           damage_modifier=0,
+                           caster_name_str=caster_name_str,
+                           caster=caster,
+                           save_dc=dc,
+                           targets=targets, vantage=vantage)
 
     @ctx_decorator
     def turn(self, initiative_ind, waiting_for):
@@ -624,7 +634,7 @@ class Encounter(object):
                 turn_audit["closest_opponent_distance"] = dl.targets[0].distance
                 turn_audit["target_location"] = f"[{dl.targets[0].x}][{dl.targets[0].y}]"
                 t_tmp = self.get_player(dl.targets[0].occupied_by_group, dl.targets[0].occupied_by_index)
-                turn_audit["target_name"] = t_tmp.get_name()
+                turn_audit["target_name_str"] = t_tmp.get_name()
                 target_name_str = self.get_name_str(dl.targets[0].occupied_by_group, dl.targets[0].occupied_by_index)
                 msg = (f"{summary_indent}{cur_active_name_str} targeted {target_name_str}"
                        f" {turn_audit['target_location']}, distance: {turn_audit['closest_opponent_distance']}")
@@ -690,6 +700,8 @@ class Encounter(object):
                 turn_audit["died_before_turn"] = False
 
                 if cur_action == 'Movement':
+                    # cur_action_dict:
+                    # {"Action": "Movement"}
                     avail_mvmt = cur_active.cur_movement / 5
                     turn_audit["movement_as_action_available"] = avail_mvmt
 
@@ -710,6 +722,8 @@ class Encounter(object):
                     turn_audit["movement_turn_end_location"] = (
                         f"[{self.initiative[initiative_ind][4]}][{self.initiative[initiative_ind][5]}]")
                 elif cur_action == 'Wait on Melee':
+                    # cur_action_dict:
+                    # {"Action": "Wait on Melee"}
                     # If an enemy gets into melee range this round, ATTACK!
                     t_player_name_str = self.get_name_str(dl[0][3], dl[0][4])
                     msg = (f"{summary_indent}{cur_active_name_str} chose to attack "
@@ -722,13 +736,20 @@ class Encounter(object):
                                         self.initiative[initiative_ind][1],
                                         dl[0][3], dl[0][4]])
                 elif cur_action == 'Spell':
-                    tmp_targets = []
-                    for t in cur_action_dict["Targets"]:
-                        tmp_targets.append(self.get_player(t.player_group, t.player_index))
-                    self.perform_spell(caster=cur_active,
-                                       spell_name=cur_action_dict["Specific_Name"],
-                                       targets=tmp_targets)
+                    # cur_action_dict:
+                    # {"Action": "Spell",
+                    #  "Specific_Name": spell_name,
+                    #  "Targets": spell_targets}
+                    self.handle_turn_attack_action(turn_audit=turn_audit,
+                                                   attacker_side=self.initiative[initiative_ind][0],
+                                                   attacker_index=self.initiative[initiative_ind][1],
+                                                   attack_type='Spell',
+                                                   action_obj=cur_action_dict)
+
                 elif cur_action == 'Melee':
+                    # cur_action_dict:
+                    # {"Action": "Melee",
+                    #  "Targets": target}
                     turn_audit["in_melee"] = True
                     turn_audit["in_melee_with"] = self.get_player(dl.targets[0].occupied_by_group,
                                                                   dl.targets[0].occupied_by_index).get_name()
@@ -754,8 +775,7 @@ class Encounter(object):
                                                            attacker_side=waiting_action[0],
                                                            attacker_index=waiting_action[1],
                                                            attack_type='Melee',
-                                                           target_side=self.initiative[initiative_ind][0],
-                                                           target_index=self.initiative[initiative_ind][1],
+                                                           action_obj=cur_action_dict,
                                                            audit_key_prefix="waiting_",
                                                            audit_key_suffix=f"_{t_cnt}")
                         else:
@@ -769,9 +789,11 @@ class Encounter(object):
                                                        attacker_side=self.initiative[initiative_ind][0],
                                                        attacker_index=self.initiative[initiative_ind][1],
                                                        attack_type='Melee',
-                                                       target_side=dl.targets[0].occupied_by_group,
-                                                       target_index=dl.targets[0].occupied_by_index)
+                                                       action_obj=cur_action_dict)
                 elif cur_action == 'Ranged':
+                    # cur_action_dict:
+                    # {"Action": "Ranged",
+                    #  "Targets": target}
                     t_range = cur_active.get_ranged_range()
                     turn_audit["ranged_attack"] = True
                     if cur_active.cur_hit_points > 0:
@@ -790,8 +812,7 @@ class Encounter(object):
                                                        attacker_side=self.initiative[initiative_ind][0],
                                                        attacker_index=self.initiative[initiative_ind][1],
                                                        attack_type='Ranged',
-                                                       target_side=t_tgt.occupied_by_group,
-                                                       target_index=t_tgt.occupied_by_index)
+                                                       action_obj=cur_action_dict)
 
             elif cur_active.alive:  # currently alive but less than 1 hit point
                 t_death_save_passed_cnt = cur_active.death_save_passed_cnt
@@ -822,119 +843,202 @@ class Encounter(object):
         return turn_audit
 
     @ctx_decorator
-    def handle_turn_attack_action(self, turn_audit, attacker_side, attacker_index, target_side,
-                                  target_index, attack_type, audit_key_prefix="", audit_key_suffix=""):
+    def handle_turn_attack_action(self, turn_audit, attacker_side, attacker_index, cur_action_dict,
+                                  attack_type, audit_key_prefix="", audit_key_suffix=""):
         attacker = self.get_player(attacker_side, attacker_index)
         attacker_name_str = self.get_name_str(attacker_side, attacker_index)
         attacker_id_str = self.get_array_id_string(attacker_side, attacker_index)
-        target = self.get_player(target_side, target_index)
-        target_name_str = self.get_name_str(target_side, target_index)
         summary_indent = "    "
+        attack_instrument = "unknown"
+        attack = []
+        msg = f"{summary_indent}{attacker_name_str} with a {attack_type} attack on "
+        msg2 = ""
+
         if attacker.cur_hit_points > 0:
-            turn_audit[f"{audit_key_prefix}target{audit_key_suffix}"] = target.get_name()
-
             t_vantage = attacker.get_vantage()
-            # if the cur_active user is unconscious then the attack is at advantage
-            # and auto-crits on hit.
-            if target.unconscious_ind or target.prone_ind:
-                if t_vantage == 'Disadvantage':
-                    t_vantage = 'Normal'
-                else:
-                    t_vantage = 'Advantage'
+            if attack_type == 'Melee' or attack_type == 'Ranged':
+                t_count = 1
+                target_name_str = ""
+                for t in cur_action_dict["Targets"]:
+                    target = self.get_player(t.occupied_by_group, t.occupied_by_index)
+                    if not target.unconscious_ind:
+                        log_if_unconscious = True
+                    else:
+                        log_if_unconscious = False
+                    tmp_name_str = self.get_name_str(t.occupied_by_group,
+                                                     t.occupied_by_index)
+                    turn_audit[f"{audit_key_prefix}target_{t_count}{audit_key_suffix}"] = tmp_name_str
+                    target_name_str = f"{target_name_str}{tmp_name_str}"
+
+                    if attack_type == 'Melee':
+                        # if the cur_active user is unconscious then the attack is at advantage
+                        if target.unconscious_ind or target.prone_ind:
+                            if t_vantage == 'Disadvantage':
+                                t_vantage = 'Normal'
+                            else:
+                                t_vantage = 'Advantage'
+                        else:
+                            t_vantage = 'Normal'
+
+                        active_attack = attacker.default_melee_attack(ctx=self.ctx, vantage=t_vantage,
+                                                                      attacker_id=attacker_id_str,
+                                                                      target_name_str=tmp_name_str,
+                                                                      target=target)
+                    else:  # attack_type == 'Ranged':
+                        # if the cur_active user is unconscious or prone then the attack is at a disadvantage
+                        if target.unconscious_ind or target.prone_ind:
+                            if t_vantage == 'Advantage':
+                                t_vantage = 'Normal'
+                            else:
+                                t_vantage = 'Disadvantage'
+                        else:
+                            t_vantage = 'Normal'
+
+                        active_attack = attacker.default_ranged_attack(ctx=self.ctx, vantage=t_vantage,
+                                                                       attacker_id=attacker_id_str,
+                                                                       target_name_str=tmp_name_str,
+                                                                       target=target)
+
+                    if t_vantage != 'Normal':
+                        target_name_str = f"{target_name_str} ({t_vantage}), "
+                    else:
+                        target_name_str = f"{target_name_str}, "
+
+                    attack_instrument = f"a {active_attack.weapon_name}"
+                    attack.append(active_attack)
+                    self.stats.inc_attack_attempts(attacker_side)
+
+                    # hit_points_before = target.cur_hit_points
+                    # successful_defend = target.defend(attack_obj=active_attack)
+
+                    # random_choice = random.randint(1, 3)  # randomly make the choice to use luck.  1/3 chance
+                    # if (successful_defend and
+                    #         active_attack.natural_value < 20 and  # if a crit failed, there's no way luck would help.
+                    #         # if the attacker has luck, they could try again.
+                    #         ('Lucky' in attacker.feature_counts and attacker.feature_counts['Lucky'] > 0) and
+                    #         random_choice == 1):
+                    #     attacker.feature_counts['Lucky'] -= 1
+
+                    #     turn_audit[f"{audit_key_prefix}luck_was_used{audit_key_suffix}"] = True
+                    #     msg = f"{msg} failed, but lucky caused a retry which"
+                    #     if attack_type == 'Melee':
+                    #         active_attack = attacker.default_melee_attack(vantage=t_vantage,
+                    #                                                       attacker_id=attacker_id_str,
+                    #                                                       target_name=tmp_name_str,
+                    #                                                       target=target,
+                    #                                                       encounter_round=self.ctx.round,
+                    #                                                       encounter_turn=self.ctx.turn, luck_retry=True)
+                    #     else:  # attack_type == 'Ranged':
+                    #         active_attack = attacker.default_ranged_attack(vantage=t_vantage,
+                    #                                                        attacker_id=attacker_id_str,
+                    #                                                        target_name=tmp_name_str,
+                    #                                                        target=target,
+                    #                                                        encounter_round=self.ctx.round,
+                    #                                                        encounter_turn=self.ctx.turn,
+                    #                                                        luck_retry=True)
+                        # successful_defend = target.defend(attack_obj=active_attack)
+                        # if successful_defend:  # successful defend means the attack failed...
+                        #     t_suc = "failed "
+                        # else:
+                        #     t_suc = "succeeded "
+
+                    t_key = f"{audit_key_prefix}{attack_type}_attack_successful{audit_key_suffix}"
+                    turn_audit[t_key] = active_attack.attack_success
+                    # hp_impact = (hit_points_before - target.cur_hit_points)
+                    if  active_attack.attack_success:
+                        t_key = f"{audit_key_prefix}{attack_type}_attack_damage{audit_key_suffix}"
+                        turn_audit[t_key] = active_attack.possible_damage
+                        t_key = f"{audit_key_prefix}hit_point_impact{audit_key_suffix}"
+                        turn_audit[t_key] = active_attack.hp_impact
+                        turn_audit[
+                            f"{audit_key_prefix}hit_points_after_attack{audit_key_suffix}"] = target.cur_hit_points
+                        self.stats.inc_attack_successes(attacker_side)
+                        # attacker.inc_damage_dealt(damage_type=active_attack.damage_type,
+                        #                           amount=active_attack.possible_damage)
+                        # attacker.stats.attack_successes += 1
+                        if active_attack.retry_count == 0:
+                            msg2 = f"that succeeded"
+                        else:
+                            msg2 = f"that failed, but lucky caused a retry that succeeded"
+                    else:
+                        if active_attack.retry_count == 0:
+                            msg2 = f"that failed"
+                        else:
+                            msg2 = f"that failed, and lucky caused a retry that also failed"
+
+                    if target.unconscious_ind:
+                        if log_if_unconscious:
+                            msg2 = f"{msg2} knocking them unconscious"
+                            p = PointInTime(self.ctx.round, self.ctx.turn)
+                            target.stats.unconscious_list.append(p)
+                            turn_audit[f"{audit_key_prefix}target_knocked_unconscious_in_turn{audit_key_suffix}"] = True
+                        elif active_attack.attack_success:
+                            msg2 = (f"{msg2} inflicting two failed death saves on the unconscious target " 
+                                    f"{target.death_save_passed_cnt} / {target.death_save_failed_cnt}")
+                            turn_audit[f"{audit_key_prefix}death_save_status{audit_key_suffix}"] = (
+                                f"{target.death_save_passed_cnt} / {target.death_save_failed_cnt}")
+                    else:
+                        if active_attack.attack_success:
+                            msg2 = (f"{msg2} for relative damage {active_attack.hp_impact} " 
+                                    f"HP leaving {target.cur_hit_points} HP")
+
+                    if not target.alive:
+                        msg2 = f"{msg2} killing them"
+                        turn_audit[f"{audit_key_prefix}target_died_in_turn{audit_key_suffix}"] = True
+                        self.cleanup_dead_player(player=target,
+                                                 list_name=t.occupied_by_group,
+                                                 list_index=t.occupied_by_index)
+
+                    t_count += 1
+
+                target_name_str = target_name_str[:-2]
+
+                msg = f"{msg} {target_name_str} using {attack_instrument} {msg2}"
+
+            # Had to group the ranged and melee attacks together because they impact one target per attack.
+            # Spells can have one to many targets and working through the impacts are in the SpellAction class
+            # instead of here.  So, the elif below matches the if (attack_type == 'Melee' or attack_type == 'Ranged')
+            # above.
+            elif attack_type == 'Spell':
+                tmp_targets = []
+                t_count = 1
+                target_name_str = ""
+                for t in cur_action_dict["Targets"]:
+                    tmp_name_str = self.get_name_str(t.player_group, t.player_index)
+                    turn_audit[f"{audit_key_prefix}target_{t_count}{audit_key_suffix}"] = tmp_name_str
+                    target_name_str = f"{target_name_str}{tmp_name_str}, "
+                    tmp_targets.append(self.get_player(t.player_group, t.player_index))
+                    t_count += 1
+
+                active_attack = self.perform_spell(caster=attacker,
+                                                   caster_name_str=attacker_name_str,
+                                                   spell_name=cur_action_dict["Specific_Name"],
+                                                   targets=tmp_targets)
+                attack.append(active_attack)
+                attack_instrument = cur_action_dict["Specific_Name"]
+                target_name_str = target_name_str[:-2]
+                msg = f"{msg} {target_name_str} using {attack_instrument} "
             else:
-                t_vantage = 'Normal'
+                target_name_str = ""
+                for t in cur_action_dict["Targets"]:
+                    tmp_name_str = self.get_name_str(t.player_group, t.player_index)
+                    target_name_str = f"{target_name_str}{tmp_name_str}, "
+                target_name_str = target_name_str[:-2]
+                msg = f"{msg} {target_name_str} uncaught attack_type"
 
-            if attack_type == 'Melee':
-                active_attack = attacker.default_melee_attack(vantage=t_vantage, attacker_id=attacker_id_str,
-                                                              target_name=target_name_str,
-                                                              encounter_round=self.ctx.round,
-                                                              encounter_turn=self.ctx.turn)
-            else:  # attack_type == 'Ranged':
-                active_attack = attacker.default_ranged_attack(vantage=t_vantage, attacker_id=attacker_id_str,
-                                                               target_name=target_name_str,
-                                                               encounter_round=self.ctx.round,
-                                                               encounter_turn=self.ctx.turn)
-
-            msg = (f"with a {attack_type} attack on "
-                   f"{target_name_str} using a {active_attack.weapon_name}")
-            self.stats.inc_attack_attempts(attacker_side)
-
-            log_if_unconscious = False
-            if not target.unconscious_ind:
-                log_if_unconscious = True
-
-            hit_points_before = target.cur_hit_points
-            successful_defend = target.defend(attack_obj=active_attack)
-
-            random_choice = random.randint(1, 3)  # randomly make the choice to use luck.  1/3 chance
-            if (successful_defend and
-                    active_attack.natural_value < 20 and  # if a crit failed, there's no way luck would help.
-                    # if the attacker has luck, they could try again.
-                    ( 'Lucky' in attacker.feature_counts and attacker.feature_counts['Lucky'] > 0 ) and
-                    random_choice == 1):
-                attacker.feature_counts['Lucky'] -= 1
-
-                turn_audit[f"{audit_key_prefix}luck_was_used{audit_key_suffix}"] = True
-                msg = f"{msg} failed, but lucky caused a retry which"
-                if attack_type == 'Melee':
-                    active_attack = attacker.default_melee_attack(vantage=t_vantage, attacker_id=attacker_id_str,
-                                                                  target_name=target_name_str,
-                                                                  encounter_round=self.ctx.round,
-                                                                  encounter_turn=self.ctx.turn, luck_retry=True)
-                else:  # attack_type == 'Ranged':
-                    active_attack = attacker.default_ranged_attack(vantage=t_vantage, attacker_id=attacker_id_str,
-                                                                   target_name=target_name_str,
-                                                                   encounter_round=self.ctx.round,
-                                                                   encounter_turn=self.ctx.turn, luck_retry=True)
-                successful_defend = target.defend(attack_obj=active_attack)
-
-            if successful_defend:  # successful defend means the attack failed...
-                t_suc = "failed "
-            else:
-                t_suc = "succeeded "
-            msg = f"{summary_indent}{attacker_name_str} {t_suc}{msg}"
-
-            t_key = f"{audit_key_prefix}{attack_type}_attack_defense_successful{audit_key_suffix}"
-            turn_audit[t_key] = successful_defend
-
-            hp_impact = (hit_points_before - target.cur_hit_points)
-            if not successful_defend:
-                t_key = f"{audit_key_prefix}{attack_type}_attack_damage{audit_key_suffix}"
-                turn_audit[t_key] = active_attack.possible_damage
-                t_key = f"{audit_key_prefix}hit_point_impact{audit_key_suffix}"
-                turn_audit[t_key] = hp_impact
-                turn_audit[f"{audit_key_prefix}hit_points_after_attack{audit_key_suffix}"] = target.cur_hit_points
-                self.stats.inc_attack_successes(attacker_side)
-                attacker.inc_damage_dealt(damage_type=active_attack.damage_type,
-                                          amount=active_attack.possible_damage)
-                attacker.stats.attack_successes += 1
-
-            if target.unconscious_ind:
-                if log_if_unconscious:
-                    msg = f"{msg} knocking them unconscious"
-                    p = PointInTime(self.ctx.round, self.ctx.turn)
-                    target.stats.unconscious_list.append(p)
-                    turn_audit[f"{audit_key_prefix}target_knocked_unconscious_in_turn{audit_key_suffix}"] = True
-                elif not successful_defend:
-                    msg = (f"{msg} inflicting two failed death saves " 
-                           f"{target.death_save_passed_cnt} / {target.death_save_failed_cnt}")
-                    turn_audit[f"{audit_key_prefix}death_save_status{audit_key_suffix}"] = (
-                        f"{target.death_save_passed_cnt} / {target.death_save_failed_cnt}")
-            else:
-                if not successful_defend:
-                    msg = f"{msg} for relative damage {hp_impact} HP leaving {target.cur_hit_points} HP"
-
-            if not target.alive:
-                msg = f"{msg} killing them"
-                turn_audit[f"{audit_key_prefix}target_died_in_turn{audit_key_suffix}"] = True
-                self.cleanup_dead_player(player=target, list_name=target_side, list_index=target_index)
-        elif target.unconscious_ind:
-            msg = (f"{summary_indent}{attacker_name_str} is unconscious. Death saves: " 
-                   f"({target.death_save_passed_cnt} / {target.death_save_failed_cnt})")
-            turn_audit[f"{audit_key_prefix}death_save_status{audit_key_suffix}"] = (
-                f"{target.death_save_passed_cnt} / {target.death_save_failed_cnt}")
         else:
-            msg = f"{summary_indent}{attacker_name_str} died earlier"
+            t_count = 1
+            for t in cur_action_dict["Targets"]:
+                target = self.get_player(t.occupied_by_group, t.occupied_by_index)
+                if target.unconscious_ind:
+                    msg = (f"\n***{attack_type} ended up in the death saves notice for attack loop *** " 
+                           f"{summary_indent}{attacker_name_str} is a target, but is unconscious. Death saves: " 
+                           f"({target.death_save_passed_cnt} / {target.death_save_failed_cnt}) ")
+                    turn_audit[f"{audit_key_prefix}death_save_status_{t_count}{audit_key_suffix}"] = (
+                        f"{target.death_save_passed_cnt} / {target.death_save_failed_cnt}")
+                else:
+                    msg = f"{summary_indent}{attacker_name_str} died earlier"
+                t_count += 1
 
         self.summary_entry(msg)
 
@@ -1013,11 +1117,19 @@ class Encounter(object):
     @ctx_decorator
     def movement(self, avail_movement, cur_active, cur_init, distance_from_player):
         player_combat_preference = cur_active.get_combat_preference()
-
         jdict = {"character": cur_active.get_name(),
                  "class": cur_active.get_class(),
                  "perception_check_passed": cur_init[2],
                  "player_combat_preference": player_combat_preference}
+
+        # stand up if they can.
+        if cur_active.prone_ind and cur_active.cur_hit_points >0:
+            cur_active.prone_ind = False
+            avail_movement = int(avail_movement/2)
+            jdict["Player_stood_up"] = True
+
+        jdict["available_movement"] = avail_movement
+
         # with self.tracer.span(name='movement'):
         if cur_init[2]:     # if they've figured out what's going on.
             op_dist = distance_from_player.targets[0].distance
@@ -1214,7 +1326,7 @@ if __name__ == '__main__':
         Heroes = []
         Opponents = []
         Heroes.append(PlayerCharacter(db=db, ctx=ctx, race_candidate='Half-orc'))
-        # Heroes.append(PlayerCharacter(db=db, ctx=ctx, class_candidate='Rogue'))
+        Heroes.append(PlayerCharacter(db=db, ctx=ctx, race_candidate='Black dragonborn',class_candidate='Paladin'))
         Heroes.append(PlayerCharacter(db=db, ctx=ctx, class_candidate='Ranger'))
         for e in Heroes:
             e.stats.side = 'Heroes'
@@ -1222,7 +1334,7 @@ if __name__ == '__main__':
         Opponents.append(Foe(db=db, ctx=ctx, foe_candidate='Skeleton'))
         for e in Opponents:
             e.stats.side = 'Opponents'
-        e1 = Encounter(ctx=ctx, heroes=Heroes, opponents=Opponents)
+        e1 = Encounter(ctx=ctx, db=db, heroes=Heroes, opponents=Opponents)
         print(f"The winning party was: {e1.winning_list_name} in {e1.ctx.round} rounds.")
         print(f"The surviving {e1.winning_list_name} members:")
         for i in range(len(e1.winning_list)):

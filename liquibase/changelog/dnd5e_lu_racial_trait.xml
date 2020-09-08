@@ -929,5 +929,22 @@ variable_recharge_die, variable_recharge_adj, description
 from lu_racial_trait
 order by race, trait_name, trait_orderby</createView>
     </changeSet>
+    <changeSet author="mdbdba" id="lu_racial_trait_5">
+        <update schemaName="dnd_5e"
+            tableName="lu_racial_trait">
+          <column name="affected_adj" value="1"/>
+            <where> name = 'Sorcerous Initiate 2' and race = 'Loredrake kobold' and affected_name = 'level:1'</where>
+        </update>
+    </changeSet>
+    <changeSet author="mdbdba" id="lu_racial_trait_6">
+        <sql splitStatements="true"
+             stripComments="true">update dnd_5e.lu_racial_trait set race = 'Black dragonborn'
+ where race = 'Black Dragonborn'
+        </sql>
+        <sql splitStatements="true"
+             stripComments="true">update dnd_5e.lu_racial_trait set recharge_on = 'Long Rest'
+ where name = 'Draconic Ancestry' and race like '%dragonborn%'
+        </sql>
+    </changeSet>
 </databaseChangeLog>
 

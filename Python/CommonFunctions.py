@@ -89,6 +89,7 @@ def calculate_distance(x1: int, y1: int, x2: int, y2: int) -> float:
     dist: float = (math.sqrt((x2 - x1)**2 + (y2 - y1)**2)) * 5
     return dist
 
+
 def calculate_area_of_effect(player_location_x, player_location_y, range, aoe_type):
     map_squares = int(range / 5)
     return_list = []
@@ -96,22 +97,24 @@ def calculate_area_of_effect(player_location_x, player_location_y, range, aoe_ty
     tmp_loc_y = player_location_y
     if aoe_type == "Line":
         tmp_loc_x += 1
-        while (tmp_loc_x <= player_location_x + map_squares):
+        while tmp_loc_x <= player_location_x + map_squares:
             return_list.append((tmp_loc_x, tmp_loc_y))
             tmp_loc_x += 1
     elif aoe_type == "Cone":
         tmp_loc_x += 1
         tmp_width = 1
-        while (tmp_loc_x <= player_location_x + map_squares):
+        while tmp_loc_x <= player_location_x + map_squares:
             for z in range(tmp_width):
-                  if z > 0:  # range(1) makes a z = 0 only need one append in that case.
-                      return_list.append((tmp_loc_x, (tmp_loc_y - z)))
-                  return_list.append((tmp_loc_x, (tmp_loc_y + z)))
+                # range(1) makes a z = 0 only need one append in that case.
+                if z > 0:
+                    return_list.append((tmp_loc_x, (tmp_loc_y - z)))
+                return_list.append((tmp_loc_x, (tmp_loc_y + z)))
             tmp_loc_x += 1
             tmp_width += 1
+
     elif aoe_type == "Cube":
         tmp_loc_x += 1
-        while (tmp_loc_x <= player_location_x + map_squares):
+        while tmp_loc_x <= player_location_x + map_squares:
             for z in range(map_squares):
                 if z > 0:  # range(1) makes a z = 0 only need one append in that case.
                     return_list.append((tmp_loc_x, (tmp_loc_y - z)))
@@ -125,7 +128,7 @@ def calculate_area_of_effect(player_location_x, player_location_y, range, aoe_ty
 
         rad_width = (map_squares - 1) / 2
         tmp_loc_x -= rad_width
-        while (tmp_loc_x <= player_location_x + rad_width):
+        while tmp_loc_x <= player_location_x + rad_width:
             for x in range(rad_width):
                 for y in range(rad_width):
                     if y > 0 and x > 0:
@@ -142,13 +145,11 @@ def calculate_area_of_effect(player_location_x, player_location_y, range, aoe_ty
                         return_list.append((tmp_loc_x, (tmp_loc_y - y)))
                         return_list.append((tmp_loc_x, (tmp_loc_y + y)))
             tmp_loc_x += 1
-            tmp_width += 1
-
-    # Sphere
     # Hemisphere
     # Radius
     # Cylinder
     return return_list
+
 
 def find_file(file_name: str) -> str:
     curpath = os.path.abspath(os.path.dirname(__file__))
