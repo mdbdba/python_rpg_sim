@@ -63,8 +63,6 @@ class Character(object):
                                Poison="", Psychic="", Radiant="", Slashing="",
                                Thunder="")
         # self.healing_received = 0
-        self.alive = True
-        self.stabilized = True
         self.hit_points = None
         self.temp_hit_points = None
         self.cur_hit_points = None
@@ -72,13 +70,12 @@ class Character(object):
         self.weight = None
         self.cur_movement = None
 
-        self.proficiency_bonus = None
+        self.proficiency_bonus = 0
         self.armor_class = 0
         self.death_save_passed_cnt = 0
         self.death_save_failed_cnt = 0
         self.tta = self.set_taliesin_temperament_archetype()
         self.combat_preference = 'Melee'  # 'Melee', 'Mixed', or Ranged'
-        self.proficiency_bonus = 0
 
         self.last_method_log = ''
         if gender_candidate == "Random":
@@ -86,20 +83,18 @@ class Character(object):
         else:
             self.gender = gender_candidate
 
-        self.blinded_ind = False
-        self.charmed_ind = False
-        self.deafened_ind = False
-        self.fatigued_ind = False
-        self.frightened_ind = False
-        self.grappled_ind = False
-        self.incapacitated_ind = False
-        self.invisible_ind = False
-        self.paralyzed_ind = False
-        self.petrified_ind = False
-        self.poisoned_ind = False
-        self.prone_ind = False
-        self.stunned_ind = False
-        self.unconscious_ind = False
+        # implement conditions dictionary that holds a structure
+        # 'name': {
+        #     "end_round": -1
+        #     "end_turn": -1
+        #     "ends_on_attack": False
+        # }
+        self.conditions = {}
+        self.alive = True
+        self.stabilized = True
+        # entries that could be in that dictionary:
+        # blinded, charmed, deafened, fatigued, frightened, grappled, incapacitated, invisible,
+        # paralyzed, petrified, poisoned, prone, stunned, unconscious
         self.ranged_weapon = None
         self.melee_weapon = None
         self.ranged_ammunition_type = None
@@ -112,11 +107,6 @@ class Character(object):
         self.feature_counts = {}  # dictionary of feature and available use counts
         self.spell_list = {}
 
-        # self.relentless_uses_available = 0
-        # self.lucky_uses_available = 0
-        # self.savage_attack_crit_bonus = False
-        # self.nimble_escape_bonus = False
-
         self.exhaustion_level = 0
         # 1   Disadvantage on Ability Checks
         # 2   Speed halved
@@ -125,6 +115,7 @@ class Character(object):
         # 5   Speed reduced to 0
         # 6   Death
 
+        self.name_str = self.get_name()
         self.stats = None
         self.init_stats()
 
@@ -137,6 +128,125 @@ class Character(object):
         else:
             return_val = self.method_last_call_audit[method_name]
         return return_val
+
+    def rm_condition(self, condition_name):
+        if condition_name in self.conditions.keys():
+            del self.conditions[condition_name]
+
+    def add_condition(self, condition_name, end_round=-1, end_turn=-1, ends_on_attack=False):
+        self.conditions[condition_name] = {"end_round": end_round,
+                                           "end_turn": end_turn,
+                                           "ends_on_attack": ends_on_attack}
+
+    def check_condition(self, condition_name):
+        if condition_name in self.conditions.keys():
+            ret_value = True
+        else:
+            ret_value = False
+        return ret_value
+
+    def rm_alive(self):
+        self.alive = False
+        self.stabilized = False
+        self.add_condition('unconscious')
+        self.add_condition('prone')
+
+    def unconscious(self):
+        self.add_condition('unconscious')
+        self.add_condition('prone')
+
+    def rm_unconscious(self):
+        self.rm_condition('unconscious')
+
+    def rm_prone(self):
+        self.rm_condition('prone')
+
+    def prone(self):
+        self.add_condition('prone')
+
+    def blinded(self, end_round=-1, end_turn=-1, ends_on_attack=False):
+        self.add_condition(condition_name='blinded', end_round=end_round,
+                           end_turn=end_turn, ends_on_attack=ends_on_attack)
+
+    def rm_blinded(self):
+        self.rm_condition('blinded')
+
+    def charmed(self, end_round=-1, end_turn=-1, ends_on_attack=False):
+        self.add_condition(condition_name='charmed', end_round=end_round,
+                           end_turn=end_turn, ends_on_attack=ends_on_attack)
+
+    def rm_charmed(self):
+        self.rm_condition('charmed')
+
+    def deafened(self, end_round=-1, end_turn=-1, ends_on_attack=False):
+        self.add_condition(condition_name='deafened', end_round=end_round,
+                           end_turn=end_turn, ends_on_attack=ends_on_attack)
+
+    def rm_deafened(self):
+        self.rm_condition('deafened')
+
+    def fatigued(self, end_round=-1, end_turn=-1, ends_on_attack=False):
+        self.add_condition(condition_name='fatigued', end_round=end_round,
+                           end_turn=end_turn, ends_on_attack=ends_on_attack)
+
+    def rm_fatigued(self):
+        self.rm_condition('fatigued')
+
+    def frightened(self, end_round=-1, end_turn=-1, ends_on_attack=False):
+        self.add_condition(condition_name='frightened', end_round=end_round,
+                           end_turn=end_turn, ends_on_attack=ends_on_attack)
+
+    def rm_frightened(self):
+        self.rm_condition('frightened')
+
+    def grappled(self, end_round=-1, end_turn=-1, ends_on_attack=False):
+        self.add_condition(condition_name='grappled', end_round=end_round,
+                           end_turn=end_turn, ends_on_attack=ends_on_attack)
+
+    def rm_grappled(self):
+        self.rm_condition('grappled')
+
+    def incapacitated(self, end_round=-1, end_turn=-1, ends_on_attack=False):
+        self.add_condition(condition_name='incapacitated', end_round=end_round,
+                           end_turn=end_turn, ends_on_attack=ends_on_attack)
+
+    def rm_incapacitated(self):
+        self.rm_condition('incapacitated')
+
+    def invisible(self, end_round=-1, end_turn=-1, ends_on_attack=False):
+        self.add_condition(condition_name='invisible', end_round=end_round,
+                           end_turn=end_turn, ends_on_attack=ends_on_attack)
+
+    def rm_invisible(self):
+        self.rm_condition('invisible')
+
+    def paralyzed(self, end_round=-1, end_turn=-1, ends_on_attack=False):
+        self.add_condition(condition_name='paralyzed', end_round=end_round,
+                           end_turn=end_turn, ends_on_attack=ends_on_attack)
+
+    def rm_paralyzed(self):
+        self.rm_condition('paralyzed')
+
+    def petrified(self, end_round=-1, end_turn=-1, ends_on_attack=False):
+        self.add_condition(condition_name='petrified', end_round=end_round,
+                           end_turn=end_turn, ends_on_attack=ends_on_attack)
+
+    def rm_petrified(self):
+        self.rm_condition('petrified')
+
+    def poisoned(self, end_round=-1, end_turn=-1, ends_on_attack=False):
+        self.add_condition(condition_name='poisoned', end_round=end_round,
+                           end_turn=end_turn, ends_on_attack=ends_on_attack)
+
+    def rm_poisoned(self):
+        self.rm_condition('poisoned')
+
+    def stunned(self, end_round=-1, end_turn=-1, ends_on_attack=False):
+        self.add_condition(condition_name='stunned', end_round=end_round,
+                           end_turn=end_turn, ends_on_attack=ends_on_attack)
+
+    def rm_stunned(self):
+        self.rm_condition('stunned')
 
     def get_combat_preference(self):
         return self.combat_preference
@@ -292,7 +402,7 @@ class Character(object):
             self.half_movement()
 
         if self.exhaustion_level >= 6:
-            self.alive = False
+            self.rm_alive()
 
         jdict = {
             "from_exhaustion_level": orig_level,
@@ -426,7 +536,7 @@ class Character(object):
         from_alive = self.alive
         self.death_save_failed_cnt += amount
         if self.death_save_failed_cnt >= 3:
-            self.alive = False
+            self.rm_alive()
 
         jdict = {
             "from_death_save_value": from_value,
@@ -443,7 +553,7 @@ class Character(object):
         from_death_save_failed_cnt = self.death_save_failed_cnt
         from_stabilized = self.stabilized
         from_alive = self.alive
-        from_unconscious_ind = self.unconscious_ind
+        from_unconscious = self.check_condition('unconscious')
 
         if self.cur_hit_points < 1:
             self.cur_hit_points = 1
@@ -451,7 +561,7 @@ class Character(object):
         self.death_save_failed_cnt = 0
         self.stabilized = True
         self.alive = True
-        self.unconscious_ind = False
+        self.rm_condition('unconscious')
 
         jdict = {
             "from_cur_hit_points": from_cur_hit_points,
@@ -464,8 +574,8 @@ class Character(object):
             "to_stabilized": self.stabilized,
             "from_alive": from_alive,
             "to_alive": self.alive,
-            "from_unconscious_ind": from_unconscious_ind,
-            "to_unconscious_ind": self.unconscious_ind,
+            "from_unconscious_ind": from_unconscious,
+            "to_unconscious_ind": self.check_condition('unconscious'),
         }
         self.ctx.crumbs[-1].add_audit(json_dict=jdict)
 
@@ -601,8 +711,8 @@ class Character(object):
             jdict['modification_due_to_damage_type'] = "immune"
 
         jdict['used_amount'] = amount
-        jdict['from_unconscious'] = self.unconscious_ind
-        jdict['from_stabilized'] = self.stabilized
+        jdict['from_unconscious'] = self.check_condition('unconscious')
+        jdict['from_stabilized'] = self.check_condition('stabilized')
         jdict['from_hit_points'] = self.cur_hit_points
 
         if amount >= self.cur_hit_points:
@@ -611,18 +721,19 @@ class Character(object):
                 self.cur_hit_points = 1
                 jdict['used_relentless_to_avoid_unconsciousness'] = "True"
             else:
-                self.unconscious_ind = True
-                self.prone_ind = True
                 self.stabilized = False
-                jdict['to_unconscious'] = self.unconscious_ind
-                jdict['to_stabilized'] = self.stabilized
-
+                self.prone()
+                self.unconscious()
                 # Instant Death?
                 if (amount - self.cur_hit_points) >= self.hit_points:
                     self.incr_death_save_failed_cnt(amount=3)
                     jdict['instant_death'] = True
+                    self.alive = False
                 else:
                     jdict['instant_death'] = False
+
+                jdict['to_unconscious'] = self.check_condition('unconscious_ind')
+                jdict['to_stabilized'] = self.check_condition('stabilized')
 
                 self.cur_hit_points = 0
         else:
@@ -670,17 +781,21 @@ class Character(object):
 
     def use_spell(self, spell_name):
         # for spells that are managed by uses:
-        if self.spell_list[spell_name].available_count > 0:
-            self.spell_list[spell_name].available_count -= 1
+        if self.spell_list[spell_name]['available_count'] > 0:
+            self.spell_list[spell_name]['available_count'] -= 1
+
+    def set_name_str(self, group_str, index_position):
+        self.name_str = f"{self.get_name().replace(' ','_')} {group_str}{index_position}"
 
     @ctx_decorator
     def get_action(self, distance_from_player):
         ret_val = {"Action": "Undecided"}
         op_dist = distance_from_player.targets[0].distance
+        combat_preference = self.get_combat_preference()
         jdict = {
             "character_alive": self.alive,
             "character_stabilized": self.stabilized,
-            "combat_preference": self.get_combat_preference(),
+            "combat_preference": combat_preference,
             "cur_movement": self.cur_movement,
             "opponent_distance": op_dist}
         spell_targets = []
@@ -689,7 +804,7 @@ class Character(object):
             ret_val = {"Action": "None"}
         elif not self.stabilized:
             ret_val = {"Action": "Death Save"}
-        elif self.get_combat_preference() == 'Melee':
+        elif combat_preference == 'Melee':
             # Yeah, this player want's to bash heads, but if they have a spell that they could take advantage of,
             #  they will.
             if len(self.spell_list) > 0 and op_dist >= 10:
@@ -697,7 +812,7 @@ class Character(object):
                 # cycle through their spells and look for one that has targets in range and does the most damage.
                 for x in self.spell_list.keys():
                     y = self.spell_list[x]
-                    if ( y['available_count'] != 0):
+                    if y['available_count'] != 0:
                         spell_targets = self.get_range_targets(range=y['range_amt'],
                                                                distance_from_targets=distance_from_player,
                                                                area_of_effect=y['range_aoe'],
@@ -793,8 +908,19 @@ class Character(object):
 
         return ret_val
 
+    def note_attack_roll(self, attempt, luck_retry):
+        attack_roll = PointInTimeAttackRoll(round=attempt.encounter_round,
+                                            turn=attempt.encounter_turn,
+                                            attacker_name=self.name_str,
+                                            target_name=attempt.target.name_str,
+                                            attack_type=attempt.attack_type,
+                                            base_roll=attempt.natural_value,
+                                            adjustment_values={'attack_mod': attempt.attack_modifier,
+                                                               'luck_retry': luck_retry})
+        self.stats.attack_rolls.append(attack_roll)
+
     @ctx_decorator
-    def ranged_attack(self, ctx, weapon_obj, target_name_str, target, attacker_id='unknown',
+    def ranged_attack(self, ctx, weapon_obj, target,
                       vantage='Normal', luck_retry=False):
         # determine modifier
         # 1)  is this a martial weapon that needs specific proficiency
@@ -817,8 +943,7 @@ class Character(object):
 
         attempt = Attack(ctx=ctx, weapon_obj=weapon_obj, attack_modifier=modifier,
                          damage_modifier=damage_modifier,
-                         attack_type='Ranged',
-                         attacker_name_str=f'{self.get_name()} {attacker_id}', target_name=target_name_str,
+                         attack_type='Ranged', attacker=self,
                          target=target, versatile_use_2handed=False, vantage=vantage)
         jdict['ranged_attack_value'] = attempt.attack_value
         jdict['ranged_possible_damage'] = attempt.possible_damage
@@ -830,16 +955,8 @@ class Character(object):
             self.stats.attack_nat20_count += 1
         if attempt.natural_value == 1:
             self.stats.attack_nat1_count += 1
-        # attack_roll: tuple = (attempt.natural_value, {attempt.attack_modifier})
-        attack_roll = PointInTimeAttackRoll(round=attempt.encounter_round,
-                                            turn=attempt.encounter_turn,
-                                            attacker_name=attempt.attacker_name_str,
-                                            target_name=attempt.target_name_str,
-                                            attack_type=attempt.attack_type,
-                                            base_roll=attempt.natural_value,
-                                            adjustment_values={'attack_mod': attempt.attack_modifier,
-                                                               'luck_retry': luck_retry})
-        self.stats.attack_rolls.append(attack_roll)
+
+        self.note_attack_roll(attempt=attempt, luck_retry=luck_retry)
 
         self.ctx.crumbs[-1].add_audit(json_dict=jdict)
 
@@ -853,7 +970,7 @@ class Character(object):
         return False
 
     @ctx_decorator
-    def melee_attack(self, ctx, weapon_obj, target_name_str, target, attacker_id='unknown',
+    def melee_attack(self, ctx, weapon_obj, target,
                      vantage='Normal', luck_retry=False) -> Attack:
         # determine modifier
         # 1)  is this a martial weapon that needs specific proficiency
@@ -892,10 +1009,8 @@ class Character(object):
 
         attempt = Attack(ctx=ctx, weapon_obj=weapon_obj,
                          attack_modifier=modifier, damage_modifier=damage_modifier,
-                         attacker_name_str=f'{self.get_name()} {attacker_id}', target_name_str=target_name_str,
-                         target=target, attack_type='Melee',
+                         attacker=self, target=target, attack_type='Melee',
                          versatile_use_2handed=v2h, vantage=vantage)
-        # ret_val: tuple = (attempt.attack_value, attempt.possible_damage, attempt.damage_type)
 
         jdict["roll_natural_value"] = attempt.natural_value
         jdict["attack_value"] = attempt.attack_value
@@ -904,16 +1019,8 @@ class Character(object):
             self.stats.attack_nat1_count += 1
         if attempt.natural_value == 20:
             self.stats.attack_nat20_count += 1
-        # attack_roll: tuple = (attempt.natural_value, {attempt.attack_modifier})
-        attack_roll = PointInTimeAttackRoll(round=attempt.encounter_round,
-                                            turn=attempt.encounter_turn,
-                                            attacker_name=attempt.attacker_name_str,
-                                            target_name=attempt.target_name_str,
-                                            attack_type=attempt.attack_type,
-                                            base_roll=attempt.natural_value,
-                                            adjustment_values={'attack_mod': attempt.attack_modifier,
-                                                               'luck_retry': luck_retry})
-        self.stats.attack_rolls.append(attack_roll)
+
+        self.note_attack_roll(attempt=attempt, luck_retry=luck_retry)
 
         self.ctx.crumbs[-1].add_audit(json_dict=jdict)
 
@@ -1055,7 +1162,8 @@ if __name__ == '__main__':
         print(a2.stats)
     except Exception as error:
         print(ctx)
-        print('error running encounter. error: {}'.format(error))
+        ctx.summary()
+        print('error running character. error: {}'.format(error))
         print(type(error))  # the exception instance
         print(error.args)  # arguments stored in .args
         exc_type, exc_value, exc_traceback = sys.exc_info()

@@ -26,6 +26,8 @@ from Die import Die
 from Ctx import Ctx
 from Ctx import ctx_decorator
 from Ctx import RpgLogging
+from distanceFromPlayer import distanceTarget
+from distanceFromPlayer import distanceFromPlayer
 
 import os
 
@@ -640,7 +642,7 @@ class PlayerCharacter(Character):
     def set_proficiency_bonus(self):
         for a in range(len(self.feature_obj)):
             if self.feature_obj[a][2] == 'proficiency_bonus':
-                self.proficiency_bonus = self.feature_obj[a][4]
+                self.proficiency_bonus = int(self.feature_obj[a][4])
 
     #     if self.debug_ind == 1:
     #         self.class_eval[-1]["Proficiency Bonus"] = self.proficiency_bonus
@@ -947,22 +949,20 @@ if __name__ == '__main__':
                               class_candidate="Rogue")
         print(a10.__repr__)
 
+        dist_target = distanceTarget(distance=20, x=1, y=4, occupied_by_group='Opponents',
+                                     occupied_by_index=0, in_need=False)
+        dist_target_2 = distanceTarget(distance=0, x=1, y=1, occupied_by_group='Heroes',
+                                       occupied_by_index=0, in_need=False)
+        d1 = distanceFromPlayer(player_name=a9.get_name(), player_group='Heroes', player_index=0, x=1, y=1,
+                                targets=[dist_target],
+                                ranged_targets=[dist_target], touch_range_chums=[],
+                                touch_range_chums_in_need=[], touch_range_targets=[], chums=[dist_target_2])
+        action = a9.get_action(d1)
+        print(d1)
+        print(f"Action for {a9.get_name()}: {action}")
+
     except Exception as error:
         exc_type, exc_value, exc_traceback = sys.exc_info()
-        print(f'Context Information:\n\t'
-              f'App_username:      {ctx.app_username}\n\t'
-              f'Full Name:         {ctx.fullyqualified}\n\t'
-              f'Logger Name:       {ctx.logger_name}\n\t' 
-              f'Trace Id:          {ctx.trace_id}\n\t' 
-              f'Study Instance Id: {ctx.study_instance_id}\n\t' 
-              f'Study Name:        {ctx.study_name}\n\t' 
-              f'Series Id:         {ctx.series_id}\n\t' 
-              f'Encounter Id:      {ctx.encounter_id}\n\t' 
-              f'Round:             {ctx.round}\n\t' 
-              f'Turn:              {ctx.turn}\n')
-
-        for line in ctx.crumbs:
-            print(line)
-
+        ctx.summary()
         for line in traceback.format_exception(exc_type, exc_value, exc_traceback):
             print(line)

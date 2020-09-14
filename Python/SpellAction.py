@@ -8,13 +8,15 @@ from Ctx import RpgLogging
 from Die import Die
 from Spell import Spell
 from Foe import Foe
+from PlayerCharacter import PlayerCharacter
+
 
 class SpellAction(object):
     @ctx_decorator
     def __init__(self, ctx: Ctx, spell_obj,
                  attack_modifier,  # bonus to the toHit
                  damage_modifier,
-                 caster_name,
+                 caster,
                  targets,
                  save_dc=None,
                  vantage='Normal'):
@@ -25,7 +27,7 @@ class SpellAction(object):
         self.effect_obj = spell_obj.effect_obj  # could be damage or healing
         self.encounter_round = self.ctx.round
         self.encounter_turn = self.ctx.turn
-        self.caster_name = caster_name
+        self.caster = caster
         self.targets = targets
         self.attack_modifier = attack_modifier
         self.damage_modifier = damage_modifier
@@ -94,10 +96,11 @@ class SpellAction(object):
     @ctx_decorator
     def set_cast_success_list(self, save_dc):
         jdict = {'dc': save_dc,
-                 'attack_roll_required_ind': self.spell_obj.attack_roll_required_ind}
+                 'attack_roll_required_ind': self.spell_obj.attack_roll_required_ind,
+                 'save_outcome':  self.spell_obj.save_outcome}
         for target in self.targets:
             if self.spell_obj.attack_roll_required_ind:
-                jdict[f'{target.get_name()}_armor_class'] = target.armor_class
+                jdict[f'{target.name_str}_armor_class'] = target.armor_class
                 jdict['attack_value'] = self.attack_value
                 if self.attack_value >= target.armor_class:
                     attack_roll = 'Success'
@@ -105,17 +108,19 @@ class SpellAction(object):
                     attack_roll = 'Failure'
             else:
                 attack_roll = 'NotRequired'
-            jdict[f'{target.get_name()}_attack_roll'] = attack_roll
+            jdict[f'{self.caster.name_str}_attack_roll'] = attack_roll
 
             if self.spell_obj.save:
                 save_success_ind = target.check(self.spell_obj.save, vantage='Normal', dc=save_dc)
             else:
                 save_success_ind = False
-            jdict[f'{target.get_name()}_save_success_ind'] = save_success_ind
+            jdict[f'{target.name_str}_save_success_ind'] = save_success_ind
 
             if attack_roll != 'Failure':
                 for effect in self.possible_effect.keys():
                     t_obj = self.possible_effect[effect]
+                    jdict[f'{target.name_str}_{effect}_possible_amount'] = t_obj['possible_amount']
+
                     if save_success_ind:
                         if self.spell_obj.save_outcome == 'HalfPossible':
                             poss_amt = int(t_obj['possible_amount']/2)
@@ -126,13 +131,15 @@ class SpellAction(object):
                     else:
                         poss_amt = t_obj['possible_amount']
 
-                    jdict[f'{target.get_name()}_{effect}_possible_amount'] = poss_amt
+                    jdict[f'{target.name_str}_{effect}_actual_amount'] = poss_amt
+                    jdict[f'{target.name_str}_{effect}_effect_category'] = t_obj['effect_category']
+                    jdict[f'{target.name_str}_{effect}_before_hit_points'] = target.cur_hit_points
                     if t_obj['effect_category'] == 'damage':
-                        jdict[f'{target.get_name()}_{effect}_effect_category'] = 'damage'
                         target.damage(amount=poss_amt, damage_type=effect)
                     else:
-                        jdict[f'{target.get_name()}_{effect}_effect_category'] = 'heal'
                         target.heal(amount=poss_amt)
+                    jdict[f'{target.name_str}_{effect}_after_hit_points'] = target.cur_hit_points
+        # print(jdict)
         self.ctx.crumbs[-1].add_audit(json_dict=jdict)
 
     def __repr__(self):
@@ -145,7 +152,7 @@ class SpellAction(object):
             'vantage': self.vantage,
             'encounter_round': self.encounter_round,
             'encounter_turn': self.encounter_turn,
-            'caster_name': self.caster_name,
+            'caster_name_str': self.caster.name_str,
             'targets': self.targets,
             'possible_effect': self.possible_effect,
             'duration_amt': self.duration_amt,
@@ -172,35 +179,22 @@ if __name__ == '__main__':
     logger = RpgLogging(logger_name=logger_name, level_threshold='debug')
     logger.setup_logging(log_dir=ctx.log_file_dir)
     try:
+        c1 = PlayerCharacter(db=db, ctx=ctx, race_candidate='Blue dragonborn', class_candidate='Sorcerer')
         s1 = Spell(db=db, ctx=ctx, name="Dragonborn Breath Weapon - Blue", cast_at_level=None)
-        f1 = [Foe(db=db, ctx=ctx, foe_candidate="Skeleton"), Foe(db=db, ctx=ctx, foe_candidate="Skeleton")]
-
+        f1 = Foe(db=db, ctx=ctx, foe_candidate="Skeleton")
+        f1.set_name_str(group_str='Opponents', index_position=0)
         a1 = SpellAction(ctx=ctx,
                          spell_obj=s1,
                          attack_modifier=0,
                          damage_modifier=0,
-                         caster_name='Bob',
+                         caster=c1,
                          save_dc=14,
-                         targets=f1,
+                         targets=[f1],
                          vantage='Normal')
         print(a1)
 
     except Exception as error:
         exc_type, exc_value, exc_traceback = sys.exc_info()
-        print(f'Context Information:\n\t'
-              f'App_username:      {ctx.app_username}\n\t'
-              f'Full Name:         {ctx.fullyqualified}\n\t'
-              f'Logger Name:       {ctx.logger_name}\n\t'
-              f'Trace Id:          {ctx.trace_id}\n\t'
-              f'Study Instance Id: {ctx.study_instance_id}\n\t'
-              f'Study Name:        {ctx.study_name}\n\t'
-              f'Series Id:         {ctx.series_id}\n\t'
-              f'Encounter Id:      {ctx.encounter_id}\n\t'
-              f'Round:             {ctx.round}\n\t'
-              f'Turn:              {ctx.turn}\n')
-
-        for line in ctx.crumbs:
-            print(line)
-
+        ctx.summary()
         for line in traceback.format_exception(exc_type, exc_value, exc_traceback):
             print(line)

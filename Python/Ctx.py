@@ -216,6 +216,21 @@ class Ctx:
                 return_value.append(fix_dict_for_json(crumb.__dict__))
         return return_value
 
+    def summary(self):
+        print(f'Context Information:\n\t'
+              f'App_username:      {self.app_username}\n\t'
+              f'Full Name:         {self.fullyqualified}\n\t'
+              f'Logger Name:       {self.logger_name}\n\t'
+              f'Trace Id:          {self.trace_id}\n\t'
+              f'Study Instance Id: {self.study_instance_id}\n\t'
+              f'Study Name:        {self.study_name}\n\t'
+              f'Series Id:         {self.series_id}\n\t'
+              f'Encounter Id:      {self.encounter_id}\n\t'
+              f'Round:             {self.round}\n\t'
+              f'Turn:              {self.turn}\n')
+
+        self.print_crumbs()
+
     def __repr__(self):
         # out_str = (f'{{ "app_username": "{self.app_username}", '
         #            f'"fullyqualified": "{self.fullyqualified}", '

@@ -9,9 +9,7 @@ class Attack(object):
     def __init__(self, ctx: Ctx, weapon_obj,
                  attack_modifier,  # bonus to the toHit
                  damage_modifier,
-                 attacker_name_str,
                  attacker,
-                 target_name_str,
                  target,
                  attack_type,
                  versatile_use_2handed=True,
@@ -23,9 +21,7 @@ class Attack(object):
         self.weapon_obj = weapon_obj
         self.weapon_name = weapon_obj.name
         self.damage_type = weapon_obj.default_damage_type
-        self.attacker_name_str = attacker_name_str
         self.attacker = attacker
-        self.target_name_str = target_name_str
         self.target = target
         self.attack_type = attack_type
         self.attack_modifier = attack_modifier

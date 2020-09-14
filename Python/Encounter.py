@@ -744,7 +744,7 @@ class Encounter(object):
                                                    attacker_side=self.initiative[initiative_ind][0],
                                                    attacker_index=self.initiative[initiative_ind][1],
                                                    attack_type='Spell',
-                                                   action_obj=cur_action_dict)
+                                                   cur_action_dict=cur_action_dict)
 
                 elif cur_action == 'Melee':
                     # cur_action_dict:
@@ -775,7 +775,7 @@ class Encounter(object):
                                                            attacker_side=waiting_action[0],
                                                            attacker_index=waiting_action[1],
                                                            attack_type='Melee',
-                                                           action_obj=cur_action_dict,
+                                                           cur_action_dict=cur_action_dict,
                                                            audit_key_prefix="waiting_",
                                                            audit_key_suffix=f"_{t_cnt}")
                         else:
@@ -789,7 +789,7 @@ class Encounter(object):
                                                        attacker_side=self.initiative[initiative_ind][0],
                                                        attacker_index=self.initiative[initiative_ind][1],
                                                        attack_type='Melee',
-                                                       action_obj=cur_action_dict)
+                                                       cur_action_dict=cur_action_dict)
                 elif cur_action == 'Ranged':
                     # cur_action_dict:
                     # {"Action": "Ranged",
@@ -812,7 +812,7 @@ class Encounter(object):
                                                        attacker_side=self.initiative[initiative_ind][0],
                                                        attacker_index=self.initiative[initiative_ind][1],
                                                        attack_type='Ranged',
-                                                       action_obj=cur_action_dict)
+                                                       cur_action_dict=cur_action_dict)
 
             elif cur_active.alive:  # currently alive but less than 1 hit point
                 t_death_save_passed_cnt = cur_active.death_save_passed_cnt
