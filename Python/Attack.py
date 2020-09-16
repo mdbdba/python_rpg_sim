@@ -104,10 +104,12 @@ class Attack(object):
         self.possible_damage += self.damage_modifier
         self.attack_value = self.natural_value + self.attack_modifier
 
+    @ctx_decorator
     def determine_success(self):
         hit_points_before = self.target.cur_hit_points
         successful_defend = self.target.defend(attack_obj=self)
-
+        jdict = {'hit_points_before': hit_points_before,
+                 'successful_attack': (not successful_defend) }
         # if the attack failed, wasn't a crit and if the attacker has luck and random chance of 33% succeeds
         # randomly make the choice to use luck.  1/3 chance
         if (successful_defend and self.natural_value < 20 and
@@ -115,18 +117,23 @@ class Attack(object):
                 random.randint(1, 3) == 1):
             self.attacker.feature_counts['Lucky'] -= 1
             self.retry_count += 1
+            jdict['lucky_used']= True
 
             # turn_audit[f"{audit_key_prefix}luck_was_used{audit_key_suffix}"] = True
             # msg = f"{msg} failed, but lucky caused a retry which"
             self.set_values()
             successful_defend = self.target.defend(attack_obj=self)
+            jdict['lucky_retry_success'] = not successful_defend
 
         self.hp_impact = (hit_points_before - self.target.cur_hit_points)
+        jdict['hp_impact'] = self.hp_impact
         # set attack success which is the opposite of a successful defend
         self.attack_success = not successful_defend
         if self.attack_success:
             self.attacker.inc_damage_dealt(damage_type=self.damage_type, amount=self.possible_damage)
             self.attacker.stats.attack_successes += 1
+
+        self.ctx.crumbs[-1].add_audit(json_dict=jdict)
 
     def __repr__(self):
         return (f'"method_last_call_audit": {self.method_last_call_audit}, ' 

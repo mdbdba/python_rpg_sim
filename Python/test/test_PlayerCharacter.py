@@ -30,9 +30,11 @@ def test_character_spell_list():
     ctx = Ctx(app_username='character_test', logger_name=logger_name)
     ctx.log_file_dir = os.path.expanduser('~/rpg/logs')
     db = InvokePSQL()
-    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate='High elf', class_candidate='Sorcerer')
+    a1 = PlayerCharacter(db=db, ctx=ctx, race_candidate='High elf', class_candidate='Sorcerer',
+                         ability_array_str='10,10,10,10,10,10')
     a1.set_name_str(group_str='Heroes', index_position=0)
-    b1 = PlayerCharacter(db=db, ctx=ctx, race_candidate='Loredrake kobold', class_candidate='Sorcerer')
+    b1 = PlayerCharacter(db=db, ctx=ctx, race_candidate='Loredrake kobold', class_candidate='Sorcerer',
+                         ability_array_str='10,10,10,10,10,10')
     b1.set_name_str(group_str='Heroes', index_position=1)
     f1 = Foe(db=db, ctx=ctx, foe_candidate='Skeleton')
     f1.set_name_str(group_str='Opponents', index_position=0)
@@ -53,8 +55,24 @@ def test_character_spell_list():
     assert(action['Targets'][0].occupied_by_index == 0)
     s1 = Spell(db=db, ctx=ctx, name=action['Specific_Name'], cast_at_level=a1.level)
     dc = a1.get_spell_saving_throw_dc(s1.save)
+    print(dc)
+    assert(dc == 10)
     a1.use_spell(action['Specific_Name'])
+    # successful save
+    dc = 1
     attack1 = SpellAction(ctx=ctx, spell_obj=s1, attack_modifier=0,
                           damage_modifier=0, caster=a1, save_dc=dc,
                           targets=[f1], vantage='Normal')
     print(attack1)
+    # fail a save
+    dc = 25
+    attack2 = SpellAction(ctx=ctx, spell_obj=s1, attack_modifier=0,
+                          damage_modifier=0, caster=a1, save_dc=dc,
+                          targets=[f1], vantage='Normal')
+    print(attack2)
+
+    # See the damage dice increase
+    attack3 = SpellAction(ctx=ctx, spell_obj=s1, attack_modifier=0,
+                          damage_modifier=0, caster=a1, save_dc=dc,
+                          targets=[f1], vantage='Normal')
+    print(attack3)

@@ -785,7 +785,7 @@ class Character(object):
             self.spell_list[spell_name]['available_count'] -= 1
 
     def set_name_str(self, group_str, index_position):
-        self.name_str = f"{self.get_name().replace(' ','_')} {group_str}{index_position}"
+        self.name_str = f"{self.get_name().replace(' ','_')}_{group_str}_{index_position}"
 
     @ctx_decorator
     def get_action(self, distance_from_player):

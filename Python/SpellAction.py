@@ -1,6 +1,7 @@
 import os
 import sys
 import traceback
+from typing import Dict
 from InvokePSQL import InvokePSQL
 from Ctx import Ctx
 from Ctx import ctx_decorator
@@ -32,6 +33,9 @@ class SpellAction(object):
         self.attack_modifier = attack_modifier
         self.damage_modifier = damage_modifier
         self.vantage = vantage
+        # Dictionary holding spell name to function name
+        self.__func_map = {"Toll the Dead": self.toll_the_dead}
+
         self.set_possible_effect()
         # possible_effect = {"effect_type": {"effect_category": , "possible_amount": ,
         #                                    "effect_modifier": , "die_used": , "rolls_used": ,}}
@@ -117,30 +121,63 @@ class SpellAction(object):
             jdict[f'{target.name_str}_save_success_ind'] = save_success_ind
 
             if attack_roll != 'Failure':
-                for effect in self.possible_effect.keys():
-                    t_obj = self.possible_effect[effect]
-                    jdict[f'{target.name_str}_{effect}_possible_amount'] = t_obj['possible_amount']
+                if self.spell_name in self.__func_map.keys():
+                    rdict = self.__func_map[self.spell_name](target=target, save_success_ind=save_success_ind)
+                    jdict.update(rdict)
+                else:
+                    for effect in self.possible_effect.keys():
+                        t_obj = self.possible_effect[effect]
+                        jdict[f'{target.name_str}_{effect}_possible_amount'] = t_obj['possible_amount']
 
-                    if save_success_ind:
-                        if self.spell_obj.save_outcome == 'HalfPossible':
-                            poss_amt = int(t_obj['possible_amount']/2)
-                        elif self.spell_obj.save_outcome == 'ReducedToZero':
-                            poss_amt = 0
+                        if save_success_ind:
+                            if self.spell_obj.save_outcome == 'HalfPossible':
+                                poss_amt = int(t_obj['possible_amount']/2)
+                            elif self.spell_obj.save_outcome == 'ReducedToZero':
+                                poss_amt = 0
+                            else:
+                                poss_amt = -1
                         else:
-                            poss_amt = -1
-                    else:
-                        poss_amt = t_obj['possible_amount']
+                            poss_amt = t_obj['possible_amount']
 
-                    jdict[f'{target.name_str}_{effect}_actual_amount'] = poss_amt
-                    jdict[f'{target.name_str}_{effect}_effect_category'] = t_obj['effect_category']
-                    jdict[f'{target.name_str}_{effect}_before_hit_points'] = target.cur_hit_points
-                    if t_obj['effect_category'] == 'damage':
-                        target.damage(amount=poss_amt, damage_type=effect)
-                    else:
-                        target.heal(amount=poss_amt)
-                    jdict[f'{target.name_str}_{effect}_after_hit_points'] = target.cur_hit_points
+                        jdict[f'{target.name_str}_{effect}_actual_amount'] = poss_amt
+                        jdict[f'{target.name_str}_{effect}_effect_category'] = t_obj['effect_category']
+                        jdict[f'{target.name_str}_{effect}_before_hit_points'] = target.cur_hit_points
+                        if t_obj['effect_category'] == 'damage':
+                            target.damage(amount=poss_amt, damage_type=effect)
+                        else:
+                            target.heal(amount=poss_amt)
+                        jdict[f'{target.name_str}_{effect}_after_hit_points'] = target.cur_hit_points
+
         # print(jdict)
         self.ctx.crumbs[-1].add_audit(json_dict=jdict)
+
+    def toll_the_dead(self, target, save_success_ind: bool) -> Dict:
+        # You point at one creature you can see within range, and the sound of
+        # a dolorous bell fills the air around it for a moment.
+        # The target must succeed on a Wisdom saving throw or take 1d8 necrotic damage.
+        # If the target is missing any of its hit points, it instead takes 1d12 necrotic damage.
+        return_dict = {}
+        effect_die = 8
+        dtype = 'Necrotic'
+        if save_success_ind:
+            return_dict[f'{target.name_str}_toll_the_dead'] = 'Called, but save cancelled effect'
+        else:
+            before_hit_points = target.cur_hit_points
+            if before_hit_points < target.hit_points:
+                return_dict[f'{target.name_str}_hit_points'] = target.hit_points
+                return_dict[f'{target.name_str}_before_hit_points'] = before_hit_points
+                return_dict[f'{target.name_str}_has_damage'] = True
+                effect_die = 12
+                self.effect_obj[dtype]['effect_die'] = effect_die
+
+            return_dict[f'{target.name_str}_effect_die_override'] = effect_die
+            self.set_possible_effect()
+            print(self.possible_effect[dtype])
+            return_dict[f'{target.name_str}_{dtype}_possible_amount'] = self.possible_effect[dtype]['possible_amount']
+            return_dict[f'{target.name_str}_{dtype}_effect_category'] = self.possible_effect[dtype]['effect_category']
+            target.damage(amount=self.possible_effect[dtype]['possible_amount'], damage_type=dtype)
+            return_dict[f'{target.name_str}_{dtype}_after_hit_points'] = target.cur_hit_points
+        return return_dict
 
     def __repr__(self):
         out_dict = {
