@@ -83,18 +83,12 @@ class Character(object):
         else:
             self.gender = gender_candidate
 
-        # implement conditions dictionary that holds a structure
-        # 'name': {
-        #     "end_round": -1
-        #     "end_turn": -1
-        #     "ends_on_attack": False
-        # }
         self.conditions = {}
+        # entries that could be in that dictionary:
+        # blinded, charmed, deafened, fatigued, frightened, grappled, incapacitated, invisible, laughing,
+        # paralyzed, petrified, poisoned, prone, sleeping, stunned, unconscious
         self.alive = True
         self.stabilized = True
-        # entries that could be in that dictionary:
-        # blinded, charmed, deafened, fatigued, frightened, grappled, incapacitated, invisible,
-        # paralyzed, petrified, poisoned, prone, stunned, unconscious
         self.ranged_weapon = None
         self.melee_weapon = None
         self.ranged_ammunition_type = None
@@ -106,6 +100,9 @@ class Character(object):
         self.feature_list = []
         self.feature_counts = {}  # dictionary of feature and available use counts
         self.spell_list = {}
+        # 0 = cantrips usable at any time
+        # the rest are the available slots per spell level 1-9
+        self.available_spell_slots = [-1, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 
         self.exhaustion_level = 0
         # 1   Disadvantage on Ability Checks
@@ -164,6 +161,13 @@ class Character(object):
     def prone(self):
         self.add_condition('prone')
 
+    def nohealing(self, end_round=-1, end_turn=-1, ends_on_attack=False):
+        self.add_condition(condition_name='nohealing', end_round=end_round,
+                           end_turn=end_turn, ends_on_attack=ends_on_attack)
+
+    def rm_nohealing(self):
+        self.rm_condition('nohealing')
+
     def blinded(self, end_round=-1, end_turn=-1, ends_on_attack=False):
         self.add_condition(condition_name='blinded', end_round=end_round,
                            end_turn=end_turn, ends_on_attack=ends_on_attack)
@@ -177,6 +181,13 @@ class Character(object):
 
     def rm_charmed(self):
         self.rm_condition('charmed')
+
+    def sleeping(self, end_round=-1, end_turn=-1, ends_on_attack=False):
+        self.add_condition(condition_name='sleeping', end_round=end_round,
+                           end_turn=end_turn, ends_on_attack=ends_on_attack)
+
+    def rm_sleeping(self):
+        self.rm_condition('sleeping')
 
     def deafened(self, end_round=-1, end_turn=-1, ends_on_attack=False):
         self.add_condition(condition_name='deafened', end_round=end_round,
@@ -692,14 +703,26 @@ class Character(object):
         return self.damage_generator
 
     @ctx_decorator
+    def clear_condition_by_turn(self, round, turn):
+        jdict = {}
+        for key in list(self.conditions.keys()):
+            if self.conditions[key]['end_round'] == round and self.conditions[key]['end_turn'] == turn:
+                self.rm_condition(key)
+                jdict[f'{key}_condition_removed'] = True
+        self.ctx.crumbs[-1].add_audit(json_dict=jdict)
+
+    @ctx_decorator
     def damage(self, amount, damage_type="Unknown"):
-
         tmp_type = self.damage_adj[damage_type]
-
         # make sure the amount is an int.
         amount = int(amount)
         jdict = {"damage_adj": tmp_type,
                  "modification_due_to_damage_type": "None"}
+        for key in list(self.conditions.keys()):
+            if self.conditions[key]['ends_on_attack'] is True:
+                self.rm_condition(key)
+                jdict[f'{key}_condition_removed'] = True
+
         if tmp_type and tmp_type == 'resistant':
             amount = amount // 2
             jdict['modification_due_to_damage_type'] = "resistant"
@@ -779,13 +802,49 @@ class Character(object):
                                 return_array.append(p)
         return return_array
 
-    def use_spell(self, spell_name):
-        # for spells that are managed by uses:
-        if self.spell_list[spell_name]['available_count'] > 0:
-            self.spell_list[spell_name]['available_count'] -= 1
+    def populate_available_spell_slots(self, cantrips_known, spell_slot_str):
+        self.available_spell_slots[0] = int(cantrips_known)
+        cnt = 1
+        for i in spell_slot_str.split(','):
+            self.available_spell_slots[cnt] = int(i)
+            cnt += 1
+
+    def use_spell(self, spell_name, spell_slot_level=None):
+        if spell_slot_level is None:  # for spells that are managed by uses:
+            if self.spell_list[spell_name]['available_count'] > 0:
+                self.spell_list[spell_name]['available_count'] -= 1
+        else:
+            if self.available_spell_slots[spell_slot_level] > 0:
+                self.available_spell_slots[spell_slot_level] -= 1
 
     def set_name_str(self, group_str, index_position):
         self.name_str = f"{self.get_name().replace(' ','_')}_{group_str}_{index_position}"
+
+    def pick_a_spell(self, distance_from_player):
+        spell_name = "None"
+        targets = []
+        if len(self.spell_list) > 0 and distance_from_player.targets[0].distance >= 10:
+            max_damage_value = 0
+            # cycle through their spells and look for one that has targets in range and does the most damage.
+            for x in self.spell_list.keys():
+                y = self.spell_list[x]
+                if y['available_count'] != 0:
+                    spell_targets = self.get_range_targets(range=y['range_amt'],
+                                                           distance_from_targets=distance_from_player,
+                                                           area_of_effect=y['range_aoe'],
+                                                           if_only_group="targets")
+                    if len(spell_targets) > 0 and max_damage_value < y['max_impact']:
+                        max_damage_value = y['max_impact']
+                        spell_name = x
+                        targets = spell_targets
+
+        if spell_name == 'None':
+            ret_val = {"Action": "Unknown"}
+        else:
+            ret_val = {"Action": "Spell",
+                       "Specific_Name": spell_name,
+                       "Targets": targets}
+        return ret_val
 
     @ctx_decorator
     def get_action(self, distance_from_player):
@@ -807,24 +866,12 @@ class Character(object):
         elif combat_preference == 'Melee':
             # Yeah, this player want's to bash heads, but if they have a spell that they could take advantage of,
             #  they will.
-            if len(self.spell_list) > 0 and op_dist >= 10:
-                max_damage_value = 0
-                # cycle through their spells and look for one that has targets in range and does the most damage.
-                for x in self.spell_list.keys():
-                    y = self.spell_list[x]
-                    if y['available_count'] != 0:
-                        spell_targets = self.get_range_targets(range=y['range_amt'],
-                                                               distance_from_targets=distance_from_player,
-                                                               area_of_effect=y['range_aoe'],
-                                                               if_only_group="targets")
-                        if len(spell_targets) > 0 and max_damage_value < y['max_impact']:
-                            max_damage_value = y['max_impact']
-                            spell_name = x
+            spell_pick = self.pick_a_spell(distance_from_player=distance_from_player)
 
-            if spell_name != "None":
+            if spell_pick['Action'] == "Spell":
                 ret_val = {"Action": "Spell",
-                           "Specific_Name": spell_name,
-                           "Targets": spell_targets}
+                           "Specific_Name": spell_pick['Specific_Name'],
+                           "Targets": spell_pick['Targets']}
             elif op_dist > self.cur_movement:
                 ret_val = {"Action": "Movement"}
             elif (self.cur_movement >= op_dist > 8
@@ -834,42 +881,49 @@ class Character(object):
                 ret_val = {"Action": "Melee",
                            "Targets": [distance_from_player.targets[0]]}
         else:
-            t_range = self.get_ranged_range()
-            jdict["ranged_weapon_range"] = t_range
-            jdict["ranged_weapon_ammo"] = self.ranged_ammunition_amt
-            op_dist2 = 1000  # the if statement below checks this value.  Needs to
-            # be > weapon range for movement to be called. Setting
-            # to 1000 so that when no suitable target exists, this
-            # triggers movement.
+            spell_pick = self.pick_a_spell(distance_from_player=distance_from_player)
 
-            m_cnt = 0
-            working_ranged_index = None
-            for m in distance_from_player.ranged_targets:
-                if (op_dist >= 8 and
-                        working_ranged_index is None and
-                        m.in_melee is False and
-                        (t_range >= m.distance > 8) and
-                        self.ranged_ammunition_amt > 0):
-                    working_ranged_index = m_cnt
-                    op_dist2 = m.distance
-                m_cnt += 1
+            if spell_pick['Action'] == "Spell":
+                ret_val = {"Action": "Spell",
+                           "Specific_Name": spell_pick['Specific_Name'],
+                           "Targets": spell_pick['Targets']}
+            else:
+                t_range = self.get_ranged_range()
+                jdict["ranged_weapon_range"] = t_range
+                jdict["ranged_weapon_ammo"] = self.ranged_ammunition_amt
+                op_dist2 = 1000  # the if statement below checks this value.  Needs to
+                # be > weapon range for movement to be called. Setting
+                # to 1000 so that when no suitable target exists, this
+                # triggers movement.
 
-            if op_dist > t_range and op_dist2 > t_range:
-                ret_val = {"Action": "Movement"}
-            elif working_ranged_index is None and op_dist >= 8:
-                ret_val = {"Action": "Movement"}
-            elif op_dist >= 8 and self.ranged_ammunition_amt < 1:
-                ret_val = {"Action": "Movement"}
-            elif working_ranged_index is not None:
+                m_cnt = 0
+                working_ranged_index = None
+                for m in distance_from_player.ranged_targets:
+                    if (op_dist >= 8 and
+                            working_ranged_index is None and
+                            m.in_melee is False and
+                            (t_range >= m.distance > 8) and
+                            self.ranged_ammunition_amt > 0):
+                        working_ranged_index = m_cnt
+                        op_dist2 = m.distance
+                    m_cnt += 1
 
-                t_tgt = distance_from_player.ranged_targets[working_ranged_index]
-                ret_val = {"Action": "Ranged",
-                           "Targets": [t_tgt]}
-                jdict["Ranged_target_change_team"] = t_tgt.occupied_by_group
-                jdict["Ranged_target_change_index"] = t_tgt.occupied_by_index
-            elif op_dist <= 8:
-                ret_val = {"Action": "Melee",
-                           "Targets": [distance_from_player.target[0]]}
+                if op_dist > t_range and op_dist2 > t_range:
+                    ret_val = {"Action": "Movement"}
+                elif working_ranged_index is None and op_dist >= 8:
+                    ret_val = {"Action": "Movement"}
+                elif op_dist >= 8 and self.ranged_ammunition_amt < 1:
+                    ret_val = {"Action": "Movement"}
+                elif working_ranged_index is not None:
+
+                    t_tgt = distance_from_player.ranged_targets[working_ranged_index]
+                    ret_val = {"Action": "Ranged",
+                               "Targets": [t_tgt]}
+                    jdict["Ranged_target_change_team"] = t_tgt.occupied_by_group
+                    jdict["Ranged_target_change_index"] = t_tgt.occupied_by_index
+                elif op_dist <= 8:
+                    ret_val = {"Action": "Melee",
+                               "Targets": [distance_from_player.target[0]]}
 
         self.ctx.crumbs[-1].add_audit(json_dict=jdict)
         return ret_val
@@ -1073,17 +1127,20 @@ class Character(object):
         jdict = {"from_hit_points": self.cur_hit_points,
                  "max_hit_points": self.hit_points,
                  "character_alive": self.alive}
-        if self.cur_hit_points == 0 and self.alive:
-            self.stabilize()
-
-        if (self.cur_hit_points + amount) > self.hit_points:
-            self.cur_hit_points = self.hit_points
+        if self.check_condition(condition_name='nohealing'):
+            jdict['condition'] = 'nohealing'
         else:
-            self.cur_hit_points += amount
+            if self.cur_hit_points == 0 and self.alive:
+                self.stabilize()
 
-        self.stats.total_healing_received += amount
+            if (self.cur_hit_points + amount) > self.hit_points:
+                self.cur_hit_points = self.hit_points
+            else:
+                self.cur_hit_points += amount
 
-        jdict["to_hit_points"] = self.cur_hit_points
+            self.stats.total_healing_received += amount
+            jdict["to_hit_points"] = self.cur_hit_points
+
         self.ctx.crumbs[-1].add_audit(json_dict=jdict)
 
     @ctx_decorator
@@ -1160,6 +1217,15 @@ if __name__ == '__main__':
         print(a2.get_ability_pref_array())
         print(a2.get_sorted_ability_array())
         print(a2.stats)
+        a2.cur_hit_points = 20
+        a2.sleeping(ends_on_attack=True)
+        is_sleeping = a2.check_condition('sleeping')
+        print(f'{a2.get_name()} is sleeping {is_sleeping}')
+        a2.damage(amount=2, damage_type='Piercing')
+        is_sleeping = a2.check_condition('sleeping')
+        print(f'{a2.get_name()} is sleeping {is_sleeping} after damage')
+        a2.populate_available_spell_slots(cantrips_known=2, spell_slot_str='9,8,7,6,5,4,3,2,1')
+        print(f'{a2.get_name()} available spell slot array: {a2.available_spell_slots}')
     except Exception as error:
         print(ctx)
         ctx.summary()

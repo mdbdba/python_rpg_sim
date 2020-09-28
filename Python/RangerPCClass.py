@@ -10,6 +10,7 @@ class RangerPCClass(PlayerCharacterClass):
         PlayerCharacterClass.__init__(self, db=db, ctx=ctx, class_candidate="Ranger",
                                       character_altering_class_options=character_altering_class_options)
         self.archetype_label = "Ranger Archetype"
+        self.combat_preference = "Ranged"
         self.ranged_weapon = "Longbow"
         self.melee_weapon = "Shortsword"
         self.melee_weapon_offhand = "Shortsword"

@@ -148,7 +148,6 @@ class SpellAction(object):
                             target.heal(amount=poss_amt)
                         jdict[f'{target.name_str}_{effect}_after_hit_points'] = target.cur_hit_points
 
-        # print(jdict)
         self.ctx.crumbs[-1].add_audit(json_dict=jdict)
 
     def toll_the_dead(self, target, save_success_ind: bool) -> Dict:
@@ -172,11 +171,31 @@ class SpellAction(object):
 
             return_dict[f'{target.name_str}_effect_die_override'] = effect_die
             self.set_possible_effect()
-            print(self.possible_effect[dtype])
             return_dict[f'{target.name_str}_{dtype}_possible_amount'] = self.possible_effect[dtype]['possible_amount']
             return_dict[f'{target.name_str}_{dtype}_effect_category'] = self.possible_effect[dtype]['effect_category']
             target.damage(amount=self.possible_effect[dtype]['possible_amount'], damage_type=dtype)
             return_dict[f'{target.name_str}_{dtype}_after_hit_points'] = target.cur_hit_points
+        return return_dict
+
+    def chill_touch(self, target, save_success_ind: bool) -> Dict:
+        # You create a ghostly, skeletal hand in the space of a creature within range.Make
+        # a ranged spell Attack against the creature to assail it with the chill of the grave.
+        # On a hit, the target takes 1d8 necrotic damage, and it can't regain Hit Points until
+        # the start of your next turn. Until then, the hand clings to the target.
+        return_dict = {}
+        dtype = 'Necrotic'
+        before_hit_points = target.cur_hit_points
+        return_dict[f'{target.name_str}_before_hit_points'] = before_hit_points
+        target.damage(amount=self.possible_effect[dtype]['possible_amount'], damage_type=dtype)
+        return_dict[f'{target.name_str}_{dtype}_after_hit_points'] = target.cur_hit_points
+        if ctx.round != -1:
+            end_round = ctx.round + 1
+            end_turn = ctx.turn + 1
+        else:
+            end_round = ctx.round
+            end_turn = ctx.turn
+        target.nohealing(end_round=end_round, end_turn=end_turn)
+
         return return_dict
 
     def __repr__(self):
@@ -206,7 +225,6 @@ class SpellAction(object):
             out_str = f'{out_str[:-2]}'
         out_str = f'{out_str}}}'
         return out_str
-
 
 if __name__ == '__main__':
     db = InvokePSQL()

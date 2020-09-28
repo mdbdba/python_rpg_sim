@@ -10,6 +10,7 @@ class WarlockPCClass(PlayerCharacterClass):
         PlayerCharacterClass.__init__(self, db=db, ctx=ctx, class_candidate="Warlock",
                                       character_altering_class_options=character_altering_class_options)
         self.archetype_label = "Otherworldly Patron"
+        self.combat_preference = "Ranged"
         self.melee_weapon = "Dagger"
         self.melee_weapon_offhand = "Dagger"
         self.ranged_weapon = "Crossbow, light"

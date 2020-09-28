@@ -98,6 +98,7 @@ class PlayerCharacter(Character):
         self.ranged_ammunition_amt = self.class_obj.ranged_ammunition_amt
         self.set_feature_list(db=db)
         self.add_class_feature_counts()
+        self.add_available_spell_slots()
         self.set_spell_list(db=db)
 
         self.class_eval[-1]["character_id"] = self.character_id
@@ -188,6 +189,11 @@ class PlayerCharacter(Character):
             if self.feature_obj[a][2] == 'Rage':
                 self.feature_counts['Rage'] = {'Rages Available': int(self.feature_obj[a][4]),
                                                'Rage Damage': int(self.feature_obj[a][6])}
+
+    def add_available_spell_slots(self):
+        for i in self.feature_obj:
+            if i[2] == 'Spellcasting' and i[3] == 'Spell Slots':
+                self.populate_available_spell_slots(cantrips_known=i[8], spell_slot_str=i[4])
 
     @ctx_decorator
     def set_spell_list(self, db):
@@ -942,6 +948,7 @@ if __name__ == '__main__':
                              race_candidate="High elf",
                              class_candidate="Sorcerer")
         print(a9.__repr__)
+        print(a9)
 
         a10 = PlayerCharacter(db=db, ctx=ctx,
                               ability_array_str="18,12,12,10,10,8",
@@ -960,6 +967,8 @@ if __name__ == '__main__':
         action = a9.get_action(d1)
         print(d1)
         print(f"Action for {a9.get_name()}: {action}")
+        print(a9.feature_obj)
+        print(a9.available_spell_slots)
 
     except Exception as error:
         exc_type, exc_value, exc_traceback = sys.exc_info()
