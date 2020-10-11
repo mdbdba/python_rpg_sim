@@ -401,26 +401,6 @@
            and c.order_by = b.order_by - 1
         </createView>
     </changeSet>
-    <changeSet author="mdbdba" id="lu_spell_effect_4">
-        <dropView  schemaName="dnd_5e"  viewName="v_spell_damage_level"/>
-        <createView replaceIfExists="true"
-            schemaName="dnd_5e"
-            viewName="v_spell_effect_by_level">with tb as ( SELECT a.id, a.spell_id, a.spell_name, a.effect_category,
-                            a.effect_type, a.effect_modifier, a.effect_die, a.level,
-             row_number() over (partition by a.spell_name, a.effect_type order by level desc) as order_by
-        from lu_spell_effect as a
-        where a.effect_category = 'damage' )
-        select b.id, b.spell_id, b.spell_name, b.effect_category,
-               b.effect_type, b.effect_modifier, b.effect_die,
-               b.level as lower_level,
-               coalesce(c.level, 21) - 1 as upper_level
-        from tb b
-        left join tb c on b.spell_id = c.spell_id
-           and b.spell_name = c.spell_name
-           and b.effect_type = c.effect_type
-           and c.order_by = b.order_by - 1
-        </createView>
-    </changeSet>
     <changeSet author="mdbdba" id="lu_spell_effect_5">
         <addColumn
             schemaName="dnd_5e"

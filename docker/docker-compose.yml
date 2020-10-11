@@ -3,7 +3,7 @@ version: '3'
 services:
   pgs:
     build: ./pgs
-    image: mdbdba/postgres:11
+    image: mdbdba/postgres:12
     container_name: pgs
     ports:
       - "5433:5432"

@@ -1,11 +1,22 @@
-create role rpg_admin with login superuser password 'cCl52yUQ4pTRBp0';
+-- if not using docker, use this file to set up the db from scratch.
+-- connect to the db as postgres and execute this file.  
+SELECT 'CREATE DATABASE rpg'
+WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = 'rpg')\gexec
+
+create role rpg_admin with login password 'cCl52yUQ4pTRBp0';
 create role app with login password '1wm4iMSfX9hzehT';
+\c rpg
 alter database rpg owner to rpg_admin;
 create schema dnd_5e;
+alter schema dnd_5e owner to rpg_admin;
 grant usage on schema dnd_5e to rpg_admin;
 grant usage on schema dnd_5e to app;
 alter database rpg set search_path = dnd_5e, "$user", public;
 
+grant all on all sequences in schema dnd_5e to rpg_admin;
+grant all on all tables in schema dnd_5e to rpg_admin;
+grant usage on all sequences in schema dnd_5e to rpg_admin;
+grant all on all sequences in schema dnd_5e to rpg_admin;
 grant select on all sequences in schema dnd_5e to app;
 grant select on all tables in schema dnd_5e to app;
 grant usage on all sequences in schema dnd_5e to app;
