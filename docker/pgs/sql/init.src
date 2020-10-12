@@ -3,8 +3,8 @@
 SELECT 'CREATE DATABASE rpg'
 WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = 'rpg')\gexec
 
-create role rpg_admin with login password 'cCl52yUQ4pTRBp0';
-create role app with login password '1wm4iMSfX9hzehT';
+create role rpg_admin with login password '@@rpg_admin@@';
+create role app with login password '@@app@@';
 \c rpg
 alter database rpg owner to rpg_admin;
 create schema dnd_5e;

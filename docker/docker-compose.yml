@@ -11,7 +11,7 @@ services:
       - rpg
     environment:
      - POSTGRES_USER=postgres
-     - POSTGRES_PASSWORD=d&d5thedition
+     - POSTGRES_PASSWORD_FILE=/db_pass
      - POSTGRES_DB=rpg
     volumes:
      - ~/rpg/docker_data/pgs/data:/var/lib/postgresql/data
