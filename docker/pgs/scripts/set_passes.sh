@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 ininit="/init.src"
 outinit="/init.sql"
-dd if=/dev/urandom count=1 2> /dev/null | uuencode -m - | sed -ne 2p | cut -c-12 > /db_pass
+dd if=/dev/urandom count=1 2> /dev/null | uuencode -m - | sed -ne 2p | tr -d '@' | cut -c-12 > /db_pass
 chown postgres /db_pass
 chmod 660 /db_pass
-rpg_admin=$(dd if=/dev/urandom count=1 2> /dev/null | uuencode -m - | sed -ne 2p | cut -c-12)
-app=$(dd if=/dev/urandom count=1 2> /dev/null | uuencode -m - | sed -ne 2p | cut -c-12)
+rpg_admin=$(dd if=/dev/urandom count=1 2> /dev/null | uuencode -m - | sed -ne 2p |tr -d '@' | cut -c-12)
+app=$(dd if=/dev/urandom count=1 2> /dev/null | uuencode -m - | sed -ne 2p |tr -d '@' | cut -c-12)
 echo "*************************************************"
 echo "** Save these db user passwords                **"
 echo "*************************************************"
