@@ -191,9 +191,14 @@ class PlayerCharacter(Character):
                                                'Rage Damage': int(self.feature_obj[a][6])}
 
     def add_available_spell_slots(self):
+        # print(self.feature_obj)
         for i in self.feature_obj:
             if i[2] == 'Spellcasting' and i[3] == 'Spell Slots':
-                self.populate_available_spell_slots(cantrips_known=i[8], spell_slot_str=i[4])
+                if i[5] == 'Cantrips Known':
+                    cantrips = i[6]
+                else:
+                    cantrips = i[8]
+                self.populate_available_spell_slots(cantrips_known=cantrips, spell_slot_str=i[4])
 
     @ctx_decorator
     def set_spell_list(self, db):
@@ -241,12 +246,18 @@ class PlayerCharacter(Character):
                 lrt_dict[result[0]] = tmp_dict
                 search_str = f"{search_str}'{result[0]}', "
 
-        search_str = search_str[0:-2]
-        sql2 = (f"select name, level, save, casting_time_uom, range_amt, range_uom, range_aoe, "
-                f"duration_amt, duration_uom, concentration_ind, higher_level_cast "
-                f"from lu_spell ls "
-                f"where name in ({search_str})")
-        spell_results = db.query(sql2)
+        if (search_str != "'No Spells', "
+                and search_str != ""
+                and search_str is not None):
+            search_str = search_str[0:-2]
+            sql2 = (f"select name, level, save, casting_time_uom, range_amt, range_uom, range_aoe, "
+                    f"duration_amt, duration_uom, concentration_ind, higher_level_cast "
+                    f"from lu_spell ls "
+                    f"where name in ({search_str})")
+            spell_results = db.query(sql2)
+        else:
+            spell_results = []
+
         if spell_results:
             for spell in spell_results:
                 effect_sql = (f"select spell_id, effect_category, effect_type, "
@@ -936,6 +947,18 @@ if __name__ == '__main__':
         #                      ability_array_str="6,6,6,6,6,6",
         #                      race_candidate="Half-Orc",
         #                      class_candidate="Barbarian")
+
+        a20 = PlayerCharacter(db=db, ctx=ctx,
+                              ability_array_str="10,13,13,10,17,10",
+                              race_candidate="Wood elf",
+                              class_candidate="Cleric")
+        print(a20.__repr__)
+
+        a21 = PlayerCharacter(db=db, ctx=ctx,
+                              ability_array_str="11,14,14,13,13,12",
+                              race_candidate="Tiefling",
+                              class_candidate="Rogue")
+        print(a21.__repr__)
 
         a8 = PlayerCharacter(db=db, ctx=ctx,
                              ability_array_str="18,12,12,10,10,8",

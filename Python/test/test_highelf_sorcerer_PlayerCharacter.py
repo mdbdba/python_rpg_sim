@@ -14,8 +14,6 @@ from SpellAction import SpellAction # NOQA
 from Spell import Spell # NOQA
 
 
-
-
 def test_character_spell_list():
     logger_name = 'character_test'
     ctx = Ctx(app_username='character_test', logger_name=logger_name)
