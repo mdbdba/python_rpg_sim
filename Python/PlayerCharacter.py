@@ -99,7 +99,7 @@ class PlayerCharacter(Character):
         self.set_feature_list(db=db)
         self.add_class_feature_counts()
         self.add_available_spell_slots()
-        self.set_spell_list(db=db)
+        self.set_spell_lists(db=db)
 
         self.class_eval[-1]["character_id"] = self.character_id
         self.class_eval[-1]["race"] = self.get_race()
@@ -116,7 +116,7 @@ class PlayerCharacter(Character):
         self.class_eval[-1]["abilityArray"] = (
             array_to_string(self.get_ability_array()))
 
-        self.logger.debug(msg="user_audit", json_dict=self.__dict__, ctx=ctx)
+        self.logger.info(msg="user_audit", json_dict=self.__dict__, ctx=ctx)
 
     @ctx_decorator
     def assign_race(self, race_candidate):
@@ -171,10 +171,10 @@ class PlayerCharacter(Character):
     def set_feature_list(self, db):
         self.feature_list.extend(self.class_obj.feature_list)
 
-        sql = (f"select distinct lrt.name " 
+        sql = (f"select distinct case when category = 'Spell' then 'Spellcasting' else lrt.name end " 
                f"from lu_racial_trait lrt " 
                f"join lu_race as r on (lrt.race = r.race or lrt.race = r.subrace_of)"
-               f"where category in ('Feat', 'Vision', 'Armor Class') "
+               f"where category in ('Feat', 'Vision', 'Armor Class', 'Spell') "
                f"and coalesce(description, '') not in ('targetAffect:Smell') "
                f"and name not like '% Build' "
                f"and name is not null " 
@@ -197,19 +197,116 @@ class PlayerCharacter(Character):
                 if i[5] == 'Cantrips Known':
                     cantrips = i[6]
                 else:
-                    cantrips = i[8]
+                    if i[8]:
+                        cantrips = i[8]
+                    else:
+                        cantrips = '0'
+
                 self.populate_available_spell_slots(cantrips_known=cantrips, spell_slot_str=i[4])
 
     @ctx_decorator
-    def set_spell_list(self, db):
+    def get_max_impact(self, db, spell_name, cast_at_level):
+        effect_sql = (f"select spell_id, effect_category, effect_type, "
+                      f"effect_modifier, effect_die, effect_adj, explicit_targets "
+                      f"from v_spell_effect_by_level "
+                      f"where spell_name = '{spell_name}' "
+                      f"and {cast_at_level} between lower_level and upper_level")
+        effect_results = db.query(effect_sql)
+        max_impact = 0
 
-        sql = (f"select lrt.affected_name, lrt.race, lrt.name, lrt.affected_adj, lrt.recharge_on, lrt.description " 
+        for effect_result in effect_results:
+            if effect_result[3]:
+                effect_modifier = effect_result[3]
+            else:
+                effect_modifier = 0
+
+            if effect_result[4]:
+                effect_die = effect_result[4]
+            else:
+                effect_die = 0
+
+            if effect_result[5]:
+                effect_adj = effect_result[5]
+            else:
+                effect_adj = 0
+
+            if effect_result[6]:
+                explicit_targets = effect_result[6]
+            else:
+                explicit_targets = 1
+
+            max_impact = max_impact + ((effect_modifier * effect_die) + effect_adj) * explicit_targets
+
+        return max_impact
+
+    @ctx_decorator
+    def set_spell_lists(self, db):
+        self.set_racial_spells(db)
+        self.set_class_spells(db)
+        self.set_granted_spells(db)
+
+    @ctx_decorator
+    def set_granted_spells(self, db):
+        pass
+
+    @ctx_decorator
+    def set_class_spells(self, db):
+        # print("Setting class spells")
+        if "Spellcasting" in self.feature_list:
+            # print("Found Spellcasting for this character")
+            i=0
+            max_spell_level = -1
+            while i <= self.level:
+                # print(f"level {i} = {self.available_spell_slots[i]}")
+                if self.available_spell_slots[i] > 0:
+                    max_spell_level = i
+                i += 1
+            print(f"max_spell_level = {max_spell_level}")
+            if max_spell_level > -1:
+                sql = (f"select a.spell_level, b.id, a.spell_name, a.order_by, b.save, "
+                       f"b.casting_time_uom, b.range_amt, b.range_uom, b.range_aoe, "
+                       f"b.duration_amt, b.duration_uom, b.verbal_component_ind, "
+                       f"b.concentration_ind, b.higher_level_cast, b.save_outcome, "
+                       f"b.general_category "
+                       f"from dnd_5e.lu_class_spell_choice_defaults a "
+                       f"join dnd_5e.lu_spell b on a.spell_name = b.name "
+                       f"and a.spell_level = b.level "
+                       f"where a.spell_level <= {max_spell_level} "
+                       f"and a.class = '{self.get_class()}' "
+                       f"order by a.spell_level, a.order_by ")
+
+                spells = db.query(sql)
+                print(spells)
+                for spell in spells:
+                    max_impact = self.get_max_impact(db=db, spell_name=spell[2], cast_at_level=spell[0])
+                    spell_ref_dict = {"category": spell[15],
+                                      "source": "class",
+                                      "id": spell[1],
+                                      "name": spell[2],
+                                      "min_level": spell[0],
+                                      "max_impact": max_impact,
+                                      "cast_at_level": spell[0],
+                                      "cast_with_ability": "Default",
+                                      "range_amt": spell[6],
+                                      "range_aoe": spell[8],
+                                      "casting_uom": spell[5],
+                                      "verbal_component_ind": spell[11],
+                                      "available_count": -1
+                                      }
+
+    @ctx_decorator
+    def set_racial_spells(self, db):
+        # Set racial spells first.  Then if they are already there, then:
+        # if it is a cantrip or can be used to deal more damage, use the class spell definition
+        # otherwise keep the racial allowance.
+        sql = (f"select lrt.affected_name, lrt.race, lrt.name, lrt.affected_adj, "
+               f"lrt.recharge_on, lrt.description " 
                f"from lu_racial_trait lrt " 
                f"join lu_race as r on (lrt.race = r.race or lrt.race = r.subrace_of) " 
                f"where category in ('Spell') " 
                f"and affected_name != 'Cantrip' " 
                f"and affected_name not like 'level:%' " 
-               f"and name is not null "
+               f"and lrt.name is not null "
                f"and (r.race = '{self.get_race()}' or r.subrace_of = '{self.get_race()}')" 
                f"union all " 
                f"select lrscd.spell_name as affected_name, lrscd.race, " 
@@ -251,7 +348,8 @@ class PlayerCharacter(Character):
                 and search_str is not None):
             search_str = search_str[0:-2]
             sql2 = (f"select name, level, save, casting_time_uom, range_amt, range_uom, range_aoe, "
-                    f"duration_amt, duration_uom, concentration_ind, higher_level_cast "
+                    f"duration_amt, duration_uom, concentration_ind, higher_level_cast, "
+                    f"verbal_component_ind, general_category, id "
                     f"from lu_spell ls "
                     f"where name in ({search_str})")
             spell_results = db.query(sql2)
@@ -260,48 +358,67 @@ class PlayerCharacter(Character):
 
         if spell_results:
             for spell in spell_results:
-                effect_sql = (f"select spell_id, effect_category, effect_type, "
-                              f"effect_modifier, effect_die, effect_adj, explicit_targets " 
-                              f"from v_spell_effect_by_level " 
-                              f"where spell_name = '{spell[0]}' " 
-                              f"and {self.level} between lower_level and upper_level")
-                effect_results = db.query(effect_sql)
+                # effect_sql = (f"select spell_id, effect_category, effect_type, "
+                #               f"effect_modifier, effect_die, effect_adj, explicit_targets "
+                #               f"from v_spell_effect_by_level "
+                #               f"where spell_name = '{spell[0]}' "
+                #               f"and {self.level} between lower_level and upper_level")
+                # effect_results = db.query(effect_sql)
 
-                if effect_results[0][3]:
-                    effect_modifier = effect_results[0][3]
+                # if effect_results[0][3]:
+                #     effect_modifier = effect_results[0][3]
+                # else:
+                #     effect_modifier = 0
+
+                # if effect_results[0][4]:
+                #     effect_die = effect_results[0][4]
+                # else:
+                #     effect_die = 0
+
+                # if effect_results[0][5]:
+                #     effect_adj = effect_results[0][5]
+                # else:
+                #     effect_adj = 0
+
+                # if effect_results[0][6]:
+                #     explicit_targets = effect_results[0][6]
+                # else:
+                #     explicit_targets = 1
+
+                # max_impact = ((effect_modifier*effect_die)+effect_adj)*explicit_targets
+
+                if 'spellLevel' in lrt_dict[spell[0]].keys():
+                    cast_at_level = int(lrt_dict[spell[0]]['spellLevel'])
                 else:
-                    effect_modifier = 0
-
-                if effect_results[0][4]:
-                    effect_die = effect_results[0][4]
+                    cast_at_level = int(spell[1])
+                max_impact = self.get_max_impact(db=db, spell_name=spell[0], cast_at_level=cast_at_level)
+                if 'castAbility' in lrt_dict[spell[0]].keys():
+                    cast_with_ability = lrt_dict[spell[0]]['castAbility']
                 else:
-                    effect_die = 0
+                    cast_with_ability = "Default"
 
-                if effect_results[0][5]:
-                    effect_adj = effect_results[0][5]
-                else:
-                    effect_adj = 0
-
-                if effect_results[0][6]:
-                    explicit_targets = effect_results[0][6]
-                else:
-                    explicit_targets = 1
-
-                max_impact = ((effect_modifier*effect_die)+effect_adj)*explicit_targets
-
-                spell_ref_dict = {"category": "damage",
+                spell_ref_dict = {"category": spell[12],
+                                  "source": "race",
+                                  "id": spell[13],
+                                  "name": spell[0],
                                   "min_level": spell[1],
+                                  "cast_at_level": cast_at_level,
+                                  "cast_with_ability": cast_with_ability,
                                   "max_impact": max_impact,
                                   "range_amt": spell[4],
                                   "range_aoe": spell[6],
                                   "casting_uom": spell[3],
+                                  "verbal_component_ind": spell[11],
                                   "available_count": lrt_dict[spell[0]]['available_count']
                                   }
-                if 'spellLevel' in lrt_dict[spell[0]].keys():
-                    spell_ref_dict['cast_at_level'] = lrt_dict[spell[0]]['spellLevel']
-                if 'castAbility' in lrt_dict[spell[0]].keys():
-                    spell_ref_dict['cast_with_ability'] = lrt_dict[spell[0]]['castAbility']
+
                 self.spell_list[spell[0]] = spell_ref_dict
+                if spell[3] == 'Action':
+                    self.spell_list_action[spell[0]] = spell_ref_dict
+                elif spell[3] == 'Bonus Action':
+                    self.spell_list_bonus_action[spell[0]] = spell_ref_dict
+                else:
+                    self.spell_list_reaction[spell[0]] = spell_ref_dict
 
     @ctx_decorator
     def adjust_for_levels(self, db):
@@ -651,18 +768,11 @@ class PlayerCharacter(Character):
         for row in rows:
             self.damage_adj[row[0]] = row[1]
 
-        # if self.debug_ind == 1:
-        #     self.class_eval[-1]["damage Adjust"] = (
-        #         dict_to_string(self.damage_adj))
-
     @ctx_decorator
     def set_proficiency_bonus(self):
         for a in range(len(self.feature_obj)):
             if self.feature_obj[a][2] == 'proficiency_bonus':
                 self.proficiency_bonus = int(self.feature_obj[a][4])
-
-    #     if self.debug_ind == 1:
-    #         self.class_eval[-1]["Proficiency Bonus"] = self.proficiency_bonus
 
     @ctx_decorator
     def is_not_using_shield(self):
@@ -673,17 +783,18 @@ class PlayerCharacter(Character):
         return ret_val
 
     @ctx_decorator
-    def default_melee_attack(self, ctx, target_name, target, attacker_id='unknown', vantage='Normal', luck_retry=False):
+    def default_melee_attack(self, ctx, target_name, target, attacker_id='unknown',
+                             vantage='Normal', luck_retry=False):
         return self.melee_attack(ctx=ctx, weapon_obj=self.melee_weapon_obj,
                                  attacker_id=attacker_id, target_name=target_name, target=target,
                                  vantage=vantage, luck_retry=luck_retry)
 
     @ctx_decorator
-    def default_ranged_attack(self, ctx, target_name, target,
+    def default_ranged_attack(self, ctx, target,
                               attacker_id='unknown', vantage='Normal', luck_retry=False):
         self.stats.ranged_attack_attempts += 1
         return self.ranged_attack(ctx=ctx, weapon_obj=self.ranged_weapon_obj,
-                                  attacker_id=attacker_id, target_name_str=target_name, target=target,
+                                  target=target, attacker_id=attacker_id,
                                   vantage=vantage, luck_retry=luck_retry)
 
     def __str__(self):
@@ -795,8 +906,6 @@ class PlayerCharacter(Character):
             if len(pvalue) > 2:
                 outstr = f'{outstr}\n{pkey}: {pvalue}'
 
-        # outstr = (f'{outstr}\n\nJournal Output:\n{self.debugStr}\n\n')
-
         outstr = f'\n{outstr}\n'
         return outstr
 
@@ -903,6 +1012,28 @@ class PlayerCharacter(Character):
             if outstr[-2:] == ', ':
                 outstr = outstr[:-2]
             outstr = f'{outstr}}}}}'
+        if self.spell_list_bonus_action:
+            outstr = f'{outstr}"spell list bonus action": {{'
+            for key in self.spell_list_bonus_action.keys():
+                outstr = f'{outstr} "{key}: {{ '
+                for spell_name in self.spell_list_bonus_action[key].keys():
+                    outstr = f'{outstr} "{spell_name}: {self.spell_list_bonus_action[key][spell_name]}", '
+                if outstr[-2:] == ', ':
+                    outstr = f'{outstr[:-2]}}}, '
+            if outstr[-2:] == ', ':
+                outstr = outstr[:-2]
+            outstr = f'{outstr}}}}}'
+        if self.spell_list_reaction:
+            outstr = f'{outstr}"spell list reaction": {{'
+            for key in self.spell_list_reaction.keys():
+                outstr = f'{outstr} "{key}: {{ '
+                for spell_name in self.spell_list_reaction[key].keys():
+                    outstr = f'{outstr} "{spell_name}: {self.spell_list_reaction[key][spell_name]}", '
+                if outstr[-2:] == ', ':
+                    outstr = f'{outstr[:-2]}}}, '
+            if outstr[-2:] == ', ':
+                outstr = outstr[:-2]
+            outstr = f'{outstr}}}}}'
 
         return outstr
 
@@ -912,7 +1043,7 @@ if __name__ == '__main__':
     logger_name = f'playercharacter_main'
     ctx = Ctx(app_username='pc_class_init', logger_name=logger_name)
     ctx.log_file_dir = os.path.expanduser('~/rpg/logs')
-    logger = RpgLogging(logger_name=logger_name, level_threshold='debug')
+    logger = RpgLogging(logger_name=logger_name, level_threshold='notset')
     logger.setup_logging(log_dir=ctx.log_file_dir)
     try:
 
@@ -948,50 +1079,73 @@ if __name__ == '__main__':
         #                      race_candidate="Half-Orc",
         #                      class_candidate="Barbarian")
 
-        a20 = PlayerCharacter(db=db, ctx=ctx,
-                              ability_array_str="10,13,13,10,17,10",
-                              race_candidate="Wood elf",
-                              class_candidate="Cleric")
-        print(a20.__repr__)
+        # a20 = PlayerCharacter(db=db, ctx=ctx,
+        #                       ability_array_str="10,13,13,10,17,10",
+        #                       race_candidate="Wood elf",
+        #                       class_candidate="Cleric")
+        # print(a20.__repr__)
 
         a21 = PlayerCharacter(db=db, ctx=ctx,
                               ability_array_str="11,14,14,13,13,12",
                               race_candidate="Tiefling",
-                              class_candidate="Rogue")
+                              class_candidate="Rogue",
+                              level=3)
         print(a21.__repr__)
+        print(f"Bonus Action Spell List: {a21.spell_list_bonus_action}")
+        print(f"Action Spell List: {a21.spell_list_action}")
+        print(f"Reaction Spell List: {a21.spell_list_reaction}")
+        print(f"Spell List: {a21.spell_list}")
 
-        a8 = PlayerCharacter(db=db, ctx=ctx,
-                             ability_array_str="18,12,12,10,10,8",
-                             race_candidate="Copper dragonborn",
-                             class_candidate="Barbarian")
-        print(a8.__repr__)
+        a22 = PlayerCharacter(db=db, ctx=ctx,
+                              ability_array_str="13,13,13,13,13,13",
+                              # race_candidate="Half-elf",
+                              race_candidate="Tiefling",
+                              class_candidate="Bard",
+                              level=3)
+        print(a22.__repr__)
+        print(f"Bonus Action Spell List: {a22.spell_list_bonus_action}")
+        print(f"Action Spell List: {a22.spell_list_action}")
+        print(f"Reaction Spell List: {a22.spell_list_reaction}")
+        print(f"Spell List: {a22.spell_list}")
 
-        a9 = PlayerCharacter(db=db, ctx=ctx,
-                             ability_array_str="18,12,12,10,10,8",
-                             race_candidate="High elf",
-                             class_candidate="Sorcerer")
-        print(a9.__repr__)
-        print(a9)
+        a22 = PlayerCharacter(db=db, ctx=ctx,
+                              ability_array_str="Common",
+                              race_candidate="Wood elf",
+                              class_candidate="Cleric")
+        print(a22.__repr__)
 
-        a10 = PlayerCharacter(db=db, ctx=ctx,
-                              ability_array_str="18,12,12,10,10,8",
-                              race_candidate="Loredrake kobold",
-                              class_candidate="Rogue")
-        print(a10.__repr__)
+        # a8 = PlayerCharacter(db=db, ctx=ctx,
+        #                      ability_array_str="18,12,12,10,10,8",
+        #                      race_candidate="Copper dragonborn",
+        #                      class_candidate="Barbarian")
+        # print(a8.__repr__)
 
-        dist_target = distanceTarget(distance=20, x=1, y=4, occupied_by_group='Opponents',
-                                     occupied_by_index=0, in_need=False)
-        dist_target_2 = distanceTarget(distance=0, x=1, y=1, occupied_by_group='Heroes',
-                                       occupied_by_index=0, in_need=False)
-        d1 = distanceFromPlayer(player_name=a9.get_name(), player_group='Heroes', player_index=0, x=1, y=1,
-                                targets=[dist_target],
-                                ranged_targets=[dist_target], touch_range_chums=[],
-                                touch_range_chums_in_need=[], touch_range_targets=[], chums=[dist_target_2])
-        action = a9.get_action(d1)
-        print(d1)
-        print(f"Action for {a9.get_name()}: {action}")
-        print(a9.feature_obj)
-        print(a9.available_spell_slots)
+        # a9 = PlayerCharacter(db=db, ctx=ctx,
+        #                      ability_array_str="18,12,12,10,10,8",
+        #                      race_candidate="High elf",
+        #                      class_candidate="Sorcerer")
+        # print(a9.__repr__)
+        # print(a9)
+
+        # a10 = PlayerCharacter(db=db, ctx=ctx,
+        #                       ability_array_str="18,12,12,10,10,8",
+        #                       race_candidate="Loredrake kobold",
+        #                       class_candidate="Rogue")
+        # print(a10.__repr__)
+
+        # dist_target = distanceTarget(distance=20, x=1, y=4, occupied_by_group='Opponents',
+        #                              occupied_by_index=0, in_need=False)
+        # dist_target_2 = distanceTarget(distance=0, x=1, y=1, occupied_by_group='Heroes',
+        #                                occupied_by_index=0, in_need=False)
+        # d1 = distanceFromPlayer(player_name=a9.get_name(), player_group='Heroes', player_index=0, x=1, y=1,
+        #                         targets=[dist_target],
+        #                         ranged_targets=[dist_target], touch_range_chums=[],
+        #                         touch_range_chums_in_need=[], touch_range_targets=[], chums=[dist_target_2])
+        # action = a9.get_action(d1)
+        # print(d1)
+        # print(f"Action for {a9.get_name()}: {action}")
+        # print(a9.feature_obj)
+        # print(a9.available_spell_slots)
 
     except Exception as error:
         exc_type, exc_value, exc_traceback = sys.exc_info()

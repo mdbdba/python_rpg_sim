@@ -820,7 +820,7 @@ class Encounter(object):
                 turn_audit["performed_death_save_in_turn"] = True
                 msg = f"{summary_indent}{cur_active_name_str} performed a death save "
                 if (t_death_save_passed_cnt > cur_active.death_save_passed_cnt
-                        and not cur_active.unconscious_ind):
+                        and not cur_active.unconscious()):
                     turn_audit["death_save_status"] = "Character Stabilized by death save success."
                     msg = f"{msg} and was stabilized by death save success."
                 else:
@@ -861,7 +861,7 @@ class Encounter(object):
                 target_name_str = ""
                 for t in cur_action_dict["Targets"]:
                     target = self.get_player(t.occupied_by_group, t.occupied_by_index)
-                    if not target.unconscious_ind:
+                    if not target.unconscious():
                         log_if_unconscious = True
                     else:
                         log_if_unconscious = False
@@ -872,7 +872,7 @@ class Encounter(object):
 
                     if attack_type == 'Melee':
                         # if the cur_active user is unconscious then the attack is at advantage
-                        if target.unconscious_ind or target.prone_ind:
+                        if target.unconscious() or target.prone():
                             if t_vantage == 'Disadvantage':
                                 t_vantage = 'Normal'
                             else:
@@ -882,11 +882,11 @@ class Encounter(object):
 
                         active_attack = attacker.default_melee_attack(ctx=self.ctx, vantage=t_vantage,
                                                                       attacker_id=attacker_id_str,
-                                                                      target_name_str=tmp_name_str,
+                                                                      target_name=tmp_name_str,
                                                                       target=target)
                     else:  # attack_type == 'Ranged':
                         # if the cur_active user is unconscious or prone then the attack is at a disadvantage
-                        if target.unconscious_ind or target.prone_ind:
+                        if target.unconscious() or target.prone():
                             if t_vantage == 'Advantage':
                                 t_vantage = 'Normal'
                             else:
@@ -896,7 +896,6 @@ class Encounter(object):
 
                         active_attack = attacker.default_ranged_attack(ctx=self.ctx, vantage=t_vantage,
                                                                        attacker_id=attacker_id_str,
-                                                                       target_name_str=tmp_name_str,
                                                                        target=target)
 
                     if t_vantage != 'Normal':
@@ -966,7 +965,7 @@ class Encounter(object):
                         else:
                             msg2 = f"that failed, and lucky caused a retry that also failed"
 
-                    if target.unconscious_ind:
+                    if target.unconscious():
                         if log_if_unconscious:
                             msg2 = f"{msg2} knocking them unconscious"
                             p = PointInTime(self.ctx.round, self.ctx.turn)
@@ -1030,7 +1029,7 @@ class Encounter(object):
             t_count = 1
             for t in cur_action_dict["Targets"]:
                 target = self.get_player(t.occupied_by_group, t.occupied_by_index)
-                if target.unconscious_ind:
+                if target.unconscious():
                     msg = (f"\n***{attack_type} ended up in the death saves notice for attack loop *** " 
                            f"{summary_indent}{attacker_name_str} is a target, but is unconscious. Death saves: " 
                            f"({target.death_save_passed_cnt} / {target.death_save_failed_cnt}) ")
@@ -1123,8 +1122,8 @@ class Encounter(object):
                  "player_combat_preference": player_combat_preference}
 
         # stand up if they can.
-        if cur_active.prone_ind and cur_active.cur_hit_points >0:
-            cur_active.prone_ind = False
+        if cur_active.prone() and cur_active.cur_hit_points >0:
+            cur_active.rm_prone()
             avail_movement = int(avail_movement/2)
             jdict["Player_stood_up"] = True
 
@@ -1319,7 +1318,7 @@ if __name__ == '__main__':
     logger_name = 'encounter_main_test'
     ctx = Ctx(app_username='encounter_class_init', logger_name=logger_name)
     ctx.log_file_dir = os.path.expanduser('~/rpg/logs')
-    logger = RpgLogging(logger_name=logger_name, level_threshold='info')
+    logger = RpgLogging(logger_name=logger_name, level_threshold='notset')
     logger.setup_logging(log_dir=ctx.log_file_dir)
     try:
         db = InvokePSQL()
@@ -1349,7 +1348,7 @@ if __name__ == '__main__':
         print(ctx)
         print(f'Context Information:\n\t'
               f'App_username:      {ctx.app_username}\n\t'
-              f'Full Name:         {ctx.fullyqualified}\n\t'
+              f'Full Name:         {ctx.fully_qualified}\n\t'
               f'Logger Name:       {ctx.logger_name}\n\t' 
               f'Trace Id:          {ctx.trace_id}\n\t' 
               f'Study Instance Id: {ctx.study_instance_id}\n\t' 

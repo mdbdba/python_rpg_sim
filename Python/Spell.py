@@ -155,7 +155,7 @@ if __name__ == '__main__':
         exc_type, exc_value, exc_traceback = sys.exc_info()
         print(f'Context Information:\n\t'
               f'App_username:      {ctx.app_username}\n\t'
-              f'Full Name:         {ctx.fullyqualified}\n\t'
+              f'Full Name:         {ctx.fully_qualified}\n\t'
               f'Logger Name:       {ctx.logger_name}\n\t' 
               f'Trace Id:          {ctx.trace_id}\n\t' 
               f'Study Instance Id: {ctx.study_instance_id}\n\t' 

@@ -178,14 +178,14 @@ class Series(object):
                 print(fix_dict_for_json(Opponent.stats.__dict__))
             # print(e.get_characters_stats())
             # self.stats.update_totals()
-            self.logger.debug(ctx=self.ctx, msg='character_stats',
+            self.logger.info(ctx=self.ctx, msg='character_stats',
                               json_dict=fix_dict_for_json(e.get_characters_stats()))
             print("------------------ Encounter Stats --------------------")
             print(fix_dict_for_json(e.stats.__dict__))
 
         print("------------------ Series Stats --------------------")
         print(fix_dict_for_json(self.stats.__dict__))
-        self.logger.debug(ctx=self.ctx, msg='series_stats', json_dict=fix_dict_for_json(self.stats.get_dict()))
+        self.logger.info(ctx=self.ctx, msg='series_stats', json_dict=fix_dict_for_json(self.stats.get_dict()))
 
 
 if __name__ == '__main__':
@@ -193,7 +193,7 @@ if __name__ == '__main__':
     # logger_name = f'Series: series_main_{series_id}'
     logger_name = f'series_main_{series_id}'
     ctx = Ctx(app_username='series_class_init', logger_name=logger_name)
-    logger = RpgLogging(logger_name=logger_name, level_threshold='debug')
+    logger = RpgLogging(logger_name=logger_name, level_threshold='notset')
     logger.setup_logging()
     try:
         db = InvokePSQL()
@@ -213,7 +213,7 @@ if __name__ == '__main__':
         exc_type, exc_value, exc_traceback = sys.exc_info()
         print(f'Context Information:\n\t'
               f'App_username:      {ctx.app_username}\n\t'
-              f'Full Name:         {ctx.fullyqualified}\n\t'
+              f'Full Name:         {ctx.fully_qualified}\n\t'
               f'Logger Name:       {ctx.logger_name}\n\t' 
               f'Trace Id:          {ctx.trace_id}\n\t' 
               f'Study Instance Id: {ctx.study_instance_id}\n\t' 

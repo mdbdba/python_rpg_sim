@@ -646,4 +646,870 @@
            and c.order_by = b.order_by - 1
         </createView>
     </changeSet>
+    <changeSet author="mdbdba" id="lu_spell_effect_8">
+        <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="376"/>
+            <column name="spell_name" value="Hellish Rebuke"/>
+            <column name="effect_category" value="damage"/>
+            <column name="level" value="1" />
+            <column name="effect_type" value="Fire"/>
+            <column name="effect_modifier" value="2"/>
+            <column name="effect_die" value="10"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="376"/>
+            <column name="spell_name" value="Hellish Rebuke"/>
+            <column name="effect_category" value="damage"/>
+            <column name="level" value="2" />
+            <column name="effect_type" value="Fire"/>
+            <column name="effect_modifier" value="3"/>
+            <column name="effect_die" value="10"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="376"/>
+            <column name="spell_name" value="Hellish Rebuke"/>
+            <column name="effect_category" value="damage"/>
+            <column name="level" value="3" />
+            <column name="effect_type" value="Fire"/>
+            <column name="effect_modifier" value="4"/>
+            <column name="effect_die" value="10"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="376"/>
+            <column name="spell_name" value="Hellish Rebuke"/>
+            <column name="effect_category" value="damage"/>
+            <column name="level" value="4" />
+            <column name="effect_type" value="Fire"/>
+            <column name="effect_modifier" value="5"/>
+            <column name="effect_die" value="10"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="376"/>
+            <column name="spell_name" value="Hellish Rebuke"/>
+            <column name="effect_category" value="damage"/>
+            <column name="level" value="5" />
+            <column name="effect_type" value="Fire"/>
+            <column name="effect_modifier" value="6"/>
+            <column name="effect_die" value="10"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="376"/>
+            <column name="spell_name" value="Hellish Rebuke"/>
+            <column name="effect_category" value="damage"/>
+            <column name="level" value="6" />
+            <column name="effect_type" value="Fire"/>
+            <column name="effect_modifier" value="7"/>
+            <column name="effect_die" value="10"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="376"/>
+            <column name="spell_name" value="Hellish Rebuke"/>
+            <column name="effect_category" value="damage"/>
+            <column name="level" value="7" />
+            <column name="effect_type" value="Fire"/>
+            <column name="effect_modifier" value="8"/>
+            <column name="effect_die" value="10"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="376"/>
+            <column name="spell_name" value="Hellish Rebuke"/>
+            <column name="effect_category" value="damage"/>
+            <column name="level" value="8" />
+            <column name="effect_type" value="Fire"/>
+            <column name="effect_modifier" value="9"/>
+            <column name="effect_die" value="10"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="376"/>
+            <column name="spell_name" value="Hellish Rebuke"/>
+            <column name="effect_category" value="damage"/>
+            <column name="level" value="9" />
+            <column name="effect_type" value="Fire"/>
+            <column name="effect_modifier" value="10"/>
+            <column name="effect_die" value="10"/>
+        </insert>
+
+    </changeSet>
+    <changeSet author="mdbdba" id="lu_spell_effect_9">
+         <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="377"/>
+            <column name="spell_name" value="Shillelagh"/>
+            <column name="effect_category" value="damage"/>
+            <column name="level" value="1" />
+            <column name="effect_type" value="Bludgeoning"/>
+            <column name="effect_modifier" value="1"/>
+            <column name="effect_die" value="8"/>
+        </insert>
+    </changeSet>
+    <changeSet author="mdbdba" id="lu_spell_effect_10">
+         <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="378"/>
+            <column name="spell_name" value="Vicious Mockery"/>
+            <column name="effect_category" value="damage"/>
+            <column name="level" value="1" />
+            <column name="effect_type" value="Psychic"/>
+            <column name="effect_modifier" value="1"/>
+            <column name="effect_die" value="4"/>
+        </insert>
+    </changeSet>
+    <changeSet author="mdbdba" id="lu_spell_effect_11">
+         <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="379"/>
+            <column name="spell_name" value="Minor Illusion"/>
+            <column name="effect_category" value="hinder"/>
+            <column name="level" value="0" />
+            <column name="effect_type" value="Confusion"/>
+            <column name="effect_modifier" value="1"/>
+            <column name="effect_die" value="1"/>
+        </insert>
+         <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="380"/>
+            <column name="spell_name" value="Cure Wounds"/>
+            <column name="effect_category" value="help"/>
+            <column name="level" value="1" />
+            <column name="effect_type" value="heal"/>
+            <column name="effect_modifier" value="1"/>
+            <column name="effect_die" value="8"/>
+        </insert>
+         <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="380"/>
+            <column name="spell_name" value="Cure Wounds"/>
+            <column name="effect_category" value="help"/>
+            <column name="level" value="2" />
+            <column name="effect_type" value="heal"/>
+            <column name="effect_modifier" value="2"/>
+            <column name="effect_die" value="8"/>
+        </insert>
+         <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="380"/>
+            <column name="spell_name" value="Cure Wounds"/>
+            <column name="effect_category" value="help"/>
+            <column name="level" value="3" />
+            <column name="effect_type" value="heal"/>
+            <column name="effect_modifier" value="3"/>
+            <column name="effect_die" value="8"/>
+        </insert>
+         <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="380"/>
+            <column name="spell_name" value="Cure Wounds"/>
+            <column name="effect_category" value="help"/>
+            <column name="level" value="4" />
+            <column name="effect_type" value="heal"/>
+            <column name="effect_modifier" value="4"/>
+            <column name="effect_die" value="8"/>
+        </insert>
+         <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="380"/>
+            <column name="spell_name" value="Cure Wounds"/>
+            <column name="effect_category" value="help"/>
+            <column name="level" value="5" />
+            <column name="effect_type" value="heal"/>
+            <column name="effect_modifier" value="5"/>
+            <column name="effect_die" value="8"/>
+        </insert>
+         <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="380"/>
+            <column name="spell_name" value="Cure Wounds"/>
+            <column name="effect_category" value="help"/>
+            <column name="level" value="6" />
+            <column name="effect_type" value="heal"/>
+            <column name="effect_modifier" value="6"/>
+            <column name="effect_die" value="8"/>
+        </insert>
+         <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="380"/>
+            <column name="spell_name" value="Cure Wounds"/>
+            <column name="effect_category" value="help"/>
+            <column name="level" value="7" />
+            <column name="effect_type" value="heal"/>
+            <column name="effect_modifier" value="7"/>
+            <column name="effect_die" value="8"/>
+        </insert>
+         <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="380"/>
+            <column name="spell_name" value="Cure Wounds"/>
+            <column name="effect_category" value="help"/>
+            <column name="level" value="8" />
+            <column name="effect_type" value="heal"/>
+            <column name="effect_modifier" value="8"/>
+            <column name="effect_die" value="8"/>
+        </insert>
+         <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="380"/>
+            <column name="spell_name" value="Cure Wounds"/>
+            <column name="effect_category" value="help"/>
+            <column name="level" value="9" />
+            <column name="effect_type" value="heal"/>
+            <column name="effect_modifier" value="9"/>
+            <column name="effect_die" value="8"/>
+        </insert>
+         <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="381"/>
+            <column name="spell_name" value="Healing Words"/>
+            <column name="effect_category" value="help"/>
+            <column name="level" value="1" />
+            <column name="effect_type" value="heal"/>
+            <column name="effect_modifier" value="1"/>
+            <column name="effect_die" value="4"/>
+        </insert>
+         <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="381"/>
+            <column name="spell_name" value="Healing Words"/>
+            <column name="effect_category" value="help"/>
+            <column name="level" value="2" />
+            <column name="effect_type" value="heal"/>
+            <column name="effect_modifier" value="2"/>
+            <column name="effect_die" value="4"/>
+        </insert>
+         <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="381"/>
+            <column name="spell_name" value="Healing Words"/>
+            <column name="effect_category" value="help"/>
+            <column name="level" value="3" />
+            <column name="effect_type" value="heal"/>
+            <column name="effect_modifier" value="3"/>
+            <column name="effect_die" value="4"/>
+        </insert>
+         <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="381"/>
+            <column name="spell_name" value="Healing Words"/>
+            <column name="effect_category" value="help"/>
+            <column name="level" value="4" />
+            <column name="effect_type" value="heal"/>
+            <column name="effect_modifier" value="4"/>
+            <column name="effect_die" value="4"/>
+        </insert>
+         <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="381"/>
+            <column name="spell_name" value="Healing Words"/>
+            <column name="effect_category" value="help"/>
+            <column name="level" value="5" />
+            <column name="effect_type" value="heal"/>
+            <column name="effect_modifier" value="5"/>
+            <column name="effect_die" value="4"/>
+        </insert>
+         <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="381"/>
+            <column name="spell_name" value="Healing Words"/>
+            <column name="effect_category" value="help"/>
+            <column name="level" value="6" />
+            <column name="effect_type" value="heal"/>
+            <column name="effect_modifier" value="6"/>
+            <column name="effect_die" value="4"/>
+        </insert>
+         <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="381"/>
+            <column name="spell_name" value="Healing Words"/>
+            <column name="effect_category" value="help"/>
+            <column name="level" value="7" />
+            <column name="effect_type" value="heal"/>
+            <column name="effect_modifier" value="7"/>
+            <column name="effect_die" value="4"/>
+        </insert>
+         <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="381"/>
+            <column name="spell_name" value="Healing Words"/>
+            <column name="effect_category" value="help"/>
+            <column name="level" value="8" />
+            <column name="effect_type" value="heal"/>
+            <column name="effect_modifier" value="8"/>
+            <column name="effect_die" value="4"/>
+        </insert>
+         <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="381"/>
+            <column name="spell_name" value="Healing Words"/>
+            <column name="effect_category" value="help"/>
+            <column name="level" value="9" />
+            <column name="effect_type" value="heal"/>
+            <column name="effect_modifier" value="9"/>
+            <column name="effect_die" value="4"/>
+        </insert>
+         <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="382"/>
+            <column name="spell_name" value="Heroism"/>
+            <column name="effect_category" value="help"/>
+            <column name="level" value="1" />
+            <column name="effect_type" value="aoe"/>
+            <column name="explicit_targets" value="1"/>
+        </insert>
+         <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="382"/>
+            <column name="spell_name" value="Heroism"/>
+            <column name="effect_category" value="help"/>
+            <column name="level" value="2" />
+            <column name="effect_type" value="aoe"/>
+            <column name="explicit_targets" value="2"/>
+        </insert>
+         <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="382"/>
+            <column name="spell_name" value="Heroism"/>
+            <column name="effect_category" value="help"/>
+            <column name="level" value="3" />
+            <column name="effect_type" value="aoe"/>
+            <column name="explicit_targets" value="3"/>
+        </insert>
+         <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="382"/>
+            <column name="spell_name" value="Heroism"/>
+            <column name="effect_category" value="help"/>
+            <column name="level" value="4" />
+            <column name="effect_type" value="aoe"/>
+            <column name="explicit_targets" value="4"/>
+        </insert>
+         <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="382"/>
+            <column name="spell_name" value="Heroism"/>
+            <column name="effect_category" value="help"/>
+            <column name="level" value="5" />
+            <column name="effect_type" value="aoe"/>
+            <column name="explicit_targets" value="5"/>
+        </insert>
+         <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="382"/>
+            <column name="spell_name" value="Heroism"/>
+            <column name="effect_category" value="help"/>
+            <column name="level" value="6" />
+            <column name="effect_type" value="aoe"/>
+            <column name="explicit_targets" value="6"/>
+        </insert>
+         <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="382"/>
+            <column name="spell_name" value="Heroism"/>
+            <column name="effect_category" value="help"/>
+            <column name="level" value="7" />
+            <column name="effect_type" value="aoe"/>
+            <column name="explicit_targets" value="7"/>
+        </insert>
+         <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="382"/>
+            <column name="spell_name" value="Heroism"/>
+            <column name="effect_category" value="help"/>
+            <column name="level" value="8" />
+            <column name="effect_type" value="aoe"/>
+            <column name="explicit_targets" value="8"/>
+        </insert>
+         <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="382"/>
+            <column name="spell_name" value="Heroism"/>
+            <column name="effect_category" value="help"/>
+            <column name="level" value="9" />
+            <column name="effect_type" value="aoe"/>
+            <column name="explicit_targets" value="9"/>
+        </insert>
+         <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="383"/>
+            <column name="spell_name" value="Hideous Laughter"/>
+            <column name="effect_category" value="hinder"/>
+            <column name="level" value="1" />
+            <column name="effect_type" value="Incapacitated"/>
+            <column name="explicit_targets" value="1"/>
+        </insert>
+         <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="384"/>
+            <column name="spell_name" value="Sleep"/>
+            <column name="effect_category" value="hinder"/>
+            <column name="level" value="1" />
+            <column name="effect_type" value="aoe"/>
+            <column name="effect_modifier" value="5"/>
+            <column name="effect_die" value="8"/>
+        </insert>
+         <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="384"/>
+            <column name="spell_name" value="Sleep"/>
+            <column name="effect_category" value="hinder"/>
+            <column name="level" value="2" />
+            <column name="effect_type" value="aoe"/>
+            <column name="effect_modifier" value="7"/>
+            <column name="effect_die" value="8"/>
+        </insert>
+         <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="384"/>
+            <column name="spell_name" value="Sleep"/>
+            <column name="effect_category" value="hinder"/>
+            <column name="level" value="3" />
+            <column name="effect_type" value="aoe"/>
+            <column name="effect_modifier" value="9"/>
+            <column name="effect_die" value="8"/>
+        </insert>
+         <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="384"/>
+            <column name="spell_name" value="Sleep"/>
+            <column name="effect_category" value="hinder"/>
+            <column name="level" value="4" />
+            <column name="effect_type" value="aoe"/>
+            <column name="effect_modifier" value="11"/>
+            <column name="effect_die" value="8"/>
+        </insert>
+         <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="384"/>
+            <column name="spell_name" value="Sleep"/>
+            <column name="effect_category" value="hinder"/>
+            <column name="level" value="5" />
+            <column name="effect_type" value="aoe"/>
+            <column name="effect_modifier" value="13"/>
+            <column name="effect_die" value="8"/>
+        </insert>
+         <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="384"/>
+            <column name="spell_name" value="Sleep"/>
+            <column name="effect_category" value="hinder"/>
+            <column name="level" value="6" />
+            <column name="effect_type" value="aoe"/>
+            <column name="effect_modifier" value="15"/>
+            <column name="effect_die" value="8"/>
+        </insert>
+         <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="384"/>
+            <column name="spell_name" value="Sleep"/>
+            <column name="effect_category" value="hinder"/>
+            <column name="level" value="7" />
+            <column name="effect_type" value="aoe"/>
+            <column name="effect_modifier" value="17"/>
+            <column name="effect_die" value="8"/>
+        </insert>
+         <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="384"/>
+            <column name="spell_name" value="Sleep"/>
+            <column name="effect_category" value="hinder"/>
+            <column name="level" value="8" />
+            <column name="effect_type" value="aoe"/>
+            <column name="effect_modifier" value="19"/>
+            <column name="effect_die" value="8"/>
+        </insert>
+         <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="384"/>
+            <column name="spell_name" value="Sleep"/>
+            <column name="effect_category" value="hinder"/>
+            <column name="level" value="9" />
+            <column name="effect_type" value="aoe"/>
+            <column name="effect_modifier" value="21"/>
+            <column name="effect_die" value="8"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="385"/>
+            <column name="spell_name" value="Dissonant Whispers"/>
+            <column name="effect_category" value="damage"/>
+            <column name="level" value="1" />
+            <column name="effect_type" value="Psychic"/>
+            <column name="effect_modifier" value="3"/>
+            <column name="effect_die" value="6"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="385"/>
+            <column name="spell_name" value="Dissonant Whispers"/>
+            <column name="effect_category" value="damage"/>
+            <column name="level" value="2" />
+            <column name="effect_type" value="Psychic"/>
+            <column name="effect_modifier" value="4"/>
+            <column name="effect_die" value="6"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="385"/>
+            <column name="spell_name" value="Dissonant Whispers"/>
+            <column name="effect_category" value="damage"/>
+            <column name="level" value="3" />
+            <column name="effect_type" value="Psychic"/>
+            <column name="effect_modifier" value="5"/>
+            <column name="effect_die" value="6"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="385"/>
+            <column name="spell_name" value="Dissonant Whispers"/>
+            <column name="effect_category" value="damage"/>
+            <column name="level" value="4" />
+            <column name="effect_type" value="Psychic"/>
+            <column name="effect_modifier" value="6"/>
+            <column name="effect_die" value="6"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="385"/>
+            <column name="spell_name" value="Dissonant Whispers"/>
+            <column name="effect_category" value="damage"/>
+            <column name="level" value="5" />
+            <column name="effect_type" value="Psychic"/>
+            <column name="effect_modifier" value="7"/>
+            <column name="effect_die" value="6"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="385"/>
+            <column name="spell_name" value="Dissonant Whispers"/>
+            <column name="effect_category" value="damage"/>
+            <column name="level" value="6" />
+            <column name="effect_type" value="Psychic"/>
+            <column name="effect_modifier" value="8"/>
+            <column name="effect_die" value="6"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="385"/>
+            <column name="spell_name" value="Dissonant Whispers"/>
+            <column name="effect_category" value="damage"/>
+            <column name="level" value="7" />
+            <column name="effect_type" value="Psychic"/>
+            <column name="effect_modifier" value="9"/>
+            <column name="effect_die" value="6"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="385"/>
+            <column name="spell_name" value="Dissonant Whispers"/>
+            <column name="effect_category" value="damage"/>
+            <column name="level" value="8" />
+            <column name="effect_type" value="Psychic"/>
+            <column name="effect_modifier" value="10"/>
+            <column name="effect_die" value="6"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="385"/>
+            <column name="spell_name" value="Dissonant Whispers"/>
+            <column name="effect_category" value="damage"/>
+            <column name="level" value="9" />
+            <column name="effect_type" value="Psychic"/>
+            <column name="effect_modifier" value="11"/>
+            <column name="effect_die" value="6"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="386"/>
+            <column name="spell_name" value="Invisibility"/>
+            <column name="effect_category" value="help"/>
+            <column name="level" value="2" />
+            <column name="effect_type" value="aoe"/>
+            <column name="explicit_targets" value="1"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="386"/>
+            <column name="spell_name" value="Invisibility"/>
+            <column name="effect_category" value="help"/>
+            <column name="level" value="3" />
+            <column name="effect_type" value="aoe"/>
+            <column name="explicit_targets" value="2"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="386"/>
+            <column name="spell_name" value="Invisibility"/>
+            <column name="effect_category" value="help"/>
+            <column name="level" value="4" />
+            <column name="effect_type" value="aoe"/>
+            <column name="explicit_targets" value="3"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="386"/>
+            <column name="spell_name" value="Invisibility"/>
+            <column name="effect_category" value="help"/>
+            <column name="level" value="5" />
+            <column name="effect_type" value="aoe"/>
+            <column name="explicit_targets" value="4"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="386"/>
+            <column name="spell_name" value="Invisibility"/>
+            <column name="effect_category" value="help"/>
+            <column name="level" value="6" />
+            <column name="effect_type" value="aoe"/>
+            <column name="explicit_targets" value="5"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="386"/>
+            <column name="spell_name" value="Invisibility"/>
+            <column name="effect_category" value="help"/>
+            <column name="level" value="7" />
+            <column name="effect_type" value="aoe"/>
+            <column name="explicit_targets" value="6"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="386"/>
+            <column name="spell_name" value="Invisibility"/>
+            <column name="effect_category" value="help"/>
+            <column name="level" value="8" />
+            <column name="effect_type" value="aoe"/>
+            <column name="explicit_targets" value="7"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="386"/>
+            <column name="spell_name" value="Invisibility"/>
+            <column name="effect_category" value="help"/>
+            <column name="level" value="9" />
+            <column name="effect_type" value="aoe"/>
+            <column name="explicit_targets" value="8"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="387"/>
+            <column name="spell_name" value="Blindness Deafness"/>
+            <column name="effect_category" value="hinder"/>
+            <column name="level" value="2" />
+            <column name="effect_type" value="aoe"/>
+            <column name="explicit_targets" value="1"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="387"/>
+            <column name="spell_name" value="Blindness Deafness"/>
+            <column name="effect_category" value="hinder"/>
+            <column name="level" value="3" />
+            <column name="effect_type" value="aoe"/>
+            <column name="explicit_targets" value="2"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="387"/>
+            <column name="spell_name" value="Blindness Deafness"/>
+            <column name="effect_category" value="hinder"/>
+            <column name="level" value="4" />
+            <column name="effect_type" value="aoe"/>
+            <column name="explicit_targets" value="3"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="387"/>
+            <column name="spell_name" value="Blindness Deafness"/>
+            <column name="effect_category" value="hinder"/>
+            <column name="level" value="5" />
+            <column name="effect_type" value="aoe"/>
+            <column name="explicit_targets" value="4"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="387"/>
+            <column name="spell_name" value="Blindness Deafness"/>
+            <column name="effect_category" value="hinder"/>
+            <column name="level" value="6" />
+            <column name="effect_type" value="aoe"/>
+            <column name="explicit_targets" value="5"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="387"/>
+            <column name="spell_name" value="Blindness Deafness"/>
+            <column name="effect_category" value="hinder"/>
+            <column name="level" value="7" />
+            <column name="effect_type" value="aoe"/>
+            <column name="explicit_targets" value="6"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="387"/>
+            <column name="spell_name" value="Blindness Deafness"/>
+            <column name="effect_category" value="hinder"/>
+            <column name="level" value="8" />
+            <column name="effect_type" value="aoe"/>
+            <column name="explicit_targets" value="7"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="387"/>
+            <column name="spell_name" value="Blindness Deafness"/>
+            <column name="effect_category" value="hinder"/>
+            <column name="level" value="9" />
+            <column name="effect_type" value="aoe"/>
+            <column name="explicit_targets" value="8"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="388"/>
+            <column name="spell_name" value="Cloud of Daggers"/>
+            <column name="effect_category" value="damage"/>
+            <column name="level" value="2" />
+            <column name="effect_type" value="Slashing"/>
+            <column name="effect_modifier" value="4"/>
+            <column name="effect_die" value="4"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="388"/>
+            <column name="spell_name" value="Cloud of Daggers"/>
+            <column name="effect_category" value="damage"/>
+            <column name="level" value="2" />
+            <column name="effect_type" value="Slashing"/>
+            <column name="effect_modifier" value="4"/>
+            <column name="effect_die" value="4"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="388"/>
+            <column name="spell_name" value="Cloud of Daggers"/>
+            <column name="effect_category" value="damage"/>
+            <column name="level" value="3" />
+            <column name="effect_type" value="Slashing"/>
+            <column name="effect_modifier" value="6"/>
+            <column name="effect_die" value="4"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="388"/>
+            <column name="spell_name" value="Cloud of Daggers"/>
+            <column name="effect_category" value="damage"/>
+            <column name="level" value="4" />
+            <column name="effect_type" value="Slashing"/>
+            <column name="effect_modifier" value="8"/>
+            <column name="effect_die" value="4"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="388"/>
+            <column name="spell_name" value="Cloud of Daggers"/>
+            <column name="effect_category" value="damage"/>
+            <column name="level" value="5" />
+            <column name="effect_type" value="Slashing"/>
+            <column name="effect_modifier" value="10"/>
+            <column name="effect_die" value="4"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="388"/>
+            <column name="spell_name" value="Cloud of Daggers"/>
+            <column name="effect_category" value="damage"/>
+            <column name="level" value="6" />
+            <column name="effect_type" value="Slashing"/>
+            <column name="effect_modifier" value="12"/>
+            <column name="effect_die" value="4"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="388"/>
+            <column name="spell_name" value="Cloud of Daggers"/>
+            <column name="effect_category" value="damage"/>
+            <column name="level" value="7" />
+            <column name="effect_type" value="Slashing"/>
+            <column name="effect_modifier" value="14"/>
+            <column name="effect_die" value="4"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="388"/>
+            <column name="spell_name" value="Cloud of Daggers"/>
+            <column name="effect_category" value="damage"/>
+            <column name="level" value="8" />
+            <column name="effect_type" value="Slashing"/>
+            <column name="effect_modifier" value="16"/>
+            <column name="effect_die" value="4"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="388"/>
+            <column name="spell_name" value="Cloud of Daggers"/>
+            <column name="effect_category" value="damage"/>
+            <column name="level" value="9" />
+            <column name="effect_type" value="Slashing"/>
+            <column name="effect_modifier" value="18"/>
+            <column name="effect_die" value="4"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="389"/>
+            <column name="spell_name" value="Enhance Ability"/>
+            <column name="effect_category" value="help"/>
+            <column name="level" value="2" />
+            <column name="effect_type" value="aoe"/>
+            <column name="explicit_targets" value="1"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="389"/>
+            <column name="spell_name" value="Enhance Ability"/>
+            <column name="effect_category" value="help"/>
+            <column name="level" value="3" />
+            <column name="effect_type" value="aoe"/>
+            <column name="explicit_targets" value="2"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="389"/>
+            <column name="spell_name" value="Enhance Ability"/>
+            <column name="effect_category" value="help"/>
+            <column name="level" value="4" />
+            <column name="effect_type" value="aoe"/>
+            <column name="explicit_targets" value="3"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="389"/>
+            <column name="spell_name" value="Enhance Ability"/>
+            <column name="effect_category" value="help"/>
+            <column name="level" value="5" />
+            <column name="effect_type" value="aoe"/>
+            <column name="explicit_targets" value="4"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="389"/>
+            <column name="spell_name" value="Enhance Ability"/>
+            <column name="effect_category" value="help"/>
+            <column name="level" value="6" />
+            <column name="effect_type" value="aoe"/>
+            <column name="explicit_targets" value="5"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="389"/>
+            <column name="spell_name" value="Enhance Ability"/>
+            <column name="effect_category" value="help"/>
+            <column name="level" value="7" />
+            <column name="effect_type" value="aoe"/>
+            <column name="explicit_targets" value="6"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="389"/>
+            <column name="spell_name" value="Enhance Ability"/>
+            <column name="effect_category" value="help"/>
+            <column name="level" value="8" />
+            <column name="effect_type" value="aoe"/>
+            <column name="explicit_targets" value="7"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="389"/>
+            <column name="spell_name" value="Enhance Ability"/>
+            <column name="effect_category" value="help"/>
+            <column name="level" value="9" />
+            <column name="effect_type" value="aoe"/>
+            <column name="explicit_targets" value="8"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="390"/>
+            <column name="spell_name" value="Hold Person"/>
+            <column name="effect_category" value="hinder"/>
+            <column name="level" value="2" />
+            <column name="effect_type" value="aoe"/>
+            <column name="explicit_targets" value="1"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="390"/>
+            <column name="spell_name" value="Hold Person"/>
+            <column name="effect_category" value="hinder"/>
+            <column name="level" value="3" />
+            <column name="effect_type" value="aoe"/>
+            <column name="explicit_targets" value="2"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="390"/>
+            <column name="spell_name" value="Hold Person"/>
+            <column name="effect_category" value="hinder"/>
+            <column name="level" value="4" />
+            <column name="effect_type" value="aoe"/>
+            <column name="explicit_targets" value="3"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="390"/>
+            <column name="spell_name" value="Hold Person"/>
+            <column name="effect_category" value="hinder"/>
+            <column name="level" value="5" />
+            <column name="effect_type" value="aoe"/>
+            <column name="explicit_targets" value="4"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="390"/>
+            <column name="spell_name" value="Hold Person"/>
+            <column name="effect_category" value="hinder"/>
+            <column name="level" value="6" />
+            <column name="effect_type" value="aoe"/>
+            <column name="explicit_targets" value="5"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="390"/>
+            <column name="spell_name" value="Hold Person"/>
+            <column name="effect_category" value="hinder"/>
+            <column name="level" value="7" />
+            <column name="effect_type" value="aoe"/>
+            <column name="explicit_targets" value="6"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="390"/>
+            <column name="spell_name" value="Hold Person"/>
+            <column name="effect_category" value="hinder"/>
+            <column name="level" value="8" />
+            <column name="effect_type" value="aoe"/>
+            <column name="explicit_targets" value="7"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="390"/>
+            <column name="spell_name" value="Hold Person"/>
+            <column name="effect_category" value="hinder"/>
+            <column name="level" value="9" />
+            <column name="effect_type" value="aoe"/>
+            <column name="explicit_targets" value="8"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="391"/>
+            <column name="spell_name" value="Suggestion"/>
+            <column name="effect_category" value="hinder"/>
+            <column name="level" value="1" />
+            <column name="effect_type" value="aoe"/>
+            <column name="explicit_targets" value="1"/>
+        </insert>
+    </changeSet>
 </databaseChangeLog>

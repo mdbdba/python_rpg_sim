@@ -97,7 +97,7 @@ class Die(object):
 
         self.details.append(t_roll_details)
 
-        self.logger.debug(msg='roll_audit', json_dict=t_roll_details.__dict__, ctx=self.ctx)
+        self.logger.info(msg='roll_audit', json_dict=t_roll_details.__dict__, ctx=self.ctx)
 
         return tot
 

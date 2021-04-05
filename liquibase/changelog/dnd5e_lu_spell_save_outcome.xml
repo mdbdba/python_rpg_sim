@@ -19,4 +19,17 @@
             <column name="value" value="ReducedToZero"/>
         </insert>
     </changeSet>
+    <changeSet author="mdbdba" id="lu_spell_save_outcome_2">
+        <insert schemaName="dnd_5e" tableName="lu_spell_save_outcome">
+            <column name="value" value="NoSave"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell_save_outcome">
+            <column name="value" value="NoEffect"/>
+        </insert>
+    </changeSet>
+    <changeSet author="mdbdba" id="lu_spell_save_outcome_3">
+        <insert schemaName="dnd_5e" tableName="lu_spell_save_outcome">
+            <column name="value" value="SpellEnds"/>
+        </insert>
+    </changeSet>
 </databaseChangeLog>

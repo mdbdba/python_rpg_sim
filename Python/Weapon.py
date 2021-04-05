@@ -28,8 +28,10 @@ class Weapon(object):
         self.versatile_2hnd_die = None
         self.set_weapon_properties(db=self.db)
         self.damage_dict = defaultdict(list)
+        self.damage_dict_defaults = defaultdict(list)
         self.default_damage_type = None
         self.effect_obj = {}
+        self.effect_obj_defaults = {}
         self.set_effect(db=self.db)
         self.set_weapon_info(db=self.db)
 
@@ -83,13 +85,26 @@ class Weapon(object):
                f"where weapon = '{self.name}';")
         s_res = db.query(sql)
         if s_res:
+            self.default_damage_type = s_res[0][0]
             for result in s_res:
                 # set value for default damage
                 self.damage_dict[result[0]].append(1)
-                self.default_damage_type = result[0]
                 self.effect_obj[result[0]] = {"effect_category": 'Damage',
                                               "effect_modifier": result[1],
                                               "effect_die": result[2]}
+                self.effect_obj_defaults[result[0]] = {"effect_category": 'Damage',
+                                                       "effect_modifier": result[1],
+                                                       "effect_die": result[2]}
+
+    def update_damage(self, damage_type, damage_modifier, damage_die):
+        self.effect_obj[damage_type] = {"effect_category": 'Damage',
+                                        "effect_modifier": damage_modifier,
+                                        "effect_die": damage_die}
+
+    def reset_damage(self, damage_type):
+        self.effect_obj[damage_type] = {"effect_category": 'Damage',
+                                        "effect_modifier": self.effect_obj_defaults[damage_type]["effect_modifier"],
+                                        "effect_die": self.effect_obj_defaults[damage_type]["effect_die"]}
 
     @ctx_decorator
     def set_weapon_info(self, db):

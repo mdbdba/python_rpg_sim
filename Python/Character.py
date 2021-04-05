@@ -100,6 +100,9 @@ class Character(object):
         self.feature_list = []
         self.feature_counts = {}  # dictionary of feature and available use counts
         self.spell_list = {}
+        self.spell_list_action = {}
+        self.spell_list_bonus_action = {}
+        self.spell_list_reaction = {}
         # 0 = cantrips usable at any time
         # the rest are the available slots per spell level 1-9
         self.available_spell_slots = [-1, 0, 0, 0, 0, 0, 0, 0, 0, 0]
@@ -796,7 +799,7 @@ class Character(object):
                             if c.x == map_point[0] and c.y == map_point[1]:
                                 return []
                 for map_point in mapped_area_of_effect:
-                    for g in [distance_from_targets.target, distance_from_targets.chums]:
+                    for g in [distance_from_targets.targets, distance_from_targets.chums]:
                         for p in g:
                             if p.x == map_point[0] and p.y == map_point[1]:
                                 return_array.append(p)
@@ -923,7 +926,7 @@ class Character(object):
                     jdict["Ranged_target_change_index"] = t_tgt.occupied_by_index
                 elif op_dist <= 8:
                     ret_val = {"Action": "Melee",
-                               "Targets": [distance_from_player.target[0]]}
+                               "Targets": [distance_from_player.targets[0]]}
 
         self.ctx.crumbs[-1].add_audit(json_dict=jdict)
         return ret_val
@@ -974,7 +977,7 @@ class Character(object):
         self.stats.attack_rolls.append(attack_roll)
 
     @ctx_decorator
-    def ranged_attack(self, ctx, weapon_obj, target,
+    def ranged_attack(self, ctx, weapon_obj, target, attacker_id,
                       vantage='Normal', luck_retry=False):
         # determine modifier
         # 1)  is this a martial weapon that needs specific proficiency
@@ -986,7 +989,8 @@ class Character(object):
         #     modifier = int(self.proficiency_bonus)
         # else:
         modifier = self.add_proficiency_bonus_for_attack(weapon_obj)
-        jdict = {"weapon_proficiency_bonus": modifier,
+        jdict = {"attacker_id": attacker_id,
+                 "weapon_proficiency_bonus": modifier,
                  "luck_retry": luck_retry}
 
         modifier += self.get_ability_modifier('Dexterity')
@@ -1024,7 +1028,7 @@ class Character(object):
         return False
 
     @ctx_decorator
-    def melee_attack(self, ctx, weapon_obj, target,
+    def melee_attack(self, ctx, weapon_obj, target, attacker_id, target_name,
                      vantage='Normal', luck_retry=False) -> Attack:
         # determine modifier
         # 1)  is this a martial weapon that needs specific proficiency
@@ -1037,7 +1041,8 @@ class Character(object):
         # else:
         #     modifier = 0
         modifier = self.add_proficiency_bonus_for_attack(weapon_obj=weapon_obj)
-        jdict = {"weapon_proficiency_bonus": modifier,
+        jdict = {"attacker_id": attacker_id,
+                 "weapon_proficiency_bonus": modifier,
                  "luck_retry": luck_retry}
         # damage_modifier = 0
         # 2)  Add the users Ability bonus, Strength for standard weapons

@@ -56,7 +56,7 @@ class Foe(Character):
                        "damage_generator": damage_generator,
                        "hit_point_generator": hit_point_generator,
                        "level": level})
-        self.logger.debug(msg="user_audit", json_dict=self.__dict__, ctx=ctx)
+        self.logger.info(msg="user_audit", json_dict=self.__dict__, ctx=ctx)
 
     def get_melee_weapon(self):
         return self.melee_weapon
@@ -69,18 +69,18 @@ class Foe(Character):
         return return_val
 
     @ctx_decorator
-    def default_melee_attack(self, target_name, attacker_id='unknown', encounter_round=-1, encounter_turn=-1,
+    def default_melee_attack(self, ctx, target_name, target, attacker_id='unknown',
                              vantage='Normal', luck_retry=False):
-        return self.melee_attack(weapon_obj=self.melee_weapon_obj, attacker_id=attacker_id, target_name=target_name,
-                                 encounter_round=encounter_round, encounter_turn=encounter_turn,
+        return self.melee_attack(ctx=ctx, weapon_obj=self.melee_weapon_obj, attacker_id=attacker_id,
+                                 target_name=target_name, target=target,
                                  vantage=vantage, luck_retry=luck_retry)
 
     @ctx_decorator
-    def default_ranged_attack(self, target_name, attacker_id='unknown', encounter_round=-1, encounter_turn=-1,
-                             vantage='Normal', luck_retry=False):
+    def default_ranged_attack(self, ctx, target,
+                              attacker_id='unknown', vantage='Normal', luck_retry=False):
         self.stats.ranged_attack_attempts += 1
-        return self.ranged_attack(weapon_obj=self.ranged_weapon_obj, attacker_id=attacker_id, target_name_str=target_name,
-                                  encounter_round=encounter_round, encounter_turn=encounter_turn,
+        return self.ranged_attack(ctx=ctx, weapon_obj=self.ranged_weapon_obj,
+                                  attacker_id=attacker_id, target=target,
                                   vantage=vantage, luck_retry=luck_retry)
 
     @ctx_decorator
@@ -301,7 +301,7 @@ if __name__ == '__main__':
     db = InvokePSQL()
     logger_name = f'foe_main'
     ctx = Ctx(app_username='foe_class_init', logger_name=logger_name)
-    logger = RpgLogging(logger_name=logger_name, level_threshold='debug')
+    logger = RpgLogging(logger_name=logger_name, level_threshold='notset')
     logger.setup_logging()
     try:
         a1 = Foe(db=db, ctx=ctx, foe_candidate="Skeleton")
@@ -318,7 +318,7 @@ if __name__ == '__main__':
         exc_type, exc_value, exc_traceback = sys.exc_info()
         print(f'Context Information:\n\t'
               f'App_username:      {ctx.app_username}\n\t'
-              f'Full Name:         {ctx.fullyqualified}\n\t'
+              f'Full Name:         {ctx.fully_qualified}\n\t'
               f'Logger Name:       {ctx.logger_name}\n\t' 
               f'Trace Id:          {ctx.trace_id}\n\t' 
               f'Study Instance Id: {ctx.study_instance_id}\n\t' 
