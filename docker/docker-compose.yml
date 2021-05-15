@@ -42,20 +42,18 @@ services:
     depends_on:
       - pgs
 
-  elk:
-    image: sebp/elk
-    container_name: elk
+ # How I set up mongo (used different passwords)
+ #  https://dev.to/efe136/how-to-enable-mongodb-authentication-with-docker-compose-2nbp
+  mongo:
+    container_name: mongodb
+    image: mongo
     ports:
-      - "5601:5601"
-      - "9200:9200"
-      - "5044:5044"
-    networks:
-      - rpg
-    environment:
-      - CLUSTER_NAME=rpg
+      - "27017:27017"
     volumes:
-      - ~/rpg/docker_data/elk/data:/var/lib/elasticsearch
-      - ~/rpg/logs:/rpg_out
+      - ~/rpg/docker_data/mongodbdata:/data/db
+    command: [--auth]
+    restart: always
+
 #   web:
 #     image: php:apache  # pulling image from DockerHub
 #     container_name: web

@@ -776,7 +776,7 @@ class Character(object):
         return f'{self.get_name()}({self.cur_hit_points}/{self.hit_points})'
 
     @ctx_decorator
-    def get_range_targets(self, range, distance_from_targets, area_of_effect="player", if_only_group="None"):
+    def get_range_targets(self, field_range, distance_from_targets, area_of_effect="player", if_only_group="None"):
         # if the area of effect is player, use the closest target.  For now,
         # This should change when the caster can realize where the spell will have the most effect or
         # when they can realize if there is a magic user in the opposing party.  They will be targeted then.
@@ -786,7 +786,7 @@ class Character(object):
         else:
             mapped_area_of_effect = calculate_area_of_effect(player_location_x=distance_from_targets.chums[0].x,
                                                              player_location_y=distance_from_targets.chums[0].y,
-                                                             range=range,
+                                                             field_range=field_range,
                                                              aoe_type=area_of_effect)
             if len(mapped_area_of_effect) > 0:
                 if if_only_group != "None":
@@ -832,7 +832,7 @@ class Character(object):
             for x in self.spell_list.keys():
                 y = self.spell_list[x]
                 if y['available_count'] != 0:
-                    spell_targets = self.get_range_targets(range=y['range_amt'],
+                    spell_targets = self.get_range_targets(field_range=y['range_amt'],
                                                            distance_from_targets=distance_from_player,
                                                            area_of_effect=y['range_aoe'],
                                                            if_only_group="targets")

@@ -90,8 +90,8 @@ def calculate_distance(x1: int, y1: int, x2: int, y2: int) -> float:
     return dist
 
 
-def calculate_area_of_effect(player_location_x, player_location_y, range, aoe_type):
-    map_squares = int(range / 5)
+def calculate_area_of_effect(player_location_x, player_location_y, field_range, aoe_type):
+    map_squares = int(field_range / 5)
     return_list = []
     tmp_loc_x = player_location_x
     tmp_loc_y = player_location_y

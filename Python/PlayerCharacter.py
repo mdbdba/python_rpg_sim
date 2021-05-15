@@ -276,23 +276,38 @@ class PlayerCharacter(Character):
                        f"order by a.spell_level, a.order_by ")
 
                 spells = db.query(sql)
-                print(spells)
+                print(f"Spells found: {spells}")
                 for spell in spells:
                     max_impact = self.get_max_impact(db=db, spell_name=spell[2], cast_at_level=spell[0])
                     spell_ref_dict = {"category": spell[15],
-                                      "source": "class",
-                                      "id": spell[1],
-                                      "name": spell[2],
-                                      "min_level": spell[0],
-                                      "max_impact": max_impact,
-                                      "cast_at_level": spell[0],
-                                      "cast_with_ability": "Default",
-                                      "range_amt": spell[6],
-                                      "range_aoe": spell[8],
-                                      "casting_uom": spell[5],
-                                      "verbal_component_ind": spell[11],
-                                      "available_count": -1
-                                      }
+                                          "source": "class",
+                                          "id": spell[1],
+                                          "name": spell[2],
+                                          "min_level": spell[0],
+                                          "max_impact": max_impact,
+                                          "cast_at_level": spell[0],
+                                          "cast_with_ability": "Default",
+                                          "range_amt": spell[6],
+                                          "range_aoe": spell[8],
+                                          "casting_uom": spell[5],
+                                          "verbal_component_ind": spell[11],
+                                          "available_count": -1
+                                          }
+
+                    ## if it already exists as a racial spell keep the available count from the original, but
+                    ## the rest of the values match the class def
+                    if spell[2] in self.spell_list.keys():
+                        spell_ref_dict["available_count"] = self.spell_list[spell[2]]["available_count"]
+
+                    self.spell_list[spell[2]] = spell_ref_dict
+
+                    if spell_ref_dict["casting_uom"] == 'Action':
+                        self.spell_list_action[spell[2]] = spell_ref_dict
+                    elif spell_ref_dict["casting_uom"] == 'Bonus Action':
+                        self.spell_list_bonus_action[spell[2]] = spell_ref_dict
+                    else:
+                        self.spell_list_reaction[spell[2]] = spell_ref_dict
+
 
     @ctx_decorator
     def set_racial_spells(self, db):
@@ -1098,7 +1113,6 @@ if __name__ == '__main__':
 
         a22 = PlayerCharacter(db=db, ctx=ctx,
                               ability_array_str="13,13,13,13,13,13",
-                              # race_candidate="Half-elf",
                               race_candidate="Tiefling",
                               class_candidate="Bard",
                               level=3)
@@ -1108,11 +1122,21 @@ if __name__ == '__main__':
         print(f"Reaction Spell List: {a22.spell_list_reaction}")
         print(f"Spell List: {a22.spell_list}")
 
-        a22 = PlayerCharacter(db=db, ctx=ctx,
+        dist_target = distanceTarget(distance=20, x=1, y=4, occupied_by_group='Opponents',
+                                     occupied_by_index=0, in_need=False)
+        dist_target_2 = distanceTarget(distance=0, x=1, y=1, occupied_by_group='Heroes',
+                                       occupied_by_index=0, in_need=False)
+        d1 = distanceFromPlayer(player_name=a22.get_name(), player_group='Heroes', player_index=0, x=1, y=1,
+                                targets=[dist_target],
+                                ranged_targets=[dist_target], touch_range_chums=[],
+                                touch_range_chums_in_need=[], touch_range_targets=[], chums=[dist_target_2])
+        print(f"action: {a22.get_action(d1)}")
+
+        a23 = PlayerCharacter(db=db, ctx=ctx,
                               ability_array_str="Common",
                               race_candidate="Wood elf",
                               class_candidate="Cleric")
-        print(a22.__repr__)
+        print(a23.__repr__)
 
         # a8 = PlayerCharacter(db=db, ctx=ctx,
         #                      ability_array_str="18,12,12,10,10,8",
