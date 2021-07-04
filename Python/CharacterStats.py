@@ -20,7 +20,7 @@ def get_empty_dict():
 
 def get_empty_damage_dict():
     return dict(Acid=0, Bludgeoning=0, Cold=0,
-                Fire=0, Force=0, Ligtning=0,
+                Fire=0, Force=0, Lightning=0,
                 Necrotic=0, Piercing=0, Poison=0,
                 Psychic=0, Radiant=0, Slashing=0,
                 Thunder=0, Total=0, Unknown=0)
@@ -181,7 +181,7 @@ class CharacterStats:
         if len(tmp_str) > 2:
             tmp_str = tmp_str[:length_to_strip]
         print(f'damage_taken{primary_delimiter}{tmp_str}')
-        # 'damage_taken_dict': {'Acid': 0, 'Bludgeoning': 0, 'Cold': 0, 'Fire': 0, 'Force': 0, 'Ligtning': 0,
+        # 'damage_taken_dict': {'Acid': 0, 'Bludgeoning': 0, 'Cold': 0, 'Fire': 0, 'Force': 0, 'Lightning': 0,
         # 'Necrotic': 0,
         #             'Piercing': 30, 'Poison': 0, 'Psychic': 0, 'Radiant': 0, 'Slashing': 0, 'Thunder': 0,
         #             'Total': 30, 'Unknown': 0},

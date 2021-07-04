@@ -5,13 +5,14 @@ from CommonFunctions import get_random_key
 from CommonFunctions import fix_dict_for_json
 from datetime import datetime
 
+# why wrapt?  https://hynek.me/articles/decorators/
 import wrapt
 import logging
 import structlog
 import itertools
 import sys
 import traceback
-# import os
+import os
 
 
 @wrapt.decorator
@@ -25,10 +26,10 @@ def ctx_decorator(wrapped, instance, args, kwds):
     if ctx is None:
         raise ValueError('ctx obj not found.')
 
-    ctx.fullyqualified = wrapped.__qualname__
-    if '.' in ctx.fullyqualified:
+    ctx.fully_qualified = wrapped.__qualname__
+    if '.' in ctx.fully_qualified:
         username_to_use = None
-        t = string_to_string_array(ctx.fullyqualified, '.')
+        t = string_to_string_array(ctx.fully_qualified, '.')
         t_class = t[0]
         t_method = t[1]
         if t_class in ['PlayerCharacter', 'Foe', 'Character'] and t_method not in ['__init__']:
@@ -159,8 +160,8 @@ def init_crumbs():
 @dataclass
 class Ctx:
     app_username: str = "Unknown"
-    fullyqualified: str = ""
-    logger_name: str = fullyqualified
+    fully_qualified: str = ""
+    logger_name: str = fully_qualified
     log_file_dir: str = ""
     trace_id: str = ""
     request_type = "Standard"   # or "Trace"
@@ -183,7 +184,10 @@ class Ctx:
         self.turn += 1
 
     def get_next_log_id(self):
-        return next(self.log_counter)
+        lid = next(self.log_counter)
+        # print(f"log_id: {lid}")
+        return lid
+
 
     def add_crumb(self, class_name: str, method_name: str, method_params: Dict, parent_id: str,
                   event_id: str,  user_name: str = 'Unknown'):
@@ -216,9 +220,24 @@ class Ctx:
                 return_value.append(fix_dict_for_json(crumb.__dict__))
         return return_value
 
+    def summary(self):
+        print(f'Context Information:\n\t'
+              f'App_username:      {self.app_username}\n\t'
+              f'Full Name:         {self.fully_qualified}\n\t'
+              f'Logger Name:       {self.logger_name}\n\t'
+              f'Trace Id:          {self.trace_id}\n\t'
+              f'Study Instance Id: {self.study_instance_id}\n\t'
+              f'Study Name:        {self.study_name}\n\t'
+              f'Series Id:         {self.series_id}\n\t'
+              f'Encounter Id:      {self.encounter_id}\n\t'
+              f'Round:             {self.round}\n\t'
+              f'Turn:              {self.turn}\n')
+
+        self.print_crumbs()
+
     def __repr__(self):
         # out_str = (f'{{ "app_username": "{self.app_username}", '
-        #            f'"fullyqualified": "{self.fullyqualified}", '
+        #            f'"fully_qualified": "{self.fully_qualified}", '
         #            f'"logger_name": "{self.logger_name}", '
         #            f'"trace_id": "{self.trace_id}", '
         #            f'"request_type": "{self.request_type}", '
@@ -235,7 +254,7 @@ class Ctx:
 
 
 class RpgLogging:
-    def __init__(self, logger_name='rpg_logging', level_threshold='warning'):
+    def __init__(self, logger_name='rpg_logging', level_threshold='notset'):
         switcher = {
             'notset': logging.NOTSET,
             'debug': logging.DEBUG,
@@ -248,13 +267,9 @@ class RpgLogging:
         self.logger_name = logger_name
         self.std_logger = logging.getLogger(logger_name)
         self.logger = structlog.get_logger(logger_name)
-        # self.round_summary_name = f"{logger_name}_round_summary"
-        # self.round_summary = logging.getLogger(self.round_summary_name)
 
     def setup_logging(self, log_dir):
         self.logger = structlog.get_logger(self.logger_name)
-        # self.round_summary = logging.getLogger(self.round_summary_name)
-        # base_path = os.path.expanduser('~/rpg/logs')
         logging.basicConfig(
             format="%(message)s",
             level=logging.INFO,
@@ -263,7 +278,6 @@ class RpgLogging:
         )
         structlog.configure(
             processors=[
-                # structlog.stdlib.filter_by_level,
                 structlog.stdlib.add_logger_name,
                 structlog.stdlib.add_log_level,
                 structlog.stdlib.PositionalArgumentsFormatter(),
@@ -272,7 +286,6 @@ class RpgLogging:
                 structlog.processors.format_exc_info,
                 structlog.processors.UnicodeDecoder(),
                 structlog.stdlib.render_to_log_kwargs,
-                # structlog.processors.ExceptionPrettyPrinter(),
                 structlog.processors.JSONRenderer(indent=4),
             ],
             context_class=dict,
@@ -280,19 +293,6 @@ class RpgLogging:
             wrapper_class=structlog.stdlib.BoundLogger,
             cache_logger_on_first_use=True,
         )
-        # handler = logging.FileHandler(filename=f'{log_dir}/{self.logger_name}.log', mode='w')
-        # handler.setLevel(logging.INFO)
-        # summary_handler = logging.FileHandler(filename=f'{base_path}/{self.round_summary_name}.log', mode='w')
-        # summary_handler.setLevel(logging.DEBUG)
-        # summary_format = logging.Formatter('%(message)s')
-        # summary_handler.setFormatter(summary_format)
-
-        # self.round_summary.addHandler(summary_handler)
-
-        # self.logger.setLevel(logging.INFO)
-        # self.logger.addHandler(handler)
-        # self.logger.addHandler(summary_handler)
-        # self.round_summary.setLevel(logging.INFO)
 
     def get_log_rec(self, ctx: Ctx, msg: str = None, json_dict: Dict = None, return_crumbs='None'):
         if msg is None and json_dict is None:
@@ -305,6 +305,7 @@ class RpgLogging:
             crumbs = ctx.get_crumbs()
 
         log_id = ctx.get_next_log_id()
+        # print(f"get_log_rec log_id: {log_id}")
         tmp_dict = {
                 'app_username': ctx.app_username,
                 'study_name': ctx.study_name,
@@ -329,46 +330,49 @@ class RpgLogging:
     def summary_entry(self, msg):
         self.std_logger.debug(msg)
 
-    # def field_snap(self, msg):
-    #     print(msg)
-    #     #self.field_snap.info(msg)
-
-    def notset(self, ctx, msg=None, json_dict=None):
-        self.logger.notset(self.get_log_rec(msg=msg, json_dict=json_dict, ctx=ctx))
-
     def debug(self, ctx, msg=None, json_dict=None):
-        self.logger.debug(self.get_log_rec(msg=msg, json_dict=json_dict, ctx=ctx, return_crumbs='One'))
+        log_rec = self.get_log_rec(msg=msg, json_dict=json_dict, ctx=ctx, return_crumbs='One')
+        # print(f"debug log_id: {log_rec['log_id']}")
+        self.logger.debug(log_rec)
 
     def info(self, ctx, msg=None, json_dict=None):
-        self.logger.info(self.get_log_rec(msg=msg, json_dict=json_dict, ctx=ctx, return_crumbs='One'))
+        log_rec = self.get_log_rec(msg=msg, json_dict=json_dict, ctx=ctx, return_crumbs='One')
+        # print(f"info log_id: {log_rec['log_id']}")
+        self.logger.info(log_rec)
 
     def warning(self, ctx, msg=None, json_dict=None):
-        self.logger.warning(self.get_log_rec(msg=msg, json_dict=json_dict, ctx=ctx))
+        log_rec = self.get_log_rec(msg=msg, json_dict=json_dict, ctx=ctx)
+        # print(f"warning log_id: {log_rec['log_id']}")
+        self.logger.warning(log_rec)
 
     def error(self, ctx, msg=None, json_dict=None):
-        self.logger.error(self.get_log_rec(msg=msg, json_dict=json_dict, ctx=ctx, return_crumbs='One'))
+        log_rec = self.get_log_rec(msg=msg, json_dict=json_dict, ctx=ctx, return_crumbs='One')
+        # print(f"error log_id: {log_rec['log_id']}")
+        self.logger.error(log_rec)
 
     def critical(self, ctx, msg=None, json_dict=None):
-        self.logger.critical(self.get_log_rec(msg=msg, json_dict=json_dict, ctx=ctx, return_crumbs='All'))
+        log_rec = self.get_log_rec(msg=msg, json_dict=json_dict, ctx=ctx, return_crumbs='All')
+        # print(f"critical log_id: {log_rec['log_id']}")
+        self.logger.critical(log_rec)
 
 
 if __name__ == '__main__':
     ctx = Ctx(app_username='demo_user_1', encounter_id=123, round=0, turn=0)
+    l = RpgLogging('ctx_test', 'notset')
+    ctx.log_file_dir = os.path.expanduser('~/rpg/logs')
+    l.setup_logging(log_dir=ctx.log_file_dir)
     ctx.add_crumb('bogus_class', 'a_method', {"ctx": ctx, "param1": "value1", "param2": 2}, 'PA1543', 'EX12345')
     ctx.add_crumb('bogus_class', 'b_method', {"ctx": ctx, "param1": "value3", "param2": 4}, 'PA7654', 'EX23456')
     ctx.add_crumb('bogus_class', 'c_method', {"ctx": ctx, "param1": "value5", "param2": 6}, 'PA0987', 'EX34567')
-    print(ctx.print_crumbs())
+    print(" -- print_crumbs -----------------------------")
+    ctx.print_crumbs()
+    print(" -- get_last_crumb (should be c_method)-------")
     print(ctx.get_last_crumb())
+    print(" -- pop and print crumb (should be b_method)--")
     ctx.pop_crumb()
     print(ctx.get_last_crumb())
-    # -----------
-    l = RpgLogging('ctx_test', 'debug')
-    l.setup_logging()
-    l.debug(msg="debug message", ctx=ctx)
-    l.info(msg="info message", ctx=ctx)
-    l.warning(msg="warning message", ctx=ctx)
-    l.error(msg="error message", ctx=ctx)
     l.critical(msg="critical message", ctx=ctx)
-
-    m = RpgLogging('ctx_main_test', 'debug')
-    m.debug(msg="debug message", ctx=ctx)
+    l.error(msg="error message", ctx=ctx)
+    l.warning(msg="warning message", ctx=ctx)
+    l.info(msg="info message", ctx=ctx)
+    l.debug(msg="debug message", ctx=ctx)

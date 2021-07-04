@@ -1,3 +1,4 @@
+import random
 from Die import Die
 from Ctx import Ctx
 from Ctx import ctx_decorator
@@ -8,22 +9,20 @@ class Attack(object):
     def __init__(self, ctx: Ctx, weapon_obj,
                  attack_modifier,  # bonus to the toHit
                  damage_modifier,
-                 encounter_round,
-                 encounter_turn,
-                 attacker_name,
-                 target_name,
+                 attacker,
+                 target,
                  attack_type,
                  versatile_use_2handed=True,
                  vantage='Normal'):
         self.ctx = ctx
+        self.encounter_round = self.ctx.round
+        self.encounter_turn = self.ctx.turn
         self.method_last_call_audit = {}
         self.weapon_obj = weapon_obj
         self.weapon_name = weapon_obj.name
         self.damage_type = weapon_obj.default_damage_type
-        self.encounter_round = encounter_round
-        self.encounter_turn = encounter_turn
-        self.attacker_name = attacker_name
-        self.target_name = target_name
+        self.attacker = attacker
+        self.target = target
         self.attack_type = attack_type
         self.attack_modifier = attack_modifier
         self.damage_modifier = damage_modifier
@@ -37,14 +36,17 @@ class Attack(object):
             self.versatile_use_2handed = False
         self.rolls_used = None
         self.die_used = None
-        self.possible_damage = self.set_possible_damage()
-        self.natural_value = self.roll_attack()
-        if self.check_natural_value(20):
-            self.possible_damage = self.possible_damage * 2
-        self.possible_damage += self.damage_modifier
-        self.attack_value = self.natural_value + self.attack_modifier
+        # self.possible_damage = self.set_possible_damage()
+        # self.natural_value = self.roll_attack()
+        # if self.check_natural_value(20):
+        #     self.possible_damage = self.possible_damage * 2
+        # self.possible_damage += self.damage_modifier
+        # self.attack_value = self.natural_value + self.attack_modifier
         self.defence_value = 0
         self.attack_success = None
+        self.retry_count = 0
+        self.hp_impact = 0
+        self.set_values()
 
     def add_method_last_call_audit(self, audit_obj):
         self.method_last_call_audit[audit_obj['methodName']] = audit_obj
@@ -80,7 +82,7 @@ class Attack(object):
     @ctx_decorator
     def set_possible_damage(self):
         total = 0
-        # print(self.weapon_obj.damage_dict.items())
+        # print(self.weapon_obj.effect_obj.items())
         for key, value in self.weapon_obj.damage_dict.items():
             if value[0] == 1 and self.versatile_use_2handed is True:
                 d = Die(ctx=self.ctx, sides=self.weapon_obj.versatile_2hnd_die)
@@ -93,6 +95,45 @@ class Attack(object):
                 self.die_used = value[2]
                 self.rolls_used = value[1]
         return total
+
+    def set_values(self):
+        self.possible_damage = self.set_possible_damage()
+        self.natural_value = self.roll_attack()
+        if self.check_natural_value(20):
+            self.possible_damage = self.possible_damage * 2
+        self.possible_damage += self.damage_modifier
+        self.attack_value = self.natural_value + self.attack_modifier
+
+    @ctx_decorator
+    def determine_success(self):
+        hit_points_before = self.target.cur_hit_points
+        successful_defend = self.target.defend(attack_obj=self)
+        jdict = {'hit_points_before': hit_points_before,
+                 'successful_attack': (not successful_defend) }
+        # if the attack failed, wasn't a crit and if the attacker has luck and random chance of 33% succeeds
+        # randomly make the choice to use luck.  1/3 chance
+        if (successful_defend and self.natural_value < 20 and
+                ('Lucky' in self.attacker.feature_counts and self.attacker.feature_counts['Lucky'] > 0) and
+                random.randint(1, 3) == 1):
+            self.attacker.feature_counts['Lucky'] -= 1
+            self.retry_count += 1
+            jdict['lucky_used']= True
+
+            # turn_audit[f"{audit_key_prefix}luck_was_used{audit_key_suffix}"] = True
+            # msg = f"{msg} failed, but lucky caused a retry which"
+            self.set_values()
+            successful_defend = self.target.defend(attack_obj=self)
+            jdict['lucky_retry_success'] = not successful_defend
+
+        self.hp_impact = (hit_points_before - self.target.cur_hit_points)
+        jdict['hp_impact'] = self.hp_impact
+        # set attack success which is the opposite of a successful defend
+        self.attack_success = not successful_defend
+        if self.attack_success:
+            self.attacker.inc_damage_dealt(damage_type=self.damage_type, amount=self.possible_damage)
+            self.attacker.stats.attack_successes += 1
+
+        self.ctx.crumbs[-1].add_audit(json_dict=jdict)
 
     def __repr__(self):
         return (f'"method_last_call_audit": {self.method_last_call_audit}, ' 

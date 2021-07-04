@@ -378,6 +378,578 @@
         </insert>
 
     </changeSet>
-
-
+    <changeSet author="mdbdba" id="lu_spell_3">
+        <addColumn
+            schemaName="dnd_5e"
+            tableName="lu_spell">
+		    <column afterColumn="range_aoe"
+                name="attack_roll_required_ind"
+			    type="boolean"/>
+	    </addColumn>
+        <addDefaultValue
+            columnDataType="boolean"
+            columnName="attack_roll_required_ind"
+            defaultValueBoolean="false"
+            schemaName="dnd_5e"
+            tableName="lu_spell"/>
+    </changeSet>
+    <changeSet author="mdbdba" id="lu_spell_4">
+        <addColumn
+            schemaName="dnd_5e"
+            tableName="lu_spell">
+		    <column
+                name="save_outcome"
+			    type="varchar(16)"/>
+	    </addColumn>
+    </changeSet>
+    <changeSet author="mdbdba" id="lu_spell_5">
+        <sql splitStatements="true"
+             stripComments="true">update dnd_5e.lu_spell set save_outcome = 'HalfPossible'
+ where id in (362, 363, 364, 365, 366, 367, 368, 369, 370, 371);
+        </sql>
+    </changeSet>
+    <changeSet author="mdbdba" id="lu_spell_6">
+        <addColumn
+            schemaName="dnd_5e"
+            tableName="lu_spell">
+		    <column
+                name="explicit_targets"
+			    type="smallint"/>
+	    </addColumn>
+        <addDefaultValue
+                columnDataType="smallint"
+                columnName="explicit_targets"
+                defaultValue="-1"
+                schemaName="dnd_5e"
+                tableName="lu_spell"/>
+    </changeSet>
+    <changeSet author="mdbdba" id="lu_spell_7">
+        <sql splitStatements="true"
+             stripComments="true">update dnd_5e.lu_spell set explicit_targets = -1
+ where id in (362, 363, 364, 365, 366, 367, 368, 369, 370, 371);
+        </sql>
+    </changeSet>
+    <changeSet author="mdbdba" id="lu_spell_8">
+                <insert schemaName="dnd_5e" tableName="lu_spell">
+            <column name="id" value="372"/>
+            <column name="name" value="Toll the Dead"/>
+            <column name="level" value="0"/>
+            <column name="school" value="Necromancy" />
+            <column name="casting_time_amt" value="1"/>
+            <column name="casting_time_uom" value="Action"/>
+            <column name="range_amt" value="1"/>
+            <column name="range_uom" value="Sight"/>
+            <column name="range_aoe" value=""/>
+            <column name="verbal_component_ind" value="true"/>
+            <column name="somatic_component_ind" value="true"/>
+            <column name="material_component_ind" value="false"/>
+            <column name="duration_amt" value="1"/>
+            <column name="duration_uom" value="Instantaneous"/>
+            <column name="concentration_ind" value="false"/>
+            <column name="description" value="You point at one creature you can see within range, and the sound of a dolorous bell fills the air around it for a moment. If the target has already taken damage, this damage increases."/>
+            <column name="higher_level_cast" value="level:1,type:Necrotic,damage:1D8or1D12|level:5,type:Necrotic,damage:2D8or2D12|level:11,type:Necrotic,damage:3D8or3D12|level:17,type:Necrotic,damage:4D8or4D12"/>
+            <column name="save" value="Wisdom"/>
+            <column name="attack_roll_required_ind" value="false" />
+            <column name="save_outcome" value="ReducedToZero" />
+            <column name="explicit_targets" value="1" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell">
+            <column name="id" value="373"/>
+            <column name="name" value="Chill Touch"/>
+            <column name="level" value="0"/>
+            <column name="school" value="Necromancy" />
+            <column name="casting_time_amt" value="1"/>
+            <column name="casting_time_uom" value="Action"/>
+            <column name="range_amt" value="120"/>
+            <column name="range_uom" value="Feet"/>
+            <column name="range_aoe" value=""/>
+            <column name="verbal_component_ind" value="true"/>
+            <column name="somatic_component_ind" value="true"/>
+            <column name="material_component_ind" value="false"/>
+            <column name="duration_amt" value="1"/>
+            <column name="duration_uom" value="Round(s)"/>
+            <column name="concentration_ind" value="false"/>
+            <column name="description" value="You create a ghostly, skeletal hand in the space of a creature within range. Make a ranged spell Attack against the creature to assail it with the chill of the grave. If you hit an Undead target, it also has disadvantage on Attack rolls against you until the end of your next turn."/>
+            <column name="higher_level_cast" value="level:1,type:Necrotic,damage:1D8or1D12|level:5,type:Necrotic,damage:2D8or2D12|level:11,type:Necrotic,damage:3D8or3D12|level:17,type:Necrotic,damage:4D8or4D12"/>
+            <column name="attack_roll_required_ind" value="true" />
+            <column name="save_outcome" value="NoSave" />
+            <column name="explicit_targets" value="1" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell">
+            <column name="id" value="374"/>
+            <column name="name" value="Fire Bolt"/>
+            <column name="level" value="0"/>
+            <column name="school" value="Evocation" />
+            <column name="casting_time_amt" value="1"/>
+            <column name="casting_time_uom" value="Action"/>
+            <column name="range_amt" value="120"/>
+            <column name="range_uom" value="Feet"/>
+            <column name="range_aoe" value=""/>
+            <column name="verbal_component_ind" value="true"/>
+            <column name="somatic_component_ind" value="true"/>
+            <column name="material_component_ind" value="false"/>
+            <column name="duration_amt" value="1"/>
+            <column name="duration_uom" value="Instantaneous"/>
+            <column name="concentration_ind" value="false"/>
+            <column name="description" value="You hurl a mote of fire at a creature or object within range. Make a ranged spell attack against the target."/>
+            <column name="higher_level_cast" value="level:1,type:Fire,damage:1D10|level:5,type:Fire,damage:2D10|level:11,type:Fire,damage:3D10|level:17,type:Fire,damage:4D10"/>
+            <column name="attack_roll_required_ind" value="true" />
+            <column name="save_outcome" value="NoSave" />
+            <column name="explicit_targets" value="1" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell">
+            <column name="id" value="375"/>
+            <column name="name" value="Magic Missile"/>
+            <column name="level" value="1"/>
+            <column name="school" value="Evocation" />
+            <column name="casting_time_amt" value="1"/>
+            <column name="casting_time_uom" value="Action"/>
+            <column name="range_amt" value="120"/>
+            <column name="range_uom" value="Feet"/>
+            <column name="range_aoe" value=""/>
+            <column name="verbal_component_ind" value="true"/>
+            <column name="somatic_component_ind" value="true"/>
+            <column name="material_component_ind" value="false"/>
+            <column name="duration_amt" value="1"/>
+            <column name="duration_uom" value="Instantaneous"/>
+            <column name="concentration_ind" value="false"/>
+            <column name="description" value="You create three glowing darts of magical force. Each dart hits a creature of your choice that you can see within range. A dart deals 1d4+1 force damage to its target. The darts all strike simultaneously and you can direct them to hit one creature or several."/>
+            <column name="higher_level_cast" value="level:1,type:Fire,damage:1D4+1,targets:3|level:2,type:Fire,damage:1D4+1,targets:4|level:3,type:Fire,damage:1D4+1,targets:5|level:4,type:Fire,damage:1D4+1,targets:6|level:5,type:Fire,damage:1D4+1,targets:7|level:6,type:Fire,damage:1D4+1,targets:8|level:7,type:Fire,damage:1D4+1,targets:9|level:8,type:Fire,damage:1D4+1,targets:10|level:9,type:Fire,damage:1D4+1,targets:11"/>
+            <column name="attack_roll_required_ind" value="true" />
+            <column name="save_outcome" value="NoSave" />
+            <column name="explicit_targets" value="3" />
+        </insert>
+    </changeSet>
+    <changeSet author="mdbdba" id="lu_spell_9">
+        <dropColumn
+                schemaName="dnd_5e"
+                tableName="lu_spell">
+            <column
+                    name="explicit_targets" />
+        </dropColumn>
+    </changeSet>
+    <changeSet author="mdbdba" id="lu_spell_10">
+        <insert schemaName="dnd_5e" tableName="lu_range_aoe"><column name="value" value="Person"/></insert>
+    </changeSet>
+    <changeSet author="mdbdba" id="lu_spell_11">
+        <sql splitStatements="true"
+             stripComments="true">update dnd_5e.lu_spell set range_aoe = 'Person'
+ where range_aoe = ''
+        </sql>
+    </changeSet>
+    <changeSet author="mdbdba" id="lu_spell_12">
+        <insert schemaName="dnd_5e" tableName="lu_spell">
+            <column name="id" value="376"/>
+            <column name="name" value="Hellish Rebuke"/>
+            <column name="level" value="1"/>
+            <column name="school" value="Evocation" />
+            <column name="casting_time_amt" value="1"/>
+            <column name="casting_time_uom" value="Reaction"/>
+            <column name="range_amt" value="60"/>
+            <column name="range_uom" value="Feet"/>
+            <column name="range_aoe" value="Person"/>
+            <column name="verbal_component_ind" value="true"/>
+            <column name="somatic_component_ind" value="true"/>
+            <column name="material_component_ind" value="false"/>
+            <column name="duration_amt" value="1"/>
+            <column name="duration_uom" value="Instantaneous"/>
+            <column name="concentration_ind" value="false"/>
+            <column name="description" value="You point your finger, and the creature that damaged you is momentarily surrounded by hellish flames. The creature must make a Dexterity saving throw. It takes 2d10 fire damage on a failed save, or half as much damage on a successful one."/>
+            <column name="higher_level_cast" value="level:1,type:Fire,damage:2D10|level:2,type:Fire,damage:3D10|level:3,type:Fire,damage:4D10|level:4,type:Fire,damage:5D10|level:5,type:Fire,damage:6D10|level:6,type:Fire,damage:7D10|level:7,type:Fire,damage:8D10|level:8,type:Fire,damage:9D10|level:9,type:Fire,damage:10D10"/>
+            <column name="attack_roll_required_ind" value="false" />
+            <column name="save_outcome" value="HalfPossible" />
+        </insert>
+    </changeSet>
+        <changeSet author="mdbdba" id="lu_spell_13">
+        <sql splitStatements="true"
+             stripComments="true">update dnd_5e.lu_spell set save = 'Dexterity'
+ where id = 376
+        </sql>
+    </changeSet>
+    <changeSet author="mdbdba" id="lu_spell_14">
+        <insert schemaName="dnd_5e" tableName="lu_spell">
+            <column name="id" value="377"/>
+            <column name="name" value="Shillelagh"/>
+            <column name="level" value="0"/>
+            <column name="school" value="Transmutation" />
+            <column name="casting_time_amt" value="1"/>
+            <column name="casting_time_uom" value="Bonus Action"/>
+            <column name="range_amt" value="1"/>
+            <column name="range_uom" value="Touch"/>
+            <column name="range_aoe" value="Person"/>
+            <column name="verbal_component_ind" value="true"/>
+            <column name="somatic_component_ind" value="true"/>
+            <column name="material_component_ind" value="true"/>
+            <column name="material_component_desc" value="mistletoe, a shamrock leaf, and a club or quarterstaff"/>
+            <column name="duration_amt" value="1"/>
+            <column name="duration_uom" value="Minute(s)"/>
+            <column name="concentration_ind" value="false"/>
+            <column name="description" value="The wood of a club or quarterstaff you are holding is imbued with nature's power. For the duration, you can use your spellcasting ability instead of Strength for the attack and damage rolls of melee attacks using that weapon, and the weapon's damage die becomes a d8. The weapon also becomes magical, if it isn't already. The spell ends if you cast it again or if you let go of the weapon."/>
+            <column name="attack_roll_required_ind" value="false" />
+            <column name="save_outcome" value="NoSave" />
+        </insert>
+    </changeSet>
+       <changeSet author="mdbdba" id="lu_spell_15">
+        <insert schemaName="dnd_5e" tableName="lu_spell">
+            <column name="id" value="378"/>
+            <column name="name" value="Vicious Mockery"/>
+            <column name="level" value="0"/>
+            <column name="school" value="Enchantment" />
+            <column name="casting_time_amt" value="1"/>
+            <column name="casting_time_uom" value="Action"/>
+            <column name="range_amt" value="60"/>
+            <column name="range_uom" value="Feet"/>
+            <column name="range_aoe" value="Person"/>
+            <column name="verbal_component_ind" value="true"/>
+            <column name="somatic_component_ind" value="false"/>
+            <column name="material_component_ind" value="false"/>
+            <column name="duration_amt" value="1"/>
+            <column name="duration_uom" value="Instantaneous"/>
+            <column name="concentration_ind" value="false"/>
+            <column name="description" value="You unleash a string of insults laced with subtle enchantments at a creature you can see within range. If the target can hear you (though it need not understand you), it must succeed on a Wisdom saving throw or take 1d4 psychic damage and have disadvantage on the next attack roll it makes before the end of its next turn."/>
+            <column name="attack_roll_required_ind" value="false" />
+            <column name="save" value="Wisdom"/>
+            <column name="save_outcome" value="ReducedToZero" />
+        </insert>
+    </changeSet>
+        <changeSet author="mdbdba" id="lu_spell_16">
+        <addColumn
+            schemaName="dnd_5e"
+            tableName="lu_spell">
+		    <column
+                name="general_category"
+			    type="varchar(128)"/>
+	    </addColumn>
+    </changeSet>
+    <changeSet author="mdbdba" id="lu_spell_17">
+        <sql splitStatements="true"
+             stripComments="true">update dnd_5e.lu_spell set general_category = 'damage'
+        where general_category is null;
+        </sql>
+    </changeSet>
+    <changeSet author="mdbdba" id="lu_spell_18">
+        <addColumn
+            schemaName="dnd_5e"
+            tableName="lu_spell">
+		    <column
+                name="effect_size_amt"
+			    type="int"/>
+	    </addColumn>
+        <addColumn
+                schemaName="dnd_5e"
+                tableName="lu_spell">
+            <column
+                    name="effect_size_uom"
+                    type="varchar(64)"/>
+        </addColumn>
+        <addForeignKeyConstraint baseColumnNames="effect_size_uom"
+            baseTableName="lu_spell"
+            constraintName="lu_spell_effect_size_uom_fk"
+            onDelete="CASCADE"
+            onUpdate="RESTRICT"
+            referencedColumnNames="value"
+            referencedTableName="lu_range_uom"/>
+    </changeSet>
+    <changeSet author="mdbdba" id="lu_spell_19">
+         <insert schemaName="dnd_5e" tableName="lu_spell">
+            <column name="id" value="379"/>
+            <column name="name" value="Minor Illusion"/>
+            <column name="level" value="0"/>
+            <column name="school" value="Illusion" />
+            <column name="casting_time_amt" value="1"/>
+            <column name="casting_time_uom" value="Action"/>
+            <column name="range_amt" value="30"/>
+            <column name="range_uom" value="Feet"/>
+            <column name="range_aoe" value="Cube"/>
+            <column name="effect_size_amt" value="5"/>
+            <column name="effect_size_uom" value="Feet"/>
+            <column name="verbal_component_ind" value="true"/>
+            <column name="somatic_component_ind" value="true"/>
+            <column name="material_component_ind" value="false"/>
+            <column name="duration_amt" value="1"/>
+            <column name="duration_uom" value="Minute(s)"/>
+            <column name="concentration_ind" value="false"/>
+            <column name="description" value="You create a sound or an image of an object within range that lasts for the duration. The illusion also ends if you dismiss it as an action or cast this spell again. For the purposes of the simulation an image of somethings is created and resides in one sector of the board. For the duration, all enemies that notice it must make an Intelligence (Investigation) check against your spell save DC. If a creature fails, they are distracted by it, attacking until they succeed, another character enters melee with the image, or enter into melee with any opponent."/>
+            <column name="attack_roll_required_ind" value="false" />
+            <column name="save" value="Investigation"/>
+            <column name="save_outcome" value="NoEffect" />
+            <column name="general_category" value="hinder" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell">
+            <column name="id" value="380"/>
+            <column name="name" value="Cure Wounds"/>
+            <column name="level" value="1"/>
+            <column name="school" value="Evocation" />
+            <column name="casting_time_amt" value="1"/>
+            <column name="casting_time_uom" value="Action"/>
+            <column name="range_amt" value="1"/>
+            <column name="range_uom" value="Touch"/>
+            <column name="range_aoe" value="Person"/>
+            <column name="verbal_component_ind" value="true"/>
+            <column name="somatic_component_ind" value="true"/>
+            <column name="material_component_ind" value="false"/>
+            <column name="duration_amt" value="1"/>
+            <column name="duration_uom" value="Instantaneous"/>
+            <column name="concentration_ind" value="false"/>
+            <column name="description" value="A creature you touch regains a number of hit points equal to 1d8 + your spellcasting ability modifier. This spell has no effect on undead or constructs. At Higher Levels: When you cast this spell using a spell slot of 2nd level or higher, the Healing increases by 1d8 for each slot level above 1st. The ability modifier is only added once."/>
+            <column name="higher_level_cast" value="level:2,type:heal:2D8|level:3,type:heal:3D8|level:4,type:heal:4D8|level:5,type:heal:5D8|level:6,type:heal:6D8|level:7,type:heal:7D8|level:8,type:heal:8D8|level:9,type:heal:9D8"/>
+            <column name="attack_roll_required_ind" value="false" />
+            <column name="save_outcome" value="NoSave" />
+            <column name="general_category" value="heal" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell">
+            <column name="id" value="381"/>
+            <column name="name" value="Healing Words"/>
+            <column name="level" value="1"/>
+            <column name="school" value="Evocation" />
+            <column name="casting_time_amt" value="1"/>
+            <column name="casting_time_uom" value="Bonus Action"/>
+            <column name="range_amt" value="60"/>
+            <column name="range_uom" value="Feet"/>
+            <column name="range_aoe" value="Person"/>
+            <column name="verbal_component_ind" value="true"/>
+            <column name="somatic_component_ind" value="false"/>
+            <column name="material_component_ind" value="false"/>
+            <column name="duration_amt" value="1"/>
+            <column name="duration_uom" value="Instantaneous"/>
+            <column name="concentration_ind" value="false"/>
+            <column name="description" value="A creature of your choice that you can see within range regains hit points equal to 1d4 + your spellcasting ability modifier. This spell has no effect on undead or constructs. At Higher Levels: When you cast this spell using a spell slot of 2nd level or higher, the Healing increases by 1d4 for each slot level above 1st."/>
+            <column name="higher_level_cast" value="level:2,type:heal:2D4|level:3,type:heal:3D4|level:4,type:heal:4D4|level:5,type:heal:5D4|level:6,type:heal:6D4|level:7,type:heal:7D4|level:8,type:heal:8D4|level:9,type:heal:9D4"/>
+            <column name="attack_roll_required_ind" value="false" />
+            <column name="save_outcome" value="NoSave" />
+            <column name="general_category" value="heal" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell">
+            <column name="id" value="382"/>
+            <column name="name" value="Heroism"/>
+            <column name="level" value="1"/>
+            <column name="school" value="Enchantment" />
+            <column name="casting_time_amt" value="1"/>
+            <column name="casting_time_uom" value="Action"/>
+            <column name="range_amt" value="1"/>
+            <column name="range_uom" value="Touch"/>
+            <column name="range_aoe" value="Person"/>
+            <column name="verbal_component_ind" value="true"/>
+            <column name="somatic_component_ind" value="true"/>
+            <column name="material_component_ind" value="false"/>
+            <column name="duration_amt" value="1"/>
+            <column name="duration_uom" value="Minute(s)"/>
+            <column name="concentration_ind" value="True"/>
+            <column name="description" value="A willing creature you touch is imbued with bravery. Until the spell ends, the creature is immune to being frightened and gains temporary hit points equal to your spellcasting ability modifier at the start of each of its turns. When the spell ends, the target loses any remaining temporary hit points from this spell. At Higher Levels: When you cast this spell using a spell slot of 2nd level or higher, you can target one additional creature for each slot level above 1st."/>
+            <column name="higher_level_cast" value="level:2,type:aoe:2|level:3,type:aoe:3|level:4,type:aoe:4|level:5,type:aoe:5|level:6,type:aoe:6|level:7,type:aoe:7|level:8,type:aoe:8|level:9,type:aoe:9"/>
+            <column name="attack_roll_required_ind" value="false" />
+            <column name="save_outcome" value="NoSave" />
+            <column name="general_category" value="help" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell">
+            <column name="id" value="383"/>
+            <column name="name" value="Hideous Laughter"/>
+            <column name="level" value="1"/>
+            <column name="school" value="Enchantment" />
+            <column name="casting_time_amt" value="1"/>
+            <column name="casting_time_uom" value="Action"/>
+            <column name="range_amt" value="30"/>
+            <column name="range_uom" value="Feet"/>
+            <column name="range_aoe" value="Person"/>
+            <column name="verbal_component_ind" value="true"/>
+            <column name="somatic_component_ind" value="true"/>
+            <column name="material_component_ind" value="true"/>
+            <column name="duration_amt" value="1"/>
+            <column name="duration_uom" value="Minute(s)"/>
+            <column name="concentration_ind" value="true"/>
+            <column name="description" value="A creature of your choice that you can see within range perceives everything as hilariously funny and falls into fits of laughter if this spell affects it. The target must succeed on a Wisdom saving throw or fall prone, becoming incapacitated and unable to stand up for the duration. A creature with an Intelligence score of 4 or less isn’t affected. At the end of each of its turns, and each time it takes damage, the target can make another Wisdom saving throw. The target has advantage on the saving throw if it’s triggered by damage. On a success, the spell ends."/>
+            <column name="attack_roll_required_ind" value="false" />
+            <column name="save" value="Wisdom"/>
+            <column name="save_outcome" value="NoEffect" />
+            <column name="general_category" value="hinder" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell">
+            <column name="id" value="384"/>
+            <column name="name" value="Sleep"/>
+            <column name="level" value="1"/>
+            <column name="school" value="Enchantment" />
+            <column name="casting_time_amt" value="1"/>
+            <column name="casting_time_uom" value="Action"/>
+            <column name="range_amt" value="90"/>
+            <column name="range_uom" value="Feet"/>
+            <column name="range_aoe" value="Person"/>
+            <column name="verbal_component_ind" value="true"/>
+            <column name="somatic_component_ind" value="true"/>
+            <column name="material_component_ind" value="true"/>
+            <column name="duration_amt" value="1"/>
+            <column name="duration_uom" value="Minute(s)"/>
+            <column name="concentration_ind" value="false"/>
+            <column name="description" value="This spell sends creatures into a magical slumber. Roll 5d8; the total is how many hit points of creatures this spell can affect. Creatures within 20 feet of a point you choose within range are affected in ascending order of their current hit points (ignoring unconscious creatures). Starting with the creature that has the lowest current hit points, each creature affected by this spell falls unconscious until the spell ends, the sleeper takes damage, or someone uses an action to shake or slap the sleeper awake. Subtract each creature’s hit points from the total before moving on to the creature with the next lowest hit points. A creature’s hit points must be equal to or less than the remaining total for that creature to be affected. Undead and creatures immune to being charmed aren’t affected by this spell. At Higher Levels: When you cast this spell using a spell slot of 2nd level or higher, roll an additional 2d8 for each slot level above 1st."/>
+            <column name="higher_level_cast" value="level:2,type:aoe:7d8|level:3,type:aoe:9d8|level:4,type:aoe:11d8|level:5,type:aoe:13d8|level:6,type:aoe:15d8|level:7,type:aoe:17d8|level:8,type:aoe:19d8|level:9,type:aoe:19d8"/>
+            <column name="attack_roll_required_ind" value="false" />
+            <column name="save_outcome" value="NoSave" />
+            <column name="general_category" value="hinder" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell">
+            <column name="id" value="385"/>
+            <column name="name" value="Dissonant Whispers"/>
+            <column name="level" value="1"/>
+            <column name="school" value="Enchantment" />
+            <column name="casting_time_amt" value="1"/>
+            <column name="casting_time_uom" value="Action"/>
+            <column name="range_amt" value="60"/>
+            <column name="range_uom" value="Feet"/>
+            <column name="range_aoe" value="Person"/>
+            <column name="verbal_component_ind" value="true"/>
+            <column name="somatic_component_ind" value="false"/>
+            <column name="material_component_ind" value="false"/>
+            <column name="duration_amt" value="1"/>
+            <column name="duration_uom" value="Instantaneous"/>
+            <column name="concentration_ind" value="false"/>
+            <column name="description" value="You whisper a discordant melody that only one creature of your choice within range can hear, wracking it with terrible pain. The target must make a Wisdom saving throw. On a failed save, it takes 3d6 psychic damage and must immediately use its reaction, if available, to move as far as its speed allows away from you. The creature doesn’t move into obviously dangerous ground, such as a fire or a pit. On a successful save, the target takes half as much damage and doesn’t have to move away. A deafened creature automatically succeeds on the save. At Higher Levels. When you cast this spell using a spell slot of 2nd level or higher, the damage increases by 1d6 for each slot level above 1st."/>
+            <column name="higher_level_cast" value="level:2,type:Psychic,damage:4D6|level:3,type:Psychic,damage:5D6|level:4,type:Psychic,damage:6D6|level:5,type:Psychic,damage:7D6|level:6,type:Psychic,damage:8D6|level:7,type:Psychic,damage:9D6|level:8,type:Psychic,damage:10D6|level:9,type:Psychic,damage:11D6" />
+            <column name="attack_roll_required_ind" value="false" />
+            <column name="save" value="Wisdom"/>
+            <column name="save_outcome" value="HalfPossible" />
+            <column name="general_category" value="hinder" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell">
+            <column name="id" value="386"/>
+            <column name="name" value="Invisibility"/>
+            <column name="level" value="2"/>
+            <column name="school" value="Illusion" />
+            <column name="casting_time_amt" value="1"/>
+            <column name="casting_time_uom" value="Action"/>
+            <column name="range_amt" value="1"/>
+            <column name="range_uom" value="Touch"/>
+            <column name="range_aoe" value="Person"/>
+            <column name="verbal_component_ind" value="true"/>
+            <column name="somatic_component_ind" value="true"/>
+            <column name="material_component_ind" value="true"/>
+            <column name="duration_amt" value="1"/>
+            <column name="duration_uom" value="Hour(s)"/>
+            <column name="concentration_ind" value="true"/>
+            <column name="description" value="A creature you touch becomes invisible until the spell ends. Anything the target is wearing or carrying is invisible as long as it is on the target’s person. The spell ends for a target that attacks or casts a spell. At Higher Levels: When you cast this spell using a spell slot of 3rd level or higher, you can target one additional creature for each slot level above 2nd."/>
+            <column name="higher_level_cast" value="level:3,type:aoe:2|level:4,type:aoe:3|level:5,type:aoe:4|level:6,type:aoe:5|level:7,type:aoe:6|level:8,type:aoe:7|level:9,type:aoe:8"/>
+            <column name="attack_roll_required_ind" value="false" />
+            <column name="save_outcome" value="NoSave" />
+            <column name="general_category" value="help" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell">
+            <column name="id" value="387"/>
+            <column name="name" value="Blindness Deafness"/>
+            <column name="level" value="2"/>
+            <column name="school" value="Necromancy" />
+            <column name="casting_time_amt" value="1"/>
+            <column name="casting_time_uom" value="Action"/>
+            <column name="range_amt" value="30"/>
+            <column name="range_uom" value="Feet"/>
+            <column name="range_aoe" value="Person"/>
+            <column name="verbal_component_ind" value="true"/>
+            <column name="somatic_component_ind" value="false"/>
+            <column name="material_component_ind" value="false"/>
+            <column name="duration_amt" value="1"/>
+            <column name="duration_uom" value="Minute(s)"/>
+            <column name="concentration_ind" value="false"/>
+            <column name="description" value="You can blind or deafen a foe. Choose one creature that you can see within range to make a Constitution saving throw. If it fails, the target is either blinded or deafened (your choice) for the duration. At the end of each of its turns, the target can make a Constitution saving throw. On a success, the spell ends. At Higher Levels: When you cast this spell using a spell slot of 3rd level or higher, you can target one additional creature for each slot level above 2nd."/>
+            <column name="higher_level_cast" value="level:3,type:aoe:2|level:4,type:aoe:3|level:5,type:aoe:4|level:6,type:aoe:5|level:7,type:aoe:6|level:8,type:aoe:7|level:9,type:aoe:8"/>
+            <column name="attack_roll_required_ind" value="false" />
+            <column name="save" value="Constitution"/>
+            <column name="save_outcome" value="NoEffect" />
+            <column name="general_category" value="hinder" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell">
+            <column name="id" value="388"/>
+            <column name="name" value="Cloud of Daggers"/>
+            <column name="level" value="2"/>
+            <column name="school" value="Conjuration" />
+            <column name="casting_time_amt" value="1"/>
+            <column name="casting_time_uom" value="Action"/>
+            <column name="range_amt" value="60"/>
+            <column name="range_uom" value="Feet"/>
+            <column name="range_aoe" value="Cube"/>
+            <column name="effect_size_amt" value="5"/>
+            <column name="effect_size_uom" value="Feet"/>
+            <column name="verbal_component_ind" value="true"/>
+            <column name="somatic_component_ind" value="true"/>
+            <column name="material_component_ind" value="true"/>
+            <column name="duration_amt" value="1"/>
+            <column name="duration_uom" value="Minute(s)"/>
+            <column name="concentration_ind" value="true"/>
+            <column name="description" value="You fill the air with spinning daggers in a cube 5 feet on each side, centered on a point you choose within range. A creature takes 4d4 slashing damage when it enters the spell’s area for the first time on a turn or starts its turn there. At Higher Levels. When you cast this spell using a spell slot of 3rd level or higher, the damage increases by 2d4 for each slot level above 2nd."/>
+            <column name="higher_level_cast" value="level:3,type:Slashing,damage:6D4|level:4,type:Slashing,damage:8D4|level:5,type:Slashing,damage:10D4|level:6,type:Slashing,damage:12D4|level:7,type:Slashing,damage:14D4|level:8,type:Slashing,damage:16D4|level:9,type:Slashing,damage:18D4" />
+            <column name="attack_roll_required_ind" value="false" />
+            <column name="save_outcome" value="NoSave" />
+            <column name="general_category" value="damage" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell">
+            <column name="id" value="389"/>
+            <column name="name" value="Enhance Ability"/>
+            <column name="level" value="2"/>
+            <column name="school" value="Transmutation" />
+            <column name="casting_time_amt" value="1"/>
+            <column name="casting_time_uom" value="Action"/>
+            <column name="range_amt" value="1"/>
+            <column name="range_uom" value="Touch"/>
+            <column name="range_aoe" value="Person"/>
+            <column name="verbal_component_ind" value="true"/>
+            <column name="somatic_component_ind" value="true"/>
+            <column name="material_component_ind" value="true"/>
+            <column name="duration_amt" value="1"/>
+            <column name="duration_uom" value="Hour(s)"/>
+            <column name="concentration_ind" value="True"/>
+            <column name="description" value="You touch a creature and bestow upon it a magical enhancement. Choose one of the following effects, the target gains that effect until the spell ends. Bear’s Endurance: The target has advantage on Constitution checks. It also gains 2d6 temporary hit points, which are lost when the spell ends; Bull’s Strength: The target has advantage on Strength checks, and his or her carrying capacity doubles; Cat’s Grace: The target has advantage on Dexterity checks. It also doesn’t take damage from falling 20 feet or less if it isn’t incapacitated; Eagle’s Splendor: The target has advantage on Charisma checks; Fox’s Cunning: The target has advantage on Intelligence checks; Owl’s Wisdom: The target has advantage on Wisdom checks. At Higher Levels: When you cast this spell using a spell slot of 3rd level or higher, you can target one additional creature for each slot level above 2nd."/>
+            <column name="higher_level_cast" value="level:3,type:aoe:2|level:4,type:aoe:3|level:5,type:aoe:4|level:6,type:aoe:5|level:7,type:aoe:6|level:8,type:aoe:7|level:9,type:aoe:8"/>
+            <column name="attack_roll_required_ind" value="false" />
+            <column name="save_outcome" value="NoSave" />
+            <column name="general_category" value="help" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell">
+            <column name="id" value="390"/>
+            <column name="name" value="Hold Person"/>
+            <column name="level" value="2"/>
+            <column name="school" value="Enchantment" />
+            <column name="casting_time_amt" value="1"/>
+            <column name="casting_time_uom" value="Action"/>
+            <column name="range_amt" value="60"/>
+            <column name="range_uom" value="Feet"/>
+            <column name="range_aoe" value="Person"/>
+            <column name="verbal_component_ind" value="true"/>
+            <column name="somatic_component_ind" value="true"/>
+            <column name="material_component_ind" value="true"/>
+            <column name="duration_amt" value="1"/>
+            <column name="duration_uom" value="Minute(s)"/>
+            <column name="concentration_ind" value="true"/>
+            <column name="description" value="Choose a humanoid that you can see within range. The target must succeed on a Wisdom saving throw or be paralyzed for the duration. At the end of each of its turns, the target can make another Wisdom saving throw. On a success, the spell ends on the target. At Higher Levels: When you cast this spell using a spell slot of 3rd level or higher, you can target on additional humanoid for each slot level above 2nd. The humanoids must be within 30 feet of each other when you target them."/>
+            <column name="higher_level_cast" value="level:3,type:aoe:2|level:4,type:aoe:3|level:5,type:aoe:4|level:6,type:aoe:5|level:7,type:aoe:6|level:8,type:aoe:7|level:9,type:aoe:8"/>
+            <column name="attack_roll_required_ind" value="false" />
+            <column name="save" value="Wisdom"/>
+            <column name="save_outcome" value="NoEffect" />
+            <column name="general_category" value="hinder" />
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell">
+            <column name="id" value="391"/>
+            <column name="name" value="Suggestion"/>
+            <column name="level" value="2"/>
+            <column name="school" value="Enchantment" />
+            <column name="casting_time_amt" value="1"/>
+            <column name="casting_time_uom" value="Action"/>
+            <column name="range_amt" value="30"/>
+            <column name="range_uom" value="Feet"/>
+            <column name="range_aoe" value="Person"/>
+            <column name="verbal_component_ind" value="true"/>
+            <column name="somatic_component_ind" value="false"/>
+            <column name="material_component_ind" value="true"/>
+            <column name="duration_amt" value="8"/>
+            <column name="duration_uom" value="Hour(s)"/>
+            <column name="concentration_ind" value="true"/>
+            <column name="description" value="You suggest a course of activity (limited to a sentence or two) and magically influence a creature you can see within range that can hear and understand you. Creatures that can’t be charmed are immune to this effect. The suggestion must be worded in such a manner as to make the course of action sound reasonable. Asking the creature to stab itself, throw itself onto a spear, immolate itself, or do some other obviously harmful act ends the spell. The target must make a Wisdom saving throw. On a failed save, it pursues the course of action you described to the best of its ability. The suggested course of action can continue for the entire duration. If the suggested activity can be completed in a shorter time, the spell ends when the subject finishes what it was asked to do. You can also specify conditions that will trigger a special activity during the duration. For the simulation, the suggestion that they are in mortal danger and must flee is given. If you or any of your companions damage the target, the spell ends."/>
+            <column name="attack_roll_required_ind" value="false" />
+            <column name="save" value="Wisdom"/>
+            <column name="save_outcome" value="NoEffect" />
+            <column name="general_category" value="hinder" />
+        </insert>
+    </changeSet>
+    <changeSet author="mdbdba" id="lu_spell_20">
+       <sql splitStatements="true"
+             stripComments="true">update dnd_5e.lu_spell set higher_level_cast =
+           'level:2,type:aoe:7d8|level:3,type:aoe:9d8|level:4,type:aoe:11d8|level:5,type:aoe:13d8|level:6,type:aoe:15d8|level:7,type:aoe:17d8|level:8,type:aoe:19d8|level:9,type:aoe:21d8'
+           where id = 384;
+        </sql>
+    </changeSet>
 </databaseChangeLog>

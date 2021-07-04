@@ -1,6 +1,6 @@
 driver=org.postgresql.Driver
-classpath=<putRestOfPathHere>/rpg/liquibase/postgresql-42.2.2.jar
-url=jdbc:postgresql://localhost:5433/rpg
+classpath=<putClonedRepoPathHere>/python_rpg_sim/liquibase/postgresql-42.2.17.jar
+url=jdbc:postgresql://localhost:5432/rpg
 username=rpg_admin
-password=Id0minated!
+password=cCl52yUQ4pTRBp0
 changeLogFile=./dnd5e_master.xml

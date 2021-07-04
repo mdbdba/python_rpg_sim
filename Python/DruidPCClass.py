@@ -10,7 +10,7 @@ class DruidPCClass(PlayerCharacterClass):
         PlayerCharacterClass.__init__(self, db=db, ctx=ctx, class_candidate="Druid",
                                       character_altering_class_options=character_altering_class_options)
         self.archetype_label = "Druid Circle"
-        self.melee_weapon = "Scimitar"
+        self.melee_weapon = "Club"
         self.armor = "Leather"
         self.shield = "Shield"
         self.background = "Hermit"

@@ -17,5 +17,37 @@
            <column name="value" value="Slashing"/> 
         </insert>
     </changeSet>
+    <changeSet author="mdbdba" id="lu_damage_type_2">
 
+        <insert schemaName="dnd_5e" tableName="lu_damage_type">
+            <column name="value" value="Acid"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_damage_type">
+            <column name="value" value="Cold"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_damage_type">
+            <column name="value" value="Fire"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_damage_type">
+            <column name="value" value="Force"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_damage_type">
+            <column name="value" value="Lightning"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_damage_type">
+            <column name="value" value="Necrotic"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_damage_type">
+            <column name="value" value="Poison"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_damage_type">
+            <column name="value" value="Psychic"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_damage_type">
+            <column name="value" value="Radiant"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_damage_type">
+            <column name="value" value="Thunder"/>
+        </insert>
+    </changeSet>
 </databaseChangeLog>

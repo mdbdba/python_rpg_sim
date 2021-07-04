@@ -10,6 +10,7 @@ class ClericPCClass(PlayerCharacterClass):
         PlayerCharacterClass.__init__(self, db=db, ctx=ctx, class_candidate="Cleric",
                                       character_altering_class_options=character_altering_class_options)
         self.archetype_label = "Divine Domain"
+        self.combat_preference = "Ranged"
         self.ranged_weapon = "Crossbow, light"
         self.melee_weapon = "Warhammer"
         self.ranged_ammunition_type = "Bolt"

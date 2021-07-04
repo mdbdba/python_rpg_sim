@@ -10,6 +10,7 @@ class BardPCClass(PlayerCharacterClass):
         PlayerCharacterClass.__init__(self, db=db, ctx=ctx, class_candidate="Bard",
                                       character_altering_class_options=character_altering_class_options)
         self.archetype_label = "Bard College"
+        self.combat_preference = "Ranged"
         self.ranged_weapon = "Dagger"
         self.melee_weapon = "Rapier"
         self.ranged_ammunition_type = "Dagger"
