@@ -1512,4 +1512,33 @@
             <column name="explicit_targets" value="1"/>
         </insert>
     </changeSet>
+    <changeSet author="mdbdba" id="lu_spell_effect_12">
+        <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="378"/>
+            <column name="spell_name" value="Vicious Mockery"/>
+            <column name="effect_category" value="damage"/>
+            <column name="level" value="5" />
+            <column name="effect_type" value="Psychic"/>
+            <column name="effect_modifier" value="2"/>
+            <column name="effect_die" value="4"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="378"/>
+            <column name="spell_name" value="Vicious Mockery"/>
+            <column name="effect_category" value="damage"/>
+            <column name="level" value="11" />
+            <column name="effect_type" value="Psychic"/>
+            <column name="effect_modifier" value="3"/>
+            <column name="effect_die" value="4"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_spell_effect">
+            <column name="spell_id" value="378"/>
+            <column name="spell_name" value="Vicious Mockery"/>
+            <column name="effect_category" value="damage"/>
+            <column name="level" value="17" />
+            <column name="effect_type" value="Psychic"/>
+            <column name="effect_modifier" value="4"/>
+            <column name="effect_die" value="4"/>
+        </insert>
+    </changeSet>
 </databaseChangeLog>

@@ -813,40 +813,73 @@ class Character(object):
             cnt += 1
 
     def use_spell(self, spell_name, spell_slot_level=None):
-        if spell_slot_level is None:  # for spells that are managed by uses:
+        if spell_slot_level is None:
+            # for spells that are managed by uses:
             if self.spell_list[spell_name]['available_count'] > 0:
                 self.spell_list[spell_name]['available_count'] -= 1
+            else:
+                raise ValueError('No available spell count to use.')
         else:
             if self.available_spell_slots[spell_slot_level] > 0:
                 self.available_spell_slots[spell_slot_level] -= 1
+            else:
+                raise ValueError('No available spell slot to use.')
 
     def set_name_str(self, group_str, index_position):
         self.name_str = f"{self.get_name().replace(' ','_')}_{group_str}_{index_position}"
 
-    def pick_a_spell(self, distance_from_player):
+    @ctx_decorator
+    def pick_a_spell(self, distance_from_player, action_type):
         spell_name = "None"
+        spell_level = -1
         targets = []
+        jdict = { "action_type": action_type }
         if len(self.spell_list) > 0 and distance_from_player.targets[0].distance >= 10:
             max_damage_value = 0
             # cycle through their spells and look for one that has targets in range and does the most damage.
-            for x in self.spell_list.keys():
-                y = self.spell_list[x]
+            if action_type == "bonus_action":
+                list_to_use = self.spell_list_bonus_action
+                jdict['list_used'] = 'bonus_action'
+            elif action_type == "action":
+                list_to_use = self.spell_list_action
+                jdict['list_used'] = 'action'
+            else: #  use reaction spell list
+                list_to_use = self.spell_list_reaction
+                jdict['list_used'] = 'reaction'
+
+            jdict['spell_options_used'] = ''
+            jdict['spell_options_rejected'] = ''
+            for x in list_to_use.keys():
+                y = list_to_use[x]
+                #  This will only weed out spells that have a set number of castings.
+                #  Spells using slots will have a -1 in this value.
                 if y['available_count'] != 0:
                     spell_targets = self.get_range_targets(field_range=y['range_amt'],
                                                            distance_from_targets=distance_from_player,
                                                            area_of_effect=y['range_aoe'],
                                                            if_only_group="targets")
+                    jdict['spell_target_count'] = len(spell_targets)
                     if len(spell_targets) > 0 and max_damage_value < y['max_impact']:
                         max_damage_value = y['max_impact']
                         spell_name = x
+                        spell_level = y['cast_at_level']
                         targets = spell_targets
+                        jdict['spell_options_used'] = (f"{jdict['spell_options_used']}{x},{y['max_impact']}"
+                                                       f",{len(spell_targets)}:")
+                    else:
+                        jdict['spell_options_rejected'] = (f"{jdict['spell_options_rejected']}{x},{y['max_impact']}"
+                                                       f",{len(spell_targets)}:")
+
 
         if spell_name == 'None':
             ret_val = {"Action": "Unknown"}
         else:
             ret_val = {"Action": "Spell",
                        "Specific_Name": spell_name,
+                       "spell_level": spell_level,
                        "Targets": targets}
+
+        self.ctx.crumbs[-1].add_audit(json_dict=jdict)
         return ret_val
 
     @ctx_decorator
@@ -869,11 +902,12 @@ class Character(object):
         elif combat_preference == 'Melee':
             # Yeah, this player want's to bash heads, but if they have a spell that they could take advantage of,
             #  they will.
-            spell_pick = self.pick_a_spell(distance_from_player=distance_from_player)
+            spell_pick = self.pick_a_spell(distance_from_player=distance_from_player, action_type='action')
 
             if spell_pick['Action'] == "Spell":
                 ret_val = {"Action": "Spell",
                            "Specific_Name": spell_pick['Specific_Name'],
+                           "spell_level": spell_pick['spell_level'],
                            "Targets": spell_pick['Targets']}
             elif op_dist > self.cur_movement:
                 ret_val = {"Action": "Movement"}
@@ -884,11 +918,12 @@ class Character(object):
                 ret_val = {"Action": "Melee",
                            "Targets": [distance_from_player.targets[0]]}
         else:
-            spell_pick = self.pick_a_spell(distance_from_player=distance_from_player)
+            spell_pick = self.pick_a_spell(distance_from_player=distance_from_player, action_type='action')
 
             if spell_pick['Action'] == "Spell":
                 ret_val = {"Action": "Spell",
                            "Specific_Name": spell_pick['Specific_Name'],
+                           "spell_level": spell_pick['spell_level'],
                            "Targets": spell_pick['Targets']}
             else:
                 t_range = self.get_ranged_range()

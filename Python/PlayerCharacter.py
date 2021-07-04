@@ -278,7 +278,13 @@ class PlayerCharacter(Character):
                 spells = db.query(sql)
                 print(f"Spells found: {spells}")
                 for spell in spells:
-                    max_impact = self.get_max_impact(db=db, spell_name=spell[2], cast_at_level=spell[0])
+                    # if this is a cantrip (spell level 0), use the players level as casting level.
+                    if spell[0] == 0:
+                        cast_at_level = self.level
+                    else:
+                        cast_at_level = spell[0]
+
+                    max_impact = self.get_max_impact(db=db, spell_name=spell[2], cast_at_level=cast_at_level)
                     spell_ref_dict = {"category": spell[15],
                                           "source": "class",
                                           "id": spell[1],
@@ -1106,6 +1112,9 @@ if __name__ == '__main__':
                               class_candidate="Rogue",
                               level=3)
         print(a21.__repr__)
+        print(f"Player Name: {a21.get_name()}")
+        print(f"Player Class: {a21.get_race()}")
+        print(f"Player Class: {a21.get_class()}")
         print(f"Bonus Action Spell List: {a21.spell_list_bonus_action}")
         print(f"Action Spell List: {a21.spell_list_action}")
         print(f"Reaction Spell List: {a21.spell_list_reaction}")
@@ -1117,6 +1126,9 @@ if __name__ == '__main__':
                               class_candidate="Bard",
                               level=3)
         print(a22.__repr__)
+        print(f"Player Name: {a22.get_name()}")
+        print(f"Player Class: {a22.get_race()}")
+        print(f"Player Class: {a22.get_class()}")
         print(f"Bonus Action Spell List: {a22.spell_list_bonus_action}")
         print(f"Action Spell List: {a22.spell_list_action}")
         print(f"Reaction Spell List: {a22.spell_list_reaction}")
@@ -1130,13 +1142,25 @@ if __name__ == '__main__':
                                 targets=[dist_target],
                                 ranged_targets=[dist_target], touch_range_chums=[],
                                 touch_range_chums_in_need=[], touch_range_targets=[], chums=[dist_target_2])
-        print(f"action: {a22.get_action(d1)}")
+        a22_action = a22.get_action(d1)
+
+        print(f"action: {a22_action}")
+        if a22_action['Action'] == 'Spell':
+            print("Action returned a spell. Testing use accounting.")
+            print(f"Available slots at level {a22_action['spell_level']}: "
+                  f"{a22.available_spell_slots[a22_action['spell_level']]}")
+            a22.use_spell(a22_action['Specific_Name'],a22_action['spell_level'])
+            print(f"Available slots at level {a22_action['spell_level']}: "
+                  f"{a22.available_spell_slots[a22_action['spell_level']]}")
 
         a23 = PlayerCharacter(db=db, ctx=ctx,
                               ability_array_str="Common",
                               race_candidate="Wood elf",
                               class_candidate="Cleric")
         print(a23.__repr__)
+        print(f"Player Name: {a23.get_name()}")
+        print(f"Player Class: {a23.get_race()}")
+        print(f"Player Class: {a23.get_class()}")
 
         # a8 = PlayerCharacter(db=db, ctx=ctx,
         #                      ability_array_str="18,12,12,10,10,8",
