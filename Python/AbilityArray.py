@@ -1,6 +1,7 @@
 from Die import Die
 # from CommonFunctions import array_to_string, string_to_array
 from CommonFunctions import string_to_array
+from CommonFunctions import print_method_last_call_audit
 from Ctx import Ctx
 from Ctx import ctx_decorator
 
@@ -59,15 +60,20 @@ class AbilityArray(object):
                             "Mental acuity, info recall, analytical skill",
                             'Wisdom': "Awareness, intuition, insight",
                             'Charisma': "Confidence, eloquence, leadership"}
-        self.class_eval = []
+        # self.class_eval = []
         if self.pref_array:
             ignore_pref_array = False
         else:
             ignore_pref_array = True
-        self.class_eval.append({"array_type": array_type,
-                                "pref_array": pref_array,
-                                "ignore_pref_array": ignore_pref_array})
+
+
+        jdict = {"used_array_type": array_type,
+                 "used_pref_array": pref_array,
+                 "ignore_pref_array": ignore_pref_array}
+
         self._populate()
+        self.ctx.crumbs[-1].add_audit(json_dict=jdict)
+
 
     def add_method_last_call_audit(self, audit_obj):
         self.method_last_call_audit[audit_obj['methodName']] = audit_obj
@@ -115,7 +121,10 @@ class AbilityArray(object):
         # set the raw_array to whatever we started with for candidate values
         self.raw_array = self.candidate_array[:]
 
-        self.class_eval[-1]["raw_array"] = self.raw_array[:]
+        # self.class_eval[-1]["raw_array"] = self.raw_array[:]
+
+        jdict = {"raw_array": self.raw_array[:]}
+        self.ctx.crumbs[-1].add_audit(json_dict=jdict)
 
         self.set_ability_array()
 
@@ -175,14 +184,13 @@ class AbilityArray(object):
 
         self.pref_sorted_array = self.ability_array[:]
 
-        if "ability_base_array" in self.class_eval[-1]:
-            self.class_eval.append({"call": "set_ability_preferences"})
-
         self.numerical_sorted_array = self.candidate_array[:]
-        self.class_eval[-1]["numerical_sorted_array"] = self.candidate_array[:]
+        jdict = { "numerical_sorted_array": self.candidate_array[:]}
         if self.pref_array:
-            self.class_eval[-1]["preference_array"] = self.pref_array[:]
-        self.class_eval[-1]["ability_array"] = self.ability_array[:]
+            jdict["preference_array"] = self.pref_array[:]
+            jdict["ability_array"] = self.ability_array[:]
+
+        self.ctx.crumbs[-1].add_audit(json_dict=jdict)
 
     def get_raw_array(self):
         """
@@ -226,27 +234,29 @@ class AbilityArray(object):
         """
         return self.ability_dsc
 
-    def get_class_eval(self):
-        """
-        Return an array of lists that can be used for debugging/testing
-        """
-        return self.class_eval
+    # def get_class_eval(self):
+    #     """
+    #     Return an array of lists that can be used for debugging/testing
+    #     """
+    #     return self.class_eval
 
     @ctx_decorator
     def set_racial_array(self, bonus_array):
         self.racial_array = bonus_array
-        self.class_eval[-1]["racial_array"] = self.racial_array[:]
+        jdict = {"racial_array": self.racial_array[:]}
         self.set_ability_array()
+        self.ctx.crumbs[-1].add_audit(json_dict=jdict)
 
     @ctx_decorator
     def set_racial_adjustment(self):
         if self.ignore_racial_bonus:
-            self.class_eval[-1]["racial_adjustment"] = "Ignored"
+            jdict = {"racial_adjustment": "Ignored"}
         else:
             for pr in range(len(self.ability_array)):
                 self.ability_array[pr] = (
                     self.ability_array[pr] + self.racial_array[pr])
-            self.class_eval[-1]["racial_adjustment"] = self.ability_array[:]
+            jdict = {"racial_adjustment": self.ability_array[:]}
+        self.ctx.crumbs[-1].add_audit(json_dict=jdict)
 
     @ctx_decorator
     def ability_score_improvement(self):
@@ -265,8 +275,9 @@ class AbilityArray(object):
                     self.ability_imp_array[self.pref_array[pr]] = (
                         self.ability_imp_array[self.pref_array[pr]] + 1)
                     points = (points - 1)
-        self.class_eval[-1]["ability_level_changes"] = self.ability_imp_array[:]
-        self.class_eval[-1]["ability_improvement"] = self.ability_array[:]
+        jdict = {"ability_level_changes": self.ability_imp_array[:],
+                 "ability_improvement": self.ability_array[:]}
+        self.ctx.crumbs[-1].add_audit(json_dict=jdict)
 
 
 if __name__ == '__main__':
@@ -277,13 +288,9 @@ if __name__ == '__main__':
     print(a1.get_raw_array())
     print(a1.get_numerical_sorted_array())
     print(a1.get_array())
-    print(a1.get_class_eval())
-    x = a1.get_class_eval()
-    print("class eval:")
-    for r in range(len(x)):
-        for key, value in x[r].items():
-            print(f"{str(key).ljust(25)}: {value}")
-    print("end class eval")
+    print(a1.get_method_last_call_audit())
+    x = a1.get_method_last_call_audit()
+    print_method_last_call_audit(x=x)
 
     a = AbilityArray(ctx=ctx, array_type="Standard",
                      pref_array=string_to_array('5,0,2,1,4,3'),
@@ -291,22 +298,22 @@ if __name__ == '__main__':
     print(a.get_raw_array())
     print(a.get_pref_array())
     print(a.get_array())
-    print(a.get_class_eval()[-1])
-    print("class eval:")
-    for key, value in a.get_class_eval()[-1].items():
-        print(f"{str(key).ljust(25)}: {value}")
-    print("end class eval")
+    # print(a.get_class_eval()[-1])
+    # print("class eval:")
+    # for key, value in a.get_class_eval()[-1].items():
+    #     print(f"{str(key).ljust(25)}: {value}")
+    # print("end class eval")
     a2 = AbilityArray(ctx=ctx, array_type="Common",
                       pref_array=string_to_array('1,2,5,0,4,3'))
     a2.set_racial_array(bonus_array=string_to_array('0,2,1,0,0,0'))
     print(a2.get_raw_array())
     print(a2.get_pref_array())
     print(a2.get_array())
-    print(a2.get_class_eval()[-1])
-    print("class eval:")
-    for key, value in a2.get_class_eval()[-1].items():
-        print(f"{str(key).ljust(25)}: {value}")
-    print("end class eval")
+    # print(a2.get_class_eval()[-1])
+    # print("class eval:")
+    # for key, value in a2.get_class_eval()[-1].items():
+    #     print(f"{str(key).ljust(25)}: {value}")
+    # print("end class eval")
 
     b = AbilityArray(ctx=ctx, array_type="Strict",
                      pref_array=string_to_array('5,0,2,1,4,3'),
@@ -315,11 +322,11 @@ if __name__ == '__main__':
     print(b.get_raw_array())
     print(b.get_pref_array())
     print(b.get_array())
-    print(b.get_class_eval()[-1])
-    print("class eval:")
-    for key, value in b.get_class_eval()[-1].items():
-        print(f"{str(key).ljust(25)}: {value}")
-    print("end class eval")
+    # print(b.get_class_eval()[-1])
+    # print("class eval:")
+    # for key, value in b.get_class_eval()[-1].items():
+    #     print(f"{str(key).ljust(25)}: {value}")
+    # print("end class eval")
 
     b2 = AbilityArray(ctx=ctx, array_type="Predefined",
                       raw_array=string_to_array('6,6,6,6,6,6'),
@@ -329,8 +336,19 @@ if __name__ == '__main__':
     print(b2.get_raw_array())
     print(b2.get_pref_array())
     print(b2.get_array())
-    print(b2.get_class_eval()[-1])
-    print("class eval:")
-    for key, value in b2.get_class_eval()[-1].items():
-        print(f"{str(key).ljust(25)}: {value}")
-    print("end class eval")
+    # print(b2.get_class_eval()[-1])
+    # print("class eval:")
+    # for key, value in b2.get_class_eval()[-1].items():
+    #     print(f"{str(key).ljust(25)}: {value}")
+    # print("end class eval")
+
+    c2 = AbilityArray(ctx=ctx)
+    print(c2.get_raw_array())
+    print(c2.get_pref_array())
+    print(c2.get_array())
+    # print(c2.get_class_eval()[-1])
+    # print("class eval:")
+    # for key, value in c2.get_class_eval()[-1].items():
+    #     print(f"{str(key).ljust(25)}: {value}")
+    # print("end class eval")
+    print(c2.get_method_last_call_audit())

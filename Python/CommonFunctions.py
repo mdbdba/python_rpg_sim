@@ -172,3 +172,12 @@ def fix_date_for_json(o):
 
 def fix_dict_for_json(d):
     return json.loads(json.dumps(d, default=fix_date_for_json))
+
+def print_method_last_call_audit(x):
+    if x is not None:
+        print("Begin - method last call audit:")
+        for s in sorted(x.keys()):
+            print(f"\n\t{s}")
+            for r in x[s].keys():
+                print(f"\t\t{str(r).ljust(25)}: {x[s][r]}")
+        print("END - method last call audit:")

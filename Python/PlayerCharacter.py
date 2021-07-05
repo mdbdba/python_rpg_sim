@@ -1161,6 +1161,7 @@ if __name__ == '__main__':
         print(f"Player Name: {a23.get_name()}")
         print(f"Player Class: {a23.get_race()}")
         print(f"Player Class: {a23.get_class()}")
+        print(ctx.crumbs)
 
         # a8 = PlayerCharacter(db=db, ctx=ctx,
         #                      ability_array_str="18,12,12,10,10,8",
