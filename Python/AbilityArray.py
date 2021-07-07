@@ -50,6 +50,12 @@ class AbilityArray(object):
         self.pref_sorted_array = []
         self.ability_array = [0, 0, 0, 0, 0, 0]
         self.ability_imp_array = [0, 0, 0, 0, 0, 0]
+        self.const_array_standard = [15, 14, 13, 12, 10, 8]
+        self.const_array_point_buy_even = [13, 13, 13, 12, 12, 12]
+        self.const_array_point_buy_one_max = [15, 12, 12, 12, 11, 11]
+        self.const_array_point_buy_two_max = [15, 15, 11, 10, 10, 10]
+        self.const_array_point_buy_three_max = [15, 15, 15, 8, 8, 8]
+
         self.ability_label_array = ['Strength', 'Dexterity', 'Constitution',
                                     'Intelligence', 'Wisdom', 'Charisma']
         self.ability_dsc = {'Strength': "Natural athleticism, bodily power",
@@ -90,24 +96,24 @@ class AbilityArray(object):
         """
         Populate a candidate array of Ability Scores
         """
-        standard = [15, 14, 13, 12, 10, 8]
-        point_buy_even = [13, 13, 13, 12, 12, 12]
-        point_buy_one_max = [15, 12, 12, 12, 11, 11]
-        point_buy_two_max = [15, 15, 11, 10, 10, 10]
-        point_buy_three_max = [15, 15, 15, 8, 8, 8]
+        # standard = [15, 14, 13, 12, 10, 8]
+        # point_buy_even = [13, 13, 13, 12, 12, 12]
+        # point_buy_one_max = [15, 12, 12, 12, 11, 11]
+        # point_buy_two_max = [15, 15, 11, 10, 10, 10]
+        # point_buy_three_max = [15, 15, 15, 8, 8, 8]
 
         if self.array_type == "Predefined":
             self.candidate_array = self.raw_array
         elif self.array_type == "standard":
-            self.candidate_array = standard
+            self.candidate_array = self.const_array_standard
         elif self.array_type == "point_buy_even":
-            self.candidate_array = point_buy_even
+            self.candidate_array = self.const_array_point_buy_even
         elif self.array_type == "point_buy_one_max":
-            self.candidate_array = point_buy_one_max
+            self.candidate_array = self.const_array_point_buy_one_max
         elif self.array_type == "point_buy_two_max":
-            self.candidate_array = point_buy_two_max
+            self.candidate_array = self.const_array_point_buy_two_max
         elif self.array_type == "point_buy_three_max":
-            self.candidate_array = point_buy_three_max
+            self.candidate_array = self.const_array_point_buy_three_max
         else:
             d = Die(ctx=self.ctx, sides=6)
             for i in range(0, 6):
@@ -289,7 +295,9 @@ if __name__ == '__main__':
     print(a1.get_numerical_sorted_array())
     print(a1.get_array())
     print(a1.get_method_last_call_audit())
-    x = a1.get_method_last_call_audit()
+    x = a1.get_method_last_call_audit(method_name='__init__')
+    print(x)
+    print(x['audit_json']['used_array_type'])
     print_method_last_call_audit(x=x)
 
     a = AbilityArray(ctx=ctx, array_type="Standard",
@@ -352,3 +360,20 @@ if __name__ == '__main__':
     #     print(f"{str(key).ljust(25)}: {value}")
     # print("end class eval")
     print(c2.get_method_last_call_audit())
+
+
+
+    comp_array = [13, 13, 13, 12, 12, 12]
+    order_comp_array = [12, 12, 12, 13, 13, 13]
+    pref_array = [5, 4, 3, 0, 1, 2]
+    a = AbilityArray(ctx=ctx, array_type="point_buy_even", pref_array=pref_array)
+    b = a.const_array_point_buy_even
+    audit = a.get_method_last_call_audit()
+    assert(audit['__init__']['audit_json']['used_array_type'] == 'point_buy_even')
+    # for i in range(0, 6):
+    #     assert(comp_array[i] == b[i])
+    #     assert(comp_array[i] == b[audit['_populate']['audit_json']['raw_array'][i]]
+    print(audit['__init__']['audit_json'])
+    for i in range(0, 6):
+        print(f"{comp_array[i]} == {b[i]}")
+        print(f"{order_comp_array[i]} == {b[audit['__init__']['audit_json']['used_pref_array'][i]]}")
