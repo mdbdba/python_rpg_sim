@@ -89,7 +89,7 @@ def test_class_druid():
     assert(a.source_material == 'SRD5')
     assert(a.archetype_label == 'Druid Circle')
     assert(a.ranged_weapon is None)
-    assert(a.melee_weapon == "Scimitar")
+    assert(a.melee_weapon == "Club")
     assert(a.ranged_ammunition_type is None)
     assert(a.ranged_ammunition_amt == 0)
     assert(a.armor == "Leather")

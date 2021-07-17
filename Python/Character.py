@@ -1146,11 +1146,10 @@ class Character(object):
             attack_obj.attack_success = False
             self.stats.defense_successes += 1
 
-        # defense_roll: tuple = (attack_obj.natural_value, attack_obj.attack_modifier)
         defense_roll = PointInTimeDefense(round=attack_obj.encounter_round,
                                           turn=attack_obj.encounter_turn,
-                                          attacker_name=attack_obj.attacker_name_str,
-                                          target_name=attack_obj.target_name_str,
+                                          attacker_name=attack_obj.attacker.name_str,
+                                          target_name=attack_obj.target.name_str,
                                           attack_type=attack_obj.attack_type,
                                           attack_value=attack_obj.attack_value,
                                           armor_class=self.armor_class,

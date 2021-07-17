@@ -14,8 +14,10 @@ def test_Attack_with_Club():
     a = Weapon(db=db, ctx=ctx, name='Club')
     c = PlayerCharacter(ctx=ctx, db=db, race_candidate='Hill dwarf',
                         class_candidate='Fighter', ability_array_str='point_buy_even')
+    c.set_name_str(group_str="Heroes",index_position=0)
     d = PlayerCharacter(ctx=ctx, db=db, race_candidate='Hill dwarf',
                         class_candidate='Fighter', ability_array_str='point_buy_even')
+    d.set_name_str(group_str="Opponents",index_position=0)
     b = Attack(ctx=ctx, weapon_obj=a, attack_modifier=0,
                      damage_modifier=0,
                      attack_type='Melee', attacker=c,
@@ -34,8 +36,10 @@ def test_Attack_with_Spear():
     a = Weapon(db=db, ctx=ctx, name='Spear')
     c = PlayerCharacter(ctx=ctx, db=db, race_candidate='Hill dwarf',
                         class_candidate='Fighter', ability_array_str='point_buy_even')
+    c.set_name_str(group_str="Heroes",index_position=0)
     d = PlayerCharacter(ctx=ctx, db=db, race_candidate='Hill dwarf',
                         class_candidate='Fighter', ability_array_str='point_buy_even')
+    d.set_name_str(group_str="Opponents",index_position=0)
     b = Attack(ctx=ctx, weapon_obj=a, attack_modifier=0,
                damage_modifier=0,
                attack_type='Ranged', attacker=c,

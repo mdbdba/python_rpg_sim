@@ -6,6 +6,8 @@ from InvokePSQL import InvokePSQL    # NOQA
 from CommonFunctions import array_to_string, string_to_array    # NOQA
 from CommonFunctions import compare_arrays    # NOQA
 from Ctx import Ctx
+from Attack import Attack
+from Weapon import Weapon
 
 def test_Character_Default():
     db = InvokePSQL()
@@ -24,20 +26,20 @@ def test_Character_Default():
     assert(a1.get_hair_color())
     assert(a1.get_hair_type())
     assert(a1.get_eye_color())
-    assert(a1.blinded_ind is False)
-    assert(a1.charmed_ind is False)
-    assert(a1.deafened_ind is False)
-    assert(a1.fatigued_ind is False)
-    assert(a1.frightened_ind is False)
-    assert(a1.grappled_ind is False)
-    assert(a1.incapacitated_ind is False)
-    assert(a1.invisible_ind is False)
-    assert(a1.paralyzed_ind is False)
-    assert(a1.petrified_ind is False)
-    assert(a1.poisoned_ind is False)
-    assert(a1.prone_ind is False)
-    assert(a1.stunned_ind is False)
-    assert(a1.unconscious_ind is False)
+    assert(a1.check_condition('blind') is False)
+    assert(a1.check_condition('charmed') is False)
+    assert(a1.check_condition('deafened') is False)
+    assert(a1.check_condition('fatigued') is False)
+    assert(a1.check_condition('frightened') is False)
+    assert(a1.check_condition('grappled') is False)
+    assert(a1.check_condition('incapacitated') is False)
+    assert(a1.check_condition('invisible') is False)
+    assert(a1.check_condition('paralyzed') is False)
+    assert(a1.check_condition('petrified') is False)
+    assert(a1.check_condition('poisoned') is False)
+    assert(a1.check_condition('prone') is False)
+    assert(a1.check_condition('stunned') is False)
+    assert(a1.check_condition('unconscious') is False)
     assert(a1.exhaustion_level == 0)
     assert(a1.cur_movement > 10)
 
@@ -195,12 +197,20 @@ def test_Character_Death():
                          ability_array_str="18,12,12,10,10,8",
                          race_candidate="Mountain Dwarf",
                          class_candidate="Barbarian")
+    a2 = PlayerCharacter(db=db, ctx=ctx,
+                         ability_array_str="18,12,12,10,10,8",
+                         race_candidate="Mountain Dwarf",
+                         class_candidate="Barbarian")
+
+    w = Weapon(db=db, ctx=ctx, name='Club')
+    b = a2.default_melee_attack(ctx=ctx, target_name='bob', target=a1, attacker_id='H1')
     assert(a1)
     assert(a1.get_race() == "Mountain dwarf")
     assert(a1.get_class() == "Barbarian")
     assert(a1.class_obj.hit_die == 12)
-    a1.defend(modifier=13, possible_damage=a1.hit_points,
-              damage_type='Bludgeoning')
+    a1.defend(attack_obj=b)
+    if a1.cur_hit_points > 0:
+        a1.damage(amount=a1.cur_hit_points, damage_type='Bludgeoning')
 
     assert(a1.alive is True)
     assert(a1.stabilized is False)
@@ -208,8 +218,8 @@ def test_Character_Death():
     assert(a1.cur_hit_points == 11)
     assert(a1.alive is True)
     assert(a1.stabilized is True)
-    a1.defend(modifier=13, possible_damage=(2 * a1.hit_points),
-              damage_type='Bludgeoning')
+    a1.damage(amount=(2 * a1.hit_points), damage_type='Bludgeoning')
+    assert(a1.stabilized is False)
     assert(a1.alive is False)
 
 
