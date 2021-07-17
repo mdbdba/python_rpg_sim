@@ -952,4 +952,12 @@
            where id = 384;
         </sql>
     </changeSet>
+    <changeSet author="mdbdba" id="lu_spell_21">
+	    <createIndex schemaName="dnd_5e" 
+		    indexName="lu_spell_name_idx"
+		    tableName="lu_spell"
+		    unique="true">
+	    	<column name="name"/>
+            </createIndex>
+    </changeSet>
 </databaseChangeLog>
