@@ -102,4 +102,11 @@
           <column name="order_by" value="6"/>
         </insert>
     </changeSet>
+    <changeSet author="mdbdba" id="lu_class_spell_choice_defaults_3">
+       <sql splitStatements="true"
+             stripComments="true">update dnd_5e.lu_class_spell_choice_defaults set spell_name =
+           'Healing Word'
+           where class = 'Bard' and spell_level = 1 and order_by = 2;
+        </sql>
+    </changeSet>
 </databaseChangeLog>

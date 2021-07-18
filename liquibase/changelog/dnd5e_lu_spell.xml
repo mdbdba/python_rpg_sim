@@ -960,4 +960,9 @@
 	    	<column name="name"/>
             </createIndex>
     </changeSet>
+    <changeSet author="mdbdba" id="lu_spell_22">
+       <sql splitStatements="true"
+             stripComments="true">update dnd_5e.lu_spell set name = 'Healing Word' where id = 381;
+        </sql>
+    </changeSet>
 </databaseChangeLog>
