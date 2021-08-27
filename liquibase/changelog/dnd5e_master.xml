@@ -53,6 +53,7 @@
     <include file="dnd5e_character_request.xml"/>
     <include file="dnd5e_lu_racial_spell_choice_defaults.xml"/>
     <include file="dnd5e_lu_class_spell_choice_defaults.xml"/>
+    <include file="dnd5e_lu_animated_object_stats.xml"/>
     <includeAll path="licensedContent/"/>
     <includeAll path="myContent/"/>
 </databaseChangeLog>

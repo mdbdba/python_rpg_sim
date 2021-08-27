@@ -1,4 +1,4 @@
-version: '3'
+version: '3.7'
 
 services:
   pgs:
@@ -30,17 +30,17 @@ services:
     networks:
       - rpg
 
-  sim_graphql:
-    build: ./sim_graphql
-    container_name: sim_graphql
-    volumes:
-      - ./sim_graphql:/usr/src/app
-    ports:
-      - 7080:80
-    networks:
-      - rpg
-    depends_on:
-      - pgs
+  # sim_graphql:
+  #  build: ./sim_graphql
+  #  container_name: sim_graphql
+  #  volumes:
+  #    - ./sim_graphql:/usr/src/app
+  #  ports:
+  #    - 7080:80
+  #  networks:
+  #    - rpg
+  #  depends_on:
+  #    - pgs
 
  # How I set up mongo (used different passwords)
  #  https://dev.to/efe136/how-to-enable-mongodb-authentication-with-docker-compose-2nbp

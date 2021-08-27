@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet author="mdbdba" id="lu_animated_object_stats_1">
+        <createTable
+                schemaName="dnd_5e"
+                tableName="lu_animated_object_stats">
+            <column name="size" type="varchar(12)"/>
+            <column name="hit_points" type="int"/>
+            <column name="armor_class" type="smallint"/>
+            <column name="attack_bonus" type="smallint"/>
+            <column name="damage_modifier" type="smallint"/>
+            <column name="damage_die" type="smallint"/>
+            <column name="damage_adj" type="smallint"/>
+            <column name="strength" type="smallint"/>
+            <column name="dexterity" type="smallint"/>
+        </createTable>
+        <addPrimaryKey
+            columnNames="size"
+            constraintName="lu_animated_object_stats_pk"
+            schemaName="dnd_5e"
+            tableName="lu_animated_object_stats"/>
+        <insert schemaName="dnd_5e" tableName="lu_animated_object_stats">
+            <column name="size" value="Tiny"/>
+            <column name="hit_points" value="20"/>
+            <column name="armor_class" value="18"/>
+            <column name="attack_bonus" value="8" />
+            <column name="damage_modifier" value="1"/>
+            <column name="damage_die" value="4"/>
+            <column name="damage_adj" value="4"/>
+            <column name="strength" value="4"/>
+            <column name="dexterity" value="18"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_animated_object_stats">
+            <column name="size" value="Small"/>
+            <column name="hit_points" value="25"/>
+            <column name="armor_class" value="16"/>
+            <column name="attack_bonus" value="6" />
+            <column name="damage_modifier" value="1"/>
+            <column name="damage_die" value="8"/>
+            <column name="damage_adj" value="2"/>
+            <column name="strength" value="6"/>
+            <column name="dexterity" value="14"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_animated_object_stats">
+            <column name="size" value="Medium"/>
+            <column name="hit_points" value="40"/>
+            <column name="armor_class" value="13"/>
+            <column name="attack_bonus" value="5" />
+            <column name="damage_modifier" value="2"/>
+            <column name="damage_die" value="6"/>
+            <column name="damage_adj" value="1"/>
+            <column name="strength" value="10"/>
+            <column name="dexterity" value="12"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_animated_object_stats">
+            <column name="size" value="Large"/>
+            <column name="hit_points" value="50"/>
+            <column name="armor_class" value="10"/>
+            <column name="attack_bonus" value="6" />
+            <column name="damage_modifier" value="2"/>
+            <column name="damage_die" value="10"/>
+            <column name="damage_adj" value="2"/>
+            <column name="strength" value="14"/>
+            <column name="dexterity" value="10"/>
+        </insert>
+        <insert schemaName="dnd_5e" tableName="lu_animated_object_stats">
+            <column name="size" value="Huge"/>
+            <column name="hit_points" value="80"/>
+            <column name="armor_class" value="10"/>
+            <column name="attack_bonus" value="8" />
+            <column name="damage_modifier" value="2"/>
+            <column name="damage_die" value="12"/>
+            <column name="damage_adj" value="4"/>
+            <column name="strength" value="18"/>
+            <column name="dexterity" value="6"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>
