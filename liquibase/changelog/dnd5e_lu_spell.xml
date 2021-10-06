@@ -1843,5 +1843,242 @@
             <column name="general_category" value="hinder" />
         </insert>
     </changeSet>
+    <changeSet author="mdbdba" id="lu_spell_27">
+        <insert schemaName="dnd_5e" tableName="lu_spell">
+            <column name="id" value="546"/>
+            <column name="name" value="Hypnotic Pattern"/>
+            <column name="level" value="3"/>
+            <column name="school" value="Illusion" />
+            <column name="casting_time_amt" value="1" />
+            <column name="casting_time_uom" value="Action"/>
+            <column name="range_amt" value="120"/>
+            <column name="range_uom" value="Feet"/>
+            <column name="verbal_component_ind" value="false"/>
+            <column name="somatic_component_ind" value="true"/>
+            <column name="material_component_ind" value="true"/>
+            <column name="duration_amt" value="1"/>
+            <column name="duration_uom" value="Minute(s)"/>
+            <column name="concentration_ind" value="true"/>
+            <column name="description" value="You create a twisting pattern of colors that weaves through the air inside a 30-foot cube within range. The pattern appears for a moment and vanishes. Each creature in the area who sees the pattern must make a Wisdom saving throw. On a failed save, the creature becomes charmed for the duration. While charmed by this spell, the creature is incapacitated and has a speed of 0. The spell ends for an affected creature if it takes any damage or if someone else uses an action to shake the creature out of its stupor. Material Component: a glowing stick of incense or a crystal vial filled with phosphorescent material" />
+            <column name="save" value="Wisdom"/>
+            <column name="attack_roll_required_ind" value="false" />
+            <column name="save_outcome" value="NoEffect" />
+            <column name="general_category" value="hinder" />
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_spell">
+            <column name="id" value="553"/>
+            <column name="name" value="Insect Plague"/>
+            <column name="level" value="5"/>
+            <column name="school" value="Conjuration" />
+            <column name="casting_time_amt" value="1" />
+            <column name="casting_time_uom" value="Action"/>
+            <column name="range_amt" value="300"/>
+            <column name="range_uom" value="Feet"/>
+            <column name="range_aoe" value="Radius Sphere"/>
+            <column name="effect_size_amt" value="20"/>
+            <column name="effect_size_uom" value="Feet"/>
+            <column name="verbal_component_ind" value="true"/>
+            <column name="somatic_component_ind" value="true"/>
+            <column name="material_component_ind" value="true"/>
+            <column name="duration_amt" value="10"/>
+            <column name="duration_uom" value="Minute(s)"/>
+            <column name="concentration_ind" value="true"/>
+            <column name="description" value="Swarming, biting locusts fill a 20-foot radius sphere centered on a point you choose within range. The sphere spreads around corners. The sphere remains for the duration, and its area is lightly obscured. The sphere's area is difficult terrain. When the area appears, each creature in it must make a Constitution saving throw. A creature takes 4d10 piercing damage on a failed save, or half as much damage on a successful one. A creature must also make this saving throw when it enters the spell's area for the first time on a turn or ends its turn there. At Higher Levels. When you cast this spell using a spell slot of 6th level or higher, the damage increases by 1d10 for each slot level above 5th. Material Component: a few grains of sugar, some kernels of grain, and a smear of fat"/>
+            <column name="higher_level_cast" value="level:6,type:damage,additional:5d10|level:7,type:damage,additional:6d10|level:8,type:damage,additional:7d10|level:9,type:damage,additional:8d10"/>
+            <column name="save" value="Constitution"/>
+            <column name="attack_roll_required_ind" value="false" />
+            <column name="save_outcome" value="HalfPossible" />
+            <column name="general_category" value="hinder" />
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_spell">
+            <column name="id" value="560"/>
+            <column name="name" value="Levitate"/>
+            <column name="level" value="2"/>
+            <column name="school" value="Transmutation" />
+            <column name="casting_time_amt" value="1" />
+            <column name="casting_time_uom" value="Action"/>
+            <column name="range_amt" value="60"/>
+            <column name="range_uom" value="Feet"/>
+            <column name="verbal_component_ind" value="true"/>
+            <column name="somatic_component_ind" value="true"/>
+            <column name="material_component_ind" value="true"/>
+            <column name="duration_amt" value="10"/>
+            <column name="duration_uom" value="Minute(s)"/>
+            <column name="concentration_ind" value="true"/>
+            <column name="description" value="One creature or loose object of your choice that you can see within range rises vertically, up to 20 feet, and remains suspended there for the duration. The spell can levitate a target that weighs up to 500 pounds. An unwilling creature that succeeds on a Constitution saving throw is unaffected. The target can move only by pushing or pulling against a fixed object or surface within reach (such as a wall or a ceiling), which allows it to move as if it were climbing. You can change the target's altitude by up to 20 feet in either direction on your turn. If you are the target, you can move up or down as part of your move. Otherwise, you can use your action to move the target, which must remain within the spell's range. When the spell ends, the target floats gently to the ground if it is still aloft. Material Component: either a small leather loop or a piece of golden wire bent into a cup shape with a long shank on one end" />
+            <column name="save" value="Constitution"/>
+            <column name="attack_roll_required_ind" value="false" />
+            <column name="save_outcome" value="NoEffect" />
+            <column name="general_category" value="hinder" />
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_spell">
+            <column name="id" value="567"/>
+            <column name="name" value="Mage Armor"/>
+            <column name="level" value="1"/>
+            <column name="school" value="Abjuration" />
+            <column name="casting_time_amt" value="1" />
+            <column name="casting_time_uom" value="Action"/>
+            <column name="range_amt" value="1"/>
+            <column name="range_uom" value="Touch"/>
+            <column name="verbal_component_ind" value="true"/>
+            <column name="somatic_component_ind" value="true"/>
+            <column name="material_component_ind" value="true"/>
+            <column name="duration_amt" value="480"/>
+            <column name="duration_uom" value="Minute(s)"/>
+            <column name="concentration_ind" value="false"/>
+            <column name="description" value="You touch a willing creature who isn't wearing armor, and a protective magical force surrounds it until the spell ends. The target's base AC becomes 13 + its Dexterity modifier. The spell ends if the target dons armor or if you dismiss the spell as an action. Material Component: a piece of cured leather" />
+            <column name="attack_roll_required_ind" value="false" />
+            <column name="save_outcome" value="NoSave" />
+            <column name="general_category" value="help" />
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_spell">
+            <column name="id" value="572"/>
+            <column name="name" value="Magic Weapon"/>
+            <column name="level" value="2"/>
+            <column name="school" value="Transmutation" />
+            <column name="casting_time_amt" value="1" />
+            <column name="casting_time_uom" value="Bonus Action"/>
+            <column name="range_amt" value="1"/>
+            <column name="range_uom" value="Touch"/>
+            <column name="verbal_component_ind" value="true"/>
+            <column name="somatic_component_ind" value="true"/>
+            <column name="material_component_ind" value="false"/>
+            <column name="duration_amt" value="60"/>
+            <column name="duration_uom" value="Minute(s)"/>
+            <column name="concentration_ind" value="true"/>
+            <column name="description" value="You touch a nonmagical weapon. Until the spell ends, that weapon becomes a magic weapon with a +1 bonus to attack rolls and damage rolls. At Higher Levels. When you cast this spell using a spell slot of 4th level or higher, the bonus increases to +2. When you use a spell slot of 6th level or higher, the bonus increases to +3." />
+            <column name="higher_level_cast" value="level:6,type:bonus,additional:3"/>
+            <column name="attack_roll_required_ind" value="false" />
+            <column name="save_outcome" value="NoSave" />
+            <column name="general_category" value="help" />
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_spell">
+            <column name="id" value="697"/>
+            <column name="name" value="Major Image"/>
+            <column name="level" value="3"/>
+            <column name="school" value="Illusion" />
+            <column name="casting_time_amt" value="1" />
+            <column name="casting_time_uom" value="Action"/>
+            <column name="range_amt" value="120"/>
+            <column name="range_uom" value="Feet"/>
+            <column name="range_aoe" value="Cube"/>
+            <column name="effect_size_amt" value="20"/>
+            <column name="effect_size_uom" value="Feet"/>
+            <column name="verbal_component_ind" value="true"/>
+            <column name="somatic_component_ind" value="true"/>
+            <column name="material_component_ind" value="true"/>
+            <column name="duration_amt" value="10"/>
+            <column name="duration_uom" value="Minute(s)"/>
+            <column name="concentration_ind" value="true"/>
+            <column name="description" value="You create the image of an object, a creature, or some other visible phenomenon that is no larger than a 20-foot cube. The image appears at a spot that you can see within range and lasts for the duration. It seems completely real, including sounds, smells, and temperature appropriate to the thing depicted. You can't create sufficient heat or cold to cause damage, a sound loud enough to deal thunder damage or deafen a creature, or a smell that might sicken a creature (like a troglodyte's stench). As long as you are within range of the illusion, you can use your action to cause the image to move to any other spot within range. As the image changes location, you can alter its appearance so that its movements appear natural for the image. For example, if you create an image of a creature and move it, you can alter the image so that it appears to be walking. Similarly, you can cause the illusion to make different sounds at different times, even making it carry on a conversation, for example. Physical interaction with the image reveals it to be an illusion, because things can pass through it. A creature that uses its action to examine the image can determine that it is an illusion with a successful Intelligence (Investigation) check against your spell save DC. If a creature discerns the illusion for what it is, the creature can see through the image, and its other sensory qualities become faint to the creature. At Higher Levels. When you cast this spell using a spell slot of 6th level or higher, the spell lasts until dispelled, without requiring your concentration." />
+            <column name="higher_level_cast" value="level:6,type:concentration,change:false"/>
+            <column name="save" value="Investigation"/>
+            <column name="attack_roll_required_ind" value="false" />
+            <column name="save_outcome" value="NoEffect" />
+            <column name="general_category" value="hinder" />
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_spell">
+            <column name="id" value="698"/>
+            <column name="name" value="Mass Cure Wounds"/>
+            <column name="level" value="5"/>
+            <column name="school" value="Evocation" />
+            <column name="casting_time_amt" value="1" />
+            <column name="casting_time_uom" value="Action"/>
+            <column name="range_amt" value="60"/>
+            <column name="range_uom" value="Feet"/>
+            <column name="range_aoe" value="Radius Sphere"/>
+            <column name="effect_size_amt" value="30"/>
+            <column name="effect_size_uom" value="Feet"/>
+            <column name="verbal_component_ind" value="true"/>
+            <column name="somatic_component_ind" value="true"/>
+            <column name="material_component_ind" value="false"/>
+            <column name="duration_amt" value="1"/>
+            <column name="duration_uom" value="Instantaneous"/>
+            <column name="concentration_ind" value="false"/>
+            <column name="description" value="A wave of healing energy washes out from a point of your choice within range. Choose up to six creatures in a 30-foot radius sphere centered on that point. Each target regains hit points equal to 3d8 + your spellcasting ability modifier. This spell has no effect on undead or constructs. At Higher Levels. When you cast this spell using a spell slot of 6th level or higher, the healing increases by 1d8 for each slot level above 5th." />
+            <column name="higher_level_cast" value="level:6,type:healing,additional:4d8|level:7,type:healing,additional:5d8|level:8,type:healing,additional:6d8|level:9,type:healing,additional:7d8"/>
+            <column name="attack_roll_required_ind" value="false" />
+            <column name="save_outcome" value="NoSave" />
+            <column name="general_category" value="help" />
+        </insert>
+
+
+        <insert schemaName="dnd_5e" tableName="lu_spell">
+            <column name="id" value="575"/>
+            <column name="name" value="Mass Heal"/>
+            <column name="level" value="9"/>
+            <column name="school" value="Evocation" />
+            <column name="casting_time_amt" value="1" />
+            <column name="casting_time_uom" value="Action"/>
+            <column name="range_amt" value="60"/>
+            <column name="range_uom" value="Feet"/>
+            <column name="verbal_component_ind" value="true"/>
+            <column name="somatic_component_ind" value="true"/>
+            <column name="material_component_ind" value="False"/>
+            <column name="duration_amt" value="1"/>
+            <column name="duration_uom" value="Instantaneous"/>
+            <column name="concentration_ind" value="false"/>
+            <column name="description" value="A flood of healing energy flows from you into injured creatures around you. You restore up to 700 hit points, divided as you choose among any number of creatures that you can see within range. Creatures healed by this spell are also cured of all diseases and any effect making them blinded or deafened. This spell has no effect on undead or constructs."/>
+            <column name="attack_roll_required_ind" value="false" />
+            <column name="save_outcome" value="NoSave" />
+            <column name="general_category" value="help" />
+        </insert>
+
+
+        <insert schemaName="dnd_5e" tableName="lu_spell">
+            <column name="id" value="577"/>
+            <column name="name" value="Mass Suggestion"/>
+            <column name="level" value="6"/>
+            <column name="school" value="Enchantment" />
+            <column name="casting_time_amt" value="1" />
+            <column name="casting_time_uom" value="Action"/>
+            <column name="range_amt" value="60"/>
+            <column name="range_uom" value="Feet"/>
+            <column name="verbal_component_ind" value="true"/>
+            <column name="somatic_component_ind" value="false"/>
+            <column name="material_component_ind" value="true"/>
+            <column name="duration_amt" value="1440"/>
+            <column name="duration_uom" value="Minute(s)"/>
+            <column name="concentration_ind" value="false"/>
+            <column name="description" value="You suggest a course of activity (limited to a sentence or two) and magically influence up to twelve creatures of your choice that you can see within range and that can hear and understand you. Creatures that can't be charmed are immune to this effect. The suggestion must be worded in such a manner as to make the course of action sound reasonable. Asking the creature to stab itself, throw itself onto a spear, immolate itself, or do some other obviously harmful act automatically negates the effect of the spell. Each target must make a Wisdom saving throw. On a failed save, it pursues the course of action you described to the best of its ability. The suggested course of action can continue for the entire duration. If the suggested activity can be completed in a shorter time, the spell ends when the subject finishes what it was asked to do. You can also specify conditions that will trigger a special activity during the duration. For example, you might suggest that a group of soldiers give all their money to the first beggar they meet. If the condition isn't met before the spell ends, the activity isn't performed. If you or any of your companions damage a creature affected by this spell, the spell ends for that creature. At Higher Levels. When you cast this spell using a 7th-level spell slot, the duration is 10 days. When you use an 8th-level spell slot, the duration is 30 days. When you use a 9th-level spell slot, the duration is a year and a day. Material Component: a snake's tongue and either a bit of honeycomb or a drop of sweet oil" />
+            <column name="higher_level_cast" value="level:7,type:duration,additional:14400 Minute(s)"/>
+            <column name="save" value="Wisdom"/>
+            <column name="attack_roll_required_ind" value="false" />
+            <column name="save_outcome" value="NoEffect" />
+            <column name="general_category" value="hinder" />
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_spell">
+            <column name="id" value="582"/>
+            <column name="name" value="Meteor Swarm"/>
+            <column name="level" value="9"/>
+            <column name="school" value="Evocation" />
+            <column name="casting_time_amt" value="1" />
+            <column name="casting_time_uom" value="Action"/>
+            <column name="range_amt" value="5280"/>
+            <column name="range_uom" value="Feet"/>
+            <column name="range_aoe" value="Radius Sphere"/>
+            <column name="effect_size_amt" value="40"/>
+            <column name="effect_size_uom" value="Feet"/>
+            <column name="verbal_component_ind" value="true"/>
+            <column name="somatic_component_ind" value="true"/>
+            <column name="material_component_ind" value="False"/>
+            <column name="duration_amt" value="1"/>
+            <column name="duration_uom" value="Instantaneous"/>
+            <column name="concentration_ind" value="false"/>
+            <column name="description" value="Blazing orbs of fire plummet to the ground at four different points you can see within range. Each creature in a 40-foot radius sphere centered on each point you choose must make a Dexterity saving throw. The sphere spreads around corners. A creature takes 20d6 fire damage and 20d6 bludgeoning damage on a failed save, or half as much damage on a successful one. A creature in the area of more than one fiery burst is affected only once. The spell damages objects in the area and ignites flammable objects that aren't being worn or carried." />
+            <column name="save" value="Dexterity"/>
+            <column name="attack_roll_required_ind" value="false" />
+            <column name="save_outcome" value="HalfPossible" />
+            <column name="general_category" value="hinder" />
+        </insert>
+    </changeSet>
+
 
 </databaseChangeLog>
