@@ -2079,6 +2079,273 @@
             <column name="general_category" value="hinder" />
         </insert>
     </changeSet>
+    <changeSet author="mdbdba" id="lu_spell_28">
 
+        <insert schemaName="dnd_5e" tableName="lu_spell">
+            <column name="id" value="583"/>
+            <column name="name" value="Mind Blank"/>
+            <column name="level" value="8"/>
+            <column name="school" value="Abjuration" />
+            <column name="casting_time_amt" value="1" />
+            <column name="casting_time_uom" value="Action"/>
+            <column name="range_amt" value="1"/>
+            <column name="range_uom" value="Touch"/>
+            <column name="verbal_component_ind" value="true"/>
+            <column name="somatic_component_ind" value="true"/>
+            <column name="material_component_ind" value="False"/>
+            <column name="duration_amt" value="1440"/>
+            <column name="duration_uom" value="Minute(s)"/>
+            <column name="concentration_ind" value="false"/>
+            <column name="description" value="Until the spell ends, one willing creature you touch is immune to psychic damage, any effect that would sense its emotions or read its thoughts, divination spells, and the charmed condition. The spell even foils wish spells and spells or effects of similar power used to affect the target's mind or to gain information about the target."/>
+            <column name="attack_roll_required_ind" value="false" />
+            <column name="save_outcome" value="NoSave" />
+            <column name="general_category" value="help" />
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_spell">
+            <column name="id" value="587"/>
+            <column name="name" value="Misty Step"/>
+            <column name="level" value="2"/>
+            <column name="school" value="Conjuration" />
+            <column name="casting_time_amt" value="1" />
+            <column name="casting_time_uom" value="Bonus Action"/>
+            <column name="range_amt" value="1"/>
+            <column name="range_uom" value="Self"/>
+            <column name="verbal_component_ind" value="true"/>
+            <column name="somatic_component_ind" value="false"/>
+            <column name="material_component_ind" value="false"/>
+            <column name="duration_amt" value="1"/>
+            <column name="duration_uom" value="Instantaneous"/>
+            <column name="concentration_ind" value="false"/>
+            <column name="description" value="Briefly surrounded by silvery mist, you teleport up to 30 feet to an unoccupied space that you can see."/>
+            <column name="attack_roll_required_ind" value="false" />
+            <column name="save_outcome" value="NoSave" />
+            <column name="general_category" value="help" />
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_spell">
+            <column name="id" value="592"/>
+            <column name="name" value="Pass without Trace"/>
+            <column name="level" value="2"/>
+            <column name="school" value="Abjuration" />
+            <column name="casting_time_amt" value="1" />
+            <column name="casting_time_uom" value="Action"/>
+            <column name="range_amt" value="1"/>
+            <column name="range_uom" value="Self"/>
+            <column name="range_aoe" value="Radius Sphere"/>
+            <column name="effect_size_amt" value="30"/>
+            <column name="effect_size_uom" value="Feet"/>
+            <column name="verbal_component_ind" value="true"/>
+            <column name="somatic_component_ind" value="true"/>
+            <column name="material_component_ind" value="true"/>
+            <column name="duration_amt" value="60"/>
+            <column name="duration_uom" value="Minute(s)"/>
+            <column name="concentration_ind" value="true"/>
+            <column name="description" value="A veil of shadows and silence radiates from you, masking you and your companions from detection. For the duration, each creature you choose within 30 feet of you (including you) has a +10 bonus to Dexterity (Stealth) checks and can't be tracked except by magical means. A creature that receives this bonus leaves behind no tracks or other traces of its passage. Material Component: ashes from a burned leaf of mistletoe and a sprig of spruce"/>
+            <column name="attack_roll_required_ind" value="false" />
+            <column name="save_outcome" value="NoSave" />
+            <column name="general_category" value="help" />
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_spell">
+            <column name="id" value="598"/>
+            <column name="name" value="Plane Shift"/>
+            <column name="level" value="7"/>
+            <column name="school" value="Conjuration" />
+            <column name="casting_time_amt" value="1" />
+            <column name="casting_time_uom" value="Action"/>
+            <column name="range_amt" value="1"/>
+            <column name="range_uom" value="Touch"/>
+            <column name="verbal_component_ind" value="true"/>
+            <column name="somatic_component_ind" value="true"/>
+            <column name="material_component_ind" value="true"/>
+            <column name="duration_amt" value="1"/>
+            <column name="duration_uom" value="Instantaneous"/>
+            <column name="concentration_ind" value="false"/>
+            <column name="description" value="You and up to eight willing creatures who link hands in a circle are transported to a different plane of existence. You can specify a target destination in general terms, such as the City of Brass on the Elemental Plane of Fire or the palace of Dispater on the second level of the Nine Hells, and you appear in or near that destination. If you are trying to reach the City of Brass, for example, you might arrive in its Street of Steel, before its Gate of Ashes, or looking at the city from across the Sea of Fire, at the GM's discretion. Alternatively, if you know the sigil sequence of a teleportation circle on another plane of existence, this spell can take you to that circle. If the teleportation circle is too small to hold all the creatures you transported, they appear in the closest unoccupied spaces next to the circle. You can use this spell to banish an unwilling creature to another plane. Choose a creature within your reach and make a melee spell attack against it. On a hit, the creature must make a Charisma saving throw. If the creature fails this save, it is transported to a random location on the plane of existence you specify. A creature so transported must find its own way back to your current plane of existence. Material Component: a forked, metal rod worth at least 250 gp, attuned to a particular plane of existence" />
+            <column name="save" value="Charisma"/>
+            <column name="attack_roll_required_ind" value="true" />
+            <column name="save_outcome" value="NoEffect" />
+            <column name="general_category" value="hinder" />
+        </insert>
+
+
+        <insert schemaName="dnd_5e" tableName="lu_spell">
+            <column name="id" value="601"/>
+            <column name="name" value="Polymorph"/>
+            <column name="level" value="4"/>
+            <column name="school" value="Transmutation" />
+            <column name="casting_time_amt" value="1" />
+            <column name="casting_time_uom" value="Action"/>
+            <column name="range_amt" value="60"/>
+            <column name="range_uom" value="Feet"/>
+            <column name="verbal_component_ind" value="true"/>
+            <column name="somatic_component_ind" value="true"/>
+            <column name="material_component_ind" value="true"/>
+            <column name="duration_amt" value="60"/>
+            <column name="duration_uom" value="Minute(s)"/>
+            <column name="concentration_ind" value="true"/>
+            <column name="description" value="This spell transforms a creature that you can see within range into a new form. An unwilling creature must make a Wisdom saving throw to avoid the effect. The spell has no effect on a shapechanger or a creature with 0 hit points. The transformation lasts for the duration, or until the target drops to 0 hit points or dies. The new form can be any beast whose challenge rating is equal to or less than the target's (or the target's level, if it doesn't have a challenge rating). The target's game statistics, including mental ability scores, are replaced by the statistics of the chosen beast. It retains its alignment and personality. The target assumes the hit points of its new form. When it reverts to its normal form, the creature returns to the number of hit points it had before it transformed. If it reverts as a result of dropping to 0 hit points, any excess damage carries over to its normal form. As long as the excess damage doesn't reduce the creature's normal form to 0 hit points, it isn't knocked unconscious. The creature is limited in the actions it can perform by the nature of its new form, and it can't speak, cast spells, or take any other action that requires hands or speech. The target's gear melds into the new form. The creature can't activate, use, wield, or otherwise benefit from any of its equipment. Material Component: a caterpillar cocoon" />
+            <column name="save" value="Wisdom"/>
+            <column name="attack_roll_required_ind" value="false" />
+            <column name="save_outcome" value="NoEffect" />
+            <column name="general_category" value="hinder" />
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_spell">
+            <column name="id" value="602"/>
+            <column name="name" value="Power Word Kill"/>
+            <column name="level" value="9"/>
+            <column name="school" value="Enchantment" />
+            <column name="casting_time_amt" value="1" />
+            <column name="casting_time_uom" value="Action"/>
+            <column name="range_amt" value="60"/>
+            <column name="range_uom" value="Feet"/>
+            <column name="verbal_component_ind" value="true"/>
+            <column name="somatic_component_ind" value="false"/>
+            <column name="material_component_ind" value="false"/>
+            <column name="duration_amt" value="1"/>
+            <column name="duration_uom" value="Instantaneous"/>
+            <column name="concentration_ind" value="false"/>
+            <column name="description" value="You utter a word of power that can compel one creature you can see within range to die instantly. If the creature you choose has 100 hit points or fewer, it dies. Otherwise, the spell has no effect." />
+            <column name="attack_roll_required_ind" value="false" />
+            <column name="save_outcome" value="NoEffect" />
+            <column name="general_category" value="hinder" />
+        </insert>
+
+
+        <insert schemaName="dnd_5e" tableName="lu_spell">
+            <column name="id" value="603"/>
+            <column name="name" value="Power Word Stun"/>
+            <column name="level" value="8"/>
+            <column name="school" value="Enchantment" />
+            <column name="casting_time_amt" value="1" />
+            <column name="casting_time_uom" value="Action"/>
+            <column name="range_amt" value="60"/>
+            <column name="range_uom" value="Feet"/>
+            <column name="verbal_component_ind" value="true"/>
+            <column name="somatic_component_ind" value="false"/>
+            <column name="material_component_ind" value="false"/>
+            <column name="duration_amt" value="1"/>
+            <column name="duration_uom" value="Instantaneous"/>
+            <column name="concentration_ind" value="false"/>
+            <column name="description" value="You speak a word of power that can overwhelm the mind of one creature you can see within range, leaving it dumbfounded. If the target has 150 hit points or fewer, it is stunned. Otherwise, the spell has no effect. The stunned target must make a Constitution saving throw at the end of each of its turns. On a successful save, this stunning effect ends." />
+            <column name="save" value="Constitution"/>
+            <column name="attack_roll_required_ind" value="false" />
+            <column name="save_outcome" value="SpellEnds" />
+            <column name="general_category" value="hinder" />
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_spell">
+            <column name="id" value="609"/>
+            <column name="name" value="Produce Flame"/>
+            <column name="level" value="0"/>
+            <column name="school" value="Conjuration" />
+            <column name="casting_time_amt" value="1" />
+            <column name="casting_time_uom" value="Action"/>
+            <column name="range_amt" value="1"/>
+            <column name="range_uom" value="Self"/>
+            <column name="verbal_component_ind" value="true"/>
+            <column name="somatic_component_ind" value="true"/>
+            <column name="material_component_ind" value="False"/>
+            <column name="duration_amt" value="10"/>
+            <column name="duration_uom" value="Minute(s)"/>
+            <column name="concentration_ind" value="false"/>
+            <column name="description" value="A flickering flame appears in your hand. The flame remains there for the duration and harms neither you nor your equipment. The flame sheds bright light in a 10-foot radius and dim light for an additional 10 feet. The spell ends if you dismiss it as an action or if you cast it again. You can also attack with the flame, although doing so ends the spell. When you cast this spell, or as an action on a later turn, you can hurl the flame at a creature within 30 feet of you. Make a ranged spell attack. On a hit, the target takes 1d8 fire damage. This spell's damage increases by 1d8 when you reach 5th level (2d8), 11th level (3d8), and 17th level (4d8)." />
+            <column name="higher_level_cast" value="level:5,type:damage,additional:2d8|level:11,type:damage,additional:3d8|level:17,type:damage,additional:4d8"/>
+            <column name="attack_roll_required_ind" value="true" />
+            <column name="save_outcome" value="NoSave" />
+            <column name="general_category" value="hinder" />
+        </insert>
+
+
+        <insert schemaName="dnd_5e" tableName="lu_spell">
+            <column name="id" value="616"/>
+            <column name="name" value="Raise Dead"/>
+            <column name="level" value="5"/>
+            <column name="school" value="Necromancy" />
+            <column name="casting_time_amt" value="1" />
+            <column name="casting_time_uom" value="Hour(s)"/>
+            <column name="range_amt" value="1"/>
+            <column name="range_uom" value="Touch"/>
+            <column name="verbal_component_ind" value="true"/>
+            <column name="somatic_component_ind" value="true"/>
+            <column name="material_component_ind" value="true"/>
+            <column name="duration_amt" value="1"/>
+            <column name="duration_uom" value="Instantaneous"/>
+            <column name="concentration_ind" value="false"/>
+            <column name="description" value="You return a dead creature you touch to life, provided that it has been dead no longer than 10 days. If the creature's soul is both willing and at liberty to rejoin the body, the creature returns to life with 1 hit point. This spell also neutralizes any poisons and cures nonmagical diseases that affected the creature at the time it died. This spell doesn't, however, remove magical diseases, curses, or similar effects; if these aren't first removed prior to casting the spell, they take effect when the creature returns to life. The spell can't return an undead creature to life. This spell closes all mortal wounds, but it doesn't restore missing body parts. If the creature is lacking body parts or organs integral for its survival-its head, for instance-the spell automatically fails. Coming back from the dead is an ordeal. The target takes a -4 penalty to all attack rolls, saving throws, and ability checks. Every time the target finishes a long rest, the penalty is reduced by 1 until it disappears. Material Component: a diamond worth at least 500 gp, which the spell consumes" />
+            <column name="attack_roll_required_ind" value="false" />
+            <column name="save_outcome" value="NoSave" />
+            <column name="general_category" value="help" />
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_spell">
+            <column name="id" value="624"/>
+            <column name="name" value="Resurrection"/>
+            <column name="level" value="7"/>
+            <column name="school" value="Necromancy" />
+            <column name="casting_time_amt" value="1" />
+            <column name="casting_time_uom" value="Hour(s)"/>
+            <column name="range_amt" value="1"/>
+            <column name="range_uom" value="Touch"/>
+            <column name="verbal_component_ind" value="true"/>
+            <column name="somatic_component_ind" value="true"/>
+            <column name="material_component_ind" value="true"/>
+            <column name="duration_amt" value="1"/>
+            <column name="duration_uom" value="Instantaneous"/>
+            <column name="concentration_ind" value="false"/>
+            <column name="description" value="You touch a dead creature that has been dead for no more than a century, that didn't die of old age, and that isn't undead. If its soul is free and willing, the target returns to life with all its hit points. This spell neutralizes any poisons and cures normal diseases afflicting the creature when it died. It doesn't, however, remove magical diseases, curses, and the like; if such effects aren't removed prior to casting the spell, they afflict the target on its return to life. This spell closes all mortal wounds and restores any missing body parts. Coming back from the dead is an ordeal. The target takes a -4 penalty to all attack rolls, saving throws, and ability checks. Every time the target finishes a long rest, the penalty is reduced by 1 until it disappears. Casting this spell to restore life to a creature that has been dead for one year or longer taxes you greatly. Until you finish a long rest, you can't cast spells again, and you have disadvantage on all attack rolls, ability checks, and saving throws. Material Component: a diamond worth at least 1,000 gp, which the spell consumes" />
+            <column name="attack_roll_required_ind" value="false" />
+            <column name="save_outcome" value="NoSave" />
+            <column name="general_category" value="help" />
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_spell">
+            <column name="id" value="625"/>
+            <column name="name" value="Reverse Gravity"/>
+            <column name="level" value="7"/>
+            <column name="school" value="Transmutation" />
+            <column name="casting_time_amt" value="1" />
+            <column name="casting_time_uom" value="Action"/>
+            <column name="range_amt" value="100"/>
+            <column name="range_uom" value="Feet"/>
+            <column name="range_aoe" value="Cylinder"/>
+            <column name="effect_size_amt" value="50"/>
+            <column name="effect_size_uom" value="Feet"/>
+            <column name="verbal_component_ind" value="true"/>
+            <column name="somatic_component_ind" value="true"/>
+            <column name="material_component_ind" value="true"/>
+            <column name="duration_amt" value="1"/>
+            <column name="duration_uom" value="Minute(s)"/>
+            <column name="concentration_ind" value="true"/>
+            <column name="description" value="This spell reverses gravity in a 50-foot radius, 100-foot high cylinder centered on a point within range. All creatures and objects that aren't somehow anchored to the ground in the area fall upward and reach the top of the area when you cast this spell. A creature can make a Dexterity saving throw to grab onto a fixed object it can reach, thus avoiding the fall. If some solid object (such as a ceiling) is encountered in this fall, falling objects and creatures strike it just as they would during a normal downward fall. If an object or creature reaches the top of the area without striking anything, it remains there, oscillating slightly, for the duration. At the end of the duration, affected objects and creatures fall back down. Material Component: a lodestone and iron filings" />
+            <column name="attack_roll_required_ind" value="false" />
+            <column name="save_outcome" value="NoSave" />
+            <column name="general_category" value="hinder" />
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_spell">
+            <column name="id" value="626"/>
+            <column name="name" value="Revivify"/>
+            <column name="level" value="3"/>
+            <column name="school" value="Necromancy" />
+            <column name="casting_time_amt" value="1" />
+            <column name="casting_time_uom" value="Action"/>
+            <column name="range_amt" value="1"/>
+            <column name="range_uom" value="Touch"/>
+            <column name="verbal_component_ind" value="true"/>
+            <column name="somatic_component_ind" value="true"/>
+            <column name="material_component_ind" value="true"/>
+            <column name="duration_amt" value="1"/>
+            <column name="duration_uom" value="Instantaneous"/>
+            <column name="concentration_ind" value="false"/>
+            <column name="description" value="You touch a creature that has died within the last minute. That creature returns to life with 1 hit point. This spell can't return to life a creature that has died of old age, nor can it restore any missing body parts. Material Component: diamonds worth 300 gp, which the spell consumes" />
+            <column name="attack_roll_required_ind" value="false" />
+            <column name="save_outcome" value="NoSave" />
+            <column name="general_category" value="hinder" />
+        </insert>
+
+    </changeSet>
 
 </databaseChangeLog>
