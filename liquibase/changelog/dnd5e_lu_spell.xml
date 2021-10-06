@@ -1397,6 +1397,451 @@
             <column name="save_outcome" value="NoEffect" />
             <column name="general_category" value="hinder" />
         </insert>
-
     </changeSet>
+    <changeSet author="mdbdba" id="lu_spell_25">
+        <insert schemaName="dnd_5e" tableName="lu_spell">
+            <column name="id" value="495"/>
+            <column name="name" value="Fear"/>
+            <column name="level" value="3"/>
+            <column name="school" value="Illusion" />
+            <column name="casting_time_amt" value="1" />
+            <column name="casting_time_uom" value="Action"/>
+            <column name="range_amt" value="1"/>
+            <column name="range_uom" value="Self"/>
+            <column name="range_aoe" value="Cone"/>
+            <column name="effect_size_amt" value="30"/>
+            <column name="effect_size_uom" value="Feet"/>
+            <column name="verbal_component_ind" value="true"/>
+            <column name="somatic_component_ind" value="true"/>
+            <column name="material_component_ind" value="true"/>
+            <column name="duration_amt" value="1"/>
+            <column name="duration_uom" value="Minute(s)"/>
+            <column name="concentration_ind" value="true"/>
+            <column name="description" value="You project a phantasmal image of a creature's worst fears. Each creature in a 30-foot cone must succeed on a Wisdom saving throw or drop whatever it is holding and become frightened for the duration. While frightened by this spell, a creature must take the Dash action and move away from you by the safest available route on each of its turns, unless there is nowhere to move. If the creature ends its turn in a location where it doesn't have line of sight to you, the creature can make a Wisdom saving throw. On a successful save, the spell ends for that creature. Material Component: a white feather or the heart of a hen" />
+            <column name="save" value="Wisdom"/>
+            <column name="attack_roll_required_ind" value="false" />
+            <column name="save_outcome" value="NoEffect" />
+            <column name="general_category" value="hinder" />
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_spell">
+            <column name="id" value="497"/>
+            <column name="name" value="Feeblemind"/>
+            <column name="level" value="8"/>
+            <column name="school" value="Enchantment" />
+            <column name="casting_time_amt" value="1" />
+            <column name="casting_time_uom" value="Action"/>
+            <column name="range_amt" value="150"/>
+            <column name="range_uom" value="Feet"/>
+            <column name="verbal_component_ind" value="true"/>
+            <column name="somatic_component_ind" value="true"/>
+            <column name="material_component_ind" value="true"/>
+            <column name="duration_amt" value="1"/>
+            <column name="duration_uom" value="Instantaneous"/>
+            <column name="concentration_ind" value="false"/>
+            <column name="description" value="You blast the mind of a creature that you can see within range, attempting to shatter its intellect and personality. The target takes 4d6 psychic damage and must make an Intelligence saving throw. On a failed save, the creature's Intelligence and Charisma scores become 1. The creature can't cast spells, activate magic items, understand language, or communicate in any intelligible way. The creature can, however, identify its friends, follow them, and even protect them. At the end of every 30 days, the creature can repeat its saving throw against this spell. If it succeeds on its saving throw, the spell ends. The spell can also be ended by greater restoration, heal, or wish. Material Component: a handful of clay, crystal, glass, or mineral spheres" />
+            <column name="save" value="Intelligence"/>
+            <column name="attack_roll_required_ind" value="false" />
+            <column name="save_outcome" value="NoEffect" />
+            <column name="general_category" value="hinder" />
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_spell">
+            <column name="id" value="498"/>
+            <column name="name" value="Find Familiar"/>
+            <column name="level" value="1"/>
+            <column name="school" value="Conjuration" />
+            <column name="casting_time_amt" value="1" />
+            <column name="casting_time_uom" value="Hour(s)"/>
+            <column name="range_amt" value="10"/>
+            <column name="range_uom" value="Feet"/>
+            <column name="verbal_component_ind" value="true"/>
+            <column name="somatic_component_ind" value="true"/>
+            <column name="material_component_ind" value="true"/>
+            <column name="duration_amt" value="1"/>
+            <column name="duration_uom" value="Instantaneous"/>
+            <column name="concentration_ind" value="false"/>
+            <column name="description" value="You gain the service of a familiar, a spirit that takes an animal form you choose: bat, cat, crab, frog (toad), hawk, lizard, octopus, owl, poisonous snake, fish (quipper), rat, raven, sea horse, spider, or weasel. Appearing in an unoccupied space within range, the familiar has the statistics of the chosen form, though it is a celestial, fey, or fiend (your choice) instead of a beast. Your familiar acts independently of you, but it always obeys your commands. In combat, it rolls its own initiative and acts on its own turn. A familiar can't attack, but it can take other actions as normal. When the familiar drops to 0 hit points, it disappears, leaving behind no physical form. It reappears after you cast this spell again. While your familiar is within 100 feet of you, you can communicate with it telepathically. Additionally, as an action, you can see through your familiar's eyes and hear what it hears until the start of your next turn, gaining the benefits of any special senses that the familiar has. During this time, you are deaf and blind with regard to your own senses. As an action, you can temporarily dismiss your familiar. It disappears into a pocket dimension where it awaits your summons. Alternatively, you can dismiss it forever. As an action while it is temporarily dismissed, you can cause it to reappear in any unoccupied space within 30 feet of you. You can't have more than one familiar at a time. If you cast this spell while you already have a familiar, you instead cause it to adopt a new form. Choose one of the forms from the above list. Your familiar transforms into the chosen creature. Finally, when you cast a spell with a range of touch, your familiar can deliver the spell as if it had cast the spell. Your familiar must be within 100 feet of you, and it must use its reaction to deliver the spell when you cast it. If the spell requires an attack roll, you use your attack modifier for the roll. Material Component: 10 gp worth of charcoal, incense, and herbs that must be consumed by fire in a brass brazier" />
+            <column name="attack_roll_required_ind" value="false" />
+            <column name="save_outcome" value="NoSave" />
+            <column name="general_category" value="help" />
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_spell">
+            <column name="id" value="499"/>
+            <column name="name" value="Find Steed"/>
+            <column name="level" value="2"/>
+            <column name="school" value="Conjuration" />
+            <column name="casting_time_amt" value="10" />
+            <column name="casting_time_uom" value="Minute(s)"/>
+            <column name="range_amt" value="30"/>
+            <column name="range_uom" value="Feet"/>
+            <column name="verbal_component_ind" value="true"/>
+            <column name="somatic_component_ind" value="true"/>
+            <column name="material_component_ind" value="False"/>
+            <column name="duration_amt" value="1"/>
+            <column name="duration_uom" value="Instantaneous"/>
+            <column name="concentration_ind" value="false"/>
+            <column name="description" value="You summon a spirit that assumes the form of an unusually intelligent, strong, and loyal steed, creating a long-lasting bond with it. Appearing in an unoccupied space within range, the steed takes on a form that you choose: a warhorse, a pony, a camel, an elk, or a mastiff. (Your GM might allow other animals to be summoned as steeds.) The steed has the statistics of the chosen form, though it is a celestial, fey, or fiend (your choice) instead of its normal type. Additionally, if your steed has an Intelligence of 5 or less, its Intelligence becomes 6, and it gains the ability to understand one language of your choice that you speak. Your steed serves you as a mount, both in combat and out, and you have an instinctive bond with it that allows you to fight as a seamless unit. While mounted on your steed, you can make any spell you cast that targets only you also target your steed. When the steed drops to 0 hit points, it disappears, leaving behind no physical form. You can also dismiss your steed at any time as an action, causing it to disappear. In either case, casting this spell again summons the same steed, restored to its hit point maximum. While your steed is within 1 mile of you, you can communicate with each other telepathically. You can't have more than one steed bonded by this spell at a time. As an action, you can release the steed from its bond at any time, causing it to disappear." />
+            <column name="attack_roll_required_ind" value="false" />
+            <column name="save_outcome" value="NoSave" />
+            <column name="general_category" value="help" />
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_spell">
+            <column name="id" value="502"/>
+            <column name="name" value="Finger of Death"/>
+            <column name="level" value="7"/>
+            <column name="school" value="Necromancy" />
+            <column name="casting_time_amt" value="1" />
+            <column name="casting_time_uom" value="Action"/>
+            <column name="range_amt" value="60"/>
+            <column name="range_uom" value="Feet"/>
+            <column name="verbal_component_ind" value="true"/>
+            <column name="somatic_component_ind" value="true"/>
+            <column name="material_component_ind" value="False"/>
+            <column name="duration_amt" value="1"/>
+            <column name="duration_uom" value="Instantaneous"/>
+            <column name="concentration_ind" value="false"/>
+            <column name="description" value="You send negative energy coursing through a creature that you can see within range, causing it searing pain. The target must make a Constitution saving throw. It takes 7d8 + 30 necrotic damage on a failed save, or half as much damage on a successful one. A humanoid killed by this spell rises at the start of your next turn as a zombie that is permanently under your command, following your verbal orders to the best of its ability." />
+            <column name="save" value="Constitution"/>
+            <column name="attack_roll_required_ind" value="false" />
+            <column name="save_outcome" value="NoEffect" />
+            <column name="general_category" value="hinder" />
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_spell">
+            <column name="id" value="503"/>
+            <column name="name" value="Fireball"/>
+            <column name="level" value="3"/>
+            <column name="school" value="Evocation" />
+            <column name="casting_time_amt" value="1" />
+            <column name="casting_time_uom" value="Action"/>
+            <column name="range_amt" value="150"/>
+            <column name="range_uom" value="Feet"/>
+            <column name="verbal_component_ind" value="true"/>
+            <column name="somatic_component_ind" value="true"/>
+            <column name="material_component_ind" value="true"/>
+            <column name="duration_amt" value="1"/>
+            <column name="duration_uom" value="Instantaneous"/>
+            <column name="concentration_ind" value="false"/>
+            <column name="description" value="A bright streak flashes from your pointing finger to a point you choose within range and then blossoms with a low roar into an explosion of flame. Each creature in a 20-foot radius sphere centered on that point must make a Dexterity saving throw. A target takes 8d6 fire damage on a failed save, or half as much damage on a successful one. The fire spreads around corners. It ignites flammable objects in the area that aren't being worn or carried. At Higher Levels. When you cast this spell using a spell slot of 4th level or higher, the damage increases by 1d6 for each slot level above 3rd. Material Component: a tiny ball of bat guano and sulfur" />
+            <column name="higher_level_cast" value="level:4,type:damage,additional:9d6|level:5,type:damage,additional:10d6|level:6,type:damage,additional:11d6|level:7,type:damage,additional:12d6|level:8,type:damage,additional:13d6|level:9,type:damage,additional:14d6"/>
+            <column name="save" value="Dexterity"/>
+            <column name="attack_roll_required_ind" value="false" />
+            <column name="save_outcome" value="HalfPossible" />
+            <column name="general_category" value="hinder" />
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_spell">
+            <column name="id" value="508"/>
+            <column name="name" value="Flaming Sphere"/>
+            <column name="level" value="2"/>
+            <column name="school" value="Conjuration" />
+            <column name="casting_time_amt" value="1" />
+            <column name="casting_time_uom" value="Action"/>
+            <column name="range_amt" value="60"/>
+            <column name="range_uom" value="Feet"/>
+            <column name="verbal_component_ind" value="true"/>
+            <column name="somatic_component_ind" value="true"/>
+            <column name="material_component_ind" value="true"/>
+            <column name="duration_amt" value="1"/>
+            <column name="duration_uom" value="Minute(s)"/>
+            <column name="concentration_ind" value="true"/>
+            <column name="description" value="A 5-foot diameter sphere of fire appears in an unoccupied space of your choice within range and lasts for the duration. Any creature that ends its turn within 5 feet of the sphere must make a Dexterity saving throw. The creature takes 2d6 fire damage on a failed save, or half as much damage on a successful one. As a bonus action, you can move the sphere up to 30 feet. If you ram the sphere into a creature, that creature must make the saving throw against the sphere's damage, and the sphere stops moving this turn. When you move the sphere, you can direct it over barriers up to 5 feet tall and jump it across pits up to 10 feet wide. The sphere ignites flammable objects not being worn or carried, and it sheds bright light in a 20-foot radius and dim light for an additional 20 feet. At Higher Levels. When you cast this spell using a spell slot of 3rd level or higher, the damage increases by 1d6 for each slot level above 2nd. Material Component: a bit of tallow, a pinch of brimstone, and a dusting of powdered iron"/>
+            <column name="higher_level_cast" value="level:3,type:damage,additional:3d6|level:4,type:damage,additional:4d6|level:5,type:damage,additional:5d6|level:6,type:damage,additional:6d6|level:7,type:damage,additional:7d6|level:8,type:damage,additional:8d6|level:9,type:damage,additional:9d6"/>
+            <column name="save" value="Dexterity"/>
+            <column name="attack_roll_required_ind" value="false" />
+            <column name="save_outcome" value="HalfPossible" />
+            <column name="general_category" value="hinder" />
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_spell">
+            <column name="id" value="514"/>
+            <column name="name" value="Forcecage"/>
+            <column name="level" value="7"/>
+            <column name="school" value="Evocation" />
+            <column name="casting_time_amt" value="1" />
+            <column name="casting_time_uom" value="Action"/>
+            <column name="range_amt" value="100"/>
+            <column name="range_uom" value="Feet"/>
+            <column name="verbal_component_ind" value="true"/>
+            <column name="somatic_component_ind" value="true"/>
+            <column name="material_component_ind" value="true"/>
+            <column name="duration_amt" value="60"/>
+            <column name="duration_uom" value="Minute(s)"/>
+            <column name="concentration_ind" value="false"/>
+            <column name="description" value="An immobile, invisible, cube-shaped prison composed of magical force springs into existence around an area you choose within range. The prison can be a cage or a solid box, as you choose. A prison in the shape of a cage can be up to 20 feet on a side and is made from 1/2-inch diameter bars spaced 1/2 inch apart. A prison in the shape of a box can be up to 10 feet on a side, creating a solid barrier that prevents any matter from passing through it and blocking any spells cast into or out from the area. When you cast the spell, any creature that is completely inside the cage's area is trapped. Creatures only partially within the area, or those too large to fit inside the area, are pushed away from the center of the area until they are completely outside the area. A creature inside the cage can't leave it by nonmagical means. If the creature tries to use teleportation or interplanar travel to leave the cage, it must first make a Charisma saving throw. On a success, the creature can use that magic to exit the cage. On a failure, the creature can't exit the cage and wastes the use of the spell or effect. The cage also extends into the Ethereal Plane, blocking ethereal travel. This spell can't be dispelled by dispel magic. Material Component: ruby dust worth 1,500 gp" />
+            <column name="save" value="Charisma"/>
+            <column name="attack_roll_required_ind" value="false" />
+            <column name="save_outcome" value="SpellEnds" />
+            <column name="general_category" value="hinder" />
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_spell">
+            <column name="id" value="515"/>
+            <column name="name" value="Foresight"/>
+            <column name="level" value="9"/>
+            <column name="school" value="Divination" />
+            <column name="casting_time_amt" value="1" />
+            <column name="casting_time_uom" value="Minute(s)"/>
+            <column name="range_amt" value="1"/>
+            <column name="range_uom" value="Touch"/>
+            <column name="verbal_component_ind" value="true"/>
+            <column name="somatic_component_ind" value="true"/>
+            <column name="material_component_ind" value="true"/>
+            <column name="duration_amt" value="480"/>
+            <column name="duration_uom" value="Minute(s)"/>
+            <column name="concentration_ind" value="false"/>
+            <column name="description" value="You touch a willing creature and bestow a limited ability to see into the immediate future. For the duration, the target can't be surprised and has advantage on attack rolls, ability checks, and saving throws. Additionally, other creatures have disadvantage on attack rolls against the target for the duration. This spell immediately ends if you cast it again before its duration ends. Material Component: a hummingbird feather" />
+            <column name="attack_roll_required_ind" value="false" />
+            <column name="save_outcome" value="NoSave" />
+            <column name="general_category" value="help" />
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_spell">
+            <column name="id" value="525"/>
+            <column name="name" value="Globe of Invulnerability"/>
+            <column name="level" value="6"/>
+            <column name="school" value="Abjuration" />
+            <column name="casting_time_amt" value="1" />
+            <column name="casting_time_uom" value="Action"/>
+            <column name="range_amt" value="1"/>
+            <column name="range_uom" value="Self"/>
+            <column name="range_aoe" value="Radius"/>
+            <column name="effect_size_amt" value="10"/>
+            <column name="effect_size_uom" value="Feet"/>
+            <column name="verbal_component_ind" value="true"/>
+            <column name="somatic_component_ind" value="true"/>
+            <column name="material_component_ind" value="true"/>
+            <column name="duration_amt" value="1"/>
+            <column name="duration_uom" value="Minute(s)"/>
+            <column name="concentration_ind" value="true"/>
+            <column name="description" value="An immobile, faintly shimmering barrier springs into existence in a 10-foot radius around you and remains for the duration. Any spell of 5th level or lower cast from outside the barrier can't affect creatures or objects within it, even if the spell is cast using a higher level spell slot. Such a spell can target creatures and objects within the barrier, but the spell has no effect on them. Similarly, the area within the barrier is excluded from the areas affected by such spells. At Higher Levels. When you cast this spell using a spell slot of 7th level or higher, the barrier blocks spells of one level higher for each slot level above 6th. Material Component: a glass or crystal bead that shatters when the spell ends" />
+            <column name="attack_roll_required_ind" value="false" />
+            <column name="save_outcome" value="NoSave" />
+            <column name="general_category" value="help" />
+        </insert>
+    </changeSet>
+    <changeSet author="mdbdba" id="lu_spell_26">
+        <insert schemaName="dnd_5e" tableName="lu_spell">
+            <column name="id" value="529"/>
+            <column name="name" value="Greater Invisibility"/>
+            <column name="level" value="4"/>
+            <column name="school" value="Illusion" />
+            <column name="casting_time_amt" value="1" />
+            <column name="casting_time_uom" value="Action"/>
+            <column name="range_amt" value="1"/>
+            <column name="range_uom" value="Touch"/>
+            <column name="verbal_component_ind" value="true"/>
+            <column name="somatic_component_ind" value="true"/>
+            <column name="material_component_ind" value="False"/>
+            <column name="duration_amt" value="1"/>
+            <column name="duration_uom" value="Minute(s)"/>
+            <column name="concentration_ind" value="true"/>
+            <column name="description" value="You or a creature you touch becomes invisible until the spell ends. Anything the target is wearing or carrying is invisible as long as it is on the target's person." />
+            <column name="attack_roll_required_ind" value="false" />
+            <column name="save_outcome" value="NoSave" />
+            <column name="general_category" value="help" />
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_spell">
+            <column name="id" value="530"/>
+            <column name="name" value="Greater Restoration"/>
+            <column name="level" value="5"/>
+            <column name="school" value="Abjuration" />
+            <column name="casting_time_amt" value="1" />
+            <column name="casting_time_uom" value="Action"/>
+            <column name="range_amt" value="1"/>
+            <column name="range_uom" value="Touch"/>
+            <column name="verbal_component_ind" value="true"/>
+            <column name="somatic_component_ind" value="true"/>
+            <column name="material_component_ind" value="true"/>
+            <column name="duration_amt" value="1"/>
+            <column name="duration_uom" value="Instantaneous"/>
+            <column name="concentration_ind" value="false"/>
+            <column name="description" value="You imbue a creature you touch with positive energy to undo a debilitating effect. You can reduce the target's exhaustion level by one, or end one of the following effects on the target: One effect that charmed or petrified the target; One curse, including the target's attunement to a cursed magic item; Any reduction to one of the target's ability scores; One effect reducing the target's hit point maximum. Material Component: diamond dust worth at least 100 gp, which the spell consumes" />
+            <column name="attack_roll_required_ind" value="false" />
+            <column name="save_outcome" value="NoSave" />
+            <column name="general_category" value="help" />
+        </insert>
+
+
+        <insert schemaName="dnd_5e" tableName="lu_spell">
+            <column name="id" value="696"/>
+            <column name="name" value="Guardian of Faith"/>
+            <column name="level" value="4"/>
+            <column name="school" value="Conjuration" />
+            <column name="casting_time_amt" value="1" />
+            <column name="casting_time_uom" value="Action"/>
+            <column name="range_amt" value="30"/>
+            <column name="range_uom" value="Feet"/>
+            <column name="verbal_component_ind" value="true"/>
+            <column name="somatic_component_ind" value="false"/>
+            <column name="material_component_ind" value="false"/>
+            <column name="duration_amt" value="8"/>
+            <column name="duration_uom" value="Hour(s)"/>
+            <column name="concentration_ind" value="false"/>
+            <column name="description" value="A large spectral guardian appears and hovers for the duration in an unoccupied space of your choice that you can see within range. The guardian occupies that space and is indistinct except for a gleaming sword and shield emblazoned with the symbol of your deity. Any creature hostile to you that moves to a space within 10 feet of the guardian for the first time on a turn must succeed on a Dexterity saving throw. The creature takes 20 radiant damage on a failed save, or half as much damage on a successful one. The guardian vanishes when it has dealt a total of 60 damage."/>
+            <column name="save" value="Dexterity"/>
+            <column name="attack_roll_required_ind" value="false" />
+            <column name="save_outcome" value="HalfPossible" />
+            <column name="general_category" value="hinder" />
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_spell">
+            <column name="id" value="533"/>
+            <column name="name" value="Guidance"/>
+            <column name="level" value="0"/>
+            <column name="school" value="Divination" />
+            <column name="casting_time_amt" value="1" />
+            <column name="casting_time_uom" value="Action"/>
+            <column name="range_amt" value="1"/>
+            <column name="range_uom" value="Touch"/>
+            <column name="verbal_component_ind" value="true"/>
+            <column name="somatic_component_ind" value="true"/>
+            <column name="material_component_ind" value="False"/>
+            <column name="duration_amt" value="1"/>
+            <column name="duration_uom" value="Minute(s)"/>
+            <column name="concentration_ind" value="true"/>
+            <column name="description" value="You touch one willing creature. Once before the spell ends, the target can roll a d4 and add the number rolled to one ability check of its choice. It can roll the die before or after making the ability check. The spell then ends." />
+            <column name="attack_roll_required_ind" value="false" />
+            <column name="save_outcome" value="NoSave" />
+            <column name="general_category" value="help" />
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_spell">
+            <column name="id" value="534"/>
+            <column name="name" value="Guiding Bolt"/>
+            <column name="level" value="1"/>
+            <column name="school" value="Evocation" />
+            <column name="casting_time_amt" value="1" />
+            <column name="casting_time_uom" value="Action"/>
+            <column name="range_amt" value="120"/>
+            <column name="range_uom" value="Feet"/>
+            <column name="verbal_component_ind" value="true"/>
+            <column name="somatic_component_ind" value="true"/>
+            <column name="material_component_ind" value="False"/>
+            <column name="duration_amt" value="1"/>
+            <column name="duration_uom" value="Round(s)"/>
+            <column name="concentration_ind" value="false"/>
+            <column name="description" value="A flash of light streaks toward a creature of your choice within range. Make a ranged spell attack against the target. On a hit, the target takes 4d6 radiant damage, and the next attack roll made against this target before the end of your next turn has advantage, thanks to the mystical dim light glittering on the target until then." />
+            <column name="attack_roll_required_ind" value="True" />
+            <column name="save_outcome" value="NoSave" />
+            <column name="general_category" value="hinder" />
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_spell">
+            <column name="id" value="540"/>
+            <column name="name" value="Heal"/>
+            <column name="level" value="6"/>
+            <column name="school" value="Evocation" />
+            <column name="casting_time_amt" value="1" />
+            <column name="casting_time_uom" value="Action"/>
+            <column name="range_amt" value="60"/>
+            <column name="range_uom" value="Feet"/>
+            <column name="verbal_component_ind" value="true"/>
+            <column name="somatic_component_ind" value="true"/>
+            <column name="material_component_ind" value="False"/>
+            <column name="duration_amt" value="1"/>
+            <column name="duration_uom" value="Instantaneous"/>
+            <column name="concentration_ind" value="false"/>
+            <column name="description" value="Choose a creature that you can see within range. A surge of positive energy washes through the creature, causing it to regain 70 hit points. This spell also ends blindness, deafness, and any diseases affecting the target. This spell has no effect on constructs or undead. At Higher Levels. When you cast this spell using a spell slot of 7th level or higher, the amount of healing increases by 10 for each slot level above 6th." />
+            <column name="higher_level_cast" value="level:7,type:heal,additional:80|level:8,type:heal,additional:90|level:9,type:heal,additional:100"/>
+            <column name="attack_roll_required_ind" value="false" />
+            <column name="save_outcome" value="NoSave" />
+            <column name="general_category" value="help" />
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_spell">
+            <column name="id" value="541"/>
+            <column name="name" value="Heat Metal"/>
+            <column name="level" value="2"/>
+            <column name="school" value="Transmutation" />
+            <column name="casting_time_amt" value="1" />
+            <column name="casting_time_uom" value="Action"/>
+            <column name="range_amt" value="60"/>
+            <column name="range_uom" value="Feet"/>
+            <column name="verbal_component_ind" value="true"/>
+            <column name="somatic_component_ind" value="true"/>
+            <column name="material_component_ind" value="true"/>
+            <column name="duration_amt" value="1"/>
+            <column name="duration_uom" value="Minute(s)"/>
+            <column name="concentration_ind" value="true"/>
+            <column name="description" value="Choose a manufactured metal object, such as a metal weapon or a suit of heavy or medium metal armor, that you can see within range. You cause the object to glow red-hot. Any creature in physical contact with the object takes 2d8 fire damage when you cast the spell. Until the spell ends, you can use a bonus action on each of your subsequent turns to cause this damage again. If a creature is holding or wearing the object and takes the damage from it, the creature must succeed on a Constitution saving throw or drop the object if it can. If it doesn't drop the object, it has disadvantage on attack rolls and ability checks until the start of your next turn. At Higher Levels. When you cast this spell using a spell slot of 3rd level or higher, the damage increases by 1d8 for each slot level above 2nd. Material Component: a piece of iron and a flame"/>
+            <column name="higher_level_cast" value="level:3,type:damage,additional:3d8|level:4,type:damage,additional:4d8|level:5,type:damage,additional:5d8|level:6,type:damage,additional:6d8|level:7,type:damage,additional:7d8|level:8,type:damage,additional:8d8|level:9,type:damage,additional:9d8"/>
+            <column name="save" value="Constitution"/>
+            <column name="attack_roll_required_ind" value="false" />
+            <column name="save_outcome" value="SpellEnds" />
+            <column name="general_category" value="hinder" />
+        </insert>
+
+
+        <insert schemaName="dnd_5e" tableName="lu_spell">
+            <column name="id" value="543"/>
+            <column name="name" value="Hold Monster"/>
+            <column name="level" value="5"/>
+            <column name="school" value="Enchantment" />
+            <column name="casting_time_amt" value="1" />
+            <column name="casting_time_uom" value="Action"/>
+            <column name="range_amt" value="90"/>
+            <column name="range_uom" value="Feet"/>
+            <column name="verbal_component_ind" value="true"/>
+            <column name="somatic_component_ind" value="true"/>
+            <column name="material_component_ind" value="true"/>
+            <column name="duration_amt" value="1"/>
+            <column name="duration_uom" value="Minute(s)"/>
+            <column name="concentration_ind" value="true"/>
+            <column name="description" value="Choose a creature that you can see within range. The target must succeed on a Wisdom saving throw or be paralyzed for the duration. This spell has no effect on undead. At the end of each of its turns, the target can make another Wisdom saving throw. On a success, the spell ends on the target. At Higher Levels. When you cast this spell using a spell slot of 6th level or higher, you can target one additional creature for each slot level above 5th. The creatures must be within 30 feet of each other when you target them. Material Component: a small, straight piece of iron"/>
+            <column name="higher_level_cast" value="level:6,type:creature,additional:2|level:7,type:creature,additional:3|level:5,type:creature,additional:4|level:8,type:creature,additional:5|level:9,type:creature,additional:6"/>
+            <column name="save" value="Wisdom"/>
+            <column name="attack_roll_required_ind" value="false" />
+            <column name="save_outcome" value="SpellEnds" />
+            <column name="general_category" value="hinder" />
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_spell">
+            <column name="id" value="544"/>
+            <column name="name" value="Holy Aura"/>
+            <column name="level" value="8"/>
+            <column name="school" value="Abjuration" />
+            <column name="casting_time_amt" value="1" />
+            <column name="casting_time_uom" value="Action"/>
+            <column name="range_amt" value="1"/>
+            <column name="range_uom" value="Self"/>
+            <column name="verbal_component_ind" value="true"/>
+            <column name="somatic_component_ind" value="true"/>
+            <column name="material_component_ind" value="true"/>
+            <column name="duration_amt" value="1"/>
+            <column name="duration_uom" value="Minute(s)"/>
+            <column name="concentration_ind" value="true"/>
+            <column name="description" value="Divine light washes out from you and coalesces in a soft radiance in a 30-foot radius around you. Creatures of your choice in that radius when you cast this spell shed dim light in a 5-foot radius and have advantage on all saving throws, and other creatures have disadvantage on attack rolls against them until the spell ends. In addition, when a fiend or an undead hits an affected creature with a melee attack, the aura flashes with brilliant light. The attacker must succeed on a Constitution saving throw or be blinded until the spell ends.Material Component: a tiny reliquary worth at least 1,000 gp containing a sacred relic, such as a scrap of cloth from a saint's robe or a piece of parchment from a religious text" />
+            <column name="attack_roll_required_ind" value="false" />
+            <column name="save_outcome" value="NoSave" />
+            <column name="general_category" value="help" />
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_spell">
+            <column name="id" value="545"/>
+            <column name="name" value="Hunter's Mark"/>
+            <column name="level" value="1"/>
+            <column name="school" value="Divination" />
+            <column name="casting_time_amt" value="1" />
+            <column name="casting_time_uom" value="Bonus Action"/>
+            <column name="range_amt" value="90"/>
+            <column name="range_uom" value="Feet"/>
+            <column name="verbal_component_ind" value="true"/>
+            <column name="somatic_component_ind" value="false"/>
+            <column name="material_component_ind" value="false"/>
+            <column name="duration_amt" value="60"/>
+            <column name="duration_uom" value="Minute(s)"/>
+            <column name="concentration_ind" value="true"/>
+            <column name="description" value="You choose a creature you can see within range and mystically mark it as your quarry. Until the spell ends, you deal an extra 1d6 damage to the target whenever you hit it with a weapon attack, and you have advantage on any Wisdom (Perception) or Wisdom (Survival) check you make to find it. If the target drops to 0 hit points before this spell ends, you can use a bonus action on a subsequent turn of yours to mark a new creature. At Higher Levels. When you cast this spell using a spell slot of 3rd or 4th level, you can maintain your concentration on the spell for up to 8 hours. When you use a spell slot of 5th level or higher, you can maintain your concentration on the spell for up to 24 hours." />
+            <column name="higher_level_cast" value="level:3,type:duration,additional:8hr|level:5,type:duration,additional:24hr" />
+            <column name="attack_roll_required_ind" value="false" />
+            <column name="save_outcome" value="NoSave" />
+            <column name="general_category" value="hinder" />
+        </insert>
+    </changeSet>
+
 </databaseChangeLog>
