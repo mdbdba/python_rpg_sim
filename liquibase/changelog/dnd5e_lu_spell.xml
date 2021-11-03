@@ -2347,5 +2347,246 @@
         </insert>
 
     </changeSet>
+    <changeSet author="mdbdba" id="lu_spell_29">
+        <insert schemaName="dnd_5e" tableName="lu_spell">
+            <column name="id" value="628"/>
+            <column name="name" value="Sacred Flame"/>
+            <column name="level" value="0"/>
+            <column name="school" value="Evocation" />
+            <column name="casting_time_amt" value="1" />
+            <column name="casting_time_uom" value="Action"/>
+            <column name="range_amt" value="60"/>
+            <column name="range_uom" value="Feet"/>
+            <column name="verbal_component_ind" value="true"/>
+            <column name="somatic_component_ind" value="true"/>
+            <column name="material_component_ind" value="False"/>
+            <column name="duration_amt" value="1"/>
+            <column name="duration_uom" value="Instantaneous"/>
+            <column name="concentration_ind" value="false"/>
+            <column name="description" value="Flame-like radiance descends on a creature that you can see within range. The target must succeed on a Dexterity saving throw or take 1d8 radiant damage. The target gains no benefit from cover for this saving throw. The spell's damage increases by 1d8 when you reach 5th level (2d8), 11th level (3d8), and 17th level (4d8)." />
+            <column name="higher_level_cast" value="level:5,type:damage,additional:2d8|level:11,type:damage,additional:3d8|level:17,type:damage,additional:4d8"/>
+            <column name="save" value="Dexterity"/>
+            <column name="attack_roll_required_ind" value="false" />
+            <column name="save_outcome" value="NoEffect" />
+            <column name="general_category" value="hinder" />
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_spell">
+            <column name="id" value="629"/>
+            <column name="name" value="Sanctuary"/>
+            <column name="level" value="1"/>
+            <column name="school" value="Abjuration" />
+            <column name="casting_time_amt" value="1" />
+            <column name="casting_time_uom" value="Bonus Action"/>
+            <column name="range_amt" value="30"/>
+            <column name="range_uom" value="Feet"/>
+            <column name="verbal_component_ind" value="true"/>
+            <column name="somatic_component_ind" value="true"/>
+            <column name="material_component_ind" value="true"/>
+            <column name="duration_amt" value="1"/>
+            <column name="duration_uom" value="Minute(s)"/>
+            <column name="concentration_ind" value="false"/>
+            <column name="description" value="You ward a creature within range against attack. Until the spell ends, any creature who targets the warded creature with an attack or a harmful spell must first make a Wisdom saving throw. On a failed save, the creature must choose a new target or lose the attack or spell. This spell doesn't protect the warded creature from area effects, such as the explosion of a fireball. Material Component: a small silver mirror. If the warded creature makes an attack, casts a spell that affects an enemy, or deals damage to another creature, this spell ends." />
+            <column name="attack_roll_required_ind" value="false" />
+            <column name="save_outcome" value="NoSave" />
+            <column name="general_category" value="help" />
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_spell">
+            <column name="id" value="637"/>
+            <column name="name" value="Shapechange"/>
+            <column name="level" value="9"/>
+            <column name="school" value="Transmutation" />
+            <column name="casting_time_amt" value="1" />
+            <column name="casting_time_uom" value="Action"/>
+            <column name="range_amt" value="1"/>
+            <column name="range_uom" value="Self"/>
+            <column name="verbal_component_ind" value="true"/>
+            <column name="somatic_component_ind" value="true"/>
+            <column name="material_component_ind" value="true"/>
+            <column name="duration_amt" value="60"/>
+            <column name="duration_uom" value="Minute(s)"/>
+            <column name="concentration_ind" value="true"/>
+            <column name="description" value="You assume the form of a different creature for the duration. The new form can be of any creature with a challenge rating equal to your level or lower. The creature can't be a construct or an undead, and you must have seen the sort of creature at least once. You transform into an average example of that creature, one without any class levels or the Spellcasting trait. Material Component: a jade circlet worth at least 1,500 gp, which you must place on your head before you cast the spell. Your game statistics are replaced by the statistics of the chosen creature, though you retain your alignment and Intelligence, Wisdom, and Charisma scores. You also retain all of your skill and saving throw proficiencies, in addition to gaining those of the creature. If the creature has the same proficiency as you and the bonus listed in its statistics is higher than yours, use the creature's bonus in place of yours. You can't use any legendary actions or lair actions of the new form. You assume the hit points and Hit Dice of the new form. When you revert to your normal form, you return to the number of hit points you had before you transformed. If you revert as a result of dropping to 0 hit points, any excess damage carries over to your normal form. As long as the excess damage doesn't reduce your normal form to 0 hit points, you aren't knocked unconscious. You retain the benefit of any features from your class, race, or other source and can use them, provided that your new form is physically capable of doing so. You can't use any special senses you have (for example, darkvision) unless your new form also has that sense. You can only speak if the creature can normally speak. When you transform, you choose whether your equipment falls to the ground, merges into the new form, or is worn by it. Worn equipment functions as normal. The GM determines whether it is practical for the new form to wear a piece of equipment, based on the creature's shape and size. Your equipment doesn't change shape or size to match the new form, and any equipment that the new form can't wear must either fall to the ground or merge into your new form. Equipment that merges has no effect in that state. During this spell's duration, you can use your action to assume a different form following the same restrictions and rules for the original form, with one exception: if your new form has more hit points than your current one, your hit points remain at their current value." />
+            <column name="attack_roll_required_ind" value="false" />
+            <column name="save_outcome" value="NoSave" />
+            <column name="general_category" value="help" />
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_spell">
+            <column name="id" value="640"/>
+            <column name="name" value="Shield of Faith"/>
+            <column name="level" value="1"/>
+            <column name="school" value="Abjuration" />
+            <column name="casting_time_amt" value="1" />
+            <column name="casting_time_uom" value="Bonus Action"/>
+            <column name="range_amt" value="60"/>
+            <column name="range_uom" value="Feet"/>
+            <column name="verbal_component_ind" value="true"/>
+            <column name="somatic_component_ind" value="true"/>
+            <column name="material_component_ind" value="true"/>
+            <column name="duration_amt" value="10"/>
+            <column name="duration_uom" value="Minute(s)"/>
+            <column name="concentration_ind" value="true"/>
+            <column name="description" value="A shimmering field appears and surrounds a creature of your choice within range, granting it a +2 bonus to AC for the duration. Material Component: a small parchment with a bit of holy text written on it" />
+            <column name="attack_roll_required_ind" value="false" />
+            <column name="save_outcome" value="NoSave" />
+            <column name="general_category" value="help" />
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_spell">
+            <column name="id" value="641"/>
+            <column name="name" value="Shocking Grasp"/>
+            <column name="level" value="0"/>
+            <column name="school" value="Evocation" />
+            <column name="casting_time_amt" value="1" />
+            <column name="casting_time_uom" value="Action"/>
+            <column name="range_amt" value="1"/>
+            <column name="range_uom" value="Touch"/>
+            <column name="verbal_component_ind" value="true"/>
+            <column name="somatic_component_ind" value="true"/>
+            <column name="material_component_ind" value="False"/>
+            <column name="duration_amt" value="1"/>
+            <column name="duration_uom" value="Instantaneous"/>
+            <column name="concentration_ind" value="false"/>
+            <column name="description" value="Lightning springs from your hand to deliver a shock to a creature you try to touch. Make a melee spell attack against the target. You have advantage on the attack roll if the target is wearing armor made of metal. On a hit, the target takes 1d8 lightning damage, and it can't take reactions until the start of its next turn. The spell's damage increases by 1d8 when you reach 5th level (2d8), 11th level (3d8), and 17th level (4d8)." />
+            <column name="attack_roll_required_ind" value="true" />
+            <column name="save_outcome" value="NoSave" />
+            <column name="general_category" value="hinder" />
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_spell">
+            <column name="id" value="642"/>
+            <column name="name" value="Silence"/>
+            <column name="level" value="2"/>
+            <column name="school" value="Illusion" />
+            <column name="casting_time_amt" value="1" />
+            <column name="casting_time_uom" value="Action"/>
+            <column name="range_amt" value="120"/>
+            <column name="range_uom" value="Feet"/>
+            <column name="verbal_component_ind" value="true"/>
+            <column name="somatic_component_ind" value="true"/>
+            <column name="material_component_ind" value="False"/>
+            <column name="duration_amt" value="10"/>
+            <column name="duration_uom" value="Minute(s)"/>
+            <column name="concentration_ind" value="true"/>
+            <column name="description" value="For the duration, no sound can be created within or pass through a 20-foot radius sphere centered on a point you choose within range. Any creature or object entirely inside the sphere is immune to thunder damage, and creatures are deafened while entirely inside it. Casting a spell that includes a verbal component is impossible there." />
+            <column name="attack_roll_required_ind" value="false" />
+            <column name="save_outcome" value="NoSave" />
+            <column name="general_category" value="hinder" />
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_spell">
+            <column name="id" value="645"/>
+            <column name="name" value="Sleet Storm"/>
+            <column name="level" value="3"/>
+            <column name="school" value="Conjuration" />
+            <column name="casting_time_amt" value="1" />
+            <column name="casting_time_uom" value="Action"/>
+            <column name="range_amt" value="150"/>
+            <column name="range_uom" value="Feet"/>
+            <column name="verbal_component_ind" value="true"/>
+            <column name="somatic_component_ind" value="true"/>
+            <column name="material_component_ind" value="true"/>
+            <column name="duration_amt" value="1"/>
+            <column name="duration_uom" value="Minute(s)"/>
+            <column name="concentration_ind" value="true"/>
+            <column name="description" value="Until the spell ends, freezing rain and sleet fall in a 20-foot tall cylinder with a 40-foot radius centered on a point you choose within range. The area is heavily obscured, and exposed flames in the area are doused. Material Component: a pinch of dust and a few drops of water. The ground in the area is covered with slick ice, making it difficult terrain. When a creature enters the spell's area for the first time on a turn or starts its turn there, it must make a Dexterity saving throw. On a failed save, it falls prone. If a creature starts its turn in the spell's area and is concentrating on a spell, the creature must make a successful Constitution saving throw against your spell save DC or lose concentration." />
+            <column name="attack_roll_required_ind" value="false" />
+            <column name="save_outcome" value="NoSave" />
+            <column name="general_category" value="hinder" />
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_spell">
+            <column name="id" value="646"/>
+            <column name="name" value="Slow"/>
+            <column name="level" value="3"/>
+            <column name="school" value="Transmutation" />
+            <column name="casting_time_amt" value="1" />
+            <column name="casting_time_uom" value="Action"/>
+            <column name="range_amt" value="120"/>
+            <column name="range_uom" value="Feet"/>
+            <column name="verbal_component_ind" value="true"/>
+            <column name="somatic_component_ind" value="true"/>
+            <column name="material_component_ind" value="true"/>
+            <column name="duration_amt" value="1"/>
+            <column name="duration_uom" value="Minute(s)"/>
+            <column name="concentration_ind" value="true"/>
+            <column name="description" value="You alter time around up to six creatures of your choice in a 40-foot cube within range. Each target must succeed on a Wisdom saving throw or be affected by this spell for the duration. Material Component: a drop of molasses An affected target's speed is halved, it takes a -2 penalty to AC and Dexterity saving throws, and it can't use reactions. On its turn, it can use either an action or a bonus action, not both. Regardless of the creature's abilities or magic items, it can't make more than one melee or ranged attack during its turn. If the creature attempts to cast a spell with a casting time of 1 action, roll a d20. On an 11 or higher, the spell doesn't take effect until the creature's next turn, and the creature must use its action on that turn to complete the spell. If it can't, the spell is wasted. A creature affected by this spell makes another Wisdom saving throw at the end of each of its turns. On a successful save, the effect ends for it." />
+            <column name="save" value="Wisdom"/>
+            <column name="attack_roll_required_ind" value="false" />
+            <column name="save_outcome" value="NoEffect" />
+            <column name="general_category" value="hinder" />
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_spell">
+            <column name="id" value="699"/>
+            <column name="name" value="Spare the Dying"/>
+            <column name="level" value="0"/>
+            <column name="school" value="Necromancy" />
+            <column name="casting_time_amt" value="1" />
+            <column name="casting_time_uom" value="Action"/>
+            <column name="range_amt" value="1"/>
+            <column name="range_uom" value="Touch"/>
+            <column name="verbal_component_ind" value="true"/>
+            <column name="somatic_component_ind" value="true"/>
+            <column name="material_component_ind" value="False"/>
+            <column name="duration_amt" value="1"/>
+            <column name="duration_uom" value="Instantaneous"/>
+            <column name="concentration_ind" value="false"/>
+            <column name="description" value="You touch a living creature that has 0 hit points. The creature becomes stable. This spell has no effect on undead or constructs." />
+            <column name="attack_roll_required_ind" value="false" />
+            <column name="save_outcome" value="NoSave" />
+            <column name="general_category" value="help" />
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_spell">
+            <column name="id" value="651"/>
+            <column name="name" value="Spike Growth"/>
+            <column name="level" value="2"/>
+            <column name="school" value="Transmutation" />
+            <column name="casting_time_amt" value="1" />
+            <column name="casting_time_uom" value="Action"/>
+            <column name="range_amt" value="150"/>
+            <column name="range_uom" value="Feet"/>
+            <column name="verbal_component_ind" value="true"/>
+            <column name="somatic_component_ind" value="true"/>
+            <column name="material_component_ind" value="true"/>
+            <column name="duration_amt" value="10"/>
+            <column name="duration_uom" value="Minute(s)"/>
+            <column name="concentration_ind" value="true"/>
+            <column name="description" value="The ground in a 20-foot radius centered on a point within range twists and sprouts hard spikes and thorns. The area becomes difficult terrain for the duration. When a creature moves into or within the area, it takes 2d4 piercing damage for every 5 feet it travels. Material Component: seven sharp thorns or seven small twigs, each sharpened to a point. The transformation of the ground is camouflaged to look natural. Any creature that can't see the area at the time the spell is cast must make a Wisdom (Perception) check against your spell save DC to recognize the terrain as hazardous before entering it." />
+            <column name="attack_roll_required_ind" value="false" />
+            <column name="save_outcome" value="NoSave" />
+            <column name="general_category" value="help" />
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_spell">
+            <column name="id" value="652"/>
+            <column name="name" value="Spirit Guardians"/>
+            <column name="level" value="3"/>
+            <column name="school" value="Conjuration" />
+            <column name="casting_time_amt" value="1" />
+            <column name="casting_time_uom" value="Action"/>
+            <column name="range_amt" value="1"/>
+            <column name="range_uom" value="Self"/>
+            <column name="range_aoe" value="Radius"/>
+            <column name="effect_size_amt" value="15"/>
+            <column name="effect_size_uom" value="Feet"/>
+            <column name="verbal_component_ind" value="true"/>
+            <column name="somatic_component_ind" value="true"/>
+            <column name="material_component_ind" value="true"/>
+            <column name="duration_amt" value="10"/>
+            <column name="duration_uom" value="Minute(s)"/>
+            <column name="concentration_ind" value="true"/>
+            <column name="description" value="You call forth spirits to protect you. They flit around you to a distance of 15 feet for the duration. If you are good or neutral, their spectral form appears angelic or fey (your choice). If you are evil, they appear fiendish. Material Component: a holy symbol. When you cast this spell, you can designate any number of creatures you can see to be unaffected by it. An affected creature's speed is halved in the area, and when the creature enters the area for the first time on a turn or starts its turn there, it must make a Wisdom saving throw. On a failed save, the creature takes 3d8 radiant damage (if you are good or neutral) or 3d8 necrotic damage (if you are evil). On a successful save, the creature takes half as much damage. At Higher Levels. When you cast this spell using a spell slot of 4th level or higher, the damage increases by 1d8 for each slot level above 3rd." />
+            <column name="higher_level_cast" value="level:4,type:damage,additional:4d8|level:5,type:damage,additional:5d8|level:6,type:damage,additional:6d8|level:7,type:damage,additional:7d8|level:8,type:damage,additional:8d8|level:9,type:damage,additional:9d8"/>
+            <column name="save" value="Dexterity"/>
+            <column name="attack_roll_required_ind" value="false" />
+            <column name="save_outcome" value="NoEffect" />
+            <column name="general_category" value="hinder" />
+        </insert>
+
+    </changeSet>
 
 </databaseChangeLog>
