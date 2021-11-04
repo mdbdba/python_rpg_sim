@@ -2588,5 +2588,268 @@
         </insert>
 
     </changeSet>
+    <changeSet author="mdbdba" id="lu_spell_30">
+        <insert schemaName="dnd_5e" tableName="lu_spell">
+            <column name="id" value="653"/>
+            <column name="name" value="Spiritual Weapon"/>
+            <column name="level" value="2"/>
+            <column name="school" value="Evocation" />
+            <column name="casting_time_amt" value="1" />
+            <column name="casting_time_uom" value="Bonus Action"/>
+            <column name="range_amt" value="60"/>
+            <column name="range_uom" value="Feet"/>
+            <column name="verbal_component_ind" value="true"/>
+            <column name="somatic_component_ind" value="true"/>
+            <column name="material_component_ind" value="False"/>
+            <column name="duration_amt" value="1"/>
+            <column name="duration_uom" value="Minute(s)"/>
+            <column name="concentration_ind" value="false"/>
+            <column name="description" value="You create a floating, spectral weapon within range that lasts for the duration or until you cast this spell again. When you cast the spell, you can make a melee spell attack against a creature within 5 feet of the weapon. On a hit, the target takes force damage equal to 1d8 + your spellcasting ability modifier. As a bonus action on your turn, you can move the weapon up to 20 feet and repeat the attack against a creature within 5 feet of it. The weapon can take whatever form you choose. Clerics of deities who are associated with a particular weapon (as St. Cuthbert is known for his mace and Thor for his hammer) make this spell's effect resemble that weapon. At Higher Levels. When you cast this spell using a spell slot of 3rd level or higher, the damage increases by 1d8 for every two slot levels above 2nd." />
+            <column name="higher_level_cast" value="level:3,type:damage,additional:2d8|level:4,type:damage,additional:3d8|level:5,type:damage,additional:4d8|level:6,type:damage,additional:5d8|level:7,type:damage,additional:6d8|level:8,type:damage,additional:7d8|level:9,type:damage,additional:8d8"/>
+            <column name="attack_roll_required_ind" value="true" />
+            <column name="save_outcome" value="NoSave" />
+            <column name="general_category" value="hinder" />
+        </insert>
 
+       <insert schemaName="dnd_5e" tableName="lu_spell">
+            <column name="id" value="656"/>
+            <column name="name" value="Stoneskin"/>
+            <column name="level" value="4"/>
+            <column name="school" value="Abjuration" />
+            <column name="casting_time_amt" value="1" />
+            <column name="casting_time_uom" value="Action"/>
+            <column name="range_amt" value="1"/>
+            <column name="range_uom" value="Touch"/>
+            <column name="verbal_component_ind" value="true"/>
+            <column name="somatic_component_ind" value="true"/>
+            <column name="material_component_ind" value="true"/>
+            <column name="duration_amt" value="60"/>
+            <column name="duration_uom" value="Minute(s)"/>
+            <column name="concentration_ind" value="true"/>
+            <column name="description" value="This spell turns the flesh of a willing creature you touch as hard as stone. Until the spell ends, the target has resistance to nonmagical bludgeoning, piercing, and slashing damage. Material Component: diamond dust worth 100 gp, which the spell consumes"/>
+            <column name="attack_roll_required_ind" value="false" />
+            <column name="save_outcome" value="NoSave" />
+            <column name="general_category" value="help" />
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_spell">
+            <column name="id" value="658"/>
+            <column name="name" value="Sunbeam"/>
+            <column name="level" value="6"/>
+            <column name="school" value="Evocation" />
+            <column name="casting_time_amt" value="1" />
+            <column name="casting_time_uom" value="Action"/>
+            <column name="range_amt" value="1"/>
+            <column name="range_uom" value="Self"/>
+            <column name="range_aoe" value="Line"/>
+            <column name="effect_size_amt" value="60"/>
+            <column name="effect_size_uom" value="Feet"/>
+            <column name="verbal_component_ind" value="true"/>
+            <column name="somatic_component_ind" value="true"/>
+            <column name="material_component_ind" value="true"/>
+            <column name="duration_amt" value="1"/>
+            <column name="duration_uom" value="Minute(s)"/>
+            <column name="concentration_ind" value="true"/>
+            <column name="description" value="A beam of brilliant light flashes out from your hand in a 5-foot wide, 60-foot long line. Each creature in the line must make a Constitution saving throw. On a failed save, a creature takes 6d8 radiant damage and is blinded until your next turn. On a successful save, it takes half as much damage and isn't blinded by this spell. Undead and oozes have disadvantage on this saving throw. Material Component: a magnifying glass. You can create a new line of radiance as your action on any turn until the spell ends. For the duration, a mote of brilliant radiance shines in your hand. It sheds bright light in a 30-foot radius and dim light for an additional 30 feet. This light is sunlight."/>
+            <column name="save" value="Constitution"/>
+            <column name="attack_roll_required_ind" value="false" />
+            <column name="save_outcome" value="HalfPossible" />
+            <column name="general_category" value="hinder" />
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_spell">
+            <column name="id" value="659"/>
+            <column name="name" value="Sunburst"/>
+            <column name="level" value="8"/>
+            <column name="school" value="Evocation" />
+            <column name="casting_time_amt" value="1" />
+            <column name="casting_time_uom" value="Action"/>
+            <column name="range_amt" value="150"/>
+            <column name="range_uom" value="Feet"/>
+            <column name="verbal_component_ind" value="true"/>
+            <column name="somatic_component_ind" value="true"/>
+            <column name="material_component_ind" value="true"/>
+            <column name="duration_amt" value="1"/>
+            <column name="duration_uom" value="Instantaneous"/>
+            <column name="concentration_ind" value="false"/>
+            <column name="description" value="Brilliant sunlight flashes in a 60-foot radius centered on a point you choose within range. Each creature in that light must make a Constitution saving throw. On a failed save, a creature takes 12d6 radiant damage and is blinded for 1 minute. On a successful save, it takes half as much damage and isn't blinded by this spell. Undead and oozes have disadvantage on this saving throw. Material Component: fire and a piece of sunstone. A creature blinded by this spell makes another Constitution saving throw at the end of each of its turns. On a successful save, it is no longer blinded. This spell dispels any darkness in its area that was created by a spell."/>
+            <column name="save" value="Constitution"/>
+            <column name="attack_roll_required_ind" value="false" />
+            <column name="save_outcome" value="HalfPossible" />
+            <column name="general_category" value="hinder" />
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_spell">
+            <column name="id" value="663"/>
+            <column name="name" value="Teleport"/>
+            <column name="level" value="7"/>
+            <column name="school" value="Conjuration" />
+            <column name="casting_time_amt" value="1" />
+            <column name="casting_time_uom" value="Action"/>
+            <column name="range_amt" value="10"/>
+            <column name="range_uom" value="Feet"/>
+            <column name="verbal_component_ind" value="true"/>
+            <column name="somatic_component_ind" value="false"/>
+            <column name="material_component_ind" value="false"/>
+            <column name="duration_amt" value="1"/>
+            <column name="duration_uom" value="Instantaneous"/>
+            <column name="concentration_ind" value="false"/>
+            <column name="description" value="This spell instantly transports you and up to eight willing creatures of your choice that you can see within range, or a single object that you can see within range, to a destination you select. If you target an object, it must be able to fit entirely inside a 10-foot cube, and it can't be held or carried by an unwilling creature. The destination you choose must be known to you, and it must be on the same plane of existence as you. Your familiarity with the destination determines whether you arrive there successfully. The a d100 roll evals as a casually seen destination."/>
+            <column name="attack_roll_required_ind" value="false" />
+            <column name="save_outcome" value="NoSave" />
+            <column name="general_category" value="help" />
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_spell">
+            <column name="id" value="667"/>
+            <column name="name" value="Time Stop"/>
+            <column name="level" value="9"/>
+            <column name="school" value="Transmutation" />
+            <column name="casting_time_amt" value="1" />
+            <column name="casting_time_uom" value="Action"/>
+            <column name="range_amt" value="1"/>
+            <column name="range_uom" value="Self"/>
+            <column name="verbal_component_ind" value="true"/>
+            <column name="somatic_component_ind" value="false"/>
+            <column name="material_component_ind" value="false"/>
+            <column name="duration_amt" value="1"/>
+            <column name="duration_uom" value="Instantaneous"/>
+            <column name="concentration_ind" value="false"/>
+            <column name="description" value="You briefly stop the flow of time for everyone but yourself. No time passes for other creatures, while you take 1d4 + 1 turns in a row, during which you can use actions and move as normal. This spell ends if one of the actions you use during this period, or any effects that you create during this period, affects a creature other than you or an object being worn or carried by someone other than you. In addition, the spell ends if you move to a place more than 1,000 feet from the location where you cast it."/>
+            <column name="attack_roll_required_ind" value="false" />
+            <column name="save_outcome" value="NoSave" />
+            <column name="general_category" value="help" />
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_spell">
+            <column name="id" value="672"/>
+            <column name="name" value="True Polymorph"/>
+            <column name="level" value="9"/>
+            <column name="school" value="Transmutation" />
+            <column name="casting_time_amt" value="1" />
+            <column name="casting_time_uom" value="Action"/>
+            <column name="range_amt" value="30"/>
+            <column name="range_uom" value="Feet"/>
+            <column name="verbal_component_ind" value="true"/>
+            <column name="somatic_component_ind" value="true"/>
+            <column name="material_component_ind" value="true"/>
+            <column name="duration_amt" value="60"/>
+            <column name="duration_uom" value="Minute(s)"/>
+            <column name="concentration_ind" value="true"/>
+            <column name="description" value="Choose one creature or nonmagical object that you can see within range. You transform the creature into a different creature, the creature into a nonmagical object, or the object into a creature (the object must be neither worn nor carried by another creature). The transformation lasts for the duration, or until the target drops to 0 hit points or dies. If you concentrate on this spell for the full duration, the transformation lasts until it is dispelled. Material Component: a drop of mercury, a dollop of gum arabic, and a wisp of smoke. This spell has no effect on a shapechanger or a creature with 0 hit points. An unwilling creature can make a Wisdom saving throw, and if it succeeds, it isn't affected by this spell. Creature into Creature. If you turn a creature into another kind of creature, the new form can be any kind you choose whose challenge rating is equal to or less than the target's (or its level, if the target doesn't have a challenge rating). The target's game statistics, including mental ability scores, are replaced by the statistics of the new form. It retains its alignment and personality. The target assumes the hit points of its new form, and when it reverts to its normal form, the creature returns to the number of hit points it had before it transformed. If it reverts as a result of dropping to 0 hit points, any excess damage carries over to its normal form. As long as the excess damage doesn't reduce the creature's normal form to 0 hit points, it isn't knocked unconscious. The creature is limited in the actions it can perform by the nature of its new form, and it can't speak, cast spells, or take any other action that requires hands or speech, unless its new form is capable of such actions. The target's gear melds into the new form. The creature can't activate, use, wield, or otherwise benefit from any of its equipment. Object into Creature. You can turn an object into any kind of creature, as long as the creature's size is no larger than the object's size and the creature's challenge rating is 9 or lower. The creature is friendly to you and your companions. It acts on each of your turns. You decide what action it takes and how it moves. The GM has the creature's statistics and resolves all of its actions and movement. If the spell becomes permanent, you no longer control the creature. It might remain friendly to you, depending on how you have treated it. Creature into Object. If you turn a creature into an object, it transforms along with whatever it is wearing and carrying into that form, as long as the object's size is no larger than the creature's size. The creature's statistics become those of the object, and the creature has no memory of time spent in this form, after the spell ends and it returns to its normal form."/>
+            <column name="attack_roll_required_ind" value="false" />
+            <column name="save_outcome" value="NoSave" />
+            <column name="general_category" value="help" />
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_spell">
+            <column name="id" value="678"/>
+            <column name="name" value="Wall of Fire"/>
+            <column name="level" value="4"/>
+            <column name="school" value="Evocation" />
+            <column name="casting_time_amt" value="1" />
+            <column name="casting_time_uom" value="Action"/>
+            <column name="range_amt" value="120"/>
+            <column name="range_uom" value="Feet"/>
+            <column name="verbal_component_ind" value="true"/>
+            <column name="somatic_component_ind" value="true"/>
+            <column name="material_component_ind" value="true"/>
+            <column name="duration_amt" value="1"/>
+            <column name="duration_uom" value="Minute(s)"/>
+            <column name="concentration_ind" value="true"/>
+            <column name="description" value="You create a wall of fire on a solid surface within range. You can make the wall up to 60 feet long, 20 feet high, and 1 foot thick, or a ringed wall up to 20 feet in diameter, 20 feet high, and 1 foot thick. The wall is opaque and lasts for the duration. Material Component: a small piece of phosphorus. When the wall appears, each creature within its area must make a Dexterity saving throw. On a failed save, a creature takes 5d8 fire damage, or half as much damage on a successful save. One side of the wall, selected by you when you cast this spell, deals 5d8 fire damage to each creature that ends its turn within 10 feet of that side or inside the wall. A creature takes the same damage when it enters the wall for the first time on a turn or ends its turn there. The other side of the wall deals no damage. At Higher Levels. When you cast this spell using a spell slot of 5th level or higher, the damage increases by 1d8 for each slot level above 4th." />
+            <column name="higher_level_cast" value="level:5,type:damage,additional:6d8|level:6,type:damage,additional:7d8|level:7,type:damage,additional:8d8|level:8,type:damage,additional:9d8|level:9,type:damage,additional:10d8"/>
+            <column name="save" value="Dexterity"/>
+            <column name="attack_roll_required_ind" value="false" />
+            <column name="save_outcome" value="NoEffect" />
+            <column name="general_category" value="hinder" />
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_spell">
+            <column name="id" value="679"/>
+            <column name="name" value="Wall of Force"/>
+            <column name="level" value="5"/>
+            <column name="school" value="Evocation" />
+            <column name="casting_time_amt" value="1" />
+            <column name="casting_time_uom" value="Action"/>
+            <column name="range_amt" value="120"/>
+            <column name="range_uom" value="Feet"/>
+            <column name="verbal_component_ind" value="true"/>
+            <column name="somatic_component_ind" value="true"/>
+            <column name="material_component_ind" value="true"/>
+            <column name="duration_amt" value="10"/>
+            <column name="duration_uom" value="Minute(s)"/>
+            <column name="concentration_ind" value="true"/>
+            <column name="description" value="An invisible wall of force springs into existence at a point you choose within range. The wall appears in any orientation you choose, as a horizontal or vertical barrier or at an angle. It can be free floating or resting on a solid surface. You can form it into a hemispherical dome or a sphere with a radius of up to 10 feet, or you can shape a flat surface made up of ten 10-foot-by-10-foot panels. Each panel must be contiguous with another panel. In any form, the wall is 1/4 inch thick. It lasts for the duration. If the wall cuts through a creature's space when it appears, the creature is pushed to one side of the wall (your choice which side). Material Component: a pinch of powder made by crushing a clear gemstone. Nothing can physically pass through the wall. It is immune to all damage and can't be dispelled by dispel magic. A disintegrate spell destroys the wall instantly, however. The wall also extends into the Ethereal Plane, blocking ethereal travel through the wall."/>
+            <column name="attack_roll_required_ind" value="false" />
+            <column name="save_outcome" value="NoSave" />
+            <column name="general_category" value="hinder" />
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_spell">
+            <column name="id" value="681"/>
+            <column name="name" value="Wall of Stone"/>
+            <column name="level" value="5"/>
+            <column name="school" value="Evocation" />
+            <column name="casting_time_amt" value="1" />
+            <column name="casting_time_uom" value="Action"/>
+            <column name="range_amt" value="120"/>
+            <column name="range_uom" value="Feet"/>
+            <column name="verbal_component_ind" value="true"/>
+            <column name="somatic_component_ind" value="true"/>
+            <column name="material_component_ind" value="true"/>
+            <column name="duration_amt" value="10"/>
+            <column name="duration_uom" value="Minute(s)"/>
+            <column name="concentration_ind" value="true"/>
+            <column name="description" value="A nonmagical wall of solid stone springs into existence at a point you choose within range. The wall is 6 inches thick and is composed of ten 10-foot-by-10-foot panels. Each panel must be contiguous with at least one other panel. Alternatively, you can create 10-foot-by-20-foot panels that are only 3 inches thick. Material Component: a small block of granite. If the wall cuts through a creature's space when it appears, the creature is pushed to one side of the wall (your choice). If a creature would be surrounded on all sides by the wall (or the wall and another solid surface), that creature can make a Dexterity saving throw. On a success, it can use its reaction to move up to its speed so that it is no longer enclosed by the wall. The wall can have any shape you desire, though it can't occupy the same space as a creature or object. The wall doesn't need to be vertical or rest on any firm foundation. It must, however, merge with and be solidly supported by existing stone. Thus, you can use this spell to bridge a chasm or create a ramp. If you create a span greater than 20 feet in length, you must halve the size of each panel to create supports. You can crudely shape the wall to create crenellations, battlements, and so on. The wall is an object made of stone that can be damaged and thus breached. Each panel has AC 15 and 30 hit points per inch of thickness. Reducing a panel to 0 hit points destroys it and might cause connected panels to collapse at the GM's discretion. If you maintain your concentration on this spell for its whole duration, the wall becomes permanent and can't be dispelled. Otherwise, the wall disappears when the spell ends."/>
+            <column name="attack_roll_required_ind" value="false" />
+            <column name="save_outcome" value="NoSave" />
+            <column name="general_category" value="hinder" />
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_spell">
+            <column name="id" value="682"/>
+            <column name="name" value="Wall of Thorns"/>
+            <column name="level" value="6"/>
+            <column name="school" value="Conjuration" />
+            <column name="casting_time_amt" value="1" />
+            <column name="casting_time_uom" value="Action"/>
+            <column name="range_amt" value="120"/>
+            <column name="range_uom" value="Feet"/>
+            <column name="verbal_component_ind" value="true"/>
+            <column name="somatic_component_ind" value="true"/>
+            <column name="material_component_ind" value="true"/>
+            <column name="duration_amt" value="10"/>
+            <column name="duration_uom" value="Minute(s)"/>
+            <column name="concentration_ind" value="true"/>
+            <column name="description" value="You create a wall of tough, pliable, tangled brush bristling with needle-sharp thorns. The wall appears within range on a solid surface and lasts for the duration. You choose to make the wall up to 60 feet long, 10 feet high, and 5 feet thick or a circle that has a 20-foot diameter and is up to 20 feet high and 5 feet thick. The wall blocks line of sight. Material Component: a handful of thorns. When the wall appears, each creature within its area must make a Dexterity saving throw. On a failed save, a creature takes 7d8 piercing damage, or half as much damage on a successful save. A creature can move through the wall, albeit slowly and painfully. For every 1 foot a creature moves through the wall, it must spend 4 feet of movement. Furthermore, the first time a creature enters the wall on a turn or ends its turn there, the creature must make a Dexterity saving throw. It takes 7d8 slashing damage on a failed save, or half as much damage on a successful one. At Higher Levels. When you cast this spell using a spell slot of 7th level or higher, both types of damage increase by 1d8 for each slot level above 6th." />
+            <column name="higher_level_cast" value="level:7,type:damage,additional:8d8|level:8,type:damage,additional:9d8|level:9,type:damage,additional:10d8"/>
+            <column name="save" value="Dexterity"/>
+            <column name="attack_roll_required_ind" value="false" />
+            <column name="save_outcome" value="NoEffect" />
+            <column name="general_category" value="hinder" />
+        </insert>
+
+        <insert schemaName="dnd_5e" tableName="lu_spell">
+            <column name="id" value="690"/>
+            <column name="name" value="Wish"/>
+            <column name="level" value="9"/>
+            <column name="school" value="Conjuration" />
+            <column name="casting_time_amt" value="1" />
+            <column name="casting_time_uom" value="Action"/>
+            <column name="range_amt" value="1"/>
+            <column name="range_uom" value="Self"/>
+            <column name="verbal_component_ind" value="true"/>
+            <column name="somatic_component_ind" value="false"/>
+            <column name="material_component_ind" value="false"/>
+            <column name="duration_amt" value="1"/>
+            <column name="duration_uom" value="Instantaneous"/>
+            <column name="concentration_ind" value="false"/>
+            <column name="description" value="Wish is the mightiest spell a mortal creature can cast. By simply speaking aloud, you can alter the very foundations of reality in accord with your desires. The basic use of this spell is to duplicate any other spell of 8th level or lower. You don't need to meet any requirements in that spell, including costly components. The spell simply takes effect. Alternatively, you can create one of the following effects of your choice: You create one object of up to 25,000 gp in value that isn't a magic item. The object can be no more than 300 feet in any dimension, and it appears in an unoccupied space you can see on the ground; You allow up to twenty creatures that you can see to regain all hit points, and you end all effects on them described in the greater restoration spell; You grant up to ten creatures that you can see resistance to a damage type you choose; You grant up to ten creatures you can see immunity to a single spell or other magical effect for 8 hours. For instance, you could make yourself and all your companions immune to a lich's life drain attack. You undo a single recent event by forcing a reroll of any roll made within the last round (including your last turn). Reality reshapes itself to accommodate the new result. For example, a wish spell could undo an opponent's successful save, a foe's critical hit, or a friend's failed save. You can force the reroll to be made with advantage or disadvantage, and you can choose whether to use the reroll or the original roll. You might be able to achieve something beyond the scope of the above examples. State your wish to the GM as precisely as possible. The GM has great latitude in ruling what occurs in such an instance; the greater the wish, the greater the likelihood that something goes wrong. This spell might simply fail, the effect you desire might only be partly achieved, or you might suffer some unforeseen consequence as a result of how you worded the wish. For example, wishing that a villain were dead might propel you forward in time to a period when that villain is no longer alive, effectively removing you from the game. Similarly, wishing for a legendary magic item or artifact might instantly transport you to the presence of the item's current owner. The stress of casting this spell to produce any effect other than duplicating another spell weakens you. After enduring that stress, each time you cast a spell until you finish a long rest, you take 1d10 necrotic damage per level of that spell. This damage can't be reduced or prevented in any way. In addition, your Strength drops to 3, if it isn't 3 or lower already, for 2d4 days. For each of those days that you spend resting and doing nothing more than light activity, your remaining recovery time decreases by 2 days. Finally, there is a 33 percent chance that you are unable to cast wish ever again if you suffer this stress."/>
+            <column name="attack_roll_required_ind" value="false" />
+            <column name="save_outcome" value="NoSave" />
+            <column name="general_category" value="hinder" />
+        </insert>
+
+    </changeSet>
 </databaseChangeLog>
